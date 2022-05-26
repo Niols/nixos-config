@@ -156,6 +156,10 @@
     ## G
     gimp
     git
+    gnumake
+
+    ## J
+    jq
 
     ## K
     keepassxc
