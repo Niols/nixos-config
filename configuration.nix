@@ -38,6 +38,16 @@
   };
 
   ############################################################################
+  ## Nix
+
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
+  ############################################################################
   ## Bluetooth
   ##
   hardware.bluetooth.enable = true;
