@@ -136,6 +136,7 @@
     discord
 
     ## E
+    element-desktop
     emacs
     evince
 
