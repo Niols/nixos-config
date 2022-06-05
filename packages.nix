@@ -10,11 +10,13 @@
 	 "slack"
 	 "steam-original"
 	 "steam-runtime"
+	 "unrar"
 	 "zoom"
       ]);
 
   environment.systemPackages = with pkgs; [
     ## A
+    arandr
     aspellDicts.fr
     aspellDicts.uk
     asunder
@@ -81,10 +83,11 @@
     gnome.nautilus
     nextcloud-client
 
+    ## O
+    opam
+
     ## P
-    picard
     pkg-config
-    python39Packages.py3status  ## python3.9-py3statyus
 
     ## R
     racket
@@ -101,6 +104,7 @@
     thunderbird
 
     ## U
+    unrar
     unzip
 
     ## V

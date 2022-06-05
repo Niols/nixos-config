@@ -8,7 +8,9 @@
     <home-manager/nixos>
   ];
 
-  # Use the systemd-boot EFI boot loader.
+  ############################################################################
+  ## Boot
+  ##
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -19,7 +21,11 @@
 	efiSupport = true;
 	enableCryptodisk = true;
 
-        ## The device on which the GRUB boot loader will be installed. The special value nodev means that a GRUB boot menu will be generated, but GRUB itself will not actually be installed. To install GRUB on multiple devices, use boot.loader.grub.devices.
+        ## The device on which the GRUB boot loader will be
+        ## installed. The special value nodev means that a GRUB boot
+        ## menu will be generated, but GRUB itself will not actually
+        ## be installed. To install GRUB on multiple devices, use
+        ## boot.loader.grub.devices.
 	device = "nodev";
 
         ## FIXME: to try
@@ -37,46 +43,54 @@
     };
   };
 
+  ############################################################################
+  ## Networking
+  ##
+  ## The global useDHCP flag is deprecated, therefore explicitly set
+  ## to false here. wPer-interface useDHCP will be mandatory in the
+  ## future, so this generated config replicates the default
+  ## behaviour.
+
   networking = {
     hostName = "wallace";
+
+    useDHCP = false;
+    interfaces.wlp0s20f3.useDHCP = true;
+
+    networkmanager.enable = true;
 
     nameservers = [
         # "1.1.1.1" "1.0.0.1" ## Cloudflare
         "8.8.8.8" "8.8.4.4" ## Google
     ];
-
-    networkmanager.enable = true;
-
-    # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-    # Per-interface useDHCP will be mandatory in the future, so this generated config
-    # replicates the default behaviour.
-    useDHCP = false;
-    interfaces.wlp0s20f3.useDHCP = true;
   };
 
-  ## Set your time zone.
+  ############################################################################
+  ## Time zone and internationalisation
+
   time.timeZone = "Europe/Amsterdam";
   # time.timeZone = "America/New_York";
 
-  ## Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
 
+  ############################################################################
+  ## X11 windowing system configuration
+
   services.xserver = {
-    # Enable the X11 windowing system.
     enable = true;
 
-    # Configure keymap. Use US International.
-    # FIXME: add non-breakable spaces on space bar.
-    # FIXME: add longer dashes somewhere.
-    # FIXME: what about three dots?
+    ## Keymap: US International.
+    ## FIXME: add non-breakable spaces on space bar.
+    ## FIXME: add longer dashes somewhere.
+    ## FIXME: what about three dots?
     layout = "us";
     xkbVariant = "intl";
 
-    # Enable the XFCE Desktop Manager, but do not let it do the window management.
+    ## XFCE as desktop manager...
     desktopManager = {
       xterm.enable = false;
       xfce = {
@@ -86,14 +100,16 @@
       };
     };
 
-    # Use i3 as the Window Manager.
+    ## ...with i3 as window manager.
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
         dmenu i3status i3lock
+        python39Packages.py3status ## wrapper around i3status
       ];
     };
 
+    ## The display manager choses this combination.
     displayManager.defaultSession = "xfce+i3";
 
     ## Enable touchpad support. On the Lenovo X1 Carbon, the touchpad does not
@@ -103,12 +119,26 @@
     synaptics.enable = false;
   };
 
-  ## Bring some functionalities from GNOME
+  ############################################################################
+  ## GNOME Stuff
+
   services.gnome.gnome-keyring.enable = true;
 
-  services.acpid = {
-    enable = true;
-  };
+  ## When using Nautilus without GNOME, you may need to enable the
+  ## GVfs service in order for Nautilus to work properly. If GVfs is
+  ## not available, you may see errors such as "Sorry, could not
+  ## display all the contents of “trash:///”: Operation not supported"
+  ## when trying to open the trash folder, or be unable to access
+  ## network filesystems.
+  ##
+  services.gvfs.enable = true;
+
+  ############################################################################
+  ## Enable CUPS to print documents.
+
+  services.printing.enable = true;
+
+  services.acpid.enable = true;
 
   ## Start GPG agent with SSH support (note: incompatible with
   ## ssh.startAgent)
@@ -118,32 +148,44 @@
   };
   # programs.ssh.startAgent = true;
 
-  ## Enable CUPS to print documents.
-  services.printing.enable = true;
+  ############################################################################
+  ## Virtualisation
 
-  ## Docker and VirtualBox
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;
   # virtualisation.virtualbox.host.enable = true;
 
-  ## Enable sound.
+  ############################################################################
+  ## Sound
+
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  ############################################################################
   ## Bluetooth
+
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  ############################################################################
+  ## User account.
+
   users.users.niols = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [
+      "docker"
+      "networkmanager"
+      "wheel"
+    ];
   };
+
+  ############################################################################
+  ## Nix
 
   nix = {
     # settings.trusted-users = ["@wheel"];
 
-    # ## Tweag Remote Builder
+    ## Tweag Remote Builder
     buildMachines = [ {
       hostName = "build01.tweag.io";
       maxJobs = 24;
@@ -181,12 +223,15 @@
     # };
   };
 
-  ## Extra `udev` rules
+  ############################################################################
+  ## Extra `udev` rules.
+
   services.udev.extraRules = ''
-## Ledger devices: owned solely by `niols`
+## For Ledger devices; owned solely by `niols`.
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0000|0001|0002|0003|0004|0005|0006|0007|0008|0009|000a|000b|000c|000d|000e|000f|0010|0011|0012|0013|0014|0015|0016|0017|0018|0019|001a|001b|001c|001d|001e|001f|1000|1001|1002|1003|1004|1005|1006|1007|1008|1009|100a|100b|100c|100d|100e|100f|1010|1011|1012|1013|1014|1015|1016|1017|1018|1019|101a|101b|101c|101d|101e|101f|2000|2001|2002|2003|2004|2005|2006|2007|2008|2009|200a|200b|200c|200d|200e|200f|2010|2011|2012|2013|2014|2015|2016|2017|2018|2019|201a|201b|201c|201d|201e|201f|3000|3001|3002|3003|3004|3005|3006|3007|3008|3009|300a|300b|300c|300d|300e|300f|3010|3011|3012|3013|3014|3015|3016|3017|3018|3019|301a|301b|301c|301d|301e|301f|4000|4001|4002|4003|4004|4005|4006|4007|4008|4009|400a|400b|400c|400d|400e|400f|4010|4011|4012|4013|4014|4015|4016|4017|4018|4019|401a|401b|401c|401d|401e|401f|5000|5001|5002|5003|5004|5005|5006|5007|5008|5009|500a|500b|500c|500d|500e|500f|5010|5011|5012|5013|5014|5015|5016|5017|5018|5019|501a|501b|501c|501d|501e|501f", OWNER="niols", MODE="0600"
   '';
 
+  ############################################################################
   ## This value determines the NixOS release from which the default
   ## settings for stateful data, like file locations and database
   ## versions on your system were taken. It‘s perfectly fine and
