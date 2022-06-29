@@ -48,6 +48,8 @@ MiscRightClickAction=TERMINAL_RIGHT_CLICK_ACTION_CONTEXT_MENU
 BackgroundDarkness=0.000000
     '';
 
+    home.file.".bash_prompt".source = ./bash-prompt.sh;
+
     ########################################################################
     ## GTK
 
@@ -87,6 +89,7 @@ BackgroundDarkness=0.000000
         if command -v opam >/dev/null; then eval $(opam env); fi
         alias cal='cal --monday'
         alias ls='ls --quoting-style=literal --color=auto'
+	. ~/.bash_prompt
       '';
     };
 
