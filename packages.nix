@@ -17,6 +17,7 @@
   environment.systemPackages = with pkgs; [
     ## A
     arandr
+    ardour
     aspellDicts.fr
     aspellDicts.uk
     asunder
