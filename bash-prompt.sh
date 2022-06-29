@@ -1,5 +1,3 @@
-#!/bin/bash
-
 readonly HISTTIMEFORMAT='%s '
 
 ## FIXME: missing "not bold", "not underlined", "not blinking", "not

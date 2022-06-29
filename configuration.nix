@@ -254,6 +254,11 @@
   };
 
   ############################################################################
+  ## Bashrc
+
+  programs.bash.promptInit = builtins.readFile ./bash-prompt.sh;
+
+  ############################################################################
   ## Extra `udev` rules.
 
   services.udev.extraRules = ''
