@@ -60,9 +60,10 @@
         ## Tried:
         ## - 1280x800 (does not work)
 	## - 1280x720 (does not work)
+        ## - 1280x960 (does not work)
         ##
-        gfxmodeEfi = "1280x960";
-        gfxmodeBios = "1280x960";
+        gfxmodeEfi = "1400x900";
+        gfxmodeBios = "1400x900";
       };
     };
     initrd.luks.devices = {
