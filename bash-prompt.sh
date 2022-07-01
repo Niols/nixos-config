@@ -110,18 +110,20 @@ bp_pwd () {
     printf '%s' "${PWD/#$HOME/'~'}"
 }
 
-bp_git_descr () {
-    printf '%s' $(git describe --all --always --abbrev=7 2>/dev/null \
-                    | sed 's|^heads/||')
-    if [ -n "$(git status --short 2>/dev/null)" ]; then
-        printf ' (dirty)'
-    fi
-}
 bp_git () {
-    _bp_git_descr_out=$(bp_git_descr)
-    if [ -n "$_bp_git_descr_out" ]; then
+    if _bp_git_status=$(git status --short 2>/dev/null); then
 	bp_sep black lightyellow
-        printf 'git: %s' "$_bp_git_descr_out"
+	printf 'git: '
+	_bp_git_branch=$(git branch --show-current)
+	if [ -n "$_bp_git_branch" ]; then
+	    printf '%s' "$_bp_git_branch"
+	else
+	    _bp_git_commit=$(git show --format=format:%h --no-patch)
+	    printf '%s' "$_bp_git_commit"
+	fi
+	if [ -n "$_bp_git_status" ]; then
+	    printf ' (dirty)'
+	fi
     fi
 }
 
