@@ -267,6 +267,15 @@ SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0000|0001|0002|
   '';
 
   ############################################################################
+  ## Transparency
+
+  services.compton = {
+    enable = true;
+    shadow = true;
+    inactiveOpacity = 0.8;
+  };
+
+  ############################################################################
   ## This value determines the NixOS release from which the default
   ## settings for stateful data, like file locations and database
   ## versions on your system were taken. It‘s perfectly fine and
