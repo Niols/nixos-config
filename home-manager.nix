@@ -4,6 +4,9 @@
   home-manager.users.niols = { pkgs, ... }: {
     programs.home-manager.enable = true;
 
+    home.file.".face".source = ./face;
+    home.file.".background-image".source = ./background-image;
+
     xdg.configFile."user-dirs.dirs".text = ''
 XDG_DESKTOP_DIR="$HOME"
 XDG_DOCUMENTS_DIR="$HOME/NiolsCloud/Documents"
