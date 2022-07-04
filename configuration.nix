@@ -237,7 +237,7 @@
   ## Nix
 
   nix = {
-    # settings.trusted-users = ["@wheel"];
+    trustedUsers = [ "@wheel" ];
 
     ## Tweag Remote Builder
     buildMachines = [ {
