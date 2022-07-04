@@ -1,49 +1,65 @@
 readonly HISTTIMEFORMAT='%s '
 
-## FIXME: missing "not bold", "not underlined", "not blinking", "not
-## inverse", "not hidden", "foreground reset", "background reset", and
-## probably others.
-
 bp_colour () {
     printf '\e[%sm' "$1" | \
-	sed -e 's|,|;|g' \
-	    -e 's|reset|0|' \
-	    -e 's|bold|1|' \
-	    -e 's|faint|2|' \
-	    -e 's|italic|3|' \
-	    -e 's|underlined|4|' \
-	    -e 's|fg:black|30|' \
-	    -e 's|bg:black|40|' \
-	    -e 's|fg:red|31|' \
-	    -e 's|bg:red|41|' \
-	    -e 's|fg:green|32|' \
-	    -e 's|bg:green|42|' \
-	    -e 's|fg:yellow|33|' \
-	    -e 's|bg:yellow|43|' \
-	    -e 's|fg:blue|34|' \
-	    -e 's|bg:blue|44|' \
-	    -e 's|fg:magenta|35|' \
-	    -e 's|bg:magenta|45|' \
-	    -e 's|fg:cyan|36|' \
-	    -e 's|bg:cyan|46|' \
-	    -e 's|fg:lightgray|37|' \
-	    -e 's|bg:lightgray|47|' \
-	    -e 's|fg:gray|90|' \
-	    -e 's|bg:gray|100|' \
-	    -e 's|fg:lightred|91|' \
-	    -e 's|bg:lightred|101|' \
-	    -e 's|fg:lightgreen|92|' \
-	    -e 's|bg:lightgreen|102|' \
-	    -e 's|fg:lightyellow|93|' \
-	    -e 's|bg:lightyellow|103|' \
-	    -e 's|fg:lightblue|94|' \
-	    -e 's|bg:lightblue|104|' \
-	    -e 's|fg:lightmagenta|95|' \
-	    -e 's|bg:lightmagenta|105|' \
-	    -e 's|fg:lightcyan|96|' \
-	    -e 's|bg:lightcyan|106|' \
-	    -e 's|fg:white|97|' \
-	    -e 's|bg:white|107|'
+        sed -e 's|,|;|g' \
+            -e 's|reset|0|' \
+            \
+            -e 's|bold|1|' \
+            -e 's|faint|2|' \
+            -e 's|italic|3|' \
+            -e 's|underlined|4|' \
+            -e 's|blinking|5|' \
+            -e 's|blinking|6|' \
+            -e 's|inverse|7|' \
+            -e 's|hidden|8|' \
+            -e 's|strikedthrough|9|' \
+            \
+            -e 's|not:bold|22|' \
+            -e 's|not:underlined|24|' \
+            -e 's|not:blinking|25|' \
+            -e 's|not:inverse|27|' \
+            -e 's|not:hidden|28|' \
+            \
+            -e 's|fg:black|30|' \
+            -e 's|fg:red|31|' \
+            -e 's|fg:green|32|' \
+            -e 's|fg:yellow|33|' \
+            -e 's|fg:blue|34|' \
+            -e 's|fg:magenta|35|' \
+            -e 's|fg:cyan|36|' \
+            -e 's|fg:lightgray|37|' \
+            \
+            -e 's|fg:default|39|' \
+            \
+            -e 's|bg:black|40|' \
+            -e 's|bg:red|41|' \
+            -e 's|bg:green|42|' \
+            -e 's|bg:yellow|43|' \
+            -e 's|bg:blue|44|' \
+            -e 's|bg:magenta|45|' \
+            -e 's|bg:cyan|46|' \
+            -e 's|bg:lightgray|47|' \
+            \
+            -e 's|bg:default|49|' \
+            \
+            -e 's|fg:gray|90|' \
+            -e 's|fg:lightred|91|' \
+            -e 's|fg:lightgreen|92|' \
+            -e 's|fg:lightyellow|93|' \
+            -e 's|fg:lightblue|94|' \
+            -e 's|fg:lightmagenta|95|' \
+            -e 's|fg:lightcyan|96|' \
+            -e 's|fg:white|97|' \
+            \
+            -e 's|bg:gray|100|' \
+            -e 's|bg:lightred|101|' \
+            -e 's|bg:lightgreen|102|' \
+            -e 's|bg:lightyellow|103|' \
+            -e 's|bg:lightblue|104|' \
+            -e 's|bg:lightmagenta|105|' \
+            -e 's|bg:lightcyan|106|' \
+            -e 's|bg:white|107|'
 }
 
 ## ==================== [ Report ] ==================== ##
