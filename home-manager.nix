@@ -82,21 +82,12 @@ BackgroundDarkness=0.000000
     ########################################################################
     ## Firefox
 
-    programs.firefox = {
-      enable = true;
-    };
+    programs.firefox.enable = true;
 
     ########################################################################
     ## Bash
 
-    programs.bash = {
-      enable = true;
-      bashrcExtra = ''
-        if command -v opam >/dev/null; then eval $(opam env); fi
-        alias cal='cal --monday'
-        alias ls='ls --quoting-style=literal --color=auto'
-      '';
-    };
+    programs.bash.enable = true;
 
     ########################################################################
     ## Git

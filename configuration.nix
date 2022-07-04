@@ -278,9 +278,21 @@
   };
 
   ############################################################################
-  ## Bashrc
+  ## Shells
 
-  programs.bash.promptInit = builtins.readFile ./bash-prompt.sh;
+  environment.shellAliases = {
+    cal = "cal --monday";
+    ls = "ls --quoting-style=literal --color=auto";
+    magit = "emacs --eval '(magit)'";
+  };
+
+  programs.bash = {
+    promptInit = builtins.readFile ./bash-prompt.sh;
+
+    interactiveShellInit = ''
+      if command -v opam >/dev/null; then eval $(opam env); fi
+    '';
+  };
 
   ############################################################################
   ## Extra `udev` rules.
