@@ -92,23 +92,18 @@ bp_report_line () {
 
 ## ==================== [ Status Line ] ==================== ##
 
-bp_first_sep () {
-    # bp_colour fg:black,bg:$2
-    # printf '▌'
+bp_open_box () {
+    if ! [ "$3" = '--first' ]; then
+	bp_colour fg:$2
+	printf '▐'
+    fi
     bp_colour fg:$1,bg:$2
 }
 
-bp_sep () {
-    bp_colour fg:black
-    printf '▐'
-    bp_colour bg:$2
+bp_close_box () {
+    bp_colour fg:$1,bg:default
     printf '▌'
-    bp_colour fg:$1,bg:$2
-}
-
-bp_last_sep () {
-    bp_colour fg:black
-    printf '▐'
+    bp_colour fg:default,bg:default
 }
 
 ## All functions leave their background hanging for the separator to
@@ -116,19 +111,21 @@ bp_last_sep () {
 ## the background
 
 bp_user () {
-    [ $(id -u) -eq 0 ] && bp_first_sep black lightred \
-                       || bp_first_sep black lightgreen
+    [ $(id -u) -eq 0 ] && BP_USER_BOX=lightred || BP_USER_BOX=lightgreen
+    bp_open_box black "$BP_USER_BOX" --first
     printf '%s@%s' $(id -nu) $(hostname)
+    bp_close_box "$BP_USER_BOX"
 }
 
 bp_pwd () {
-    bp_sep white gray
+    bp_open_box white gray
     printf '%s' "${PWD/#$HOME/'~'}"
+    bp_close_box gray
 }
 
 bp_git () {
     if _bp_git_status=$(git status --short 2>/dev/null); then
-	bp_sep black lightyellow
+	bp_open_box black lightyellow
 	printf 'git: '
 	_bp_git_branch=$(git branch --show-current)
 	if [ -n "$_bp_git_branch" ]; then
@@ -140,13 +137,15 @@ bp_git () {
 	if [ -n "$_bp_git_status" ]; then
 	    printf ' (dirty)'
 	fi
+	bp_close_box lightyellow
     fi
 }
 
 bp_nix () {
     if [ -n "${IN_NIX_SHELL+x}" ]; then
-	bp_sep black lightcyan
+	bp_open_box black lightcyan
         printf 'nix: %s' "$IN_NIX_SHELL"
+	bp_close_box lightcyan
     fi
 }
 
@@ -156,7 +155,6 @@ bp_status_line () {
 	   "$(bp_pwd)" \
 	   "$(bp_git)" \
 	   "$(bp_nix)" \
-	   "$(bp_last_sep)" \
 	   "$(bp_colour reset)"
 }
 
