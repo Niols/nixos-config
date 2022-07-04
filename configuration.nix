@@ -36,8 +36,10 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+
     loader = {
       efi.canTouchEfiVariables = true;
+
       grub = {
         enable = true;
         version = 2;
@@ -51,6 +53,12 @@
         ## boot.loader.grub.devices.
         device = "nodev";
 
+        ## FIXME: Attempt to use a Grub theme. cf:
+        ## - Nix package: `legacyPackages.x86_64-linux.breeze-grub`
+        ## - Nix package: `legacyPackages.x86_64-linux.nixos-grub2-theme`
+        ## - https://fostips.com/boot-menu-modern-stylish-grub-themes/
+        ## - https://github.com/vinceliuice/grub2-themes
+
         ## FIXME: to try
         ##
         ## Grub menu is painted really slowly on HiDPI, so we lower the
@@ -58,14 +66,17 @@
         ## ratio) doesn't seem to work, so we just pick another low one.
         ##
         ## Tried:
+        ## - 1024x768 (works!)
         ## - 1280x800 (does not work)
-	## - 1280x720 (does not work)
+        ## - 1280x720 (does not work)
         ## - 1280x960 (does not work)
+        ## - 1400x900 (does not work)
         ##
-        gfxmodeEfi = "1400x900";
-        gfxmodeBios = "1400x900";
+        gfxmodeEfi = "1024x768";
+        #gfxmodeBios = "1024x768";
       };
     };
+
     initrd.luks.devices = {
       crypt = {
         device = "/dev/nvme0n1p2";
