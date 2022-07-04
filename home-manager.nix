@@ -4,6 +4,11 @@
   home-manager.users.niols = { pkgs, ... }: {
     programs.home-manager.enable = true;
 
+    home.sessionVariables = {
+      ## Keep the prompt when entering `nix shell`.
+      NIX_SHELL_PRESERVE_PROMPT = "oui";
+    };
+
     home.file.".face".source = ./face;
     home.file.".background-image".source = ./background-image;
 
