@@ -162,6 +162,18 @@
   };
 
   ############################################################################
+  ## LightDM
+
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    background = ./background-image;
+    extraConfig = ''
+      ## Do not hide users, show their `.face`!
+      greeter-hide-users = false
+    '';
+  };
+
+  ############################################################################
   ## GNOME Stuff
 
   services.gnome.gnome-keyring.enable = true;
@@ -279,7 +291,12 @@ SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0000|0001|0002|
   '';
 
   ############################################################################
-  ## Transparency
+  ## Background & Transparency
+
+  services.xserver.desktopManager.wallpaper = {
+    mode = "fill";
+    combineScreens = false;
+  };
 
   services.picom.enable = true;
 
