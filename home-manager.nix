@@ -4,11 +4,6 @@
   home-manager.users.niols = { pkgs, ... }: {
     programs.home-manager.enable = true;
 
-    home.sessionVariables = {
-      ## Keep the prompt when entering `nix shell`.
-      NIX_SHELL_PRESERVE_PROMPT = "oui";
-    };
-
     home.file.".face".source = ./face;
     home.file.".background-image".source = ./background-image;
 
@@ -87,7 +82,20 @@ BackgroundDarkness=0.000000
     ########################################################################
     ## Bash
 
-    programs.bash.enable = true;
+    programs.bash = {
+      enable = true;
+
+      bashrcExtra = ''
+        ## Keep the prompt when entering `nix shell`.
+	##
+	## NOTE: We put this here instead of in
+        ## `home.sessionVariables` because the latter only works for
+        ## login Shells.
+	##
+	## cf https://discourse.nixos.org/t/*/8488/23
+        NIX_SHELL_PRESERVE_PROMPT=yes
+      '';
+    };
 
     ########################################################################
     ## Git
