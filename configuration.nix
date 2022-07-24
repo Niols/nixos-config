@@ -322,7 +322,7 @@ SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0000|0001|0002|
   ## Background & Transparency
 
   services.xserver.desktopManager.wallpaper = {
-    mode = "fill";
+    mode = "scale";
     combineScreens = false;
   };
 
