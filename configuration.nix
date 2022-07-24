@@ -110,8 +110,12 @@
   ############################################################################
   ## Time zone and internationalisation
 
-  time.timeZone = "Europe/Amsterdam";
-  # time.timeZone = "America/New_York";
+  ## List all available timezones with:
+  ##
+  ##     timedatectl list-timezones
+  ##
+  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/London";
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
