@@ -228,11 +228,18 @@
   ############################################################################
   ## User account.
 
+  ## - `adbusers` & `plugdev` are necessary for `adb` & `fastboot`.
+  ## - `docker` for Docker
+  ## - `networkmanager` for NetworkManager
+  ## - `wheel` for `sudo`
+
   users.users.niols = {
     isNormalUser = true;
     extraGroups = [
+      "adbusers"
       "docker"
       "networkmanager"
+      "plugdev"
       "wheel"
     ];
   };
@@ -280,6 +287,11 @@
     #   options = "--delete-older-than 20d";
     # };
   };
+
+  ############################################################################
+  ## Android setup
+
+  programs.adb.enable = true;
 
   ############################################################################
   ## Shells
