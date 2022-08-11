@@ -114,8 +114,7 @@
   ##
   ##     timedatectl list-timezones
   ##
-  # time.timeZone = "Europe/Amsterdam";
-  time.timeZone = "Europe/London";
+  time.timeZone = "Europe/Amsterdam";
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
