@@ -88,6 +88,7 @@
     opam
 
     ## P
+    picard
     pkg-config
 
     ## R
