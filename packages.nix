@@ -34,6 +34,7 @@
 
     ## D
     dig
+    direnv
     discord
 
     ## E

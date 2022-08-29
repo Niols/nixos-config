@@ -313,6 +313,14 @@
       if command -v opam >/dev/null; then
         eval "$(opam env)"
       fi
+
+      ## If `direnv` is available on the system, then we set it up for
+      ## this Shell. This line should appear after all Shell
+      ## extensions that manipulate the prompt.
+      ##
+      if command -v direnv >/dev/null; then
+        eval "$(direnv hook bash)"
+      fi
     '';
   };
 
