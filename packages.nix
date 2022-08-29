@@ -28,6 +28,7 @@
     bintools
 
     ## C
+    caffeine-ng
     calc
     chromium
 
