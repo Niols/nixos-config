@@ -87,12 +87,13 @@ BackgroundDarkness=0.000000
 
       bashrcExtra = ''
         ## Keep the prompt when entering `nix shell`.
-	##
-	## NOTE: We put this here instead of in
+        ##
+        ## NOTE: We put this here instead of in
         ## `home.sessionVariables` because the latter only works for
         ## login Shells.
-	##
-	## cf https://discourse.nixos.org/t/*/8488/23
+        ##
+        ## cf https://discourse.nixos.org/t/*/8488/23
+        ##
         NIX_SHELL_PRESERVE_PROMPT=yes
       '';
     };
