@@ -305,7 +305,14 @@
     promptInit = builtins.readFile ./bash-prompt.sh;
 
     interactiveShellInit = ''
-      if command -v opam >/dev/null; then eval $(opam env); fi
+      ## If OPAM is available on the system, then we set it up for
+      ## this Shell.
+      ##
+      ## FIXME: OPAM can be available but not set up.
+      ##
+      if command -v opam >/dev/null; then
+        eval "$(opam env)"
+      fi
     '';
   };
 
