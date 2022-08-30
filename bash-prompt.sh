@@ -67,13 +67,13 @@ bp_colour () {
 bp_return_code () {
     _bp_rc=$?
     if [ $_bp_rc -eq 0 ]; then
-	bp_colour reset,bold,fg:green
-	printf '✓ 0'
-	bp_colour reset
+        bp_colour reset,bold,fg:green
+        printf '✓ 0'
+        bp_colour reset
     else
-	bp_colour reset,bold,fg:red
-	printf '✗ %d' $_bp_rc
-	bp_colour reset
+        bp_colour reset,bold,fg:red
+        printf '✗ %d' $_bp_rc
+        bp_colour reset
     fi
 }
 
@@ -94,8 +94,8 @@ bp_report_line () {
 
 bp_open_box () {
     if ! [ "$3" = '--first' ]; then
-	bp_colour fg:$2
-	printf '▐'
+        bp_colour fg:$2
+        printf '▐'
     fi
     bp_colour fg:$1,bg:$2
 }
@@ -125,37 +125,46 @@ bp_pwd () {
 
 bp_git () {
     if _bp_git_status=$(git status --short 2>/dev/null); then
-	bp_open_box black lightyellow
-	printf 'git: '
-	_bp_git_branch=$(git branch --show-current)
-	if [ -n "$_bp_git_branch" ]; then
-	    printf '%s' "$_bp_git_branch"
-	else
-	    _bp_git_commit=$(git show --format=format:%h --no-patch)
-	    printf '%s' "$_bp_git_commit"
-	fi
-	if [ -n "$_bp_git_status" ]; then
-	    printf ' (dirty)'
-	fi
-	bp_close_box lightyellow
+        bp_open_box black lightyellow
+        printf 'git: '
+        _bp_git_branch=$(git branch --show-current)
+        if [ -n "$_bp_git_branch" ]; then
+            printf '%s' "$_bp_git_branch"
+        else
+            _bp_git_commit=$(git show --format=format:%h --no-patch)
+            printf '%s' "$_bp_git_commit"
+        fi
+        if [ -n "$_bp_git_status" ]; then
+            printf ' (dirty)'
+        fi
+        bp_close_box lightyellow
     fi
 }
 
 bp_nix () {
     if [ -n "${IN_NIX_SHELL+x}" ]; then
-	bp_open_box black lightcyan
+        bp_open_box black lightcyan
         printf 'nix: %s' "$IN_NIX_SHELL"
-	bp_close_box lightcyan
+        bp_close_box lightcyan
+    fi
+}
+
+bp_direnv () {
+    if [ -n "${DIRENV_FILE+x}" ]; then
+        bp_open_box black lightmagenta
+        printf 'direnv'
+        bp_close_box lightmagenta
     fi
 }
 
 bp_status_line () {
     printf '%s%s%s%s%s%s' \
-	   "$(bp_user)" \
-	   "$(bp_pwd)" \
-	   "$(bp_git)" \
-	   "$(bp_nix)" \
-	   "$(bp_colour reset)"
+       "$(bp_user)" \
+       "$(bp_pwd)" \
+       "$(bp_git)" \
+       "$(bp_nix)" \
+       "$(bp_direnv)" \
+       "$(bp_colour reset)"
 }
 
 ## ==================== [ Prompt ] ==================== ##
