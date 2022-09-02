@@ -315,11 +315,13 @@
       fi
 
       ## If `direnv` is available on the system, then we set it up for
-      ## this Shell. This line should appear after all Shell
-      ## extensions that manipulate the prompt.
+      ## this Shell. Also, we make it completely quiet (the status
+      ## line will inform us of direnv's presence). These lines should
+      ## appear after all Shell extensions that manipulate the prompt.
       ##
       if command -v direnv >/dev/null; then
         eval "$(direnv hook bash)"
+        export DIRENV_LOG_FORMAT=
       fi
     '';
   };
