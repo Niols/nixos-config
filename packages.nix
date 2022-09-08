@@ -4,14 +4,14 @@
   ## Packages installed in system profile. Allow a selected set of
   ## unfree packages for this list.
   nixpkgs.config.allowUnfreePredicate = (pkg: builtins.elem
-     (pkgs.lib.getName pkg) [
-         "discord"
-	 "skypeforlinux"
-	 "slack"
-	 "steam-original"
-	 "steam-runtime"
-	 "unrar"
-	 "zoom"
+      (pkgs.lib.getName pkg) [
+          "discord"
+          "skypeforlinux"
+          "slack"
+          "steam-original"
+          "steam-runtime"
+          "unrar"
+          "zoom"
       ]);
 
   environment.systemPackages = with pkgs; [
