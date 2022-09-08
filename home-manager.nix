@@ -7,49 +7,11 @@
     home.file.".face".source = ./face;
     home.file.".background-image".source = ./background-image;
 
-    xdg.configFile."user-dirs.dirs".text = ''
-XDG_DESKTOP_DIR="$HOME"
-XDG_DOCUMENTS_DIR="$HOME/NiolsCloud/Documents"
-XDG_DOWNLOAD_DIR="$HOME/Downloads"
-XDG_MUSIC_DIR="$HOME/NiolsCloud/Musique"
-XDG_PICTURES_DIR="$HOME/NiolsCloud/Images"
-XDG_VIDEOS_DIR="$HOME/NiolsCloud/Vidéos"
-    '';
+    xdg.configFile."user-dirs.dirs".source =
+      ./home/xdg-config/user-dirs.dirs;
 
-    xdg.configFile."xfce4/terminal/terminalrc".text = ''
-[Configuration]
-MiscAlwaysShowTabs=FALSE
-MiscBell=FALSE
-MiscBellUrgent=FALSE
-MiscBordersDefault=FALSE
-MiscCursorBlinks=FALSE
-MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
-MiscDefaultGeometry=80x24
-MiscInheritGeometry=FALSE
-MiscMenubarDefault=FALSE
-MiscMouseAutohide=FALSE
-MiscMouseWheelZoom=TRUE
-MiscToolbarDefault=FALSE
-MiscConfirmClose=FALSE
-MiscCycleTabs=TRUE
-MiscTabCloseButtons=TRUE
-MiscTabCloseMiddleClick=TRUE
-MiscTabPosition=GTK_POS_TOP
-MiscHighlightUrls=TRUE
-MiscMiddleClickOpensUri=FALSE
-MiscCopyOnSelect=FALSE
-MiscShowRelaunchDialog=TRUE
-MiscRewrapOnResize=TRUE
-MiscUseShiftArrowsToScroll=FALSE
-MiscSlimTabs=FALSE
-MiscNewTabAdjacent=FALSE
-MiscSearchDialogOpacity=100
-MiscShowUnsafePasteDialog=FALSE
-ScrollingBar=TERMINAL_SCROLLBAR_NONE
-BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
-MiscRightClickAction=TERMINAL_RIGHT_CLICK_ACTION_CONTEXT_MENU
-BackgroundDarkness=0.000000
-    '';
+    xdg.configFile."xfce4/terminal/terminalrc".source =
+      ./home/xdg-config/xfce4/terminal/terminalrc;
 
     ########################################################################
     ## GTK
