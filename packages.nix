@@ -39,7 +39,7 @@
 
     ## E
     element-desktop
-    emacs
+    ## emacs --> cf `home-manager.nix`
     evince
 
     ## F

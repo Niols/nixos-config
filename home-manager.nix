@@ -14,6 +14,39 @@
       ./home/xdg-config/xfce4/terminal/terminalrc;
 
     ########################################################################
+    ## Doom Emacs
+
+    nixpkgs.overlays = [
+      ## This overlay is the `emacs-overlay`. It brings two new version of Emacs
+      ## into the packages: `emacsUnstable` and `emacsGit`. The former is the
+      ## last release on the git, while the latter is the last state of the git
+      ## `master` branch.
+      (import (builtins.fetchTarball {
+        url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+      }))
+
+      ## This overlay replaces `emacs` by `emacsGit` (cf `emacs-overlay` above).
+      ## We do that in order to have an Emacs 29+ on our system. FIXME: When
+      ## `emacsUnstable` reaches 29+, replace by `emacsUnstable`. When `emacs`
+      ## reaches 29+, get rid of both overlays.
+      (self: super: {
+        emacs = self.emacsGit;
+      })
+    ];
+
+    home.packages = [
+      ## The following brings the `doom-emacs` package on the system, which
+      ## wraps `pkgs.emacs` into a Doom Emacs. There is no need for a
+      ## `~/.emacs.d` directory, everything is handled in
+      ## `/etc/nixos/home/doom.d`.
+      (pkgs.callPackage (builtins.fetchTarball {
+        url = https://github.com/nix-community/nix-doom-emacs/archive/master.tar.gz;
+      }) {
+        doomPrivateDir = ./home/doom.d;
+      })
+    ];
+
+    ########################################################################
     ## GTK
 
     gtk = {

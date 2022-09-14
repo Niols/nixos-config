@@ -1,0 +1,8 @@
+#+TITLE: :lang lilypond
+
+This module adds basic LilyPond support.
+
+TODO:
+- keybinding
+- flycheck support
+- indentation-aware mode
