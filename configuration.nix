@@ -308,7 +308,6 @@
   environment.shellAliases = {
     cal = "cal --monday";
     ls = "ls --quoting-style=literal --color=auto";
-    magit = "emacs --eval '(magit)'";
   };
 
   programs.bash = {
