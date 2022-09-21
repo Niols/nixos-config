@@ -90,6 +90,22 @@
         ## cf https://discourse.nixos.org/t/*/8488/23
         ##
         NIX_SHELL_PRESERVE_PROMPT=yes
+
+        ## The `nrun` command tries to find the given command name for you,
+        ## either by pulling it from the `PATH` (although you probably already
+        ## tried that) or by pulling it from the `nixpkgs` flake.
+        ##
+        nrun () (
+          cmd=$1; shift
+          if command -v "$cmd" >/dev/null; then
+            "$cmd" "$@"
+          elif nix search nixpkgs "^$cmd\$" >/dev/null 2>&1; then
+            nix run nixpkgs#"$cmd" -- "$@"
+          else
+            echo "Command '$cmd' could not be found in the system or in nixpkgs." >&2
+            exit 127
+          fi
+        )
       '';
     };
 
