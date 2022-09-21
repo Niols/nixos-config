@@ -12,9 +12,13 @@
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };
+
+    nix-doom-emacs = {
+      url = "github:nix-community/nix-doom-emacs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }: {
+  outputs = inputs@{ nixpkgs, home-manager, ... }: {
 
     nixosConfigurations.wallace = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -28,6 +32,7 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             users.niols = import ./home.nix;
+            extraSpecialArgs = inputs;
           };
         }
       ];

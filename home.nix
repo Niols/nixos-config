@@ -1,4 +1,4 @@
-{ pkgs, emacs-overlay, ... }: {
+{ pkgs, specialArgs, ... }: {
     home.stateVersion = "21.05";
 
     programs.home-manager.enable = true;
@@ -20,7 +20,7 @@
       ## into the packages: `emacsUnstable` and `emacsGit`. The former is the
       ## last release on the git, while the latter is the last state of the git
       ## `master` branch.
-      emacs-overlay
+      specialArgs.emacs-overlay
 
       ## This overlay replaces `emacs` by `emacsGit` (cf `emacs-overlay` above).
       ## We do that in order to have an Emacs 29+ on our system. FIXME: When
@@ -36,9 +36,7 @@
       ## wraps `pkgs.emacs` into a Doom Emacs. There is no need for a
       ## `~/.emacs.d` directory, everything is handled in
       ## `/etc/nixos/home/doom.d`.
-      (pkgs.callPackage (builtins.fetchTarball {
-        url = https://github.com/nix-community/nix-doom-emacs/archive/master.tar.gz;
-      }) {
+      (pkgs.callPackage specialArgs.nix-doom-emacs {
         doomPrivateDir = ./home/doom.d;
       })
     ];
