@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, emacs-overlay, ... }: {
     home.stateVersion = "21.05";
 
     programs.home-manager.enable = true;
@@ -20,9 +20,7 @@
       ## into the packages: `emacsUnstable` and `emacsGit`. The former is the
       ## last release on the git, while the latter is the last state of the git
       ## `master` branch.
-      (import (builtins.fetchTarball {
-        url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-      }))
+      emacs-overlay
 
       ## This overlay replaces `emacs` by `emacsGit` (cf `emacs-overlay` above).
       ## We do that in order to have an Emacs 29+ on our system. FIXME: When

@@ -8,6 +8,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+    };
   };
 
   outputs = { nixpkgs, home-manager, ... }: {
@@ -25,8 +29,6 @@
             useUserPackages = true;
             users.niols = import ./home.nix;
           };
-          ## FIXME: use home-manager.extraSpecialArgs
-          ## to pass arguments to home.nix
         }
       ];
     };
