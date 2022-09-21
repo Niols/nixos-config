@@ -1,12 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./packages.nix
-    ./home-manager.nix
-    <home-manager/nixos>
-  ];
+  imports = [ ];
 
   ############################################################################
   ## Boot

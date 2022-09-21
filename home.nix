@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }: {
+    home.stateVersion = "21.05";
 
-{
-  home-manager.users.niols = { pkgs, ... }: {
     programs.home-manager.enable = true;
 
     home.file.".face".source = ./face;
@@ -178,5 +177,4 @@
  yellow)%d%C(reset)%n %C(white)%s%C(reset)\"";
       };
     };
-  };
-}
+  }
