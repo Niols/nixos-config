@@ -118,48 +118,33 @@
 
       ## Change of personality depending on the location in the file
       ## tree. This only switches between personal and profesionnal.
-      includes = [
-        {
-          condition = "gitdir:~/git/perso/**";
-          contents.user = {
-            name = "Niols";
-            email = "niols@niols.fr";
-            signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
-          };
-        }
-        {
-          condition = "gitdir:~/git/boloss/**";
-          contents.user = {
-            name = "Niols";
-            email = "niols@niols.fr";
-            signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
-          };
-        }
-        {
-          condition = "gitdir:/etc/**";
-          contents.user = {
-            name = "Niols";
-            email = "niols@niols.fr";
-            signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
-          };
-        }
-        {
-          condition = "gitdir:~/git/tweag/**";
-          contents.user = {
-            name = "Nicolas “Niols” Jeannerod";
-            email = "nicolas.jeannerod@tweag.io";
-            signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
-          };
-        }
-        {
-          condition = "gitdir:~/git/hachi/**";
-          contents.user = {
-            name = "Nicolas “Niols” Jeannerod";
-            email = "nicolas.jeannerod@tweag.io";
-            signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
-          };
-        }
-      ];
+      includes =
+        (map
+          (condition: {
+            condition = condition;
+            contents.user = {
+              name = "Niols";
+              email = "niols@niols.fr";
+              signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
+            };
+          }) [
+            "gitdir:~/git/perso/**"
+            "gitdir:~/git/boloss/**"
+            "gitdir:/etc/**"
+          ])
+        ++
+        (map
+          (condition: {
+            condition = condition;
+            contents.user = {
+              name = "Nicolas “Niols” Jeannerod";
+              email = "nicolas.jeannerod@tweag.io";
+              signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
+            };
+          }) [
+            "gitdir:~/git/tweag/**"
+            "gitdir:~/git/hachi/**"
+          ]);
 
       extraConfig.init.defaultBranch = "main";
 
