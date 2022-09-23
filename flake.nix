@@ -49,6 +49,7 @@
 
             users = {
               niols = import ./home.nix;
+              root = import ./home.nix;
             };
 
             ## The following option gives Home Manager an access to this file's

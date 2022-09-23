@@ -136,6 +136,14 @@
           };
         }
         {
+          condition = "gitdir:/etc/**";
+          contents.user = {
+            name = "Niols";
+            email = "niols@niols.fr";
+            signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
+          };
+        }
+        {
           condition = "gitdir:~/git/tweag/**";
           contents.user = {
             name = "Nicolas “Niols” Jeannerod";
