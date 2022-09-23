@@ -1,4 +1,4 @@
-{ pkgs, specialArgs, ... }: {
+{ lib, pkgs, specialArgs, ... }: {
     home.stateVersion = "21.05";
 
     programs.home-manager.enable = true;
@@ -116,35 +116,49 @@
       signing.key = "YOU NEED TO EXPLICITLY SETUP THE KEY";
       signing.signByDefault = true;
 
-      ## Change of personality depending on the location in the file
-      ## tree. This only switches between personal and profesionnal.
+      ## Change of personality depending on the location in the file tree. This
+      ## only switches between personal and profesionnal. Because entries accept
+      ## only one condition, we first introduce a `processConditions` function
+      ## which will accept `conditions` and flatten them to several uses of
+      ## `condition`.
       includes =
-        (map
-          (condition: {
-            condition = condition;
-            contents.user = {
-              name = "Niols";
-              email = "niols@niols.fr";
-              signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
-            };
-          }) [
-            "gitdir:~/git/perso/**"
-            "gitdir:~/git/boloss/**"
-            "gitdir:/etc/**"
-          ])
-        ++
-        (map
-          (condition: {
-            condition = condition;
-            contents.user = {
-              name = "Nicolas “Niols” Jeannerod";
-              email = "nicolas.jeannerod@tweag.io";
-              signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
-            };
-          }) [
-            "gitdir:~/git/tweag/**"
-            "gitdir:~/git/hachi/**"
-          ]);
+        let processConditions = entries:
+              lib.lists.concatMap
+                (entry:
+                  lib.lists.map
+                    (condition: {
+                      condition = condition;
+                      contents.user = entry.contents.user;
+                    })
+                    entry.conditions)
+                entries;
+        in
+          processConditions [
+            {
+              conditions = [
+                "gitdir:~/git/perso/**"
+                "gitdir:~/git/boloss/**"
+                "gitdir:/etc/**"
+              ];
+              contents.user = {
+                name = "Niols";
+                email = "niols@niols.fr";
+                signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
+              };
+            }
+
+            {
+              conditions = [
+                "gitdir:~/git/tweag/**"
+                "gitdir:~/git/hachi/**"
+              ];
+              contents.user = {
+                name = "Nicolas “Niols” Jeannerod";
+                email = "nicolas.jeannerod@tweag.io";
+                signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
+              };
+            }
+          ];
 
       extraConfig.init.defaultBranch = "main";
 
