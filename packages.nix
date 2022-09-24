@@ -28,7 +28,7 @@
     bintools
 
     ## C
-    caffeine-ng
+    ## caffeine-ng -> the behaviour is really inconsistent
     calc
     chromium
 
