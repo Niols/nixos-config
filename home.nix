@@ -15,22 +15,6 @@
     ########################################################################
     ## Doom Emacs
 
-    nixpkgs.overlays = [
-      ## This overlay is the `emacs-overlay`. It brings two new version of Emacs
-      ## into the packages: `emacsUnstable` and `emacsGit`. The former is the
-      ## last release on the git, while the latter is the last state of the git
-      ## `master` branch.
-      specialArgs.emacs-overlay
-
-      ## This overlay replaces `emacs` by `emacsGit` (cf `emacs-overlay` above).
-      ## We do that in order to have an Emacs 29+ on our system. FIXME: When
-      ## `emacsUnstable` reaches 29+, replace by `emacsUnstable`. When `emacs`
-      ## reaches 29+, get rid of both overlays.
-      (self: super: {
-        emacs = self.emacsGit;
-      })
-    ];
-
     home.packages = [
       ## The following brings the `doom-emacs` package on the system, which
       ## wraps `pkgs.emacs` into a Doom Emacs. There is no need for a
