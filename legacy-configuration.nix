@@ -281,7 +281,7 @@
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo="
       "hachi.cachix.org-1:LhKjNU6sYCnwfR9NH48iI+Pug9D+x+TsHy28poUqINI="
-      "plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc="
+      "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc="
     ];
 
     # ## Garbage-collect automatically on a weekly basis; keep old
