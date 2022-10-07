@@ -30,6 +30,10 @@
         ./legacy-configuration.nix
         ./packages.nix
 
+        {
+          nix.registry.nixpkgs.flake = nixpkgs;
+        }
+
         home-manager.nixosModules.home-manager {
           home-manager = {
             ## By default, Home Manager uses a private pkgs instance that is
