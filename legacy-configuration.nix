@@ -284,14 +284,14 @@
       "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc="
     ];
 
-    # ## Garbage-collect automatically on a weekly basis; keep old
-    # ## versions during 20 days.
-    # settings.auto-optimise-store = true;
-    # gc = {
-    #   automatic = true;
-    #   dates = "weekly";
-    #   options = "--delete-older-than 20d";
-    # };
+    ## Garbage-collect automatically everything that is at least a month old.
+    ##
+    settings.auto-optimise-store = true;
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 31d";
+    };
   };
 
   ############################################################################
