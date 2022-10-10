@@ -134,7 +134,6 @@
             {
               conditions = [
                 "gitdir:~/git/tweag/**"
-                "gitdir:~/git/hachi/**"
               ];
               contents.user = {
                 name = "Nicolas “Niols” Jeannerod";
