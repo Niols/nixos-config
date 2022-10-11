@@ -18,8 +18,7 @@
     ## A
     arandr
     ardour
-    aspellDicts.fr
-    aspellDicts.uk
+    (aspellWithDicts (dicts: [ dicts.fr dicts.uk ]))
     asunder
     audacity
 
@@ -65,7 +64,6 @@
 
     ## I
     inkscape
-    ispell
 
     ## J
     jq
