@@ -1,4 +1,4 @@
-{ lib, pkgs, specialArgs, ... }: {
+{ lib, pkgs, config, specialArgs, ... }: {
     home.stateVersion = "21.05";
 
     programs.home-manager.enable = true;
@@ -6,8 +6,14 @@
     home.file.".face".source = ./face;
     home.file.".background-image".source = ./background-image;
 
-    xdg.configFile."user-dirs.dirs".source =
-      ./home/xdg-config/user-dirs.dirs;
+    xdg.userDirs = {
+      enable = true;
+      desktop = "${config.home.homeDirectory}";
+      documents = "${config.home.homeDirectory}/NiolsCloud/Documents";
+      music = "${config.home.homeDirectory}/NiolsCloud/Music";
+      pictures = "${config.home.homeDirectory}/NiolsCloud/Images";
+      videos = "${config.home.homeDirectory}/NiolsCloud/Vidéos";
+    };
 
     xdg.configFile."xfce4/terminal/terminalrc".source =
       ./home/xdg-config/xfce4/terminal/terminalrc;

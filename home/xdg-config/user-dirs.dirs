@@ -1,6 +1,0 @@
-XDG_DESKTOP_DIR="$HOME"
-XDG_DOCUMENTS_DIR="$HOME/NiolsCloud/Documents"
-XDG_DOWNLOAD_DIR="$HOME/Downloads"
-XDG_MUSIC_DIR="$HOME/NiolsCloud/Musique"
-XDG_PICTURES_DIR="$HOME/NiolsCloud/Images"
-XDG_VIDEOS_DIR="$HOME/NiolsCloud/Vidéos"
