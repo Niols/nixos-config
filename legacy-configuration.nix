@@ -254,10 +254,6 @@
       supportedFeatures = [ "benchmark" "big-parallel" "kvm" ];
     } ];
 
-    ## Required for as long as `nix flakes` are not available. FIXME:
-    ## try removing this eventually?
-    package = pkgs.nixFlakes;
-
     extraOptions = ''
       builders-use-substitutes = true
 
