@@ -26,6 +26,11 @@
     nixosConfigurations.wallace = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
+
+        ## A module providing overlays that will apply to the `pkgs` received by
+        ## all the subsequent modules.
+        (import ./overlays.nix inputs)
+
         ./hardware-configuration.nix
         ./legacy-configuration.nix
         ./packages.nix
