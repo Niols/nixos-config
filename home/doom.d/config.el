@@ -61,3 +61,8 @@
 
 (global-unset-key (kbd "C-<down-mouse-1>"))
 (global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+
+;; FIXME: disgusting hack to “fix” my problem when opening `magit'. cf for
+;; instance: https://tweag.slack.com/archives/C0T4L4QPR/p1665592172497879
+(defun doom-modeline-set-project-modeline () ())
+(defun doom-modeline-set-vcs-modeline () ())
