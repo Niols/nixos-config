@@ -6,17 +6,7 @@
     home.file.".face".source = ./face;
     home.file.".background-image".source = ./background-image;
 
-    xdg.userDirs = {
-      enable = true;
-      desktop = "${config.home.homeDirectory}";
-      documents = "${config.home.homeDirectory}/NiolsCloud/Documents";
-      music = "${config.home.homeDirectory}/NiolsCloud/Music";
-      pictures = "${config.home.homeDirectory}/NiolsCloud/Images";
-      videos = "${config.home.homeDirectory}/NiolsCloud/Vidéos";
-    };
-
-    xdg.configFile."xfce4/terminal/terminalrc".source =
-      ./home/xdg-config/xfce4/terminal/terminalrc;
+    xdg = import ./home/xdg { inherit config; };
 
     ########################################################################
     ## Doom Emacs
