@@ -3,10 +3,10 @@
 
     programs.home-manager.enable = true;
 
-    home.file.".face".source = ./face;
-    home.file.".background-image".source = ./background-image;
+    home.file.".face".source = ../face;
+    home.file.".background-image".source = ../background-image;
 
-    xdg = import ./home/xdg { inherit config; };
+    xdg = import ./xdg { inherit config; };
 
     ########################################################################
     ## Doom Emacs
@@ -17,12 +17,12 @@
       ## `~/.emacs.d` directory, everything is handled in
       ## `/etc/nixos/home/doom.d`.
       (pkgs.callPackage specialArgs.nix-doom-emacs {
-        doomPrivateDir = ./home/doom.d;
+        doomPrivateDir = ./doom.d;
       })
     ];
 
-    gtk = import ./home/gtk.nix;
-    programs.firefox = import ./home/programs/firefox.nix;
+    gtk = import ./gtk.nix;
+    programs.firefox = import ./programs/firefox.nix;
 
     ########################################################################
     ## Bash
