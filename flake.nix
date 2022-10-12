@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.emacs-overlay.follows = "emacs-overlay";
     };
+
+    nur = {
+      url = github:nix-community/nur;
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, ... }: {
