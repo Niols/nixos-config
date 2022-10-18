@@ -278,9 +278,13 @@
       "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc="
     ];
 
-    ## Garbage-collect automatically everything that is at least a month old.
+    ## Garbage-collect automatically everything that is at least a month old. Do
+    ## not garbage-collect results of `direnv` or `nix build` as long as there
+    ## is a link.
     ##
     settings.auto-optimise-store = true;
+    settings.keep-outputs = true;
+    settings.keep-derivations = true;
     gc = {
       automatic = true;
       dates = "daily";
