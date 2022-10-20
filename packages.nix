@@ -23,6 +23,7 @@
     audacity
 
     ## B
+    bat
     bc
     bintools
 
