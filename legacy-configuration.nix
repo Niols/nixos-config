@@ -285,11 +285,11 @@
     settings.auto-optimise-store = true;
     settings.keep-outputs = true;
     settings.keep-derivations = true;
-    gc = {
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 31d";
-    };
+    # gc = {
+    #   automatic = true;
+    #   dates = "daily";
+    #   options = "--delete-older-than 31d";
+    # };
   };
 
   ############################################################################
