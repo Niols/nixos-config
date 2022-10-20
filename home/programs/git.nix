@@ -31,7 +31,7 @@
           conditions = [
             "gitdir:~/git/perso/**"
             "gitdir:~/git/boloss/**"
-            "gitdir:/etc/**"
+            "gitdir:~/git/rscds/**"
           ];
           contents.user = {
             name = "Niols";
