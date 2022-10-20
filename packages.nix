@@ -8,8 +8,8 @@
           "discord"
           "skypeforlinux"
           "slack"
+          "steam-run"
           "steam-original"
-          "steam-runtime"
           "unrar"
           "zoom"
       ]);
