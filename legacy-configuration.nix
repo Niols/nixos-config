@@ -246,7 +246,8 @@
   ############################################################################
   ## Android setup
 
-  programs.adb.enable = true;
+  ## As of 26 October 2022, `android-tools` is broken, so we're disabling it.
+  # programs.adb.enable = true;
 
   ############################################################################
   ## Shells
