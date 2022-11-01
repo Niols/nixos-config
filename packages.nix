@@ -84,6 +84,7 @@
     ## N
     gnome.nautilus
     nextcloud-client
+    nix-output-monitor
 
     ## O
     opam
