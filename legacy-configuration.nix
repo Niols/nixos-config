@@ -222,20 +222,33 @@
   ############################################################################
   ## User account.
 
-  ## - `adbusers` & `plugdev` are necessary for `adb` & `fastboot`.
+  ## - `adbusers` are necessary for `adb` & `fastboot`.
   ## - `docker` for Docker
   ## - `networkmanager` for NetworkManager
+  ## - `plugdev` is a classic group for USB devices
   ## - `wheel` for `sudo`
 
-  users.users.niols = {
-    isNormalUser = true;
-    extraGroups = [
-      "adbusers"
-      "docker"
-      "networkmanager"
-      "plugdev"
-      "wheel"
-    ];
+  ## NOTE: groups in `users.*.extraGroups` are not created if they do not exist.
+  ## They must be created by other means.
+  ##
+  ## - `adbusers` is created when `programs.adb.enable = true` is set somewhere.
+  ##   (FIXME: Does this setting also create `plugdev`? Not sure.)
+  ##
+  ## - `plugdev` needs to be explicitly created in `users.groups`.
+
+  users = {
+    users.niols = {
+      isNormalUser = true;
+      extraGroups = [
+        "adbusers"
+        "docker"
+        "networkmanager"
+        #"plugdev"
+        "wheel"
+      ];
+    };
+
+    groups.plugdev.members = [ "niols" ];
   };
 
   ############################################################################
