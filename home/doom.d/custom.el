@@ -59,10 +59,6 @@
     (cons 340 "#5B6268")
     (cons 360 "#5B6268")))
  '(vc-annotate-very-old-color nil)
-
- ;; Prevent Tuareg mode from prefixing OCaml commands with `opam exec --'.
- '(tuareg-opam-insinuate 'f)
  )
 
-(custom-set-faces
- )
+(custom-set-faces)
