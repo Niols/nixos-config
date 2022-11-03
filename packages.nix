@@ -10,6 +10,7 @@
           "slack"
           "steam-run"
           "steam-original"
+          "teamspeak-client"
           "unrar"
           "zoom"
       ]);
