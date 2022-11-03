@@ -35,7 +35,7 @@
 
     ## D
     dig
-    direnv
+    direnv nix-direnv
     discord
 
     ## E
