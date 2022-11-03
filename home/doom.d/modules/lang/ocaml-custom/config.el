@@ -17,9 +17,13 @@
   ;; harmless if `prettify-symbols-mode' isn't active
   (setq tuareg-prettify-symbols-full t)
 
-  ;; Use opam to set environment
-  (setq tuareg-opam-insinuate t)
-  (tuareg-opam-update-env (tuareg-opam-current-compiler))
+  ;; FIXME: THIS IS WHERE THE CUSTOMIZATION TAKES PLACE
+  ;;
+  ;; We disable using OPAM for the environment because we trust that Nix, on the
+  ;; outside, will take care of it.
+  ;;
+  (setq tuareg-opam-insinuate nil)
+  ;(tuareg-opam-update-env (tuareg-opam-current-compiler))
 
   (setq-hook! 'tuareg-mode-hook
     comment-line-break-function #'+ocaml-custom/comment-indent-new-line)
