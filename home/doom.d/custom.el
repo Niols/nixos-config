@@ -29,6 +29,7 @@
    '("/home/niols/git/hachi/meta/minutes/"
      "/home/niols/NiolsCloud/Documents/Org/"))
 
+ ;; CRDT: Collaborative editing for geeks!
  '(package-selected-packages '(crdt))
 
  '(pdf-view-midnight-colors (cons "#bbc2cf" "#282c34"))
@@ -57,7 +58,8 @@
     (cons 320 "#6f4e52")
     (cons 340 "#5B6268")
     (cons 360 "#5B6268")))
- '(vc-annotate-very-old-color nil))
+ '(vc-annotate-very-old-color nil)
+ )
 
 (custom-set-faces
  )
