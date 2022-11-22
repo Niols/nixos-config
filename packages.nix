@@ -93,6 +93,7 @@
     ## P
     picard
     pkg-config
+    python3     ## needed by TreeMacs
 
     ## R
     racket
