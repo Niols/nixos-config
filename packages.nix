@@ -91,6 +91,7 @@
     opam
 
     ## P
+    pdftk
     picard
     pkg-config
     python3     ## needed by TreeMacs
