@@ -10,6 +10,9 @@
   keybindings = {
     "Shift-Control-C" = "eval:selection_to_clipboard";
     "Shift-Control-V" = "eval:paste_clipboard";
+    "Control-minus" = "resize-font:smaller";
+    "Control-plus" = "resize-font:bigger";
+    "Control-equal" = "resize-font:equal";
   };
 
   ## Whether to enable the scrollbar.
