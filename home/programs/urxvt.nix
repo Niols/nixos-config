@@ -18,6 +18,10 @@
   ## Whether to enable the scrollbar.
   scroll.bar.enable = false;
 
+  ## ISO14755 support for viewing and entering unicode characters. We disable it
+  ## because it is otherwise bound to `Control-Shift`.
+  iso14755 = false;
+
   ## Whether to enable pseudo-transparency.
   transparent = true;
 
