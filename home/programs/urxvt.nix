@@ -22,33 +22,24 @@
   transparent = true;
 
   extraConfig = {
-    ## special
-    "foreground" = "#93a1a1";
-    "background" = "#141c21";
-    "cursorColor" = "#afbfbf";
-    ## black
-    "color0" = "#263640";
-    "color8" = "#4a697d";
-    ## red
-    "color1" = "#d12f2c";
-    "color9" = "#fa3935";
-    ## green
-    "color2" = "#819400";
-    "color10" = "#a4bd00";
-    ## yellow
-    "color3" = "#b08500";
-    "color11" = "#d9a400";
-    ## blue
-    "color4" = "#2587cc";
-    "color12" = "#2ca2f5";
-    ## magenta
-    "color5" = "#696ebf";
-    "color13" = "#8086e8";
-    ## cyan
-    "color6" = "#289c93";
-    "color14" = "#33c5ba";
-    ## white
-    "color7" = "#bfbaac";
-    "color15" = "#fdf6e3";
+    ## Tango colour palette
+    "foreground" = "white";
+    "background" = "black";
+    "color0" = "#2E3436";
+    "color1" = "#a40000";
+    "color2" = "#4E9A06";
+    "color3" = "#C4A000";
+    "color4" = "#3465A4";
+    "color5" = "#75507B";
+    "color6" = "#ce5c00";
+    "color7" = "#babdb9";
+    "color8" = "#555753";
+    "color9" = "#EF2929";
+    "color10" = "#8AE234";
+    "color11" = "#FCE94F";
+    "color12" = "#729FCF";
+    "color13" = "#AD7FA8";
+    "color14" = "#fcaf3e";
+    "color15" = "#EEEEEC";
   };
 }
