@@ -26,4 +26,8 @@
     programs.bash = import ./programs/bash.nix;
     programs.firefox = import ./programs/firefox.nix;
     programs.git = import ./programs/git.nix { inherit lib; };
+    programs.lsd = {
+      enable = true;
+      enableAliases = true;
+    };
 }
