@@ -30,4 +30,5 @@
       enable = true;
       enableAliases = true;
     };
+    programs.urxvt = import ./programs/urxvt.nix;
 }
