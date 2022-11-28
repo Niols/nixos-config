@@ -126,7 +126,7 @@ bp_pwd () {
 bp_git () {
     if _bp_git_status=$(git status --short 2>/dev/null); then
         bp_open_box black lightyellow
-        printf 'git: '
+        printf '\uea64 '
         _bp_git_branch=$(git branch --show-current)
         if [ -n "$_bp_git_branch" ]; then
             printf '%s' "$_bp_git_branch"
@@ -135,7 +135,7 @@ bp_git () {
             printf '%s' "$_bp_git_commit"
         fi
         if [ -n "$_bp_git_status" ]; then
-            printf ' (dirty)'
+            printf '*'
         fi
         bp_close_box lightyellow
     fi
@@ -144,7 +144,7 @@ bp_git () {
 bp_nix () {
     if [ -n "${IN_NIX_SHELL+x}" ]; then
         bp_open_box black lightcyan
-        printf 'nix: %s' "$IN_NIX_SHELL"
+        printf '\uf313 %s' "$IN_NIX_SHELL"
         bp_close_box lightcyan
     fi
 }
