@@ -144,7 +144,7 @@ bp_git () {
 bp_nix () {
     if [ -n "${IN_NIX_SHELL+x}" ]; then
         bp_open_box black lightcyan
-        printf '\uf313 %s' "$IN_NIX_SHELL"
+        printf '\uf313'
         bp_close_box lightcyan
     fi
 }
