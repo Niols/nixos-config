@@ -81,6 +81,13 @@
   };
 
   ############################################################################
+  ## Fonts
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  ];
+
+  ############################################################################
   ## Networking
   ##
   ## The global useDHCP flag is deprecated, therefore explicitly set

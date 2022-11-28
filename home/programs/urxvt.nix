@@ -3,7 +3,7 @@
 
   ## List of fonts to be used.
   fonts = [
-    "xft:DejaVu Sans Mono:style=Normal:antialias=true:size=10:minspace=False"
+    "xft:FiraCode Nerd Font Mono:style=Normal:antialias=true:size=11:minspace=False"
   ];
 
   ## Mapping of keybindings to actions.
