@@ -126,7 +126,7 @@ bp_pwd () {
 bp_git () {
     if _bp_git_status=$(git status --short 2>/dev/null); then
         bp_open_box black lightyellow
-        printf '\uea64 '
+        printf '\ue725 '
         _bp_git_branch=$(git branch --show-current)
         if [ -n "$_bp_git_branch" ]; then
             printf '%s' "$_bp_git_branch"
