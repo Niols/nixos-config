@@ -255,6 +255,9 @@
 
   services.udev = import ./udev.nix;
 
+  ## Visit http://127.0.0.1:8384/ to check that it works.
+  services.syncthing = import ./syncthing.nix;
+
   ############################################################################
   ## Background & Transparency
 
