@@ -66,6 +66,7 @@
 
     ## I
     inkscape
+    imagemagick
 
     ## J
     jq
