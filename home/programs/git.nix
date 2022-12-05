@@ -65,7 +65,7 @@
   ## Lesser Known Git Commands, by Tim Pettersen
   ## https://dzone.com/articles/lesser-known-git-commands
   aliases = {
-    it = "!git init && git commit -m “root” --allow-empty";
+    it = "!git init && git commit -m root --allow-empty";
     commend = "commit --amend --no-edit";
     grog = "log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)\
 %h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold\
