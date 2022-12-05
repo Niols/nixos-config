@@ -25,10 +25,6 @@
 
  '(objed-cursor-color "#ff6c6b")
 
- '(org-agenda-files
-   '("/home/niols/git/hachi/meta/minutes/"
-     "/home/niols/NiolsCloud/Documents/Org/"))
-
  ;; CRDT: Collaborative editing for geeks!
  '(package-selected-packages '(crdt))
 
