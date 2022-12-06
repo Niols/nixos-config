@@ -21,20 +21,24 @@
   settings = {
     ## Substituters that are always used.
     substituters = [
-      "https://nix-community.cachix.org/"
-      "https://cache.nixos.org/"
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org"
     ];
 
     ## Not used by default but trusted. If a flake uses `extra-substituters`
     ## with these, they will be accepted without issue.
     trusted-substituters = [
-      "https://cache.iog.io/"
+      "https://cache.iog.io"
+      "https://iohk.cachix.org"
+      "https://public-plutonomicon.cachix.org"
     ];
 
     ## Public keys that we trust to put stuff in substituters.
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ## for cache.iog.io
+      "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo="
+      "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc"
     ];
   };
 
