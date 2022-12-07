@@ -31,6 +31,7 @@
       "https://cache.iog.io"
       "https://iohk.cachix.org"
       "https://public-plutonomicon.cachix.org"
+      "https://tweag-tree-sitter-formatter.cachix.org"
     ];
 
     ## Public keys that we trust to put stuff in substituters.
@@ -39,6 +40,7 @@
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ## for cache.iog.io
       "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo="
       "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc"
+      "tweag-tree-sitter-formatter.cachix.org-1:R95oCa9JV/Cu8dtdFZY55HLFqJ3ASh34dXh7o7LeL5Y="
     ];
   };
 
