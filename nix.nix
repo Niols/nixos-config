@@ -1,15 +1,25 @@
 {
   settings.trusted-users = [ "@wheel" ];
 
-  ## Tweag Remote Builder
-  buildMachines = [ {
-    hostName = "build01.tweag.io";
-    maxJobs = 24;
-    sshUser = "nix";
-    sshKey = "/root/.ssh/id-tweag-builder";
-    system = "x86_64-linux";
-    supportedFeatures = [ "benchmark" "big-parallel" "kvm" ];
-  } ];
+  buildMachines = [
+    ## Tweag Remote Builders
+    {
+      hostName = "build01.tweag.io";
+      maxJobs = 24;
+      sshUser = "nix";
+      sshKey = "/root/.ssh/id-tweag-builder";
+      system = "x86_64-linux";
+      supportedFeatures = [ "big-parallel" "kvm" ];
+    }
+    {
+      hostName = "build02.tweag.io";
+      maxJobs = 24;
+      sshUser = "nix";
+      sshKey = "/root/.ssh/id-tweag-builder";
+      systems = ["aarch64-darwin" "x86_64-darwin"];
+      supportedFeatures = [ "big-parallel" ];
+    }
+  ];
 
   extraOptions = ''
       builders-use-substitutes = true
