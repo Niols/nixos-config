@@ -9,7 +9,7 @@
       sshUser = "nix";
       sshKey = "/root/.ssh/id-tweag-builder";
       system = "x86_64-linux";
-      supportedFeatures = [ "big-parallel" "kvm" ];
+      supportedFeatures = [ "benchmark" "big-parallel" "kvm" ];
     }
     {
       hostName = "build02.tweag.io";
@@ -17,7 +17,7 @@
       sshUser = "nix";
       sshKey = "/root/.ssh/id-tweag-builder";
       systems = ["aarch64-darwin" "x86_64-darwin"];
-      supportedFeatures = [ "big-parallel" ];
+      supportedFeatures = [ "benchmark" "big-parallel" ];
     }
   ];
 
