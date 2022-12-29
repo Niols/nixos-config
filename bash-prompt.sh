@@ -111,7 +111,7 @@ bp_close_box () {
 ## the background
 
 bp_user () {
-    [ $(id -u) -eq 0 ] && BP_USER_BOX=lightred || BP_USER_BOX=lightgreen
+    [ $(id -u) -eq 0 ] && BP_USER_BOX=red || BP_USER_BOX=green
     bp_open_box black "$BP_USER_BOX" --first
     printf '%s@%s' $(id -nu) $(hostname)
     bp_close_box "$BP_USER_BOX"
