@@ -1,28 +1,18 @@
 {
   inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-unstable";
-    };
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = github:nix-community/home-manager;
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    emacs-overlay.url = github:nix-community/emacs-overlay;
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.emacs-overlay.follows = "emacs-overlay";
-    };
+    nix-doom-emacs.url = github:nix-community/nix-doom-emacs;
+    nix-doom-emacs.inputs.nixpkgs.follows = "nixpkgs";
+    nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
 
-    nur = {
-      url = github:nix-community/nur;
-    };
+    nur.url = github:nix-community/nur;
   };
 
   outputs = inputs@{ nixpkgs, home-manager, ... }: {
