@@ -1,4 +1,17 @@
-{ config, pkgs, ... }:
+{ opam-nix }: { config, pkgs, ... }:
+
+let ocamlConstraints = {
+        dune = "*";
+        merlin = "*";
+        ocaml-base-compiler = "*";
+        ocaml-lsp-server = "*";
+        ocp-indent = "*";
+        ppx_deriving = "*";
+        utop = "*";
+    };
+    ocamlPackages = opam-nix.queryToScope { pkgs = pkgs; } ocamlConstraints;
+    ocamlPackages' = map (x: ocamlPackages.${x}) (builtins.attrNames ocamlConstraints);
+in
 
 {
   ## Packages installed in system profile. Allow a selected set of
@@ -15,7 +28,7 @@
           "zoom"
       ]);
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = (with pkgs; [
     ## A
     arandr
     ardour
@@ -88,9 +101,6 @@
     nextcloud-client
     nix-output-monitor
 
-    ## O
-    opam
-
     ## P
     pdftk
     picard
@@ -132,5 +142,5 @@
 
     ## Z
     zoom-us
-  ];
+  ]) ++ ocamlPackages';
 }

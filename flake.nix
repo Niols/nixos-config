@@ -12,10 +12,13 @@
     nix-doom-emacs.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
 
-    nur.url = github:nix-community/nur;
+    opam-nix.url = github:tweag/opam-nix;
+    opam-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # nur.url = github:nix-community/nur;
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
+  outputs = inputs@{ nixpkgs, home-manager, opam-nix, ... }: {
 
     nixosConfigurations.wallace = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -27,7 +30,7 @@
 
         ./hardware-configuration.nix
         ./legacy-configuration.nix
-        ./packages.nix
+        (import ./packages.nix { opam-nix = opam-nix.lib.x86_64-linux; })
 
         {
           nix.registry.nixpkgs.flake = nixpkgs;
