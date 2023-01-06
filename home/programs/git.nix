@@ -32,6 +32,7 @@
             "gitdir:~/git/perso/**"
             "gitdir:~/git/boloss/**"
             "gitdir:~/git/rscds/**"
+            "gitdir:~/.opam/plugins/opam-publish/repos/**"
           ];
           contents.user = {
             name = "Niols";
