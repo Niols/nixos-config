@@ -108,7 +108,6 @@ in
     python3     ## needed by TreeMacs
 
     ## R
-    racket
     ripgrep
 
     ## S
