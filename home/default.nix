@@ -32,4 +32,5 @@
       enableAliases = true;
     };
     programs.urxvt = import ./programs/urxvt.nix;
+    programs.starship = import ./programs/starship.nix;
 }

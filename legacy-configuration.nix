@@ -229,8 +229,6 @@
   };
 
   programs.bash = {
-    promptInit = builtins.readFile ./bash-prompt.sh;
-
     interactiveShellInit = ''
       ## If OPAM is available on the system and it has been initialised, then we
       ## set it up for this Shell.
