@@ -15,10 +15,10 @@
     opam-nix.url = github:tweag/opam-nix;
     opam-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # nur.url = github:nix-community/nur;
+    nixos-hardware.url = github:NixOS/nixos-hardware/master;
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, opam-nix, ... }: {
+  outputs = inputs@{ nixpkgs, home-manager, opam-nix, nixos-hardware, ... }: {
 
     nixosConfigurations.wallace = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -29,6 +29,10 @@
         (import ./overlays.nix inputs)
 
         ./hardware-configuration.nix
+
+        ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
+        nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
+
         ./legacy-configuration.nix
         (import ./packages.nix { opam-nix = opam-nix.lib.x86_64-linux; })
 
