@@ -53,6 +53,7 @@ in
     bat
     bc
     bintools
+    btop
 
     ## C
     ## caffeine-ng -> the behaviour is really inconsistent
