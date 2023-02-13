@@ -27,5 +27,16 @@
         exit 127
       fi
     )
+
+    ## Removes all the `.direnv/flake-profile-*-link` files that are not the one
+    ## pointed by `.direnv/flake-profile`.
+    ##
+    cleanup_flake_profiles () {
+      find . \
+          -type l \
+          -regex '.*/.direnv/flake-profile-[0-9]*-link' \
+          -exec sh -c 'a={}; b=''${a%-[0-9]*-link}; ! [ $a -ef $b ]' ';' \
+          -delete
+    }
   '';
 }
