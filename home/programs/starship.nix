@@ -47,6 +47,7 @@ in {
     };
 
     git_branch.format = lbox "bright-yellow" "[ $branch(:$remote_branch)](fg:black bg:bright-yellow)";
+    git_commit.format = lbox "bright-yellow" "[ ($hash$tag)](fg:black bg:bright-yellow)";
     git_status.format = rbox "bright-yellow" "[$all_status$ahead_behind](fg:black bg:bright-yellow)";
 
     nix_shell.format = box "bright-cyan" "[$symbol$state]($style)";
