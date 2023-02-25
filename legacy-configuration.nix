@@ -204,6 +204,10 @@
         #"plugdev"
         "wheel"
       ];
+
+      ## NOTE: Not great, but necessary for the `.face`.
+      ## cf https://github.com/NixOS/nixpkgs/issues/73976
+      homeMode = "755";
     };
 
     groups.plugdev.members = [ "niols" ];
