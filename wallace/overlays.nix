@@ -10,7 +10,7 @@
     emacs-overlay.overlay
 
     ## Custom overlay to brutally replace `emacs` by `emacsGit`.
-    (self: super: { emacs = self.emacsGit; })
+    (final: _: { emacs = final.emacsGit; })
 
   ];
 }

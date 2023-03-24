@@ -16,11 +16,10 @@ nixpkgs.lib.nixosSystem {
     ./legacy-configuration.nix
     (import ./packages.nix { opam-nix = opam-nix.lib.x86_64-linux; })
 
-    {
-      nix.registry.nixpkgs.flake = nixpkgs;
-    }
+    { nix.registry.nixpkgs.flake = nixpkgs; }
 
-    home-manager.nixosModules.home-manager {
+    home-manager.nixosModules.home-manager
+    {
       home-manager = {
         ## By default, Home Manager uses a private pkgs instance that is
         ## configured via the `home-manager.users.<name>.nixpkgs` options.
