@@ -1,0 +1,31 @@
+---
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+
+  build-wallace:
+    name: Build Wallace
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v3.3.0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v19
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Wallace
+        run: |
+          nix build .#nixosConfigurations.wallace.config.system.build.toplevel
