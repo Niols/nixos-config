@@ -1,4 +1,4 @@
-## https://starship.rs/
+# # https://starship.rs/
 
 let
   ## open and close box
@@ -37,7 +37,8 @@ in {
 
     directory = {
       format = box "bright-black" "[$path]($style bg:bright-black)";
-      repo_root_format = box "bright-black" "[$before_root_path]($before_repo_root_style bg:bright-black)[$repo_root]($repo_root_style bg:bright-black)[$path]($style bg:bright-black)[$read_only]($read_only_style bg:bright-black)";
+      repo_root_format = box "bright-black"
+        "[$before_root_path]($before_repo_root_style bg:bright-black)[$repo_root]($repo_root_style bg:bright-black)[$path]($style bg:bright-black)[$read_only]($read_only_style bg:bright-black)";
       style = "fg:white";
       repo_root_style = "fg:white";
       before_repo_root_style = "fg:black";
@@ -46,9 +47,12 @@ in {
       truncation_symbol = "…";
     };
 
-    git_branch.format = lbox "bright-yellow" "[ $branch(:$remote_branch)](fg:black bg:bright-yellow)";
-    git_commit.format = lbox "bright-yellow" "[ \\($hash$tag\\)](fg:black bg:bright-yellow)";
-    git_status.format = rbox "bright-yellow" "[(\\[$all_status$ahead_behind\\])](fg:black bg:bright-yellow)";
+    git_branch.format = lbox "bright-yellow"
+      "[ $branch(:$remote_branch)](fg:black bg:bright-yellow)";
+    git_commit.format =
+      lbox "bright-yellow" "[ \\($hash$tag\\)](fg:black bg:bright-yellow)";
+    git_status.format = rbox "bright-yellow"
+      "[(\\[$all_status$ahead_behind\\])](fg:black bg:bright-yellow)";
 
     nix_shell.format = box "bright-cyan" "[$symbol$state]($style)";
     nix_shell.symbol = "";

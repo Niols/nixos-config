@@ -1,45 +1,47 @@
-{ opam-nix }: { config, pkgs, ... }:
+{ opam-nix }:
+{ config, pkgs, ... }:
 
-let ocamlConstraints = {
-        dune = "*";
-        merlin = "*";
-        ocaml-base-compiler = "*";
-        ocaml-lsp-server = "*";
-        ocp-indent = "*";
-        ppx_deriving = "*";
-        utop = "*";
-    };
-    ocamlPackages = opam-nix.queryToScope { pkgs = pkgs; } ocamlConstraints;
-    ocamlPackages' = map (x: ocamlPackages.${x}) (builtins.attrNames ocamlConstraints);
+let
+  ocamlConstraints = {
+    dune = "*";
+    merlin = "*";
+    ocaml-base-compiler = "*";
+    ocaml-lsp-server = "*";
+    ocp-indent = "*";
+    ppx_deriving = "*";
+    utop = "*";
+  };
+  ocamlPackages = opam-nix.queryToScope { pkgs = pkgs; } ocamlConstraints;
+  ocamlPackages' =
+    map (x: ocamlPackages.${x}) (builtins.attrNames ocamlConstraints);
 
-    ## Emacs for Haskell is not very Nix-aware and expects a binary called
-    ## `haskell-language-server-wrapper`. But Nix environments make this notion
-    ## of wrappers irrelevant and therefore they do not provide the binary in
-    ## question. This compatibility script adds an executable fallback called
-    ## `haskell-language-server-wrapper` that just relays everything to
-    ## `haskell-language-server`. This should make my life easier everywhere.
-    hlsWrapperCompatScript = pkgs.writeShellApplication {
-        name = "haskell-language-server-wrapper";
-        text = ''
-          exec haskell-language-server "$@"
-        '';
-    };
-in
+  ## Emacs for Haskell is not very Nix-aware and expects a binary called
+  ## `haskell-language-server-wrapper`. But Nix environments make this notion
+  ## of wrappers irrelevant and therefore they do not provide the binary in
+  ## question. This compatibility script adds an executable fallback called
+  ## `haskell-language-server-wrapper` that just relays everything to
+  ## `haskell-language-server`. This should make my life easier everywhere.
+  hlsWrapperCompatScript = pkgs.writeShellApplication {
+    name = "haskell-language-server-wrapper";
+    text = ''
+      exec haskell-language-server "$@"
+    '';
+  };
 
-{
+in {
   ## Packages installed in system profile. Allow a selected set of
   ## unfree packages for this list.
-  nixpkgs.config.allowUnfreePredicate = (pkg: builtins.elem
-      (pkgs.lib.getName pkg) [
-          "discord"
-          "skypeforlinux"
-          "slack"
-          "steam-run"
-          "steam-original"
-          "teamspeak-client"
-          "unrar"
-          "zoom"
-      ]);
+  nixpkgs.config.allowUnfreePredicate = (pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "discord"
+      "skypeforlinux"
+      "slack"
+      "steam-run"
+      "steam-original"
+      "teamspeak-client"
+      "unrar"
+      "zoom"
+    ]);
 
   environment.systemPackages = (with pkgs; [
     ## A
@@ -62,7 +64,8 @@ in
 
     ## D
     dig
-    direnv nix-direnv
+    direnv
+    nix-direnv
     discord
 
     ## E
@@ -71,7 +74,7 @@ in
     evince
 
     ## F
-    fd  ## alternative to 'find' needed by Doom Emacs
+    fd # # alternative to 'find' needed by Doom Emacs
     ffmpeg-full
     gnome.file-roller
     filezilla
@@ -103,7 +106,7 @@ in
     keepassxc
 
     ## L
-    ledger-live-desktop ## Wallet app for Ledger devices
+    ledger-live-desktop # # Wallet app for Ledger devices
     libreoffice
     lilypond
 
@@ -120,7 +123,7 @@ in
     pdftk
     picard
     pkg-config
-    python3     ## needed by TreeMacs
+    python3 # # needed by TreeMacs
 
     ## R
     ripgrep
@@ -146,7 +149,7 @@ in
     wget
 
     ## X
-    xf86_input_wacom  ## wacom tablet support + `xsetwacom`
+    xf86_input_wacom # # wacom tablet support + `xsetwacom`
     xorg.xev
     xournalpp
 

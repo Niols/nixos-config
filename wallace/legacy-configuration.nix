@@ -83,9 +83,7 @@
   ############################################################################
   ## Fonts
 
-  fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
-  ];
+  fonts.fonts = with pkgs; [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
 
   ############################################################################
   ## Networking
@@ -104,8 +102,9 @@
     networkmanager.enable = true;
 
     nameservers = [
-        # "1.1.1.1" "1.0.0.1" ## Cloudflare
-        "8.8.8.8" "8.8.4.4" ## Google
+      # "1.1.1.1" "1.0.0.1" ## Cloudflare
+      "8.8.8.8"
+      "8.8.4.4" # # Google
     ];
   };
 

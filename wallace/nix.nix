@@ -16,24 +16,22 @@
       maxJobs = 24;
       sshUser = "nix";
       sshKey = "/root/.ssh/id-tweag-builder";
-      systems = ["aarch64-darwin" "x86_64-darwin"];
+      systems = [ "aarch64-darwin" "x86_64-darwin" ];
       supportedFeatures = [ "benchmark" "big-parallel" ];
     }
   ];
 
   extraOptions = ''
-      builders-use-substitutes = true
+    builders-use-substitutes = true
 
-      ## Required to use the `nix` CLI and `nix search` in particular.
-      experimental-features = nix-command flakes
-    '';
+    ## Required to use the `nix` CLI and `nix search` in particular.
+    experimental-features = nix-command flakes
+  '';
 
   settings = {
     ## Substituters that are always used.
-    substituters = [
-      "https://nix-community.cachix.org"
-      "https://cache.nixos.org"
-    ];
+    substituters =
+      [ "https://nix-community.cachix.org" "https://cache.nixos.org" ];
 
     ## Not used by default but trusted. If a flake uses `extra-substituters`
     ## with these, they will be accepted without issue.
@@ -47,7 +45,7 @@
     ## Public keys that we trust to put stuff in substituters.
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ## for cache.iog.io
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" # # for cache.iog.io
       "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo="
       "public-plutonomicon.cachix.org-1:3AKJMhCLn32gri1drGuaZmFrmnue+KkKrhhubQk/CWc"
       "tweag-tree-sitter-formatter.cachix.org-1:R95oCa9JV/Cu8dtdFZY55HLFqJ3ASh34dXh7o7LeL5Y="

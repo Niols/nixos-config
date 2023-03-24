@@ -28,8 +28,10 @@
   windowManager.i3 = {
     enable = true;
     extraPackages = with pkgs; [
-      dmenu i3status i3lock
-      python39Packages.py3status ## wrapper around i3status
+      dmenu
+      i3status
+      i3lock
+      python39Packages.py3status # # wrapper around i3status
     ];
   };
 
@@ -41,9 +43,9 @@
       enable = true;
       background = ./background-image;
       extraConfig = ''
-      ## Do not hide users, show their `.face`!
-      greeter-hide-users = false
-    '';
+        ## Do not hide users, show their `.face`!
+        greeter-hide-users = false
+      '';
     };
   };
 
