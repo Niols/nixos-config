@@ -25,6 +25,7 @@
   outputs = inputs:
     { # # NixOS configurations
       nixosConfigurations.wallace = import ./wallace inputs;
+      nixosConfigurations.siegfried = import ./siegfried inputs;
     } // ( # # More standard part of the flake
       inputs.flake-utils.lib.eachDefaultSystem (system:
         let
