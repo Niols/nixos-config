@@ -56,8 +56,15 @@
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
 
+  nix = {
+    settings.trusted-users = [ "@wheel" ];
 
-  
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+
+    settings.auto-optimise-store = true;
+  };
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -130,4 +137,3 @@
   system.stateVersion = "22.11"; # Did you read the comment?
 
 }
-
