@@ -92,6 +92,8 @@
     htop
     tmux
     wget
+    git
+    bat
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
