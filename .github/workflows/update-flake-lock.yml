@@ -24,7 +24,7 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Update flake lock
-        uses: determinatesystems/update-flake-lock@v17
+        uses: determinatesystems/update-flake-lock@v18
         with:
           pr-title: "Update flake.lock"
           ## The token below opens the PRs as `Niols` instead of GitHub Actions.
