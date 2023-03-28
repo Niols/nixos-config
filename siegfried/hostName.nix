@@ -1,0 +1,1 @@
+_: { networking.hostName = "siegfried"; }
