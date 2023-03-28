@@ -5,22 +5,8 @@
     ./hardware-configuration.nix
   ];
 
-  networking = {
-    defaultGateway = "37.187.6.254";
-    # Use google's public DNS server
-    nameservers = [ "8.8.8.8" ];
-    interfaces.eth0.ipv4.addresses = [{
-      address = "37.187.6.180";
-      prefixLength = 24;
-    }];
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
@@ -86,12 +72,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.ports = [ 22 2222 3000 9100 ];
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
