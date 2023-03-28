@@ -8,16 +8,6 @@
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
-  nix = {
-    settings.trusted-users = [ "@wheel" ];
-
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-
-    settings.auto-optimise-store = true;
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.niols = {
     isNormalUser = true;
