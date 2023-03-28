@@ -1,4 +1,6 @@
 _: {
+  import = [ ./hostName.nix ];
+
   networking = {
     defaultGateway = "37.187.6.254";
 
