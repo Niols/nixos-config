@@ -8,15 +8,6 @@
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.niols = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
-    ];
-  };
-
   environment.systemPackages = with pkgs; [ emacs htop tmux wget git bat ];
 
   # Enable the OpenSSH daemon.
