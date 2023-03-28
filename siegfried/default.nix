@@ -2,5 +2,12 @@
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
-  modules = [ ./configuration.nix ./boot ./networking ./nix ./users ];
+  modules = [
+    ./hardware-configuration.nix
+    ./configuration.nix
+    ./boot
+    ./networking
+    ./nix
+    ./users
+  ];
 }
