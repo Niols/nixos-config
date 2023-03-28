@@ -11,5 +11,6 @@ nixpkgs.lib.nixosSystem {
     ./users
     ./services
     ./system
+    ./time
   ];
 }
