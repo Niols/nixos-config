@@ -5,10 +5,9 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   boot.kernelParams = [ "net.ifnames=0" ];
 
@@ -94,14 +93,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    emacs
-    htop
-    tmux
-    wget
-    git
-    bat
-  ];
+  environment.systemPackages = with pkgs; [ emacs htop tmux wget git bat ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
