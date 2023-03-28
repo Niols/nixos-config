@@ -5,12 +5,12 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./hardware-configuration.nix
     ./boot.nix
+    ./environment.nix
     ./networking
     ./nix.nix
-    ./users.nix
     ./services.nix
     ./system.nix
     ./time.nix
-    ./environment.nix
+    ./users.nix
   ];
 }
