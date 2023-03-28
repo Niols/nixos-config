@@ -4,13 +4,13 @@ nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
     ./hardware-configuration.nix
-    ./boot
+    ./boot.nix
     ./networking
-    ./nix
-    ./users
-    ./services
-    ./system
-    ./time
+    ./nix.nix
+    ./users.nix
+    ./services.nix
+    ./system.nix
+    ./time.nix
     ./environment.nix
   ];
 }
