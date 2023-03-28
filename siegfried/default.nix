@@ -9,5 +9,6 @@ nixpkgs.lib.nixosSystem {
     ./networking
     ./nix
     ./users
+    ./services
   ];
 }

@@ -6,10 +6,6 @@
 
   environment.systemPackages = with pkgs; [ emacs htop tmux wget git bat ];
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.ports = [ 22 2222 3000 9100 ];
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
