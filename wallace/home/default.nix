@@ -31,4 +31,7 @@
   };
   programs.urxvt = import ./programs/urxvt.nix;
   programs.starship = import ./programs/starship.nix;
+
+  programs.nix-index.enable = true;
+  programs.nix-index.symlinkToCacheHome = true;
 }

@@ -255,6 +255,11 @@
     '';
   };
 
+  ## For using `nix-index` as the `command-not-found` hook, we need to disable
+  ## that hook. FIXME: this and all the `nix-index` stuff should go in the same
+  ## file.
+  programs.command-not-found.enable = false;
+
   services.udev = import ./udev.nix;
 
   ## Visit http://127.0.0.1:8384/ to check that it works.

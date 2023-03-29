@@ -1,4 +1,5 @@
-inputs@{ nixpkgs, nixos-hardware, opam-nix, home-manager, ... }:
+inputs@{ nixpkgs, nixos-hardware, opam-nix, home-manager, nix-index-database
+, ... }:
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -17,6 +18,8 @@ nixpkgs.lib.nixosSystem {
     (import ./packages.nix { opam-nix = opam-nix.lib.x86_64-linux; })
 
     { nix.registry.nixpkgs.flake = nixpkgs; }
+
+    nix-index-database.nixosModules.nix-index
 
     home-manager.nixosModules.home-manager
     {
@@ -47,5 +50,7 @@ nixpkgs.lib.nixosSystem {
         extraSpecialArgs = inputs;
       };
     }
+
+    { home-manager.sharedModules = [ nix-index-database.hmModules.nix-index ]; }
   ];
 }
