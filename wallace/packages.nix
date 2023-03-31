@@ -61,6 +61,7 @@ in {
     ## caffeine-ng -> the behaviour is really inconsistent
     calc
     chromium
+    comma
 
     ## D
     dig
