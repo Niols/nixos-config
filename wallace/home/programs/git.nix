@@ -26,6 +26,7 @@
       conditions = [
         "gitdir:~/git/perso/**"
         "gitdir:~/git/boloss/**"
+        "gitdir:~/git/colis/**"
         "gitdir:~/git/rscds/**"
         "gitdir:~/.opam/plugins/opam-publish/repos/**"
       ];
