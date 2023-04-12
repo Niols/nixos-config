@@ -14,7 +14,7 @@ nixpkgs.lib.nixosSystem {
     nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
     ./legacy-configuration.nix
-    ./packages.nix
+    ./packages
 
     { nix.registry.nixpkgs.flake = nixpkgs; }
 
