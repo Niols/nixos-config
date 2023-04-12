@@ -1,20 +1,6 @@
-{ opam-nix }:
 { config, pkgs, ... }:
 
 let
-  ocamlConstraints = {
-    dune = "*";
-    merlin = "*";
-    ocaml-base-compiler = "*";
-    ocaml-lsp-server = "*";
-    ocp-indent = "*";
-    ppx_deriving = "*";
-    utop = "*";
-  };
-  ocamlPackages = opam-nix.queryToScope { pkgs = pkgs; } ocamlConstraints;
-  ocamlPackages' =
-    map (x: ocamlPackages.${x}) (builtins.attrNames ocamlConstraints);
-
   ## Emacs for Haskell is not very Nix-aware and expects a binary called
   ## `haskell-language-server-wrapper`. But Nix environments make this notion
   ## of wrappers irrelevant and therefore they do not provide the binary in
@@ -43,7 +29,7 @@ in {
       "zoom"
     ]);
 
-  environment.systemPackages = (with pkgs; [
+  environment.systemPackages = with pkgs; [
     ## A
     arandr
     ardour
@@ -160,5 +146,5 @@ in {
 
     ## Z
     zoom-us
-  ]) ++ ocamlPackages';
+  ];
 }

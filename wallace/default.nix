@@ -1,5 +1,4 @@
-inputs@{ nixpkgs, nixos-hardware, opam-nix, home-manager, nix-index-database
-, ... }:
+inputs@{ nixpkgs, nixos-hardware, home-manager, nix-index-database, ... }:
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -15,7 +14,7 @@ nixpkgs.lib.nixosSystem {
     nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
     ./legacy-configuration.nix
-    (import ./packages.nix { opam-nix = opam-nix.lib.x86_64-linux; })
+    ./packages.nix
 
     { nix.registry.nixpkgs.flake = nixpkgs; }
 
