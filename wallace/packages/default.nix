@@ -29,7 +29,6 @@ in {
       "zoom"
     ]);
 
-  environment.systemPackages =
-      (import ./system.nix { inherit pkgs; })
-      ++ [hlsWrapperCompatScript];
+  environment.systemPackages = (import ./system.nix { inherit pkgs; })
+    ++ (import ./ocaml.nix { inherit pkgs; }) ++ [ hlsWrapperCompatScript ];
 }
