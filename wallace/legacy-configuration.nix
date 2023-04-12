@@ -116,7 +116,8 @@
   ##     timedatectl list-timezones
   ##
   #time.timeZone = "Europe/Paris";
-  time.timeZone = "Iceland";
+  # time.timeZone = "Iceland";
+  time.timeZone = "Europe/London";
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
