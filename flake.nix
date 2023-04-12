@@ -12,9 +12,6 @@
     nix-doom-emacs.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
 
-    opam-nix.url = "github:tweag/opam-nix";
-    opam-nix.inputs.nixpkgs.follows = "nixpkgs";
-
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     flake-utils.url = "github:numtide/flake-utils";
