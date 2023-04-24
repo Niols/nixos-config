@@ -1,118 +1,118 @@
-{ pkgs, ... }: with pkgs;
-  [
-    ## A
-    arandr
-    ardour
-    (aspellWithDicts (dicts: [ dicts.fr dicts.uk ]))
-    asunder
-    audacity
+{ pkgs, ... }:
+with pkgs; [
+  ## A
+  arandr
+  ardour
+  (aspellWithDicts (dicts: [ dicts.fr dicts.uk ]))
+  asunder
+  audacity
 
-    ## B
-    bat
-    bc
-    bintools
-    btop
+  ## B
+  bat
+  bc
+  bintools
+  btop
 
-    ## C
-    ## caffeine-ng -> the behaviour is really inconsistent
-    calc
-    chromium
-    comma
+  ## C
+  ## caffeine-ng -> the behaviour is really inconsistent
+  calc
+  chromium
+  comma
 
-    ## D
-    dig
-    direnv
-    nix-direnv
-    discord
+  ## D
+  dig
+  direnv
+  nix-direnv
+  discord
 
-    ## E
-    element-desktop
-    ## emacs --> cf `home-manager.nix`
-    evince
+  ## E
+  element-desktop
+  ## emacs --> cf `home-manager.nix`
+  evince
 
-    ## F
-    fd # # alternative to 'find' needed by Doom Emacs
-    ffmpeg-full
-    gnome.file-roller
-    filezilla
-    firefox
+  ## F
+  fd # # alternative to 'find' needed by Doom Emacs
+  ffmpeg-full
+  gnome.file-roller
+  filezilla
+  firefox
 
-    ## G
-    gcc
-    gimp
-    git
-    git-lfs
-    gnumake
-    gnupg
-    guile
-    guvcview
+  ## G
+  gcc
+  gimp
+  git
+  git-lfs
+  gnumake
+  gnupg
+  guile
+  guvcview
 
-    ## H
-    htop
-    httpie
+  ## H
+  htop
+  httpie
 
-    ## I
-    inkscape
-    imagemagick
+  ## I
+  inkscape
+  imagemagick
 
-    ## J
-    jq
+  ## J
+  jq
 
-    ## K
-    keepassxc
+  ## K
+  keepassxc
 
-    ## L
-    ledger-live-desktop # # Wallet app for Ledger devices
-    libreoffice
-    lilypond
+  ## L
+  ledger-live-desktop # # Wallet app for Ledger devices
+  libreoffice
+  lilypond
 
-    ## M
-    mattermost-desktop
-    mosh
+  ## M
+  mattermost-desktop
+  mosh
 
-    ## N
-    gnome.nautilus
-    nextcloud-client
-    nix-output-monitor
+  ## N
+  gnome.nautilus
+  nextcloud-client
+  nix-output-monitor
 
-    ## P
-    pdftk
-    picard
-    pkg-config
-    python3 # # needed by TreeMacs
+  ## P
+  pdftk
+  picard
+  pkg-config
+  python3 # # needed by TreeMacs
 
-    ## R
-    ripgrep
+  ## R
+  ripgrep
 
-    ## S
-    signal-desktop
-    skypeforlinux
-    slack
-    steam-run
+  ## S
+  signal-desktop
+  skypeforlinux
+  slack
+  steam-run
 
-    ## T
-    texlive.combined.scheme-full
-    thunderbird
+  ## T
+  texlive.combined.scheme-full
+  thunderbird
 
-    ## U
-    unrar
-    unzip
+  ## U
+  unrar
+  unzip
 
-    ## V
-    vlc
+  ## V
+  vlc
 
-    ## W
-    wget
+  ## W
+  wget
 
-    ## X
-    xf86_input_wacom # # wacom tablet support + `xsetwacom`
-    xorg.xev
-    xournalpp
+  ## X
+  xf86_input_wacom # # wacom tablet support + `xsetwacom`
+  xorg.xev
+  xournalpp
 
-    ## Y
-    yamllint
-    youtube-dl
+  ## Y
+  yamllint
+  youtube-dl
 
-    ## Z
-    zoom-us
-  ]
+  ## Z
+  zoom-us
+]
