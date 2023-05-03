@@ -60,6 +60,7 @@ with pkgs; [
 
   ## K
   keepassxc
+  killall
 
   ## L
   ledger-live-desktop # # Wallet app for Ledger devices
