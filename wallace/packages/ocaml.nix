@@ -1,5 +1,6 @@
 { pkgs, ... }:
-with pkgs.ocamlPackages; [
+with pkgs;
+[ opam ] ++ (with ocamlPackages; [
   dune_3
   merlin
   ocaml
@@ -11,4 +12,4 @@ with pkgs.ocamlPackages; [
   utop
   visitors
   yojson
-]
+])
