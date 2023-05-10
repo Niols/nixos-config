@@ -3,5 +3,10 @@
   "extends": [
     "config:base"
   ],
-  "youShouldNotSeeThis": "test"
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  }
 }
