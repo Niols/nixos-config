@@ -9,6 +9,7 @@ nixpkgs.lib.nixosSystem {
     ./networking
     ./nix.nix
     ./ssh.nix
+    ./syncthing.nix
     ./system.nix
     ./time.nix
     ./users.nix
