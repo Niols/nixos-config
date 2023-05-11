@@ -8,7 +8,7 @@ nixpkgs.lib.nixosSystem {
     ./environment.nix
     ./networking
     ./nix.nix
-    ./services.nix
+    ./ssh.nix
     ./system.nix
     ./time.nix
     ./users.nix

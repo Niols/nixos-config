@@ -5,4 +5,6 @@ _: {
       ports = [ 22 2222 3000 9100 ];
     };
   };
+
+  programs.mosh.enable = true;
 }
