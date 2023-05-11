@@ -8,6 +8,7 @@ nixpkgs.lib.nixosSystem {
     ./environment.nix
     ./networking
     ./nix.nix
+    ./nginx.nix
     ./ssh.nix
     ./syncthing.nix
     ./system.nix
