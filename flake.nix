@@ -20,6 +20,9 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = ""; # saves some resources on Linux
+
+    secrets.url = "github:niols/nixos-secrets";
+    secrets.flake = false;
   };
 
   outputs = inputs:

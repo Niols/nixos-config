@@ -581,7 +581,8 @@
         "nix-index-database": "nix-index-database",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "pre-commit-hooks": "pre-commit-hooks"
+        "pre-commit-hooks": "pre-commit-hooks",
+        "secrets": "secrets"
       }
     },
     "rotate-text": {
@@ -597,6 +598,22 @@
       "original": {
         "owner": "debug-ito",
         "repo": "rotate-text.el",
+        "type": "github"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1683828388,
+        "narHash": "sha256-RaMPlcH8j5qxuLkKbrXWPYZxWLptUxQlZp4oGS8Wt50=",
+        "owner": "niols",
+        "repo": "nixos-secrets",
+        "rev": "f8c7dcc20f0235a1923398c3fce5505eae7e1dff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niols",
+        "repo": "nixos-secrets",
         "type": "github"
       }
     },
