@@ -1,4 +1,6 @@
-_: {
+{ config, secrets, ... }:
+
+{
   services.syncthing = {
     enable = true;
     user = "syncthing";
@@ -11,7 +13,17 @@ _: {
     };
   };
 
+  age.secrets.syncthing-passwd = {
+    file = "${secrets}/syncthing-passwd.age";
+    mode = "600";
+    owner = "nginx";
+    group = "nginx";
+  };
+
   services.nginx.virtualHosts.syncthing = {
-    locations."/" = { proxyPass = "http://127.0.0.1:8384"; };
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:8384";
+      basicAuthFile = config.age.secrets.syncthing-passwd.path;
+    };
   };
 }
