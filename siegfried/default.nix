@@ -1,4 +1,4 @@
-{ nixpkgs, ... }:
+{ nixpkgs, agenix, ... }:
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -14,5 +14,6 @@ nixpkgs.lib.nixosSystem {
     ./system.nix
     ./time.nix
     ./users.nix
+    agenix.nixosModules.default
   ];
 }
