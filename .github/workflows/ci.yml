@@ -28,7 +28,9 @@ jobs:
 
       - name: Build Wallace
         run: |
-          nix build .#nixosConfigurations.wallace.config.system.build.toplevel
+          nix build \
+              .#nixosConfigurations.wallace.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
 
   build-siegfried:
     name: Build Siegfried
@@ -46,7 +48,9 @@ jobs:
 
       - name: Build Siegfried
         run: |
-          nix build .#nixosConfigurations.siegfried.config.system.build.toplevel
+          nix build  \
+              .#nixosConfigurations.siegfried.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
 
   run-flake-checks:
     name: Run flake checks
