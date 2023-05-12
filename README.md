@@ -25,3 +25,34 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 [cleverca22-kexec]: https://github.com/cleverca22/nix-tests/tree/2ba968302208ff0c17d555317c11fd3f06e947e2/kexec
 [install-manual]: https://web.archive.org/web/20230325142657/https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning
 [jonringer-config]: https://github.com/jonringer/server-configuration/blob/6c0e8b85dfd99c40bb72c5825bbf259a85d9f18d/configuration.nix
+
+How to use
+----------
+
+### About the flake input `secrets`
+
+The flake input `secrets`:
+
+```nix
+secrets.url = "github:niols/nixos-secrets";
+secrets.flake = false;
+```
+
+is a private repository. If it is in the cache of the machine, then
+there is no need to do anything special. If it is not (the very first
+time or whenever one updates the lock file), then one needs to give
+Nix access to private repositories on GitHub. This can be done via an
+access token, with eg.:
+
+```
+sudo nixos-rebuild switch --option access-tokens github.com=ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+```
+
+The configuration builds fine without the secrets, so one can also just override
+that input and give an empty directory. For instance, the CI runs:
+
+```
+nix build \
+    .#nixosConfigurations.<name>.config.system.build.toplevel \
+    --override-input secrets $(mktemp -d)
+```
