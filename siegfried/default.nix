@@ -1,4 +1,4 @@
-{ nixpkgs, agenix, secrets, ... }:
+{ nixpkgs, agenix, home-manager, secrets, ... }:
 
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
@@ -16,6 +16,8 @@ nixpkgs.lib.nixosSystem {
     ./time.nix
     ./users.nix
     agenix.nixosModules.default
+    home-manager.nixosModules.home-manager
+    ./home-manager.nix
     { _module.args = { inherit secrets; }; }
   ];
 }
