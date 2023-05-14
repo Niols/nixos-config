@@ -5,6 +5,7 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./hardware-configuration.nix
     ./boot.nix
+    ./dancelor.nix
     ./environment.nix
     ./networking
     ./nix.nix
