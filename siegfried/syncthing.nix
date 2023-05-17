@@ -17,6 +17,9 @@
   };
 
   services.nginx.virtualHosts.syncthing = {
+    forceSSL = true;
+    enableACME = true;
+
     locations."/" = {
       proxyPass = "http://127.0.0.1:8384";
       basicAuthFile = config.age.secrets.syncthing-passwd.path;
