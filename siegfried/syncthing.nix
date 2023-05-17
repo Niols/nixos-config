@@ -17,6 +17,8 @@
   };
 
   services.nginx.virtualHosts.syncthing = {
+    serverName = "syncthing.niols.fr";
+
     forceSSL = true;
     enableACME = true;
 
