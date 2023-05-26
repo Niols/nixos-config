@@ -26,25 +26,28 @@
   };
 
   outputs = inputs:
-    { # # NixOS configurations
+    ## NixOS configurations
+    {
       nixosConfigurations.wallace = import ./wallace inputs;
       nixosConfigurations.siegfried = import ./siegfried inputs;
-    } // ( # # More standard part of the flake
-      inputs.flake-utils.lib.eachDefaultSystem (system:
-        let
-          pkgs = inputs.nixpkgs.legacyPackages.${system};
-          pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              nixfmt.enable = true;
-              deadnix.enable = true;
-            };
+    }
+
+    ## More standard part of the flake
+    // (inputs.flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            nixfmt.enable = true;
+            deadnix.enable = true;
           };
-        in {
-          formatter = pkgs.nixfmt;
+        };
+      in {
+        formatter = pkgs.nixfmt;
 
-          devShells.default = pkgs.mkShell { inherit (pre-commit) shellHook; };
+        devShells.default = pkgs.mkShell { inherit (pre-commit) shellHook; };
 
-          checks = { inherit pre-commit; };
-        }));
+        checks = { inherit pre-commit; };
+      }));
 }
