@@ -1,12 +1,12 @@
 _: {
   networking = {
-    defaultGateway = "141.145.193.254";
+    defaultGateway = "10.0.0.255";
 
     ## Use Google's public DNS servers
     nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
     interfaces.eth0.ipv4.addresses = [{
-      address = "141.145.193.23";
+      address = "10.0.0.123";
       prefixLength = 24;
     }];
 
