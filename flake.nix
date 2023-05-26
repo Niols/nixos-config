@@ -29,6 +29,7 @@
     ## NixOS configurations
     {
       nixosConfigurations = {
+        orianne = import ./orianne inputs;
         siegfried = import ./siegfried inputs;
         wallace = import ./wallace inputs;
       };
