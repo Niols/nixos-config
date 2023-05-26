@@ -28,8 +28,10 @@
   outputs = inputs:
     ## NixOS configurations
     {
-      nixosConfigurations.wallace = import ./wallace inputs;
-      nixosConfigurations.siegfried = import ./siegfried inputs;
+      nixosConfigurations = {
+        siegfried = import ./siegfried inputs;
+        wallace = import ./wallace inputs;
+      };
     }
 
     ## More standard part of the flake
