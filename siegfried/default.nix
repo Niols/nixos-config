@@ -9,7 +9,6 @@ nixpkgs.lib.nixosSystem {
     ./environment.nix
     ./hostname.nix
     ./networking.nix
-    ./nfs.nix
     ./nix.nix
     ./nginx.nix
     ./public.nix
