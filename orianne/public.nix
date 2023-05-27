@@ -1,3 +1,9 @@
+# # =========================== [ Public files ] =========================== # #
+##
+## This file contains configuration related to the “public” files from
+## Siegfried. They are the TV shows, movies, music, etc. that can be freely
+## shared to most users and that are used by several services.
+
 _:
 
 {
