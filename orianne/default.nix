@@ -11,8 +11,5 @@ nixpkgs.lib.nixosSystem {
     ./system.nix
     ./packages.nix
     ./users.nix
-
-    ## FIXME:
-    { networking.firewall.enable = false; }
   ];
 }
