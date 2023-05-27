@@ -4,6 +4,7 @@
   services.syncthing = {
     enable = true;
     user = "syncthing";
+    group = "public";
     dataDir = "/home/syncthing";
     configDir = "/home/syncthing/.config/syncthing";
     guiAddress = "127.0.0.1:8384";
