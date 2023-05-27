@@ -10,10 +10,6 @@ _: {
     forceSSL = true;
     enableACME = true;
 
-    ## The default `client_max_body_size` is 1M, this might not be enough for
-    ## some posters, etc.
-    clientMaxBodySize = "20M";
-
     locations."/" = { return = "302 https://$host/web/"; };
 
     locations."/" = {

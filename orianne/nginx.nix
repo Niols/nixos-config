@@ -2,6 +2,10 @@ _: {
   services.nginx = {
     enable = true;
 
+    ## The default `client_max_body_size` is 1M, which might not be enough for
+    ## everything. In particular, JellyFin requires more for the posters etc.
+    clientMaxBodySize = "20M";
+
     ## NOTE: Hardened setup as per https://nixos.wiki/wiki/Nginx
 
     recommendedGzipSettings = true;
