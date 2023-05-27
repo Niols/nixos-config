@@ -1,1 +1,4 @@
-_: { services.openssh.enable = true; }
+_: {
+  services.openssh.enable = true;
+  programs.mosh.enable = true;
+}
