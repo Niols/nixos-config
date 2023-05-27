@@ -8,6 +8,7 @@ nixpkgs.lib.nixosSystem {
     ./hostname.nix
     ./ssh.nix
     ./system.nix
+    ./packages.nix
     ./users.nix
   ];
 }
