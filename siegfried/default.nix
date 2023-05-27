@@ -8,7 +8,7 @@ nixpkgs.lib.nixosSystem {
     ./dancelor.nix
     ./environment.nix
     ./hostname.nix
-    ./networking
+    ./networking.nix
     ./nfs.nix
     ./nix.nix
     ./nginx.nix
