@@ -7,6 +7,7 @@ nixpkgs.lib.nixosSystem {
     ./boot.nix
     ./dancelor.nix
     ./environment.nix
+    ./hostname.nix
     ./networking
     ./nfs.nix
     ./nix.nix
