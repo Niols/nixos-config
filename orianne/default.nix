@@ -7,6 +7,7 @@ nixpkgs.lib.nixosSystem {
     ./hardware-configuration.nix
     ./hostname.nix
     ./jellyfin.nix
+    ./nfs.nix
     ./ssh.nix
     ./system.nix
     ./packages.nix
