@@ -26,6 +26,14 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 [install-manual]: https://web.archive.org/web/20230325142657/https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning
 [jonringer-config]: https://github.com/jonringer/server-configuration/blob/6c0e8b85dfd99c40bb72c5825bbf259a85d9f18d/configuration.nix
 
+### Installing on an Oracle Cloud machine
+
+I used an VM.Standard.A1.Flex instance. For this one, I followed [the tutorial
+from blog.korfuri.fr] referencing the same [kexec configuration by
+@cleverca22][cleverca22-kexec]
+
+[the tutorial from blog.korfuri.fr]: https://web.archive.org/web/20230322224448/https://blog.korfuri.fr/posts/2022/08/nixos-on-an-oracle-free-tier-ampere-machine/
+
 How to use
 ----------
 
