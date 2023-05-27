@@ -11,6 +11,7 @@ nixpkgs.lib.nixosSystem {
     ./nfs.nix
     ./nix.nix
     ./nginx.nix
+    ./public.nix
     ./ssh.nix
     ./syncthing.nix
     ./system.nix
