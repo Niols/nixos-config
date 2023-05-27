@@ -5,11 +5,8 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./boot.nix
     ./hardware-configuration.nix
-    ./hostname.nix
-    ./networking.nix
     ./ssh.nix
     ./system.nix
-    ./time.nix
     ./users.nix
   ];
 }
