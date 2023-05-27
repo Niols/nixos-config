@@ -1,7 +1,7 @@
 _: {
   services.jellyfin = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
   };
 
   services.nginx.virtualHosts.media = {
