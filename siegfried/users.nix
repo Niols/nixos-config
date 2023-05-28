@@ -1,6 +1,4 @@
 _: {
-  users.motd = "wesh alors";
-
   users.users.niols = {
     isNormalUser = true;
     extraGroups = [ "public" "wheel" ];
