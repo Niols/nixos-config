@@ -7,9 +7,11 @@ nixpkgs.lib.nixosSystem {
     ./boot.nix
     ./dancelor.nix
     ./environment.nix
-    ./networking
+    ./hostname.nix
+    ./networking.nix
     ./nix.nix
     ./nginx.nix
+    ./public.nix
     ./ssh.nix
     ./syncthing.nix
     ./system.nix

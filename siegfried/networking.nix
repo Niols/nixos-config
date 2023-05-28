@@ -1,6 +1,4 @@
 _: {
-  imports = [ ./hostName.nix ];
-
   networking = {
     defaultGateway = "37.187.6.254";
     defaultGateway6 = "2001:41d0:a:6ff:ff:ff:ff:ff";
@@ -19,10 +17,19 @@ _: {
       prefixLength = 56;
     }];
 
-    ## TODO: Open ports in the firewall.
-    #firewall.allowedTCPPorts = [ ... ];
-    #firewall.allowedUDPPorts = [ ... ];
-    ## Or disable the firewall altogether.
-    firewall.enable = false;
+    firewall = {
+      ## FIXME: For now, disable the firewall altogether.
+      enable = false;
+
+      ## TODO: Open ports in the firewall.
+
+      ## Allowed TCP ports
+      ##
+      ## - 2049: NFS
+      ##
+      allowedTCPPorts = [ 2049 ];
+
+      #allowedUDPPorts = [ ... ];
+    };
   };
 }
