@@ -28,22 +28,17 @@
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-
-      ####################################################################
-      ## NixOS configurations
-
-      flake.nixosConfigurations = {
-        orianne = import ./orianne inputs;
-        siegfried = import ./siegfried inputs;
-        wallace = import ./wallace inputs;
-      };
-
-      ####################################################################
-      ## More standard part of the flake
-
       systems = [ "x86_64-linux" "aarch64-linux" ];
 
-      imports = [ inputs.pre-commit-hooks.flakeModule ];
+      imports = [
+        ## NixOS configurations
+        ./orianne
+        ./siegfried
+        ./wallace
+
+        ## Other
+        inputs.pre-commit-hooks.flakeModule
+      ];
 
       perSystem = { config, pkgs, ... }: {
         formatter = pkgs.nixfmt;
