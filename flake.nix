@@ -10,7 +10,8 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -25,32 +26,41 @@
     secrets.flake = false;
   };
 
-  outputs = inputs:
-    ## NixOS configurations
-    {
-      nixosConfigurations = {
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+
+      ####################################################################
+      ## NixOS configurations
+
+      flake.nixosConfigurations = {
         orianne = import ./orianne inputs;
         siegfried = import ./siegfried inputs;
         wallace = import ./wallace inputs;
       };
-    }
 
-    ## More standard part of the flake
-    // (inputs.flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-        pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-          src = ./.;
-          hooks = {
-            nixfmt.enable = true;
-            deadnix.enable = true;
-          };
-        };
-      in {
+      ####################################################################
+      ## More standard part of the flake
+
+      systems = [ "x86_64-linux" "aarch64-linux" ];
+
+      imports = [ inputs.pre-commit-hooks.flakeModule ];
+
+      perSystem = { config, pkgs, ... }: {
         formatter = pkgs.nixfmt;
 
-        devShells.default = pkgs.mkShell { inherit (pre-commit) shellHook; };
+        pre-commit.settings.hooks = {
+          nixfmt.enable = true;
+          deadnix.enable = true;
+        };
 
-        checks = { inherit pre-commit; };
-      }));
+        devShells.default =
+          pkgs.mkShell { shellHook = config.pre-commit.installationScript; };
+      };
+
+      ## Improve the way `inputs'` are computed by also handling the case of
+      ## flakes having a `lib.${system}` attribute.
+      ##
+      perInput = system: flake:
+        if flake ? lib.${system} then { lib = flake.lib.${system}; } else { };
+    };
 }
