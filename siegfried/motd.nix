@@ -38,8 +38,6 @@
           [last_login]
           root = 5
           niols = 5
-
-          [last_run]
         EOF
         ${pkgs.rust-motd}/bin/rust-motd motd.conf > /var/run/motd.dynamic
       ''}";
