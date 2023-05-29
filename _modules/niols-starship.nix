@@ -35,7 +35,7 @@ in
 
         status.disabled = false;
         status.format = "$symbol";
-        status.success_symbol = "[✓ $status](bold fg:green)";
+        status.success_symbol = "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
         status.symbol = "[✗ $status](bold fg:red)";
 
         cmd_duration.min_time = 0;
