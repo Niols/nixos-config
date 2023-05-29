@@ -11,9 +11,8 @@ let
   box = style: text: "${obox style}${text}${cbox style}";
   lbox = style: text: "${obox style}${text}";
   rbox = style: text: "${text}${cbox style}";
-in
 
-{
+in {
   options.niols-starship = with lib; {
     enable = mkEnableOption (mdDoc "niols-starship");
     hostcolour = mkOption {
@@ -35,7 +34,8 @@ in
 
         status.disabled = false;
         status.format = "$symbol";
-        status.success_symbol = "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
+        status.success_symbol =
+          "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
         status.symbol = "[✗ $status](bold fg:red)";
 
         cmd_duration.min_time = 0;
@@ -48,7 +48,8 @@ in
         username.style_user = "fg:black bg:${config.niols-starship.hostcolour}";
 
         hostname.ssh_only = false;
-        hostname.format = rbox "${config.niols-starship.hostcolour}" "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
+        hostname.format = rbox "${config.niols-starship.hostcolour}"
+          "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
         hostname.ssh_symbol = "";
 
         directory = {
