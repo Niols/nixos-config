@@ -1,5 +1,15 @@
 { config, pkgs, lib, ... }: {
 
+  ## NOTE: This file is very heavily inspired by the NixOS module
+  ## `programs.rust-motd`:
+  ##
+  ## https://github.com/NixOS/nixpkgs/blob/041094ad2ff90eab7d3d044c3eaad463666d2caa/nixos/modules/programs/rust-motd.nix
+  ##
+  ## Ideally, we would even use that NixOS module, but it has a severe issue
+  ## making it unusable in practice for us:
+  ##
+  ## https://github.com/NixOS/nixpkgs/issues/234802
+
   assertions = [ {
     assertion = config.users.motd == null;
     message = "Should not use both `users.motd` and my custom configuration.";
