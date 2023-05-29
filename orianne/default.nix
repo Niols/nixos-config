@@ -13,9 +13,12 @@
       ./nix.nix
       ./public.nix
       ./ssh.nix
+      ./starship.nix
       ./system.nix
       ./packages.nix
       ./users.nix
+      inputs.home-manager.nixosModules.home-manager
+      ./home-manager.nix
       { _module.args = { inherit (inputs) nixpkgs; }; }
     ];
   };
