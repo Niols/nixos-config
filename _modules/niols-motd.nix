@@ -57,9 +57,6 @@
             [uptime]
             prefix = "Up"
 
-            [user_service_status]
-            gpg-agent = "gpg-agent"
-
             [filesystems]
             root = "/"
             boot = "/boot"
