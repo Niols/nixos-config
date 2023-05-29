@@ -50,7 +50,9 @@
 
             [banner]
             color = "${config.niols-motd.hostcolour}"
-            command = "echo ${config.niols-motd.hostname} | figlet -f standard"
+            command = """
+              printf -- '\033[1m%s\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
+            """
 
             [uptime]
             prefix = "Up"
