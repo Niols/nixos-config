@@ -1,4 +1,6 @@
 _: {
+  imports = [ ../_modules/niols-starship.nix ];
+
   home-manager.users.niols.niols-starship = {
     enable = true;
     hostcolour = "yellow";
