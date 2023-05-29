@@ -12,13 +12,21 @@
 
   options.niols-motd = with lib; {
     enable = mkEnableOption (mdDoc "niols-motd");
+
     hostname = mkOption {
       type = types.str;
       description = mdDoc "Name of the machine; pretty.";
     };
+
     hostcolour = mkOption {
       type = types.str;
       description = mdDoc "Colour of the machine.";
+    };
+
+    noSwap = mkOption {
+      type = types.bool;
+      default = false;
+      description = mdDoc "Whether to hide swap from memory.";
     };
   };
 
@@ -64,11 +72,9 @@
               boot = "/boot"
 
               [memory]
-              swap_pos = "below"
-
-              [last_login]
-              root = 5
-              niols = 5
+              swap_pos = "${
+                if config.niols-motd.noSwap then "none" else "beside"
+              }"
             '';
           };
         in "${pkgs.writeShellScript "update-motd" ''
