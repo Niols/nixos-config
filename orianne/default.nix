@@ -10,6 +10,7 @@
       ./jellyfin.nix
       ./motd.nix
       ./nginx.nix
+      ./nix.nix
       ./public.nix
       ./ssh.nix
       ./system.nix
