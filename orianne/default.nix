@@ -12,6 +12,7 @@
       ./nginx.nix
       ./public.nix
       ./ssh.nix
+      ./starship.nix
       ./system.nix
       ./packages.nix
       ./users.nix
