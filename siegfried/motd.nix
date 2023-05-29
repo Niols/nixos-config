@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
 
   assertions = [ {
     assertion = config.users.motd == null;
@@ -72,4 +72,8 @@
     wantedBy = [ "timers.target" ];
     timerConfig.OnCalendar = "*:0/5";
   };
+
+  security.pam.services.sshd.text = lib.mkDefault (lib.mkAfter ''
+    session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/run/motd.dynamic
+  '');
 }
