@@ -15,6 +15,8 @@
       ./system.nix
       ./packages.nix
       ./users.nix
+      inputs.home-manager.nixosModules.home-manager
+      ./home-manager.nix
     ];
   };
 }
