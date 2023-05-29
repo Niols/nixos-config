@@ -39,37 +39,40 @@
       path = with pkgs; [ bash figlet ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.writeShellScript "update-motd" ''
-          cat > motd.conf <<EOF
-            [global]
-            progress_full_character = "#"
-            progress_empty_character = "-"
-            progress_prefix = "["
-            progress_suffix = "]"
-            time_format = "%Y-%m-%d %H:%M:%S"
+        ExecStart = let
+          motd-config = pkgs.writeTextFile {
+            name = "motd.toml";
+            text = ''
+              [global]
+              progress_full_character = "#"
+              progress_empty_character = "-"
+              progress_prefix = "["
+              progress_suffix = "]"
+              time_format = "%Y-%m-%d %H:%M:%S"
 
-            [banner]
-            color = "${config.niols-motd.hostcolour}"
-            command = "echo ${config.niols-motd.hostname} | figlet -f standard"
+              [banner]
+              color = "${config.niols-motd.hostcolour}"
+              command = """
+                printf -- '\\033[1m%s\\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
+              """
 
-            [uptime]
-            prefix = "Up"
+              [uptime]
+              prefix = "Up"
 
-            [user_service_status]
-            gpg-agent = "gpg-agent"
+              [filesystems]
+              root = "/"
+              boot = "/boot"
 
-            [filesystems]
-            root = "/"
-            boot = "/boot"
+              [memory]
+              swap_pos = "below"
 
-            [memory]
-            swap_pos = "below"
-
-            [last_login]
-            root = 5
-            niols = 5
-          EOF
-          ${pkgs.rust-motd}/bin/rust-motd motd.conf > /var/run/motd.dynamic
+              [last_login]
+              root = 5
+              niols = 5
+            '';
+          };
+        in "${pkgs.writeShellScript "update-motd" ''
+          ${pkgs.rust-motd}/bin/rust-motd ${motd-config} > /var/run/motd.dynamic
         ''}";
 
         CapabilityBoundingSet = [ "" ];

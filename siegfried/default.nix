@@ -15,6 +15,7 @@
       ./nginx.nix
       ./public.nix
       ./ssh.nix
+      ./starship.nix
       ./syncthing.nix
       ./system.nix
       ./time.nix
