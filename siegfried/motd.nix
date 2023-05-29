@@ -12,8 +12,8 @@
       ExecStart = "${pkgs.writeShellScript "update-motd" ''
         cat > motd.conf <<EOF
           [global]
-          progress_full_character = "="
-          progress_empty_character = "="
+          progress_full_character = "#"
+          progress_empty_character = "-"
           progress_prefix = "["
           progress_suffix = "]"
           time_format = "%Y-%m-%d %H:%M:%S"
@@ -76,4 +76,8 @@
   security.pam.services.sshd.text = lib.mkDefault (lib.mkAfter ''
     session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/run/motd.dynamic
   '');
+
+  services.openssh.extraConfig = ''
+    PrintLastLog no
+  '';
 }
