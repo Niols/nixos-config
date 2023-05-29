@@ -30,7 +30,7 @@
         message = "Should not use both `users.motd` and `niols-motd`.";
       }
       {
-        assertion = config.programs.rust-motd == null;
+        assertion = config.programs.rust-motd.enable == false;
         message = "Should not use both `programs.rust-motd` and `niols-motd`.";
       }
     ];
