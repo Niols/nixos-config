@@ -49,7 +49,7 @@ in
 
         hostname.ssh_only = false;
         hostname.format = rbox "${config.niols-starship.hostcolour}" "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
-        hostname.ssh_symbol = "🌐";
+        hostname.ssh_symbol = "";
 
         directory = {
           format = box "bright-black" "[$path]($style bg:bright-black)";
