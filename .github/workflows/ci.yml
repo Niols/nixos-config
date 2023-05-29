@@ -10,47 +10,14 @@ on:
       - '*'
   pull_request:
 
+## We specify a concurrency group with automated cancellation. This means that
+## other pushes on the same `github.ref` (eg. other pushes to the same pull
+## request) cancel previous occurrences of the CI.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-
-  build-wallace:
-    name: Build Wallace
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v3
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v21
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Wallace
-        run: |
-          nix build \
-              .#nixosConfigurations.wallace.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
-
-  build-siegfried:
-    name: Build Siegfried
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v3
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v21
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Siegfried
-        run: |
-          nix build  \
-              .#nixosConfigurations.siegfried.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
 
   build-orianne:
     name: Build Orianne
@@ -78,6 +45,46 @@ jobs:
         run: |
           nix build \
               .#nixosConfigurations.orianne.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
+
+  build-siegfried:
+    name: Build Siegfried
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v21
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Siegfried
+        run: |
+          nix build  \
+              .#nixosConfigurations.siegfried.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
+
+  build-wallace:
+    name: Build Wallace
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v21
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Wallace
+        run: |
+          nix build \
+              .#nixosConfigurations.wallace.config.system.build.toplevel \
               --override-input secrets $(mktemp -d)
 
   run-flake-checks:
