@@ -16,6 +16,7 @@
       ./system.nix
       ./packages.nix
       ./users.nix
+      { _module.args = { inherit (inputs) nixpkgs; }; }
     ];
   };
 }
