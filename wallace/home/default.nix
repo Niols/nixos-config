@@ -1,4 +1,6 @@
 { lib, pkgs, config, specialArgs, ... }: {
+  imports = [ ../../_modules/niols-starship.nix ];
+
   home.stateVersion = "21.05";
 
   programs.home-manager.enable = true;
@@ -30,7 +32,12 @@
     enableAliases = true;
   };
   programs.urxvt = import ./programs/urxvt.nix;
-  programs.starship = import ./programs/starship.nix;
+
+  # programs.starship = import ./programs/starship.nix;
+  niols-starship = {
+    enable = true;
+    hostcolour = "green";
+  };
 
   programs.nix-index.enable = true;
   programs.nix-index.symlinkToCacheHome = true;
