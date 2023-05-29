@@ -6,6 +6,7 @@
     modules = [
 
       ./hardware-configuration.nix
+      ./motd.nix
 
       ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
