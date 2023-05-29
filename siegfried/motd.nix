@@ -1,9 +1,6 @@
 _: {
-  users.motd = "wesh alors";
-
   programs.rust-motd = {
-    enable = false;
-    #enableMotdInSSHD = true;
+    enable = true;
 
     settings = {
       global = {
@@ -40,6 +37,8 @@ _: {
         root = 5;
         niols = 5;
       };
+
+      last_run = {};
     };
   };
 }
