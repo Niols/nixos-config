@@ -1,4 +1,4 @@
-_: {
+{ nixpkgs, ... }: {
   nix = {
     settings.trusted-users = [ "@wheel" ];
 
@@ -7,5 +7,7 @@ _: {
     '';
 
     settings.auto-optimise-store = true;
+
+    registry.nixpkgs.flake = nixpkgs;
   };
 }
