@@ -1,44 +1,75 @@
-_: {
-  programs.rust-motd = {
-    enable = true;
+{ config, pkgs, ... }: {
 
-    settings = {
-      global = {
-        progress_full_character = "#";
-        progress_empty_character = "-";
-        progress_prefix = "[";
-        progress_suffix = "]";
-        time_format = "%Y-%m-%d %H:%M:%S";
-      };
+  assertions = [ {
+    assertion = config.users.motd == null;
+    message = "Should not use both `users.motd` and my custom configuration.";
+  } ];
 
-      banner = {
-        color = "green";
-        command = "echo Siegfried | figlet -f standard";
-      };
+  systemd.services.update-motd = {
+    path = with pkgs; [ bash figlet ];
 
-      uptime = {
-        prefix = "Up";
-      };
+    serviceConfig = {
+      ExecStart = "${pkgs.writeShellScript "update-motd" ''
+        cat > motd.conf <<EOF
+          [global]
+          progress_full_character = "="
+          progress_empty_character = "="
+          progress_prefix = "["
+          progress_suffix = "]"
+          time_format = "%Y-%m-%d %H:%M:%S"
 
-      user_service_status = {
-        gpg-agent = "gpg-agent";
-      };
+          [banner]
+          color = "yellow"
+          command = "echo Siegfried | figlet -f standard"
 
-      filesystems = {
-        root = "/";
-          boot = "/boot";
-      };
+          [uptime]
+          prefix = "Up"
 
-      memory = {
-        swap_pos = "below";
-      };
+          [user_service_status]
+          gpg-agent = "gpg-agent"
 
-      last_login = {
-        root = 5;
-        niols = 5;
-      };
+          [filesystems]
+          root = "/"
+          boot = "/boot"
 
-      last_run = {};
+          [memory]
+          swap_pos = "below"
+
+          [last_login]
+          root = 5
+          niols = 5
+
+          [last_run]
+        EOF
+        ${pkgs.rust-motd}/bin/rust-motd motd.conf > /var/run/motd.dynamic
+      ''}";
+
+      CapabilityBoundingSet = [ "" ];
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateDevices = true;
+      PrivateTmp = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHome = true;
+      ProtectHostname = true;
+      ProtectKernelModules = true;
+      ProtectKernelLogs = true;
+      ProtectKernelTunables = true;
+      ProtectSystem = "full";
+      StateDirectory = "rust-motd";
+      RestrictAddressFamilies = [ "AF_UNIX" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      RemoveIPC = true;
+      WorkingDirectory = "/var/lib/rust-motd";
     };
+  };
+
+  systemd.timers.update-motd = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*:0/5";
   };
 }
