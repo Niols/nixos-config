@@ -72,7 +72,9 @@
               boot = "/boot"
 
               [memory]
-              swap_pos = "${if config.niols-motd.noSwap then "none" else "beside"}"
+              swap_pos = "${
+                if config.niols-motd.noSwap then "none" else "beside"
+              }"
             '';
           };
         in "${pkgs.writeShellScript "update-motd" ''
