@@ -5,5 +5,6 @@ _: {
     enable = true;
     hostname = "Orianne";
     hostcolour = "cyan";
+    noSwap = true;
   };
 }
