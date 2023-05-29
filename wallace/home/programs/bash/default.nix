@@ -38,5 +38,7 @@
           -exec sh -c 'a={}; b=''${a%-[0-9]*-link}; ! [ $a -ef $b ]' ';' \
           -delete
     }
+
+    [ -f /var/run/motd.dynamic ] && cat /var/run/motd.dynamic
   '';
 }
