@@ -16,7 +16,7 @@ _: {
         command = "echo Siegfried | figlet -f standard";
       };
 
-      update = {
+      uptime = {
         prefix = "Up";
       };
 
