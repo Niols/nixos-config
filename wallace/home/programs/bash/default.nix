@@ -39,6 +39,11 @@
           -delete
     }
 
-    [ -f /var/run/motd.dynamic ] && cat /var/run/motd.dynamic
+    ## If there is a MOTD and we are not entering a Nix shell, then we print the
+    ## MOTD in question.
+    ##
+    if [ -f /var/run/motd.dynamic ] && ! [ -n "$IN_NIX_SHELL" ]; then
+      cat /var/run/motd.dynamic
+    fi
   '';
 }
