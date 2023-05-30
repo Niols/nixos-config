@@ -15,11 +15,7 @@ _:
 
   systemd.timers.make-srv-public = {
     wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnBootSec = "5m";
-      OnUnitActiveSec = "5m";
-      Unit = "make-public.service";
-    };
+    timerConfig.OnCalendar = "*:0/5";
   };
 
   systemd.services.make-srv-public = {
