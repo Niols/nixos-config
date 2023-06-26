@@ -22,7 +22,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = ""; # saves some resources on Linux
 
-    secrets.url = "github:niols/nixos-secrets";
+    secrets.url = "github:niols/nixos-secrets/test-broken-password";
     secrets.flake = false;
   };
 
