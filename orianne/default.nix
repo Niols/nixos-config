@@ -20,7 +20,7 @@
       ./users.nix
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
-      { _module.args = { inherit (inputs) nixpkgs; }; }
+      { _module.args = { inherit (inputs) secrets nixpkgs; }; }
     ];
   };
 }
