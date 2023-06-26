@@ -16,7 +16,6 @@
 
   services.nginx.virtualHosts.dancelor = {
     serverName = "new.dancelor.org";
-    serverAliases = [ "dancelor.org" "www.dancelor.org" ];
 
     forceSSL = true;
     enableACME = true;
