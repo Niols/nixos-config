@@ -1,4 +1,6 @@
-{ config, secrets, ...}: {
+{ config, secrets, ... }:
+
+{
   users.users.dancelor = {
     isNormalUser = true;
 
