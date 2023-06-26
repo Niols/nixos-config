@@ -1,6 +1,10 @@
 { config, secrets, ... }:
 
 {
+  ## The users' passwords must be set in this configuration and will be enforced
+  ## at each configuration activation.
+  users.mutableUsers = false;
+
   users.users.niols = {
     isNormalUser = true;
     extraGroups = [ "public" "wheel" ];
