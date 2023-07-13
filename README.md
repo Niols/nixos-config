@@ -12,7 +12,17 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 1. From the default Debian system installed automatically by OVH, follow the
    NixOS wiki page on [installing on a server with a different
    filesystem][install-server]. In particular, use [@cleverca22's kexec
-   configuration][cleverca22-kexec].
+   configuration][cleverca22-kexec]. The following `myconfig.nix` suffices:
+   ```nix
+   {
+     imports = [ ./configuration.nix ];
+     boot.kernelParams = [ "net.ifnames=0" ];
+     kexec.autoReboot = false;
+     users.users.root.openssh.authorizedKeys.keys = [
+       "ssh-rsa ..."
+     ];
+   }
+   ```
 
 2. Once rebooted to a NixOS in RAM, follow the NixOS manual's instructions for
    [installation with manual partitioning][install-manual].
