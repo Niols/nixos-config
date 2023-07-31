@@ -32,9 +32,6 @@ _:
   ## The following defines an NFS share with Orianne for everything in `/srv`.
   ## Orianne uses this to then share it to the world with Jellyfin.
 
-  ## REVIEW: Maybe implied by `services.nfs.server.enable = true`?
-  networking.firewall.allowedTCPPorts = [ 2049 ];
-
   services.nfs.server = {
     enable = true;
     exports = ''

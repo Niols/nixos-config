@@ -10,6 +10,7 @@
       ./environment.nix
       ./hostname.nix
       ./motd.nix
+      ./networking.nix
       ./nix.nix
       ./nginx.nix
       ./public.nix
