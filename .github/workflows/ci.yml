@@ -103,4 +103,6 @@ jobs:
 
       - name: Run flake checks
         run: |
-          nix flake check --print-build-logs
+          nix flake check \
+              --print-build-logs \
+              --override-input secrets $(mktemp -d)
