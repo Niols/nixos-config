@@ -28,6 +28,7 @@ with pkgs; [
   ## E
   element-desktop
   ## emacs --> cf `home-manager.nix`
+  entr
   evince
 
   ## F
