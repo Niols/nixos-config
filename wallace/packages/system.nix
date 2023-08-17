@@ -64,6 +64,7 @@ with pkgs; [
 
   ## L
   ledger-live-desktop # # Wallet app for Ledger devices
+  libqalculate # # provides `qalc`
   libreoffice
   lilypond
 
