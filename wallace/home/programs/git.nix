@@ -2,7 +2,7 @@
 
 {
   enable = true;
-  ignores = [ "*~" "*#" ".envrc" ".direnv" ];
+  ignores = [ "*~" "*#" ".envrc" ".direnv" ".auctex-auto" ];
 
   ## Require to sign by default, but give a useless key, forcing
   ## myself to setup the key correctly in the future.
