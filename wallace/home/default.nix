@@ -33,7 +33,10 @@
   };
   programs.urxvt = import ./programs/urxvt.nix;
 
-  programs.rofi.enable = true;
+  programs.rofi = {
+    enable = true;
+    plugins = [ pkgs.rofi-calc ];
+  };
 
   # programs.starship = import ./programs/starship.nix;
   niols-starship = {
