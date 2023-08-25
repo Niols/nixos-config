@@ -33,6 +33,8 @@
   };
   programs.urxvt = import ./programs/urxvt.nix;
 
+  programs.rofi.enable = true;
+
   # programs.starship = import ./programs/starship.nix;
   niols-starship = {
     enable = true;
