@@ -38,7 +38,7 @@
     }
 
     {
-      conditions = [ "gitdir:~/git/tweag/**" ];
+      conditions = [ "gitdir:~/git/tweag/**" "gitdir:~/git/iog/**" ];
       contents.user = {
         name = "Nicolas “Niols” Jeannerod";
         email = "nicolas.jeannerod@tweag.io";
