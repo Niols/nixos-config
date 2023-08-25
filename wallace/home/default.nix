@@ -1,5 +1,6 @@
 { lib, pkgs, config, specialArgs, ... }: {
-  imports = [ ../../_modules/niols-starship.nix ];
+  imports =
+    [ ../../_modules/niols-starship.nix specialArgs.nix-doom-emacs.hmModule ];
 
   home.stateVersion = "21.05";
 
@@ -14,12 +15,6 @@
   ## Doom Emacs
 
   home.packages = [
-    ## The following brings the `doom-emacs` package on the system, which
-    ## wraps `pkgs.emacs` into a Doom Emacs. There is no need for a
-    ## `~/.emacs.d` directory, everything is handled in
-    ## `/etc/nixos/home/doom.d`.
-    (pkgs.callPackage specialArgs.nix-doom-emacs { doomPrivateDir = ./doom.d; })
-
     ## Necessary for i3; I much prefer running it standalone.
     pkgs.rofimoji
   ];
@@ -39,6 +34,11 @@
   programs.rofi = {
     enable = true;
     plugins = [ pkgs.rofi-calc ];
+  };
+
+  programs.doom-emacs = {
+    enable = true;
+    doomPrivateDir = ./doom.d;
   };
 
   # programs.starship = import ./programs/starship.nix;
