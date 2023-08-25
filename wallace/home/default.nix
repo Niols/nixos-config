@@ -19,6 +19,9 @@
     ## `~/.emacs.d` directory, everything is handled in
     ## `/etc/nixos/home/doom.d`.
     (pkgs.callPackage specialArgs.nix-doom-emacs { doomPrivateDir = ./doom.d; })
+
+    ## Necessary for i3; I much prefer running it standalone.
+    pkgs.rofimoji
   ];
 
   gtk = import ./gtk.nix;
