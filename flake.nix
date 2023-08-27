@@ -33,7 +33,6 @@
       imports = [
         ## NixOS configurations
         ./orianne
-        ./siegfried
         ./wallace
 
         ## Other
