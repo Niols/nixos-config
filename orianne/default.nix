@@ -12,11 +12,11 @@
       ./motd.nix
       ./nginx.nix
       ./nix.nix
+      ./packages.nix
       ./public.nix
       ./ssh.nix
       ./starship.nix
       ./system.nix
-      ./packages.nix
       ./users.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
