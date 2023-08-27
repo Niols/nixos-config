@@ -67,6 +67,26 @@ jobs:
               .#nixosConfigurations.siegfried.config.system.build.toplevel \
               --override-input secrets $(mktemp -d)
 
+  build-dagrun:
+    name: Build Dagrún
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Dagrún
+        run: |
+          nix build  \
+              .#nixosConfigurations.dagrun.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
+
   build-wallace:
     name: Build Wallace
     runs-on: ubuntu-latest
