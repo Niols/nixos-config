@@ -32,7 +32,9 @@
 
       imports = [
         ## NixOS configurations
+        ./dagrun
         ./orianne
+        ./siegfried
         ./wallace
 
         ## Other
