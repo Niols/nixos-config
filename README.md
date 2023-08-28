@@ -28,6 +28,20 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 
 ### Installing on an Oracle Cloud machine
 
+#### VM.Standard.E2.1.Micro
+
+Installed a regular Ubuntu 22.04 on the machine with my SSH key. Then used
+[nixos-infect] as of [c9419eb]. Just running:
+
+``` nix
+curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-22.11 bash -x
+```
+
+worked like a charm and gave me a root access into a NixOS machine.
+
+[nixos-infect]: https://github.com/elitak/nixos-infect
+[c9419eb]: https://github.com/elitak/nixos-infect/commit/c9419eb629f03b7abcc0322340b6aaefb4eb2b60
+
 #### VM.Standard.A1.Flex
 
 For this one, I followed [the tutorial from blog.korfuri.fr] referencing the
