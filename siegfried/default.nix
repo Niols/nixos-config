@@ -5,7 +5,7 @@
     system = "x86_64-linux";
     modules = [
       ./boot.nix
-      # ./hardware-configuration.nix
+      ./hardware-configuration.nix
       ./hostname.nix
       ./motd.nix
       ./nginx.nix
