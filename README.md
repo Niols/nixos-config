@@ -4,7 +4,9 @@ Niols's NixOS Configuration/s
 Installing NixOS
 ----------------
 
-### Installing on an OVH's “Bare Metal Cloud” dedicated instance
+### On an OVH's “Bare Metal Cloud” dedicated instance
+
+/!\ I never managed to reproduce this.
 
 Here is the protocol I followed successfuly to install my OVH “Bare Metal Cloud”
 (ex-Kimsufi) instance in March 2023:
@@ -28,26 +30,27 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 
 ### Installing on an Oracle Cloud machine
 
-#### VM.Standard.E2.1.Micro
-
-Installed a regular Ubuntu 22.04 on the machine with my SSH key. Then used
-[nixos-infect] as of [c9419eb]. Just running:
-
-``` nix
-curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-22.11 bash -x
-```
-
-worked like a charm and gave me a root access into a NixOS machine.
-
-[nixos-infect]: https://github.com/elitak/nixos-infect
-[c9419eb]: https://github.com/elitak/nixos-infect/commit/c9419eb629f03b7abcc0322340b6aaefb4eb2b60
-
 #### VM.Standard.A1.Flex
 
 For this one, I followed [the tutorial from blog.korfuri.fr] referencing the
 same [kexec configuration by @cleverca22][cleverca22-kexec]
 
 [the tutorial from blog.korfuri.fr]: https://web.archive.org/web/20230322224448/https://blog.korfuri.fr/posts/2022/08/nixos-on-an-oracle-free-tier-ampere-machine/
+
+#### VM.Standard.E2.1.Micro
+
+I first installed a regular Ubuntu 22.04 on the machine and set up my SSH key,
+all via the Oracle Cloud web interface. I then used [nixos-infect] to transform
+it into a NixOS machine, which worked like a charm.
+
+```
+curl https://raw.githubusercontent.com/elitak/nixos-infect/c9419eb629f03b7abcc0322340b6aaefb4eb2b60/nixos-infect \
+    | NIX_CHANNEL=nixos-22.11 bash -x
+```
+
+[nixos-infect]: https://github.com/elitak/nixos-infect
+
+Confirmed in August 2023.
 
 How to use
 ----------
