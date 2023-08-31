@@ -1,6 +1,9 @@
 { config, secrets, ... }:
 
 {
+  ## Make each system activation forcefully replace the current status of users.
+  users.mutableUsers = false;
+
   users.users.niols = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
