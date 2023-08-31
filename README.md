@@ -50,6 +50,21 @@ curl https://raw.githubusercontent.com/elitak/nixos-infect/c9419eb629f03b7abcc03
 
 [nixos-infect]: https://github.com/elitak/nixos-infect
 
+From the infected machine, I then get the SSH host keys, update the secrets to
+contain a password for the users, and then clone the configuration in
+`/etc/nixos` and rebuild.
+
+Because these machines have little memory, it is good to add swap. One could do
+that in a clean way with a partition. However, because we rely on
+[nixos-infect], this is not really doable. It is however easy to add eg. 4GB of
+swap with NixOS in `hardware-configuration.nix`:
+
+```
+swapDevices = [ { device = "/var/lib/swapfile"; size = 4*1024; } ];
+```
+
+It can also be interesting to add a zramSwap.
+
 Confirmed in August 2023.
 
 How to use
