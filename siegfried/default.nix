@@ -13,6 +13,7 @@
       ./packages.nix
       ./ssh.nix
       ./starship.nix
+      ./storage.nix
       ./system.nix
       ./teamspeak.nix
       ./users.nix
