@@ -4,7 +4,7 @@ _: {
 
     niols-starship = {
       enable = true;
-      hostcolour = "purple";
+      hostcolour = "magenta";
     };
   };
 
