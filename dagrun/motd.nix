@@ -3,7 +3,7 @@ _: {
 
   niols-motd = {
     enable = true;
-    hostname = "Dagrún";
+    hostname = "Dagrun"; # FIXME
     hostcolour = "magenta";
     noSwap = true;
   };
