@@ -14,6 +14,7 @@
       ./ssh.nix
       ./starship.nix
       ./system.nix
+      ./teamspeak.nix
       ./users.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
