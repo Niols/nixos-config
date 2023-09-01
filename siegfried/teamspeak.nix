@@ -1,5 +1,5 @@
 _:
 
 {
-  services.teamspeak.enable = true;
+  services.teamspeak3.enable = true;
 }
