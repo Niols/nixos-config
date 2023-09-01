@@ -4,7 +4,7 @@ _: {
   niols-motd = {
     enable = true;
     hostname = "Dagrún";
-    hostcolour = "purple";
+    hostcolour = "magenta";
     noSwap = true;
   };
 }
