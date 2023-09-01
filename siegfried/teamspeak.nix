@@ -4,7 +4,7 @@
   services.teamspeak3 = {
     enable = true;
     openFirewall = true;
-    dataDir = "/hester/siegfried/teamspeak";
+    dataDir = "/hester/services/teamspeak";
   };
 
   nixpkgs.config.allowUnfreePredicate =
