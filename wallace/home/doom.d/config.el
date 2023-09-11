@@ -67,3 +67,6 @@
 ;; instance: https://tweag.slack.com/archives/C0T4L4QPR/p1665592172497879
 (defun doom-modeline-set-project-modeline () ())
 (defun doom-modeline-set-vcs-modeline () ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; config.el ends here
