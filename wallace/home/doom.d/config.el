@@ -69,4 +69,26 @@
 (defun doom-modeline-set-vcs-modeline () ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  _                  _        _
+;; | |____ __ ___ _  _(_)___ __| |___  __
+;; | (_-< '_ \___| || | |___/ _` / _ \/ _|
+;; |_/__/ .__/    \_,_|_|   \__,_\___/\__|
+;;      |_|
+
+(after! lsp-ui
+  ;; enable `lsp-ui-doc' with `lsp-ui'
+  (setq lsp-ui-doc-enable t)
+
+  ;; Where to display the doc; default is at point.
+  ;; (setq lsp-ui-doc-position)
+
+  ;; Delay before showing documentation, in seconds.
+  (setq lsp-ui-doc-delay 0.75)
+
+  ;; Whether to show the documentation when cursor or mouse move.
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-ui-doc-show-with-mouse t)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; config.el ends here
