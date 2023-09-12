@@ -1,7 +1,7 @@
 _: {
   services.jellyfin = {
     enable = true;
-    openFirewall = true; # # FIXME: `false` once tests are good
+    openFirewall = false;
   };
 
   services.nginx.virtualHosts.media = {
