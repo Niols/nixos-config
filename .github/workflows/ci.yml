@@ -92,6 +92,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Maximise build space
+        uses: easimon/maximize-build-space@v8
+
       - name: Check out repository code.
         uses: actions/checkout@v4
 
@@ -100,9 +103,6 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Maximise build space
-        uses: easimon/maximize-build-space@v8
 
       - name: Build Wallace
         run: |
