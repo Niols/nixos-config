@@ -101,6 +101,9 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Maximise build space
+        uses: easimon/maximize-build-space@v8
+
       - name: Build Wallace
         run: |
           nix build \
