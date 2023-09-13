@@ -1,6 +1,9 @@
 { lib, pkgs, config, specialArgs, ... }: {
-  imports =
-    [ ../../_modules/niols-starship.nix specialArgs.nix-doom-emacs.hmModule ];
+  imports = [
+    ../../_modules/niols-starship.nix
+    specialArgs.nix-doom-emacs.hmModule
+    programs/garbage-collect.nix
+  ];
 
   home.stateVersion = "21.05";
 
