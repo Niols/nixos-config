@@ -5,15 +5,14 @@
     system = "aarch64-linux";
     modules = [
       ./boot.nix
-      ./dancelor.nix
+      #      ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./jellyfin.nix
+      #      ./jellyfin.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix
       ./packages.nix
-      ./public.nix
       ./ssh.nix
       ./starship.nix
       ./system.nix
