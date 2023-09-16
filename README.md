@@ -67,6 +67,16 @@ It can also be interesting to add a zramSwap.
 
 Confirmed in August 2023.
 
+### Installing on a Google Cloud machine
+
+#### t2a-standard-4
+
+See Oracle's VM.Standard.A1.Flex above.
+
+### e2-micro
+
+See Oracle's VM.Standard.E2.1.Micro above.
+
 How to use
 ----------
 
