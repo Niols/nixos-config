@@ -7,7 +7,6 @@
       ./boot.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./media.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix

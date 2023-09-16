@@ -8,7 +8,7 @@
       #      ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      #      ./jellyfin.nix
+      ./media.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix
