@@ -15,6 +15,7 @@
       ./packages.nix
       ./ssh.nix
       ./starship.nix
+      ./storage.nix
       ./system.nix
       ./users.nix
       inputs.agenix.nixosModules.default
