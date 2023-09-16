@@ -87,6 +87,26 @@ jobs:
               .#nixosConfigurations.dagrun.config.system.build.toplevel \
               --override-input secrets $(mktemp -d)
 
+  build-emeline:
+    name: Build Emeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v23
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Emeline
+        run: |
+          nix build  \
+              .#nixosConfigurations.emeline.config.system.build.toplevel \
+              --override-input secrets $(mktemp -d)
+
   build-wallace:
     name: Build Wallace
     runs-on: ubuntu-latest
