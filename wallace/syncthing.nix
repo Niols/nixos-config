@@ -1,5 +1,9 @@
+_:
+
 {
-  enable = true;
-  user = "niols";
-  configDir = "/home/niols/.config/syncthing/";
+  services.syncthing = {
+    enable = true;
+    user = "niols";
+    configDir = "/home/niols/.config/syncthing/";
+  };
 }

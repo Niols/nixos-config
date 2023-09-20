@@ -13,6 +13,7 @@
 
       ./legacy-configuration.nix
       ./packages
+      ./syncthing.nix
       ./timezone.nix
 
       { nix.registry.nixpkgs.flake = inputs.nixpkgs; }
