@@ -249,8 +249,6 @@
   ## file.
   programs.command-not-found.enable = false;
 
-  services.udev = import ./udev.nix;
-
   ############################################################################
   ## Background & Transparency
 

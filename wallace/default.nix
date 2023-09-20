@@ -15,6 +15,7 @@
       ./packages
       ./syncthing.nix
       ./timezone.nix
+      ./udev.nix
 
       { nix.registry.nixpkgs.flake = inputs.nixpkgs; }
 
