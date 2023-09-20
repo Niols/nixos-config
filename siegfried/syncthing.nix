@@ -4,8 +4,9 @@
   services.syncthing = {
     enable = true;
     user = "syncthing";
-    dataDir = "/hester/services/syncthing";
-    configDir = "/hester/services/syncthing/config";
+
+    key = config.age.secrets.syncthing-siegfried-key.path;
+    cert = config.age.secrets.syncthing-siegfried-cert.path;
 
     guiAddress = "127.0.0.1:8384";
     settings.gui.insecureSkipHostcheck = true;
@@ -29,13 +30,6 @@
   systemd.services.syncthing-init.unitConfig.RequiresMountsFor = "/hester";
   systemd.services.syncthing.unitConfig.RequiresMountsFor = "/hester";
 
-  age.secrets.syncthing-passwd = {
-    file = "${secrets}/syncthing-passwd.age";
-    mode = "600";
-    owner = "nginx";
-    group = "nginx";
-  };
-
   services.nginx.virtualHosts.syncthing = {
     serverName = "syncthing.niols.fr";
 
@@ -44,7 +38,19 @@
 
     locations."/" = {
       proxyPass = "http://127.0.0.1:8384";
-      basicAuthFile = config.age.secrets.syncthing-passwd.path;
+      basicAuthFile = config.age.secrets.syncthing-siegfried-passwd.path;
     };
   };
+
+  age.secrets.syncthing-siegfried-passwd = {
+    file = "${secrets}/syncthing-siegfried-passwd.age";
+    mode = "600";
+    owner = "nginx";
+    group = "nginx";
+  };
+
+  age.secrets.syncthing-siegfried-key.file =
+    "${secrets}/syncthing-siegfried-key.age";
+  age.secrets.syncthing-siegfried-cert.file =
+    "${secrets}/syncthing-siegfried-cert.age";
 }
