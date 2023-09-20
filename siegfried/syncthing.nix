@@ -26,9 +26,6 @@
       };
     };
 
-    ## NOTE: `readFile` is usually very bad with secrets. However, here, we are
-    ## only talking about the ids of the peers, so it is not the worst. Ideally,
-    ## though, we could get the ids from a path.
     overrideDevices = true;
     settings.devices = {
       "Barbara".id =
@@ -70,10 +67,4 @@
     "${secrets}/syncthing-siegfried-key.age";
   age.secrets.syncthing-siegfried-cert.file =
     "${secrets}/syncthing-siegfried-cert.age";
-
-  ## FIXME: unused for now; one would need a way to specify paths containing ids.
-  age.secrets.syncthing-barbara-id.file = "${secrets}/syncthing-barbara-id.age";
-  age.secrets.syncthing-philippe-id.file =
-    "${secrets}/syncthing-philippe-id.age";
-  age.secrets.syncthing-wallace-id.file = "${secrets}/syncthing-wallace-id.age";
 }

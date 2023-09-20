@@ -18,6 +18,9 @@
       ./timezone.nix
       ./udev.nix
 
+      inputs.agenix.nixosModules.default
+      { _module.args = { inherit (inputs) secrets; }; }
+
       { nix.registry.nixpkgs.flake = inputs.nixpkgs; }
 
       inputs.nix-index-database.nixosModules.nix-index
