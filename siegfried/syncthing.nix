@@ -3,8 +3,8 @@
 {
   services.syncthing = {
     enable = true;
-    user = "syncthing";
-    group = "public";
+    # user = "syncthing";
+    # group = "public";
     dataDir = "/hester/services/syncthing";
     configDir = "/hester/services/syncthing/config";
     guiAddress = "127.0.0.1:8384";
