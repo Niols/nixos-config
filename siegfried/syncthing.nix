@@ -14,7 +14,7 @@
       Organiser.path = "/hester/organiser";
     };
 
-    extraOptions = { insecureSkipHostcheck = true; };
+    settings = { gui.insecureSkipHostcheck = true; };
   };
 
   users.groups.hester.members = [ "syncthing" ];
