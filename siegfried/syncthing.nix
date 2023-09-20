@@ -6,15 +6,19 @@
     user = "syncthing";
     dataDir = "/hester/services/syncthing";
     configDir = "/hester/services/syncthing/config";
+
     guiAddress = "127.0.0.1:8384";
+    settings.gui.insecureSkipHostcheck = true;
 
     overrideFolders = true;
     settings.folders = {
       # Music.path = "/hester/music";
-      Organiser.path = "/hester/organiser";
-    };
 
-    settings = { gui.insecureSkipHostcheck = true; };
+      Organiser = {
+        path = "/hester/organiser";
+        ignorePerms = true;
+      };
+    };
   };
 
   users.groups.hester.members = [ "syncthing" ];
