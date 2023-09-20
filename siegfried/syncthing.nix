@@ -28,7 +28,7 @@
     ## only talking about the ids of the peers, so it is not the worst. Ideally,
     ## though, we could get the ids from a path.
     overrideDevices = true;
-    devices = {
+    settings.devices = {
       "Barbara".id =
         "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
       "Philippe".id =
