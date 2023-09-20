@@ -12,7 +12,10 @@
 
     overrideFolders = true;
     settings.folders = {
-      # Music.path = "/hester/music";
+      Music = {
+        path = "/hester/music";
+        ignorePerms = true;
+      };
 
       Organiser = {
         path = "/hester/organiser";
