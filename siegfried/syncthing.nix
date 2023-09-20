@@ -10,12 +10,13 @@
     guiAddress = "127.0.0.1:8384";
 
     overrideFolders = true;
-    folders = {
+    settings.folders = {
       # Music.path = "/hester/music";
       Organiser.path = "/hester/organiser";
     };
   };
 
+  systemd.services.syncthing-init.unitConfig.RequiresMountsFor = "/hester";
   systemd.services.syncthing.unitConfig.RequiresMountsFor = "/hester";
 
   age.secrets.syncthing-passwd = {
