@@ -23,6 +23,19 @@
         ignorePerms = true;
       };
     };
+
+    ## NOTE: `readFile` is usually very bad with secrets. However, here, we are
+    ## only talking about the ids of the peers, so it is not the worst. Ideally,
+    ## though, we could get the ids from a path.
+    overrideDevices = true;
+    devices = {
+      "Barbara".id =
+        builtins.readFile config.age.secrets.syncthing-barbara-id.path;
+      "Philippe".id =
+        builtins.readFile config.age.secrets.syncthing-philippe-id.path;
+      "Wallace".id =
+        builtins.readFile config.age.secrets.syncthing-wallace-id.path;
+    };
   };
 
   users.groups.hester.members = [ "syncthing" ];
@@ -53,4 +66,8 @@
     "${secrets}/syncthing-siegfried-key.age";
   age.secrets.syncthing-siegfried-cert.file =
     "${secrets}/syncthing-siegfried-cert.age";
+  age.secrets.syncthing-barbara-id.file = "${secrets}/syncthing-barbara-id.age";
+  age.secrets.syncthing-philippe-id.file =
+    "${secrets}/syncthing-philippe-id.age";
+  age.secrets.syncthing-wallace-id.file = "${secrets}/syncthing-wallace-id.age";
 }
