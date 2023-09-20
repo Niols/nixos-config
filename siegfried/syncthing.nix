@@ -16,6 +16,8 @@
     # };
   };
 
+  # users.groups.hester.members = [ "syncthing" ];
+
   systemd.services.syncthing-init.unitConfig.RequiresMountsFor = "/hester";
   systemd.services.syncthing.unitConfig.RequiresMountsFor = "/hester";
 
