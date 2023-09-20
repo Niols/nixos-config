@@ -13,6 +13,8 @@
       # Music.path = "/hester/music";
       Organiser.path = "/hester/organiser";
     };
+
+    extraOptions = { insecureSkipHostcheck = true; };
   };
 
   users.groups.hester.members = [ "syncthing" ];
