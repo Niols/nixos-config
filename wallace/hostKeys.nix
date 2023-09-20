@@ -2,6 +2,11 @@ _:
 
 {
   services.openssh = {
+    enable = true;
+    ## A bit overkill to enable SSH but that is the way to generate host keys.
+    ## REVIEW: potentially, it could be disabled after the very first
+    ## activation.
+
     hostKeys = [
       {
         bits = 4096;
