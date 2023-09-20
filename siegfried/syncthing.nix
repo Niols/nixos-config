@@ -30,11 +30,11 @@
     overrideDevices = true;
     devices = {
       "Barbara".id =
-        builtins.readFile config.age.secrets.syncthing-barbara-id.path;
+        "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
       "Philippe".id =
-        builtins.readFile config.age.secrets.syncthing-philippe-id.path;
+        "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
       "Wallace".id =
-        builtins.readFile config.age.secrets.syncthing-wallace-id.path;
+        "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
     };
   };
 
@@ -66,6 +66,8 @@
     "${secrets}/syncthing-siegfried-key.age";
   age.secrets.syncthing-siegfried-cert.file =
     "${secrets}/syncthing-siegfried-cert.age";
+
+  ## FIXME: unused for now; one would need a way to specify paths containing ids.
   age.secrets.syncthing-barbara-id.file = "${secrets}/syncthing-barbara-id.age";
   age.secrets.syncthing-philippe-id.file =
     "${secrets}/syncthing-philippe-id.age";
