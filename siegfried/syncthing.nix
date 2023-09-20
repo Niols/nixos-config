@@ -21,6 +21,7 @@
       Organiser = {
         path = "/hester/organiser";
         ignorePerms = true;
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
     };
 
