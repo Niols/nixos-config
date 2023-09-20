@@ -9,11 +9,11 @@
     configDir = "/hester/services/syncthing/config";
     guiAddress = "127.0.0.1:8384";
 
-    # overrideFolders = true;
-    # settings.folders = {
-    #   # Music.path = "/hester/music";
-    #   Organiser.path = "/hester/organiser";
-    # };
+    overrideFolders = true;
+    settings.folders = {
+      # Music.path = "/hester/music";
+      Organiser.path = "/hester/organiser";
+    };
   };
 
   # users.groups.hester.members = [ "syncthing" ];
