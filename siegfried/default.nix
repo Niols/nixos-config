@@ -15,6 +15,7 @@
       ./starship.nix
       ./storage.nix
       ./system.nix
+      ./syncthing.nix
       ./teamspeak.nix
       ./users.nix
       inputs.agenix.nixosModules.default
