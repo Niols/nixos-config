@@ -17,6 +17,7 @@
       ./syncthing.nix
       ./timezone.nix
       ./udev.nix
+      ./xserver.nix
 
       inputs.agenix.nixosModules.default
       { _module.args = { inherit (inputs) secrets; }; }

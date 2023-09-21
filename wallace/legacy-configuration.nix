@@ -31,11 +31,6 @@
   };
 
   ############################################################################
-  ## X11 windowing system configuration
-
-  services.xserver = import ./xserver.nix { inherit pkgs; };
-
-  ############################################################################
   ## GNOME Stuff
 
   services.gnome.gnome-keyring.enable = true;
