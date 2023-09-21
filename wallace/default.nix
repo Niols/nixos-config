@@ -8,9 +8,6 @@
       ./hardware-configuration.nix
       ./motd.nix
 
-      ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
-      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
-
       ./hostKeys.nix
       ./legacy-configuration.nix
       ./nix.nix
@@ -20,10 +17,11 @@
       ./udev.nix
       ./xserver.nix
 
-      inputs.agenix.nixosModules.default
-      { _module.args = { inherit (inputs) secrets; }; }
+      ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
+      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
-      { nix.registry.nixpkgs.flake = inputs.nixpkgs; }
+      inputs.agenix.nixosModules.default
+      { _module.args = { inherit (inputs) secrets nixpkgs; }; }
 
       inputs.nix-index-database.nixosModules.nix-index
 

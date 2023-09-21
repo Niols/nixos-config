@@ -1,4 +1,4 @@
-_:
+{ nixpkgs, ... }:
 
 {
   nix = {
@@ -67,5 +67,7 @@ _:
     #   dates = "daily";
     #   options = "--delete-older-than 31d";
     # };
+
+    registry.nixpkgs.flake = nixpkgs;
   };
 }
