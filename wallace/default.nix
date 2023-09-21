@@ -4,7 +4,7 @@
   flake.nixosConfigurations.wallace = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = [
-
+      ./boot.nix
       ./hardware-configuration.nix
       ./motd.nix
 
