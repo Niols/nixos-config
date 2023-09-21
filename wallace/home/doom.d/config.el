@@ -29,8 +29,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-(setq org-agenda-files (directory-files "~/org/" nil "\\.org$"))
+(setq org-directory "~/.organiser/")
+(setq org-agenda-files (directory-files "~/.organiser/" nil "\\.org$"))
 (setq org-agenda-start-on-weekday 1)
 (setq org-hide-emphasis-markers t)
 (setq org-log-done 'time)
