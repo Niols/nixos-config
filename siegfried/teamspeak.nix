@@ -12,4 +12,6 @@
 
   nixpkgs.config.allowUnfreePredicate =
     (pkg: builtins.elem (pkgs.lib.getName pkg) [ "teamspeak-server" ]);
+
+  systemd.services.teamspeak3-server.unitConfig.RequiresMountsFor = "/hester";
 }
