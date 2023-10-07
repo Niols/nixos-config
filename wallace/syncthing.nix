@@ -20,6 +20,36 @@
         path = "~/.organiser";
         devices = [ "Barbara" "Philippe" "Siegfried" ];
       };
+
+      "Philippe/DCIM/SD Card" = {
+        path = "~/Philippe/DCIM/SD Card";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/DCIM/Storage" = {
+        path = "~/Philippe/DCIM/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Movies/Storage" = {
+        path = "~/Philippe/Movies/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Pictures/SD Card" = {
+        path = "~/Philippe/Pictures/SD Card";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Pictures/Storage" = {
+        path = "~/Philippe/Pictures/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Scans" = {
+        path = "~/Philippe/Scans";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
     };
 
     overrideDevices = true;
