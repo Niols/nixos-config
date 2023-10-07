@@ -24,6 +24,36 @@
         ignorePerms = true;
         devices = [ "Barbara" "Philippe" "Wallace" ];
       };
+
+      "Philippe/DCIM/SD Card" = {
+        path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/DCIM/Storage" = {
+        path = "/hester/services/syncthing/Philippe/DCIM/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Movies/Storage" = {
+        path = "/hester/services/syncthing/Philippe/Movies/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Pictures/SD Card" = {
+        path = "/hester/services/syncthing/Philippe/Pictures/SD Card";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Pictures/Storage" = {
+        path = "/hester/services/syncthing/Philippe/Pictures/Storage";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
+
+      "Philippe/Scans" = {
+        path = "/hester/services/syncthing/Philippe/Scans";
+        devices = [ "Barbara" "Philippe" "Siegfried" ];
+      };
     };
 
     overrideDevices = true;
