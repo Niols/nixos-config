@@ -28,37 +28,37 @@
       "Philippe/DCIM/SD Card" = {
         path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
 
       "Philippe/DCIM/Storage" = {
         path = "/hester/services/syncthing/Philippe/DCIM/Storage";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
 
       "Philippe/Movies/Storage" = {
         path = "/hester/services/syncthing/Philippe/Movies/Storage";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
 
       "Philippe/Pictures/SD Card" = {
         path = "/hester/services/syncthing/Philippe/Pictures/SD Card";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
 
       "Philippe/Pictures/Storage" = {
         path = "/hester/services/syncthing/Philippe/Pictures/Storage";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
 
       "Philippe/Scans" = {
         path = "/hester/services/syncthing/Philippe/Scans";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Philippe" "Wallace" ];
       };
     };
 
