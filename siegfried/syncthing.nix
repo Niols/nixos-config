@@ -25,6 +25,11 @@
         devices = [ "Barbara" "Oxana" "Philippe" "Wallace" ];
       };
 
+      MobileSheets = {
+        path = "/hester/services/syncthing/MobileSheets";
+        devices = [ "Barbara" "Philippe" "Oxana" ];
+      };
+
       "Philippe/DCIM/SD Card" = {
         path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
         ignorePerms = true;
