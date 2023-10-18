@@ -18,7 +18,7 @@
 
       Organiser = {
         path = "~/.organiser";
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
+        devices = [ "Barbara" "Oxana" "Philippe" "Siegfried" ];
       };
 
       "Philippe/DCIM/SD Card" = {
@@ -60,6 +60,8 @@
         "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
       "Siegfried".id =
         "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
+      "Oxana".id =
+        "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
       "Wallace".id =
         "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
     };
