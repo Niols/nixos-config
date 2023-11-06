@@ -647,11 +647,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1695235242,
-        "narHash": "sha256-TBLm2U+ignM5lAIVjSep6is0eNYvnfyXQmnfhLq4Hv0=",
+        "lastModified": 1699287457,
+        "narHash": "sha256-NfgQ6yBAO/vqP6jufNn3CgkNwMe8tIBwQMbEcuIcoHo=",
         "owner": "niols",
         "repo": "nixos-secrets",
-        "rev": "c378fd58269d557430f967413f5f6a5598982798",
+        "rev": "5ce745cbcf89a0d4a89aaa8e79219fab574e0511",
         "type": "github"
       },
       "original": {
