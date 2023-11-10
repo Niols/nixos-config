@@ -92,6 +92,7 @@ with pkgs; [
   signal-desktop
   skypeforlinux
   slack
+  # spotdl # broken as of 2023-11-10
   steam-run
 
   ## T
