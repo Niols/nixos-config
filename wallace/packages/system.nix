@@ -79,6 +79,7 @@ with pkgs; [
   nix-output-monitor
 
   ## P
+  pdfgrep
   pdftk
   picard
   pkg-config
