@@ -21,6 +21,16 @@
         devices = [ "Barbara" "Oxana" "Philippe" "Siegfried" ];
       };
 
+      "Oxana/Documents" = {
+        path = "~/Oxana/Documents";
+        devices = [ "Oxana" "Philippe" "Siegfried" ];
+      };
+
+      "Oxana/Notes" = {
+        path = "~/Oxana/Notes";
+        devices = [ "Oxana" "Philippe" "Siegfried" ];
+      };
+
       "Philippe/DCIM/SD Card" = {
         path = "~/Philippe/DCIM/SD Card";
         devices = [ "Philippe" "Siegfried" ];

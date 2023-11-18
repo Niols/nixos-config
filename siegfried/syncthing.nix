@@ -30,6 +30,16 @@
         devices = [ "Barbara" "Philippe" "Oxana" ];
       };
 
+      "Oxana/Documents" = {
+        path = "/hester/services/syncthing/Oxana/Documents";
+        devices = [ "Oxana" "Philippe" "Wallace" ];
+      };
+
+      "Oxana/Notes" = {
+        path = "/hester/services/syncthing/Oxana/Notes";
+        devices = [ "Oxana" "Philippe" "Wallace" ];
+      };
+
       "Philippe/DCIM/SD Card" = {
         path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
         ignorePerms = true;
