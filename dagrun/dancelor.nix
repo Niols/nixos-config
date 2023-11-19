@@ -22,7 +22,7 @@ let
 
       ## Test whether the given path is a Git repository owned by 'dancelor'.
       is_dancelor_git_repository () (
-        cd "$1" && su -s /bin/sh dancelor -c \
+        cd "$1" && ${pkgs.su}/bin/su -s /bin/sh dancelor -c \
           'test "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true'
       )
 
