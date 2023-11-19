@@ -2,11 +2,23 @@
 
 let
   dancelor' = dancelor.packages.x86_64-linux.dancelor;
-  run-dancelor-server = pkgs.writeShellApplication {
-    name = "run-dancelor-server";
-    text = ''
-      mkdir -p /var/cache/dancelor/{version,set,book}
 
+  init-dancelor = pkgs.writeShellApplication {
+    name = "init-dancelor";
+    text = ''
+      mkdir -p \
+        /var/cache/dancelor/{version,set,book} \
+        /var/lib/dancelor/database
+
+      chown -R dancelor:dancelor \
+        /var/cache/dancelor \
+        /var/lib/dancelor/database
+    '';
+  };
+
+  run-dancelor = pkgs.writeShellApplication {
+    name = "run-dancelor";
+    text = ''
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
@@ -23,9 +35,13 @@ in {
   };
   users.groups.dancelor = { };
 
+  systemd.services.dancelor-init = {
+    serviceConfig = { ExecStart = "${init-dancelor}/bin/init-dancelor"; };
+  };
+
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = "${run-dancelor-server}/bin/run-dancelor-server";
+      ExecStart = "${run-dancelor}/bin/run-dancelor";
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
