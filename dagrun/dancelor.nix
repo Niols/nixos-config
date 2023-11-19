@@ -11,7 +11,14 @@ in {
 
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = "${dancelor'}/bin/dancelor-server --help";
+      ExecStart = ''
+        ${dancelor'}/bin/dancelor-server \
+          --cache /var/cache/dancelor \
+          --database /var/lib/dancelor/database \
+          --loglevel info \
+          --port 6872 \
+          --share ${dancelor'}/share
+      '';
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
