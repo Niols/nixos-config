@@ -1,31 +1,28 @@
-_:
-# { config, secrets, ... }:
+{ config, secrets, inputs', ... }:
 
 {
-  # users.users.dancelor = {
-  #   isNormalUser = true;
+  users.users.dancelor.isSystemUser = true;
 
-  #   openssh.authorizedKeys.keys = [
-  #     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
-  #   ];
-  # };
+  systemd.services.dancelor = {
+    serviceConfig.ExecStart = "${inputs'.dancelor}/bin/dancelor --help";
+  };
 
-  # age.secrets.dancelor-passwd = {
-  #   file = "${secrets}/dancelor-passwd.age";
-  #   mode = "600";
-  #   owner = "nginx";
-  #   group = "nginx";
-  # };
+  age.secrets.dancelor-passwd = {
+    file = "${secrets}/dancelor-passwd.age";
+    mode = "600";
+    owner = "nginx";
+    group = "nginx";
+  };
 
-  # services.nginx.virtualHosts.dancelor = {
-  #   serverName = "new.dancelor.org";
+  services.nginx.virtualHosts.dancelor = {
+    serverName = "new.dancelor.org";
 
-  #   forceSSL = true;
-  #   enableACME = true;
+    forceSSL = true;
+    enableACME = true;
 
-  #   locations."/" = {
-  #     proxyPass = "http://127.0.0.1:6872";
-  #     basicAuthFile = config.age.secrets.dancelor-passwd.path;
-  #   };
-  # };
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:6872";
+      basicAuthFile = config.age.secrets.dancelor-passwd.path;
+    };
+  };
 }
