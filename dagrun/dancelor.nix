@@ -1,7 +1,11 @@
 { config, secrets, inputs', ... }:
 
 {
-  users.users.dancelor.isSystemUser = true;
+  users.users.dancelor = {
+    isSystemUser = true;
+    group = "dancelor";
+  };
+  users.groups.dancelor = { };
 
   systemd.services.dancelor = {
     serviceConfig.ExecStart = "${inputs'.dancelor}/bin/dancelor --help";
