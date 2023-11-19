@@ -1,8 +1,8 @@
-{ config, secrets, dancelor, ... }:
+{ config, secrets, ... }:
 
-let dancelor' = dancelor.packages.x86_64-linux.dancelor;
+# let dancelor' = dancelor.packages.x86_64-linux.dancelor;
 
-in {
+{
   users.users.dancelor = {
     isSystemUser = true;
     group = "dancelor";
@@ -11,11 +11,18 @@ in {
 
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = "${dancelor'}/bin/dancelor --help";
+      ExecStart = "echo soon to be Dancelor";
+      # ExecStart = "${dancelor'}/bin/dancelor --help";
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
     };
+  };
+
+  nix.settings = {
+    substituters = [ "https://dancelor.cachix.org" ];
+    trusted-public-keys =
+      [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
   };
 
   age.secrets.dancelor-passwd = {
