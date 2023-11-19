@@ -55,10 +55,17 @@ in {
   users.groups.dancelor = { };
 
   systemd.services.dancelor-init = {
-    serviceConfig = { ExecStart = "${init-dancelor}/bin/init-dancelor"; };
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${init-dancelor}/bin/init-dancelor";
+      Type = "oneshot";
+    };
   };
 
   systemd.services.dancelor = {
+    after = [ "network.target" "dancelor-init.service" ];
+    requires = [ "dancelor-init.service" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = "${run-dancelor}/bin/run-dancelor";
       Restart = "always";
