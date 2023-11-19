@@ -18,6 +18,14 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
+    runtimeInputs = with pkgs; [
+      git
+      inkscape
+      lilypond
+      timidity
+      freepats
+      xvfb-run
+    ];
     text = ''
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
