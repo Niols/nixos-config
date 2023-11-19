@@ -9,6 +9,7 @@ let
   init-dancelor = pkgs.writeShellApplication {
     name = "init-dancelor";
     runtimeInputs = with pkgs; [ git ];
+    excludeShellChecks = [ "SC2016" ];
     text = ''
       mkdir -p /var/cache/dancelor/{version,set,book}
       mkdir -p /var/lib/dancelor
