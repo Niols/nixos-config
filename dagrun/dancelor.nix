@@ -1,6 +1,6 @@
-{ config, secrets, inputs, ... }:
+{ config, secrets, dancelor, ... }:
 
-let dancelor = inputs.dancelor.packages.x86_64-linux.dancelor;
+let dancelor' = dancelor.packages.x86_64-linux.dancelor;
 
 in {
   users.users.dancelor = {
@@ -11,7 +11,7 @@ in {
 
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = "${dancelor}/bin/dancelor --help";
+      ExecStart = "${dancelor'}/bin/dancelor --help";
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
