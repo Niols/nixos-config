@@ -69,6 +69,10 @@ in {
     group = "nginx";
   };
 
+  age.secrets.dancelor-database-repository = {
+    file = "${secrets}/dancelor-database-repository.age";
+  };
+
   services.nginx.virtualHosts.dancelor = {
     serverName = "new.dancelor.org";
 
