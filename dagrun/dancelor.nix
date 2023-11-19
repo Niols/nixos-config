@@ -13,6 +13,9 @@ let
       mkdir -p /var/cache/dancelor/{version,set,book}
       mkdir -p /var/lib/dancelor
 
+      rm -f /var/lib/dancelor/share
+      ln -s ${dancelor}/share /var/lib/dancelor/share
+
       if [ -e /var/lib/dancelor/database ]; then
         if ! [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
           echo "The directory '/var/lib/dancelor/database' exists but is not a Git repository." >&2
@@ -35,9 +38,9 @@ let
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
+        --share /var/lib/dancelor/share \
         --loglevel info \
-        --port 6872 \
-        --share ${dancelor'}/share
+        --port 6872
     '';
   };
 
