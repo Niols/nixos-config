@@ -20,7 +20,7 @@ let
       cp -R ${dancelor'}/share/dancelor /var/lib/dancelor/share
 
       if [ -e /var/lib/dancelor/database ]; then
-        if ! [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
+        if ! [ "$(cd /var/lib/dancelor/database && git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
           echo "The directory '/var/lib/dancelor/database' exists but is not a Git repository." >&2
           exit 1
         fi
