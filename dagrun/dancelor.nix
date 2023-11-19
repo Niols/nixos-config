@@ -8,7 +8,10 @@
   users.groups.dancelor = { };
 
   systemd.services.dancelor = {
-    serviceConfig.ExecStart = "${inputs'.dancelor}/bin/dancelor --help";
+    serviceConfig = {
+      ExecStart = "${inputs'.dancelor}/bin/dancelor --help";
+      Restart = "always";
+    };
   };
 
   age.secrets.dancelor-passwd = {
