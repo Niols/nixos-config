@@ -5,14 +5,22 @@ let
 
   init-dancelor = pkgs.writeShellApplication {
     name = "init-dancelor";
+    runtimeInputs = with pkgs; [ git ];
     text = ''
-      mkdir -p \
-        /var/cache/dancelor/{version,set,book} \
-        /var/lib/dancelor/database
+      mkdir -p /var/cache/dancelor/{version,set,book}
+      mkdir -p /var/lib/dancelor
 
-      chown -R dancelor:dancelor \
-        /var/cache/dancelor \
-        /var/lib/dancelor/database
+      if [ -e /var/lib/dancelor/database ]; then
+        if ! [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
+          echo "The directory '/var/lib/dancelor/database' exists but is not a Git repository." >&2
+          exit 1
+        fi
+      else
+        git clone "$(cat ${config.age.secrets.dancelor-database-repository.path})" /var/lib/dancelor/database
+      fi
+
+      chown -R dancelor:dancelor /var/cache/dancelor
+      chown -R dancelor:dancelor /var/lib/dancelor
     '';
   };
 
