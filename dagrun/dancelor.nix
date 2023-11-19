@@ -12,6 +12,8 @@ in {
   systemd.services.dancelor = {
     serviceConfig = {
       ExecStart = ''
+        mkdir -p /var/cache/dancelor/{version,set,book}
+
         ${dancelor'}/bin/dancelor-server \
           --cache /var/cache/dancelor \
           --database /var/lib/dancelor/database \
