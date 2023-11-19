@@ -11,7 +11,7 @@ in {
 
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = "${dancelor'}/bin/dancelor --help";
+      ExecStart = "${dancelor'}/bin/dancelor-server --help";
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
