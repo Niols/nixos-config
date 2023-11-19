@@ -13,8 +13,11 @@ let
       mkdir -p /var/cache/dancelor/{version,set,book}
       mkdir -p /var/lib/dancelor
 
-      rm -f /var/lib/dancelor/share
-      ln -s ${dancelor}/share /var/lib/dancelor/share
+      ## Create a 'share' directory from the sources and the produced JS.
+      ## FIXME: This should be handled by Dancelor itself.
+      rm -Rf /var/lib/dancelor/share
+      cp -R ${dancelor}/share /var/lib/dancelor/share
+      cp -R ${dancelor'}/share/dancelor /var/lib/dancelor/share
 
       if [ -e /var/lib/dancelor/database ]; then
         if ! [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
