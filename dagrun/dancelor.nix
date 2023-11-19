@@ -13,6 +13,8 @@ in {
     serviceConfig = {
       ExecStart = "${dancelor}/bin/dancelor --help";
       Restart = "always";
+      User = "dancelor";
+      Group = "dancelor";
     };
   };
 
