@@ -1,4 +1,4 @@
-{ config, secrets, dancelor, ... }:
+{ config, secrets, dancelor, pkgs, ... }:
 
 let dancelor' = dancelor.packages.x86_64-linux.dancelor;
 
@@ -11,16 +11,19 @@ in {
 
   systemd.services.dancelor = {
     serviceConfig = {
-      ExecStart = ''
-        mkdir -p /var/cache/dancelor/{version,set,book}
+      ExecStart = pkgs.writeShellApplication {
+        name = "run-dancelor-server";
+        text = ''
+          mkdir -p /var/cache/dancelor/{version,set,book}
 
-        ${dancelor'}/bin/dancelor-server \
-          --cache /var/cache/dancelor \
-          --database /var/lib/dancelor/database \
-          --loglevel info \
-          --port 6872 \
-          --share ${dancelor'}/share
-      '';
+          ${dancelor'}/bin/dancelor-server \
+            --cache /var/cache/dancelor \
+            --database /var/lib/dancelor/database \
+            --loglevel info \
+            --port 6872 \
+            --share ${dancelor'}/share
+        '';
+      };
       Restart = "always";
       User = "dancelor";
       Group = "dancelor";
