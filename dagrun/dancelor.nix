@@ -1,7 +1,10 @@
 { config, secrets, dancelor, pkgs, ... }:
 
 let
-  dancelor' = dancelor.packages.x86_64-linux.dancelor;
+  system = "x86_64-linux";
+  lilypond' = dancelor.inputs.nixpkgs.legacyPackages.${system}.lilypond;
+  timidity' = dancelor.inputs.timidity.packages.${system}.timidityWithVorbis;
+  dancelor' = dancelor.packages.${system}.dancelor;
 
   init-dancelor = pkgs.writeShellApplication {
     name = "init-dancelor";
@@ -26,14 +29,8 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
-    runtimeInputs = with pkgs; [
-      git
-      inkscape
-      lilypond
-      timidity
-      freepats
-      xvfb-run
-    ];
+    runtimeInputs = (with pkgs; [ git inkscape freepats xvfb-run ])
+      ++ [ lilypond' timidity' ];
     text = ''
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
