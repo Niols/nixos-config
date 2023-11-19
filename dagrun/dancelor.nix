@@ -14,10 +14,6 @@ let
       mkdir -p /var/cache/dancelor/{version,set,book}
       mkdir -p /var/lib/dancelor
 
-      ## Create a link to the 'share' directory.
-      rm -f /var/lib/dancelor/share
-      ln -s ${dancelor'}/share/dancelor /var/lib/dancelor/share
-
       ## Test whether the given path is a Git repository owned by 'dancelor'.
       is_dancelor_git_repository () (
         cd "$1" && ${pkgs.su}/bin/su -s /bin/sh dancelor -c \
@@ -46,7 +42,7 @@ let
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
-        --share /var/lib/dancelor/share \
+        --share ${dancelor'}/share/dancelor \
         --loglevel debug \
         --port 6872
     '';
