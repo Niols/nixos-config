@@ -38,7 +38,7 @@ let
     name = "run-dancelor";
     runtimeInputs = (with pkgs; [ git freepats ]) ++ [ lilypond' timidity' ];
     text = ''
-      ${dancelor'}/bin/dancelor-server \
+      ${dancelor'}/bin/dancelor \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
         --share ${dancelor'}/share/dancelor \
