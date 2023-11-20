@@ -32,15 +32,16 @@
         "timidity": "timidity"
       },
       "locked": {
-        "lastModified": 1699988681,
-        "narHash": "sha256-HlILrvB5jR8nG90JvzjQZEvANwkNHikOty50TkJNA3I=",
+        "lastModified": 1700476365,
+        "narHash": "sha256-C4hKGg39hO00E5lu/Taz9+7IHgLs6Yv98TVlCg1TEkM=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "29bda86c3b20cb71d4973c153fa7208b9925087c",
+        "rev": "5a24c84ae2d252d9c0f277b76985f5ecc1615201",
         "type": "github"
       },
       "original": {
         "owner": "paris-branch",
+        "ref": "niols/reorganise-and-package-properly",
         "repo": "dancelor",
         "type": "github"
       }
