@@ -37,12 +37,9 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
-    runtimeInputs = (with pkgs; [ git freepats xvfb-run ])
+    runtimeInputs = (with pkgs; [ git at-spi2-core freepats xvfb-run ])
       ++ [ inkscape' lilypond' timidity' ];
     text = ''
-      ## Desactivate the accessibility bus to make Inkscape happy.
-      export NO_AT_BRIGE=1
-
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
