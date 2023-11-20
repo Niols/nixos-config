@@ -52,6 +52,7 @@ let
 in {
   users.users.dancelor = {
     isSystemUser = true;
+    home = "/var/lib/dancelor";
     group = "dancelor";
   };
   users.groups.dancelor = { };
