@@ -3,6 +3,7 @@
 let
   system = "x86_64-linux";
   lilypond' = dancelor.inputs.nixpkgs.legacyPackages.${system}.lilypond;
+  inkscape' = dancelor.inputs.nixpkgs.legacyPackages.${system}.inkscape;
   timidity' = dancelor.inputs.timidity.packages.${system}.timidityWithVorbis;
   dancelor' = dancelor.packages.${system}.dancelor;
 
@@ -36,8 +37,8 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
-    runtimeInputs = (with pkgs; [ git inkscape freepats xvfb-run ])
-      ++ [ lilypond' timidity' ];
+    runtimeInputs = (with pkgs; [ git freepats xvfb-run ])
+      ++ [ inkscape' lilypond' timidity' ];
     text = ''
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
