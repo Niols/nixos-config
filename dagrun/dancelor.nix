@@ -37,7 +37,7 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
-    runtimeInputs = (with pkgs; [ git at-spi2-core freepats xvfb-run ])
+    runtimeInputs = (with pkgs; [ git freepats xvfb-run ])
       ++ [ inkscape' lilypond' timidity' ];
     text = ''
       ${dancelor'}/bin/dancelor-server \
@@ -56,6 +56,9 @@ in {
     group = "dancelor";
   };
   users.groups.dancelor = { };
+
+  ## Necessary for Inkscape to find the accessibility bus.
+  services.gnome.at-spi2-core.enable = true;
 
   systemd.services.dancelor-init = {
     wantedBy = [ "multi-user.target" ];
