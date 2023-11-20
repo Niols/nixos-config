@@ -32,16 +32,16 @@
         "timidity": "timidity"
       },
       "locked": {
-        "lastModified": 1700476365,
-        "narHash": "sha256-C4hKGg39hO00E5lu/Taz9+7IHgLs6Yv98TVlCg1TEkM=",
+        "lastModified": 1700480439,
+        "narHash": "sha256-1/pHbU0L2/lOBPb0Iwk6MFv0nF728PS5KbdIw8Hqp9Q=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "5a24c84ae2d252d9c0f277b76985f5ecc1615201",
+        "rev": "49ef45b93d02df831e61102737e8b3f7f7b8cc5b",
         "type": "github"
       },
       "original": {
         "owner": "paris-branch",
-        "ref": "niols/reorganise-and-package-properly",
+        "ref": "niols/crop-in-pure-lilypond",
         "repo": "dancelor",
         "type": "github"
       }

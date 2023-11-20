@@ -3,7 +3,6 @@
 let
   system = "x86_64-linux";
   lilypond' = dancelor.inputs.nixpkgs.legacyPackages.${system}.lilypond;
-  inkscape' = dancelor.inputs.nixpkgs.legacyPackages.${system}.inkscape;
   timidity' = dancelor.inputs.timidity.packages.${system}.timidityWithVorbis;
   dancelor' = dancelor.packages.${system}.dancelor;
 
@@ -37,8 +36,7 @@ let
 
   run-dancelor = pkgs.writeShellApplication {
     name = "run-dancelor";
-    runtimeInputs = (with pkgs; [ git freepats xvfb-run ])
-      ++ [ inkscape' lilypond' timidity' ];
+    runtimeInputs = (with pkgs; [ git freepats ]) ++ [ lilypond' timidity' ];
     text = ''
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
@@ -52,13 +50,9 @@ let
 in {
   users.users.dancelor = {
     isSystemUser = true;
-    home = "/var/lib/dancelor";
     group = "dancelor";
   };
   users.groups.dancelor = { };
-
-  ## Necessary for Inkscape to find the accessibility bus.
-  services.gnome.at-spi2-core.enable = true;
 
   systemd.services.dancelor-init = {
     wantedBy = [ "multi-user.target" ];
