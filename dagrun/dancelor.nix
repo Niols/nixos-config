@@ -102,6 +102,12 @@ in {
     locations."/" = {
       proxyPass = "http://127.0.0.1:6872";
       basicAuthFile = config.age.secrets.dancelor-passwd.path;
+      extraConfig = ''
+        ## Dancelor relies on SVGs being embedded as objects, which can trigger
+        ## the `X-Frame-Options` policy. We therefore relax it a tiny bit
+        ## (compared to DENY).
+        add_header X-Frame-Options SAMEORIGIN;
+      '';
     };
   };
 }
