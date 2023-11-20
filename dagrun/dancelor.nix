@@ -40,6 +40,9 @@ let
     runtimeInputs = (with pkgs; [ git freepats xvfb-run ])
       ++ [ inkscape' lilypond' timidity' ];
     text = ''
+      ## Desactivate the accessibility bus to make Inkscape happy.
+      export NO_AT_BRIGE=1
+
       ${dancelor'}/bin/dancelor-server \
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
