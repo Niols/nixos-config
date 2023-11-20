@@ -50,6 +50,8 @@ let
 in {
   users.users.dancelor = {
     isSystemUser = true;
+    ## LilyPond needs a home to cache fonts.
+    home = "/var/lib/dancelor";
     group = "dancelor";
   };
   users.groups.dancelor = { };
