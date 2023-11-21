@@ -48,6 +48,7 @@ let
   };
 
 in {
+  ## Create a user and a group `dancelor:dancelor`.
   users.users.dancelor = {
     isSystemUser = true;
     ## LilyPond needs a home to cache fonts.
@@ -56,6 +57,8 @@ in {
   };
   users.groups.dancelor = { };
 
+  ## Initialisation service. Runs once as root so as to create the right
+  ## directories for the actual service which will run as `dancelor`.
   systemd.services.dancelor-init = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
@@ -64,6 +67,8 @@ in {
     };
   };
 
+  ## Actual service that runs `dancelor`. Requires the service above. Runs as
+  ## `dancelor:dancelor`.
   systemd.services.dancelor = {
     after = [ "network.target" "dancelor-init.service" ];
     requires = [ "dancelor-init.service" ];
@@ -76,12 +81,15 @@ in {
     };
   };
 
+  ## Use Dancelor's Cachix instance as a substituter. Since Dancelor's CI fill
+  ## it with all the components, this should make things much faster.
   nix.settings = {
     substituters = [ "https://dancelor.cachix.org" ];
     trusted-public-keys =
       [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
   };
 
+  ## A secret `passwd` file containing the users' identifiers.
   age.secrets.dancelor-passwd = {
     file = "${secrets}/dancelor-passwd.age";
     mode = "600";
@@ -89,16 +97,18 @@ in {
     group = "nginx";
   };
 
+  ## A secret Git repository for the database. It will be cloned by the
+  ## `dancelor-init` service and used by the `dancelor` service.
   age.secrets.dancelor-database-repository = {
     file = "${secrets}/dancelor-database-repository.age";
   };
 
+  ## A simple Nginx proxy in front of Dancelor. Handles HTTPS, the generation of
+  ## the certificate, and the `passwd` authentication.
   services.nginx.virtualHosts.dancelor = {
     serverName = "dancelor.org";
-
     forceSSL = true;
     enableACME = true;
-
     locations."/" = {
       proxyPass = "http://127.0.0.1:6872";
       basicAuthFile = config.age.secrets.dancelor-passwd.path;
