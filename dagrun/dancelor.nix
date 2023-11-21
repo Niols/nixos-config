@@ -27,6 +27,11 @@ let
         fi
       else
         git clone "$(cat ${config.age.secrets.dancelor-database-repository.path})" /var/lib/dancelor/database
+        (
+          cd /var/lib/dancelor/database
+          git config user.name Auto
+          git config user.email noreply@dancelor.org
+        )
       fi
 
       chown -R dancelor:dancelor /var/cache/dancelor
