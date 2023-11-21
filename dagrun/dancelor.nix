@@ -105,8 +105,12 @@ in {
       extraConfig = ''
         ## Dancelor relies on SVGs being embedded as objects, which can trigger
         ## the `X-Frame-Options` policy. We therefore relax it a tiny bit
-        ## (compared to DENY).
+        ## (compared to `DENY`). We also have to include other headers otherwise
+        ## they are dropped, because `add_header` replaces all parent headers.
+        ## cf http://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header
         add_header X-Frame-Options SAMEORIGIN;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
       '';
     };
   };
