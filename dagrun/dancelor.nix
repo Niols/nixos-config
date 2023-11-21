@@ -42,7 +42,7 @@ let
         --cache /var/cache/dancelor \
         --database /var/lib/dancelor/database \
         --share ${dancelor'}/share/dancelor \
-        --loglevel debug \
+        --loglevel info \
         --port 6872
     '';
   };
