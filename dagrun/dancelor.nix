@@ -94,7 +94,7 @@ in {
   };
 
   services.nginx.virtualHosts.dancelor = {
-    serverName = "new.dancelor.org";
+    serverName = "dancelor.org";
 
     forceSSL = true;
     enableACME = true;
