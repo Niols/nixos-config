@@ -22,7 +22,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = ""; # saves some resources on Linux
 
-    dancelor.url = "github:paris-branch/dancelor/niols/crop-in-pure-lilypond";
+    dancelor.url = "github:paris-branch/dancelor";
 
     secrets.url = "github:niols/nixos-secrets";
     secrets.flake = false;
