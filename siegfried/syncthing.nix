@@ -27,16 +27,19 @@
 
       MobileSheets = {
         path = "/hester/services/syncthing/MobileSheets";
+        ignorePerms = true;
         devices = [ "Barbara" "Philippe" "Oxana" ];
       };
 
       "Oxana/Documents" = {
         path = "/hester/services/syncthing/Oxana/Documents";
+        ignorePerms = true;
         devices = [ "Oxana" "Philippe" "Wallace" ];
       };
 
       "Oxana/Notes" = {
         path = "/hester/services/syncthing/Oxana/Notes";
+        ignorePerms = true;
         devices = [ "Oxana" "Philippe" "Wallace" ];
       };
 
