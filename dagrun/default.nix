@@ -18,9 +18,10 @@
       ./system.nix
       ./users.nix
       inputs.agenix.nixosModules.default
+      inputs.dancelor.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
-      { _module.args = { inherit (inputs) secrets nixpkgs dancelor; }; }
+      { _module.args = { inherit (inputs) secrets nixpkgs; }; }
     ];
   };
 }
