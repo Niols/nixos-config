@@ -27,16 +27,19 @@
 
       MobileSheets = {
         path = "/hester/services/syncthing/MobileSheets";
+        ignorePerms = true;
         devices = [ "Barbara" "Philippe" "Oxana" ];
       };
 
       "Oxana/Documents" = {
         path = "/hester/services/syncthing/Oxana/Documents";
+        ignorePerms = true;
         devices = [ "Oxana" "Philippe" "Wallace" ];
       };
 
       "Oxana/Notes" = {
         path = "/hester/services/syncthing/Oxana/Notes";
+        ignorePerms = true;
         devices = [ "Oxana" "Philippe" "Wallace" ];
       };
 
@@ -94,8 +97,18 @@
 
   users.groups.hester.members = [ "syncthing" ];
 
-  systemd.services.syncthing-init.unitConfig.RequiresMountsFor = "/hester";
-  systemd.services.syncthing.unitConfig.RequiresMountsFor = "/hester";
+  ## Hester is an auto-mountable Samba target with a timeout. If we use
+  ## `RequiresMountsFor = "/hester"`, then Syncthing will add a `requires =` and
+  ## an `after =` on `hester.mount` which shuts down every time Hester has a
+  ## timeout, which is not what we want.
+  systemd.services.syncthing-init.unitConfig = {
+    requires = [ "hester.automount" ];
+    after = [ "hester.automount" ];
+  };
+  systemd.services.syncthing.unitConfig = {
+    requires = [ "hester.automount" ];
+    after = [ "hester.automount" ];
+  };
 
   services.nginx.virtualHosts.syncthing = {
     serverName = "syncthing.niols.fr";
