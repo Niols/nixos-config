@@ -5,7 +5,6 @@
     system = "aarch64-linux";
     modules = [
       ./boot.nix
-      #      ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
       ./media.nix
