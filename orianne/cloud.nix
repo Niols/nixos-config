@@ -10,7 +10,6 @@
 
     home = "/hester/services/nextcloud-test";
 
-    nginx.enable = true;
     https = true; # use HTTPS for links
 
     # autoUpdateApps.enable = true;
