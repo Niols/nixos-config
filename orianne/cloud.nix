@@ -1,6 +1,14 @@
 { pkgs, ... }:
 
 {
+
+  services.nginx.virtualHosts.cloud = {
+    serverName = "new.cloud.niols.fr";
+
+    forceSSL = true;
+    enableACME = true;
+  };
+
   services.nextcloud = {
     enable = true;
 
