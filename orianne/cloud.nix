@@ -1,13 +1,6 @@
 { pkgs, ... }:
 
 {
-  virtualHosts = {
-    "new.cloud.niols.fr" = {
-      forceSSL = true;
-      enableACME = true;
-    };
-  };
-
   services.nextcloud = {
     enable = true;
 
