@@ -20,5 +20,7 @@
     };
   };
 
+  users.groups.hester.members = [ "nextcloud" ];
+
   environment.etc."nextcloud-admin-pass".text = "test123";
 }
