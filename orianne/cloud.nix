@@ -8,8 +8,8 @@
 
     hostName = "new.cloud.niols.fr";
 
-    home = "/var/lib/nextcloud-test"; # cannot be on a shared FS
-    datadir = "/hester/services/nextcloud-test";
+    home = "/var/lib/nextcloud-test";
+    ## `datadir` is `home` by default
 
     https = true; # use HTTPS for links
 
