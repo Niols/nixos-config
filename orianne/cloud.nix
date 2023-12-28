@@ -16,8 +16,11 @@
 
     hostName = "new.cloud.niols.fr";
 
+    ## Home is on the machine, but the data directory is on Hester. We don't
+    ## check permissions.
     home = "/var/lib/nextcloud-test";
-    ## `datadir` is `home` by default
+    datadir = "/hester/services/nextcloud-test/data";
+    extraOptions.check_data_directory_permissions = false;
 
     https = true; # use HTTPS for links
 
