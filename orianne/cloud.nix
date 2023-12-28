@@ -38,6 +38,9 @@ in {
 
   age.secrets.nextcloud-admin-password = {
     file = "${secrets}/nextcloud-admin-password.age";
+    mode = "640";
+    owner = "nextcloud";
+    group = "nextcloud";
   };
 
   services.postgresql = {
