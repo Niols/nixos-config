@@ -38,6 +38,7 @@ in {
     https = true; # use HTTPS for links
 
     autoUpdateApps.enable = true;
+    configureRedis = true;
 
     config = {
       adminuser = "admin";
