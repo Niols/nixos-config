@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-
   services.nginx.virtualHosts.cloud = {
     serverName = "new.cloud.niols.fr";
 
@@ -10,7 +9,7 @@
   };
 
   services.nextcloud = {
-    enable = true;
+    # enable = true;
 
     package = pkgs.nextcloud26;
 
