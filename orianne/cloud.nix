@@ -1,19 +1,18 @@
 { pkgs, ... }:
 
-{
-  services.nginx.virtualHosts.cloud = {
-    serverName = "new.cloud.niols.fr";
+let hostName = "new.cloud.niols.fr";
 
+in {
+  services.nginx.virtualHosts.${hostName} = {
     forceSSL = true;
     enableACME = true;
   };
 
   services.nextcloud = {
     enable = true;
-
     package = pkgs.nextcloud26;
 
-    hostName = "new.cloud.niols.fr";
+    inherit hostName;
 
     ## Home is on the machine, but the data directory is on Hester. We don't
     ## check permissions.
