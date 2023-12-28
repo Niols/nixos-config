@@ -28,7 +28,7 @@ in {
     ## Nextcloud to see whether it recommends further processing, such as
     ## database reindexing or conversion.
     ##
-    package = pkgs.nextcloud27;
+    package = pkgs.nextcloud28;
 
     inherit hostName;
 
