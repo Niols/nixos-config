@@ -29,7 +29,7 @@ in {
     hester-movies = hester { path = "/movies"; };
     hester-shows = hester { path = "/shows"; };
     hester-nextcloud = hester {
-      path = "/services/nextcloud-test";
+      path = "/services/nextcloud";
       uid = "nextcloud";
       gid = "nextcloud";
     };
