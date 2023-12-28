@@ -29,6 +29,8 @@ in {
       dbuser = "nextcloud";
       dbhost = "/run/postgresql";
       dbname = "nextcloud";
+
+      defaultPhoneRegion = "FR";
     };
   };
 
