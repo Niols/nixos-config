@@ -29,10 +29,33 @@
     config = {
       adminuser = "admin";
       adminpassFile = "/etc/nextcloud-admin-pass-tmp";
+
+      dbtype = "pgsql";
+      dbuser = "nextcloud";
+      dbhost = "/run/postgresql";
+      dbname = "nextcloud";
+      dbpassFile = "/etc/nextcloud-db-pass-tmp";
     };
   };
 
   users.groups.hester.members = [ "nextcloud" ];
 
   environment.etc."nextcloud-admin-pass-tmp".text = "test123";
+  environment.etc."nextcloud-db-pass-tmp".text = "dbtest123";
+
+  services.postgresql = {
+    enable = true;
+
+    # Ensure the database, user, and permissions always exist
+    ensureDatabases = [ "nextcloud" ];
+    ensureUsers = [{
+      name = "nextcloud";
+      ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+    }];
+  };
+
+  systemd.services."nextcloud-setup" = {
+    requires = [ "postgresql.service" ];
+    after = [ "postgresql.service" ];
+  };
 }
