@@ -29,14 +29,12 @@ in {
       dbuser = "nextcloud";
       dbhost = "/run/postgresql";
       dbname = "nextcloud";
-      dbpassFile = "/etc/nextcloud-db-pass-tmp";
     };
   };
 
   users.groups.hester.members = [ "nextcloud" ];
 
   environment.etc."nextcloud-admin-pass-tmp".text = "test123";
-  environment.etc."nextcloud-db-pass-tmp".text = "dbtest123";
 
   services.postgresql = {
     enable = true;
