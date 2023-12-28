@@ -32,8 +32,8 @@ in {
 
     inherit hostName;
 
-    home = "/var/lib/nextcloud-test";
-    datadir = "/hester/services/nextcloud-test";
+    home = "/var/lib/nextcloud";
+    datadir = "/hester/services/nextcloud";
 
     https = true; # use HTTPS for links
 
