@@ -21,6 +21,7 @@
     home = "/var/lib/nextcloud-test";
     datadir = "/hester/services/nextcloud-test/data";
     extraOptions.check_data_directory_permissions = false;
+    extraOptions.localstorage.umask = "0777";
 
     https = true; # use HTTPS for links
 
