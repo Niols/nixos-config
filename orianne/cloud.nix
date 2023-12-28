@@ -5,6 +5,29 @@ let hostName = "new.cloud.niols.fr";
 in {
   services.nextcloud = {
     enable = true;
+
+    ## #####  Upgrading Nextcloud's version  ###################################
+    ##
+    ## From https://nixos.wiki/wiki/Nextcloud#Maintenance
+    ##
+    ## There is no default `nextcloud` package. Instead you have to set the
+    ## current version in `services.nextcloud.package`. As soon a major version
+    ## of Nextcloud gets unsupported, it will be removed from nixpkgs as well.
+    ##
+    ## Upgrading then consists of these steps:
+    ##
+    ## - Increment the version of services.nextcloud.package in your config by 1
+    ##   (leaving out a major version is not supported)
+    ##
+    ## - `nixos-rebuild switch`
+    ##
+    ## In theory, your Nextcloud has now been upgraded by one version. NixOS
+    ## attempts `nextcloud-occ upgrade`, if this succeeds without problems you
+    ## don't need to do anything. Check `journalctl` to make sure nothing
+    ## horrible happened. Go to the `/settings/admin/overview` page in your
+    ## Nextcloud to see whether it recommends further processing, such as
+    ## database reindexing or conversion.
+    ##
     package = pkgs.nextcloud27;
 
     inherit hostName;
