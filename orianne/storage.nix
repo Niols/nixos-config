@@ -21,7 +21,11 @@ let
   };
 
 in {
-  fileSystems.hester = hester { };
+  fileSystems = {
+    hester-music = hester { path = "/music"; };
+    hester-movies = hester { path = "/movies"; };
+    hester-shows = hester { path = "/shows"; };
+  };
 
   users.groups.hester.members = [ "niols" ];
 
