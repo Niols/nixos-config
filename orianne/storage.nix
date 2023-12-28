@@ -17,6 +17,9 @@ let
       "gid=${gid}"
       "dir_mode=0770"
       "file_mode=0660"
+
+      ## Symbolic link support on a CIFS share.
+      "mfsymlinks"
     ];
   };
 
