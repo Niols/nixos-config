@@ -28,12 +28,12 @@
     # autoUpdateApps.enable = true;
 
     config = {
-      adminpassFile = "/etc/nextcloud-admin-pass";
       adminuser = "admin";
+      adminpassFile = "/etc/nextcloud-admin-pass-tmp";
     };
   };
 
   users.groups.hester.members = [ "nextcloud" ];
 
-  environment.etc."nextcloud-admin-pass".text = "test123";
+  environment.etc."nextcloud-admin-pass-tmp".text = "test123";
 }
