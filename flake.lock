@@ -963,11 +963,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1700411085,
-        "narHash": "sha256-bXP0TU/Rk7BY9SpYq+asHGCTzVITzN/0XOwJ0Tev6fI=",
+        "lastModified": 1703798676,
+        "narHash": "sha256-7TpB7VtfhbvwlP1/UTDsUJjmTj84Fl9LJK0igV8MTLo=",
         "owner": "niols",
         "repo": "nixos-secrets",
-        "rev": "efefd7b72172d6cfce4a9ae163e4489020833f21",
+        "rev": "3fe684248f45203f1fb696a438ac90512368a234",
         "type": "github"
       },
       "original": {

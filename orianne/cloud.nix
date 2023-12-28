@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, secrets, pkgs, ... }:
 
 let hostName = "new.cloud.niols.fr";
 
@@ -23,7 +23,7 @@ in {
 
     config = {
       adminuser = "admin";
-      adminpassFile = "/etc/nextcloud-admin-pass-tmp";
+      adminpassFile = config.age.secrets.nextcloud-admin-password.path;
 
       dbtype = "pgsql";
       dbuser = "nextcloud";
@@ -35,6 +35,10 @@ in {
   users.groups.hester.members = [ "nextcloud" ];
 
   environment.etc."nextcloud-admin-pass-tmp".text = "test123";
+
+  age.secrets.nextcloud-admin-password = {
+    file = "${secrets}/nextcloud-admin-password.age";
+  };
 
   services.postgresql = {
     enable = true;
