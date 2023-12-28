@@ -23,7 +23,7 @@ in {
 
     config = {
       adminuser = "admin";
-      adminpassFile = config.age.secrets.nextcloud-admin-password.path;
+      adminpassFile = config.age.secrets.niolscloud-admin-password.path;
 
       dbtype = "pgsql";
       dbuser = "nextcloud";
@@ -34,10 +34,8 @@ in {
 
   users.groups.hester.members = [ "nextcloud" ];
 
-  environment.etc."nextcloud-admin-pass-tmp".text = "test123";
-
-  age.secrets.nextcloud-admin-password = {
-    file = "${secrets}/nextcloud-admin-password.age";
+  age.secrets.niolscloud-admin-password = {
+    file = "${secrets}/niolscloud-admin-password.age";
     mode = "640";
     owner = "nextcloud";
     group = "nextcloud";
