@@ -14,12 +14,8 @@ in {
 
     inherit hostName;
 
-    ## Home is on the machine, but the data directory is on Hester. We don't
-    ## check permissions.
     home = "/var/lib/nextcloud-test";
     datadir = "/hester/services/nextcloud-test";
-    # extraOptions.check_data_directory_permissions = false;
-    # extraOptions.localstorage.umask = "0777";
 
     https = true; # use HTTPS for links
 
