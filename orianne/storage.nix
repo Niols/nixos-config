@@ -25,6 +25,11 @@ in {
     hester-music = hester { path = "/music"; };
     hester-movies = hester { path = "/movies"; };
     hester-shows = hester { path = "/shows"; };
+    hester-nextcloud = hester {
+      path = "/services/nextcloud-test";
+      uid = "nextcloud";
+      gid = "nextcloud";
+    };
   };
 
   users.groups.hester.members = [ "niols" ];
