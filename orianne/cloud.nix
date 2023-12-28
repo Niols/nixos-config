@@ -3,11 +3,6 @@
 let hostName = "new.cloud.niols.fr";
 
 in {
-  services.nginx.virtualHosts.${hostName} = {
-    forceSSL = true;
-    enableACME = true;
-  };
-
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud27;
@@ -19,7 +14,7 @@ in {
 
     https = true; # use HTTPS for links
 
-    # autoUpdateApps.enable = true;
+    autoUpdateApps.enable = true;
 
     config = {
       adminuser = "admin";
@@ -33,8 +28,6 @@ in {
       defaultPhoneRegion = "FR";
     };
   };
-
-  users.groups.hester.members = [ "nextcloud" ];
 
   age.secrets.niolscloud-admin-password = {
     file = "${secrets}/niolscloud-admin-password.age";
@@ -56,5 +49,10 @@ in {
   systemd.services."nextcloud-setup" = {
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
+  };
+
+  services.nginx.virtualHosts.${hostName} = {
+    forceSSL = true;
+    enableACME = true;
   };
 }
