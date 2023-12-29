@@ -40,6 +40,8 @@ in {
     autoUpdateApps.enable = true;
     configureRedis = true;
 
+    secretFile = config.age.secrets.niolscloud-secrets.path;
+
     config = {
       adminuser = "admin";
       adminpassFile = config.age.secrets.niolscloud-admin-password.path;
@@ -55,6 +57,13 @@ in {
 
   age.secrets.niolscloud-admin-password = {
     file = "${secrets}/niolscloud-admin-password.age";
+    mode = "640";
+    owner = "nextcloud";
+    group = "nextcloud";
+  };
+
+  age.secrets.niolscloud-secrets = {
+    file = "${secrets}/niolscloud-secrets.age";
     mode = "640";
     owner = "nextcloud";
     group = "nextcloud";
