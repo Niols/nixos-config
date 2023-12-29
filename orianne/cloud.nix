@@ -44,6 +44,7 @@ in {
       inherit calendar contacts impersonate previewgenerator tasks;
       ## FIXME: news keeweb onlyoffice cookbook
     };
+    appstoreEnable = true;
     autoUpdateApps.enable = true;
 
     configureRedis = true;
