@@ -37,7 +37,14 @@ in {
 
     https = true; # use HTTPS for links
 
+    ## Specify important apps via Nix. One can still install apps via the web
+    ## interface. The latter get updated automatically.
+    extraAppsEnable = true;
+    extraApps = with config.services.nextcloud.package.packages.apps; {
+      inherit calendar contacts impersonate news previewgenerator tasks;
+    };
     autoUpdateApps.enable = true;
+
     configureRedis = true;
 
     secretFile = config.age.secrets.niolscloud-secrets.path;
