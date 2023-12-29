@@ -47,6 +47,9 @@ in {
     appstoreEnable = true;
     autoUpdateApps.enable = true;
 
+    ## Necessary for CIFS external storage.
+    phpExtraExtensions = p: [ p.smbclient ];
+
     configureRedis = true;
 
     secretFile = config.age.secrets.niolscloud-secrets.path;
