@@ -41,7 +41,8 @@ in {
     ## interface. The latter get updated automatically.
     extraAppsEnable = true;
     extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit calendar contacts impersonate news previewgenerator tasks;
+      inherit calendar contacts impersonate previewgenerator tasks;
+      ## FIXME: news keeweb onlyoffice cookbook
     };
     autoUpdateApps.enable = true;
 
