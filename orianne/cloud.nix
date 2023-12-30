@@ -1,6 +1,10 @@
 { config, secrets, pkgs, ... }:
 
-let hostName = "new.cloud.niols.fr";
+let
+  hostName = "cloud.niols.fr";
+
+  ## To remove once the transition is complete.
+  otherHostName = "new.cloud.niols.fr";
 
 in {
   services.nextcloud = {
@@ -31,6 +35,7 @@ in {
     package = pkgs.nextcloud28;
 
     inherit hostName;
+    config.extraTrustedDomains = [ otherHostName ];
 
     home = "/var/lib/nextcloud";
     datadir = "/hester/services/nextcloud";
@@ -91,6 +96,7 @@ in {
     }];
   };
 
+  ## Make sure Nextcloud only starts once the database is up.
   systemd.services."nextcloud-setup" = {
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
@@ -99,5 +105,10 @@ in {
   services.nginx.virtualHosts.${hostName} = {
     forceSSL = true;
     enableACME = true;
+  };
+
+  services.nginx.virtualHosts.${otherHostName} = {
+    enableACME = true;
+    globalRedirect = "cloud.niols.fr";
   };
 }
