@@ -106,6 +106,7 @@ in {
   services.nginx.virtualHosts.${hostName} = {
     forceSSL = true;
     enableACME = true;
+    serverAliases = otherHostNames;
   };
 
   services.nginx.virtualHosts.${newHostName} = {
