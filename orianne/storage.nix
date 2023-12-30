@@ -1,7 +1,7 @@
 { config, secrets, ... }:
 
 let
-  hester = { path ? "", uid ? "root", gid ? "hester" }: {
+  hester = { path, uid, gid }: {
     mountPoint = "/hester" + path;
     device = "//hester.niols.fr/backup" + path;
     fsType = "cifs";
@@ -25,9 +25,11 @@ let
 
 in {
   fileSystems = {
-    hester-music = hester { path = "/music"; };
-    hester-movies = hester { path = "/movies"; };
-    hester-shows = hester { path = "/shows"; };
+    hester-medias = hester {
+      path = "/medias";
+      uid = "root";
+      gid = "hester";
+    };
     hester-nextcloud = hester {
       path = "/services/nextcloud";
       uid = "nextcloud";
