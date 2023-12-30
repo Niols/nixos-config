@@ -14,7 +14,7 @@
     overrideFolders = true;
     settings.folders = {
       Music = {
-        path = "/hester/music";
+        path = "/hester/medias/music";
         ignorePerms = true;
         devices = [ "Barbara" "Philippe" "Wallace" ];
       };
