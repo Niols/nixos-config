@@ -8,7 +8,7 @@
       ./cloud.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./media.nix
+      ./medias.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix

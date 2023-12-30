@@ -25,8 +25,8 @@ let
 
 in {
   fileSystems = {
-    hester-media = hester {
-      path = "/media";
+    hester-medias = hester {
+      path = "/medias";
       uid = "root";
       gid = "hester";
     };
