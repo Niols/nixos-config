@@ -6,6 +6,7 @@
     modules = [
       ./boot.nix
       ./cloud.nix
+      ./databases.nix
       ./hardware-configuration.nix
       ./hostname.nix
       ./medias.nix
