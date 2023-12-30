@@ -2,10 +2,9 @@
 
 let
   hostName = "cloud.niols.fr";
-  otherHostNames = [ "cloud.jeannerod.fr" ];
 
-  ## To remove once the transition is complete.
-  newHostName = "new.cloud.niols.fr";
+  ## FIXME: remove new.cloud.niols.fr once the transition is complete.
+  otherHostNames = [ "new.cloud.niols.fr" "cloud.jeannerod.fr" ];
 
 in {
   services.nextcloud = {
@@ -36,7 +35,7 @@ in {
     package = pkgs.nextcloud28;
 
     inherit hostName;
-    config.extraTrustedDomains = otherHostNames ++ [ newHostName ];
+    config.extraTrustedDomains = otherHostNames;
 
     home = "/var/lib/nextcloud";
     datadir = "/hester/services/nextcloud";
@@ -107,10 +106,5 @@ in {
     forceSSL = true;
     enableACME = true;
     serverAliases = otherHostNames;
-  };
-
-  services.nginx.virtualHosts.${newHostName} = {
-    enableACME = true;
-    globalRedirect = hostName;
   };
 }
