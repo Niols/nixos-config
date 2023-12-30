@@ -38,7 +38,7 @@ in {
     config.extraTrustedDomains = otherHostNames;
 
     home = "/var/lib/nextcloud";
-    datadir = "/hester/services/nextcloud";
+    datadir = "/var/lib/nextcloud";
 
     https = true; # use HTTPS for links
 
