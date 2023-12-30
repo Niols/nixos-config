@@ -12,4 +12,6 @@ _: {
 
     locations."/" = { proxyPass = "http://127.0.0.1:8096"; };
   };
+
+  users.groups.hester.members = [ "jellyfin" ];
 }
