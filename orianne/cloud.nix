@@ -108,4 +108,13 @@ in {
     enableACME = true;
     serverAliases = otherHostNames;
   };
+
+  services.borgbackup.jobs.nextcloud = {
+    paths = "/var/lib/nextcloud";
+    encryption.mode = "none";
+    repo = "/hester/backups/nextcloud";
+    startAt = "*-*-* 04:00:00";
+  };
+  systemd.services.borgbackup-job-nextcloud.unitConfig.RequiresMountsFor =
+    "/hester";
 }
