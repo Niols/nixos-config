@@ -70,6 +70,9 @@ in {
 
       defaultPhoneRegion = "FR";
     };
+
+    ## The `file` log type allows reading logs from the NextCloud interface.
+    logType = "file";
   };
 
   age.secrets.niolscloud-admin-password = {
