@@ -46,8 +46,10 @@ in {
     ## interface. The latter get updated automatically.
     extraAppsEnable = true;
     extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit calendar contacts impersonate previewgenerator tasks;
-      ## FIXME: news keeweb onlyoffice cookbook
+      inherit calendar contacts cookbook impersonate onlyoffice previewgenerator
+        tasks;
+      ## FIXME: news and keeweb are provided via Nix for Nextcloud 27 so they
+      ## should be for Nextcloud 28 eventually.
     };
     appstoreEnable = true;
     autoUpdateApps.enable = true;
