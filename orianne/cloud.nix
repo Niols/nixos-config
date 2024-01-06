@@ -52,9 +52,6 @@ in {
     appstoreEnable = true;
     autoUpdateApps.enable = true;
 
-    ## Necessary for CIFS external storage.
-    phpExtraExtensions = p: [ p.smbclient ];
-
     configureRedis = true;
 
     secretFile = config.age.secrets.niolscloud-secrets.path;
@@ -73,6 +70,12 @@ in {
 
     ## The `file` log type allows reading logs from the NextCloud interface.
     logType = "file";
+
+    ## Options for the PHP worker. Extension `smbclient` is necessary for CIFS
+    ## external storage. Options `opcache.<whatever>` need to be quoted to have
+    ## a dot in the name of the option.
+    phpExtraExtensions = p: [ p.smbclient ];
+    phpOptions."opcache.interned_strings_buffer" = "16";
   };
 
   age.secrets.niolscloud-admin-password = {
