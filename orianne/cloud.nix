@@ -2,9 +2,7 @@
 
 let
   hostName = "cloud.niols.fr";
-
-  ## FIXME: remove new.cloud.niols.fr once the transition is complete.
-  otherHostNames = [ "new.cloud.niols.fr" "cloud.jeannerod.fr" ];
+  otherHostNames = [ "cloud.jeannerod.fr" ];
 
 in {
   services.nextcloud = {
