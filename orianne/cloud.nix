@@ -71,6 +71,21 @@ in {
     ## The `file` log type allows reading logs from the NextCloud interface.
     logType = "file";
 
+    extraOptions = {
+      ## Mail configuration
+      mail_sendmailmode = "smtp";
+      mail_from_address = "no-reply";
+      mail_domain = "niols.fr";
+
+      ## Mail authentication - password in secrets.
+      mail_smtpmode = "smtp";
+      mail_smtphost = "mail.infomaniak.com";
+      mail_smtpsecure = "ssl";
+      mail_smtpport = 465;
+      mail_smtpauth = 1;
+      mail_smtpname = "no-reply@niols.fr";
+    };
+
     ## Options for the PHP worker. Extension `smbclient` is necessary for CIFS
     ## external storage. Options `opcache.<whatever>` need to be quoted to have
     ## a dot in the name of the option.
