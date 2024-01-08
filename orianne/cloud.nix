@@ -113,6 +113,7 @@ in {
       name = "nextcloud";
       ensureDBOwnership = true;
     }];
+    ## All databases are backed up daily. See `databases.nix`.
   };
 
   ## Make sure Nextcloud only starts once the database is up.
