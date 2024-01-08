@@ -6,5 +6,6 @@
     startAt = "*-*-* 19:00:00";
     location = "/hester/backups/databases/orianne";
   };
-  systemd.services.postgresqlBackup.unitConfig.RequiresMountsFor = "/hester";
+  systemd.services.postgresqlBackup.unitConfig.RequiresMountsFor =
+    "/hester/backups";
 }

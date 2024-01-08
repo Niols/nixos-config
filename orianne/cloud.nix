@@ -135,5 +135,5 @@ in {
     startAt = "*-*-* 19:00:00";
   };
   systemd.services.borgbackup-job-nextcloud.unitConfig.RequiresMountsFor =
-    "/hester";
+    "/hester/backups";
 }
