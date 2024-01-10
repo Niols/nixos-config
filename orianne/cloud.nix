@@ -133,6 +133,7 @@ in {
     encryption.mode = "none";
     repo = "/hester/backups/nextcloud";
     startAt = "*-*-* 04:00:00";
+    removableDevice = true;
   };
   systemd.services.borgbackup-job-nextcloud.unitConfig.RequiresMountsFor =
     "/hester/backups";
