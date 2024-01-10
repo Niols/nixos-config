@@ -139,7 +139,7 @@ in {
   services.borgbackup.jobs.nextcloud = {
     startAt = "*-*-* 04:15:00";
 
-    paths = [ "/var/lib/nextcloud" ];
+    paths = [ "/var/lib/nextcloud" "/var/backup/postgresql/nextcloud.sql.gz" ];
 
     repo = "ssh://u363090@hester.niols.fr:23/./backups/nextcloud";
     encryption = {
