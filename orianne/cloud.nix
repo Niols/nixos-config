@@ -129,11 +129,18 @@ in {
   };
 
   ############################################################################
-  ## Daily backup via Borg.
+  ## Daily backup
+  ##
+  ## They have to happen some time after 04:00 so as to include the dump of the
+  ## database. See ./databases.nix.
+
+  services.postgresqlBackup.databases = [ "nextcloud" ];
 
   services.borgbackup.jobs.nextcloud = {
-    paths = "/var/lib/nextcloud";
-    startAt = "*-*-* 04:00:00";
+    startAt = "*-*-* 04:15:00";
+
+    paths = [ "/var/lib/nextcloud" ];
+
     repo = "ssh://u363090@hester.niols.fr:23/./backups/nextcloud";
     encryption = {
       mode = "repokey";
@@ -144,10 +151,8 @@ in {
       "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
   };
 
-  age.secrets.hester-niolscloud-backup-identity = {
-    file = "${secrets}/hester-niolscloud-backup-identity.age";
-  };
-  age.secrets.hester-niolscloud-backup-repokey = {
-    file = "${secrets}/hester-niolscloud-backup-repokey.age";
-  };
+  age.secrets.hester-niolscloud-backup-identity.file =
+    "${secrets}/hester-niolscloud-backup-identity.age";
+  age.secrets.hester-niolscloud-backup-repokey.file =
+    "${secrets}/hester-niolscloud-backup-repokey.age";
 }
