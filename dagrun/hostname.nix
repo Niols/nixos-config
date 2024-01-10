@@ -1,1 +1,6 @@
-_: { networking.hostName = "dagrun"; }
+_: {
+  networking = {
+    hostName = "dagrun";
+    domain = "niols.fr";
+  };
+}
