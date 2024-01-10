@@ -8,6 +8,7 @@
       ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
+      ./matrix.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix
