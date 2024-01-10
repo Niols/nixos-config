@@ -133,14 +133,21 @@ in {
 
   services.borgbackup.jobs.nextcloud = {
     paths = "/var/lib/nextcloud";
-    encryption.mode = "none";
-    repo = "hester.niols.fr:/home/backups/nextcloud";
     startAt = "*-*-* 04:00:00";
+    repo = "ssh://hester.niols.fr:23/./backups/nextcloud";
+    encryption = {
+      mode = "repokey";
+      passCommand =
+        "cat ${config.age.secrets.hester-niolscloud-backup-repokey.path}";
+    };
     environment.BORG_RSH =
       "ssh -l u363090 -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
   };
 
   age.secrets.hester-niolscloud-backup-identity = {
     file = "${secrets}/hester-niolscloud-backup-identity.age";
+  };
+  age.secrets.hester-niolscloud-backup-repokey = {
+    file = "${secrets}/hester-niolscloud-backup-repokey.age";
   };
 }
