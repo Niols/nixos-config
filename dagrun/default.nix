@@ -6,6 +6,7 @@
     modules = [
       ./boot.nix
       ./dancelor.nix
+      ./databases.nix
       ./hardware-configuration.nix
       ./hostname.nix
       ./matrix.nix
