@@ -128,13 +128,19 @@ in {
     serverAliases = otherHostNames;
   };
 
+  ############################################################################
+  ## Daily backup via Borg.
+
   services.borgbackup.jobs.nextcloud = {
     paths = "/var/lib/nextcloud";
     encryption.mode = "none";
-    repo = "/hester/backups/nextcloud";
+    repo = "hester.niols.fr:/home/backups/nextcloud";
     startAt = "*-*-* 04:00:00";
-    removableDevice = true;
+    environment.BORG_RSH =
+      "ssh -l u363090 -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
   };
-  systemd.services.borgbackup-job-nextcloud.unitConfig.RequiresMountsFor =
-    "/hester/backups";
+
+  age.secrets.hester-niolscloud-backup-identity = {
+    file = "${secrets}/hester-niolscloud-backup-identity.age";
+  };
 }

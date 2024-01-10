@@ -35,11 +35,6 @@ in {
       uid = "nextcloud";
       gid = "nextcloud";
     };
-    hester-backups = hester {
-      path = "/backups";
-      uid = "root";
-      gid = "root";
-    };
   };
 
   users.groups.hester.members = [ "niols" ];
