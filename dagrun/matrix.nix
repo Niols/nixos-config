@@ -2,13 +2,10 @@
 
 {
   services.postgresql = {
-    ensureDatabases = [ "matrix-synapse" ];
-    ensureUsers = [{
-      name = "matrix-synapse";
-      ensureDBOwnership = true;
-      ensureClauses.login = true;
-    }];
-    ## All databases are backed up daily. See `databases.nix`.
+    ensureUsers = [{ name = "matrix-synapse"; }];
+    ## Database `matrix-synapse` has to be created manually. Be careful with the
+    ## collation. Refer to the documentation:
+    ## https://github.com/matrix-org/synapse/blob/be65a8ec0195955c15fdb179c9158b187638e39a/docs/postgres.md#fixing-incorrect-collate-or-ctype
   };
 
   services.nginx.virtualHosts.matrix = {
