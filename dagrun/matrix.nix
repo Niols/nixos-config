@@ -4,6 +4,7 @@
     ensureUsers = [{
       name = "matrix-synapse";
       ensureDBOwnership = true;
+      ensureClauses.login = true;
     }];
     ## All databases are backed up daily. See `databases.nix`.
   };
