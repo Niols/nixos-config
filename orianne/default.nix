@@ -5,9 +5,11 @@
     system = "aarch64-linux";
     modules = [
       ./boot.nix
+      ./cloud.nix
+      ./databases.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./media.nix
+      ./medias.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix

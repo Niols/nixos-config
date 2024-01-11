@@ -32,11 +32,11 @@
         "timidity": "timidity"
       },
       "locked": {
-        "lastModified": 1704652046,
-        "narHash": "sha256-jc6iNKv7+Y/tsB1dZC9YsfknvzY+/UdLZV0S6R6ZVQs=",
+        "lastModified": 1702470163,
+        "narHash": "sha256-4QSvcEn/S54fYuCkoaKzvs8DOZpu9ecsWQHB2EXkkFQ=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "aa3f57361e9f825ebe46e2acd205c5f98cbe64fd",
+        "rev": "360996ea3841e5b17a1bcb0c418abe58595cd37d",
         "type": "github"
       },
       "original": {
@@ -671,11 +671,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1702151865,
-        "narHash": "sha256-9VAt19t6yQa7pHZLDbil/QctAgVsA66DLnzdRGqDisg=",
+        "lastModified": 1703438236,
+        "narHash": "sha256-aqVBq1u09yFhL7bj1/xyUeJjzr92fXVvQSSEx6AdB1M=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "666fc80e7b2afb570462423cb0e1cf1a3a34fedd",
+        "rev": "5f64a12a728902226210bf01d25ec6cbb9d9265b",
         "type": "github"
       },
       "original": {
@@ -963,11 +963,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1703815615,
-        "narHash": "sha256-b5f5Y8f6Mk7kH8M2abouuS1pQzrzuom5xBf7yxzHHRU=",
+        "lastModified": 1704975208,
+        "narHash": "sha256-nuJUdmBjpdXaRc327GMIUNPo8FeIzegNs2Ni0HL7qVg=",
         "owner": "niols",
         "repo": "nixos-secrets",
-        "rev": "fe7d98d5ef7dc3abf93c963324c1fabd73ca801a",
+        "rev": "18cb1b99c67262718340daeb19c90c6acb6f4969",
         "type": "github"
       },
       "original": {
