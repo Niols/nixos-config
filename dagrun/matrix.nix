@@ -53,8 +53,12 @@
     };
   };
 
-  age.secrets.matrix-synapse-registration-secret.file =
-    "${secrets}/matrix-synapse-registration-secret.age";
-  age.secrets.matrix-synapse-signing-key.file =
-    "${secrets}/matrix-synapse-signing-key.age";
+  age.secrets.matrix-synapse-registration-secret = {
+    file = "${secrets}/matrix-synapse-registration-secret.age";
+    owner = "matrix-synapse";
+  };
+  age.secrets.matrix-synapse-signing-key = {
+    file = "${secrets}/matrix-synapse-signing-key.age";
+    owner = "matrix-synapse";
+  };
 }
