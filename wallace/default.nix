@@ -7,6 +7,7 @@
       ./boot.nix
       ./hardware-configuration.nix
       ./motd.nix
+      ./storage.nix
 
       ./hostKeys.nix
       ./legacy-configuration.nix

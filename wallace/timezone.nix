@@ -8,8 +8,8 @@ _: {
   ##
 
   # time.timeZone = "Europe/London";
-  time.timeZone = "Europe/Paris";
-  # time.timeZone = "Iceland";
+  # time.timeZone = "Europe/Paris";
+  time.timeZone = "Iceland";
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
