@@ -45,11 +45,11 @@
         }];
       }];
       signing_key_path = config.age.secrets.matrix-synapse-signing-key.path;
-      extraConfigFiles = [
-        config.age.secrets.matrix-synapse-macaroon-secret.path
-        config.age.secrets.matrix-synapse-registration-secret.path
-      ];
     };
+    extraConfigFiles = [
+      config.age.secrets.matrix-synapse-macaroon-secret.path
+      config.age.secrets.matrix-synapse-registration-secret.path
+    ];
   };
 
   age.secrets.matrix-synapse-macaroon-secret = {
