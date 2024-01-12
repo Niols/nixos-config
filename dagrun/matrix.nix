@@ -1,5 +1,15 @@
 { config, secrets, ... }:
 
+## NOTE: The nginx reverse proxy makes both the client and the federation
+## services accessible at <public_baseurl>:443. However, other servers will by
+## default look to communicate to <server_name>:8448, unless there is a JSON
+## file at https://<server_name>/.well-known/matrix/server containing:
+##
+##     { "m.server": "<public_baseurl>:443" }
+##
+## This file is not part of the current configuration (FIXME) but it is crucial
+## for Matrix to operate correctly.
+
 {
   services.postgresql = {
     ensureUsers = [{ name = "matrix-synapse"; }];
