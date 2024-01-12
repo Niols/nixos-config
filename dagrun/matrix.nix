@@ -8,33 +8,11 @@
     ## https://github.com/matrix-org/synapse/blob/be65a8ec0195955c15fdb179c9158b187638e39a/docs/postgres.md#fixing-incorrect-collate-or-ctype
   };
 
-  ## Port 8448 is an SSL port necessary for federation. The nginx virtual host
-  ## will reverse proxy on it.
-  networking.firewall.allowedTCPPorts = [ 8448 ];
-
   services.nginx.virtualHosts.matrix = {
     serverName = "matrix.niols.fr";
 
     enableACME = true;
     forceSSL = true;
-
-    listen = [
-      {
-        addr = "0.0.0.0";
-        port = 80;
-        ssl = false;
-      }
-      {
-        addr = "0.0.0.0";
-        port = 443;
-        ssl = true;
-      }
-      {
-        addr = "0.0.0.0";
-        port = 8448;
-        ssl = true;
-      }
-    ];
 
     locations = {
       ## It's also possible to do a redirect here or something else as this
