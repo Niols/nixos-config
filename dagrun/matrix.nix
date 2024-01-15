@@ -74,4 +74,35 @@
     file = "${secrets}/matrix-synapse-signing-key.age";
     owner = "matrix-synapse";
   };
+
+  ############################################################################
+  ## Daily backup
+  ##
+  ## They have to happen some time after 04:00 so as to include the dump of the
+  ## database. See ./databases.nix.
+
+  services.postgresqlBackup.databases = [ "matrix-synapse" ];
+
+  services.borgbackup.jobs.matrix = {
+    startAt = "*-*-* 04:15:00";
+
+    paths = [
+      "/var/lib/matrix-synapse"
+      "/var/backup/postgresql/matrix-synapse.sql.gz"
+    ];
+
+    repo = "ssh://u363090@hester.niols.fr:23/./backups/matrix";
+    encryption = {
+      mode = "repokey";
+      passCommand =
+        "cat ${config.age.secrets.hester-matrix-backup-repokey.path}";
+    };
+    environment.BORG_RSH =
+      "ssh -i ${config.age.secrets.hester-matrix-backup-identity.path}";
+  };
+
+  age.secrets.hester-matrix-backup-identity.file =
+    "${secrets}/hester-matrix-backup-identity.age";
+  age.secrets.hester-matrix-backup-repokey.file =
+    "${secrets}/hester-matrix-backup-repokey.age";
 }
