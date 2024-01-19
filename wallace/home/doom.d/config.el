@@ -3,7 +3,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Nicolas “Niols” Jeannerod"
@@ -69,10 +68,10 @@
 (defun doom-modeline-set-vcs-modeline () ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  _                  _        _
-;; | |____ __ ___ _  _(_)___ __| |___  __
-;; | (_-< '_ \___| || | |___/ _` / _ \/ _|
-;; |_/__/ .__/    \_,_|_|   \__,_\___/\__|
+;;  _
+;; | |____ __
+;; | (_-< '_ \
+;; |_/__/ .__/
 ;;      |_|
 
 (after! lsp-ui
@@ -88,6 +87,10 @@
   ;; Whether to show the documentation when cursor or mouse move.
   (setq lsp-ui-doc-show-with-cursor t)
   (setq lsp-ui-doc-show-with-mouse t)
+)
+
+(after! lsp
+  (setq lsp-auto-execute-action f)
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
