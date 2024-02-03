@@ -50,8 +50,7 @@
           };
 
           ## The following option gives Home Manager an access to this file's
-          ## inputs through the `specialArgs` option, eg.
-          ## `specialArgs.nix-doom-emacs`.
+          ## inputs through the `specialArgs` option.
           extraSpecialArgs = inputs;
         };
       }

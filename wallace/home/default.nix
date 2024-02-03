@@ -1,9 +1,5 @@
-{ lib, pkgs, config, specialArgs, ... }: {
-  imports = [
-    ../../_modules/niols-starship.nix
-    specialArgs.nix-doom-emacs.hmModule
-    programs/garbage-collect.nix
-  ];
+{ lib, pkgs, config, ... }: {
+  imports = [ ../../_modules/niols-starship.nix programs/garbage-collect.nix ];
 
   home.stateVersion = "21.05";
 
@@ -37,11 +33,6 @@
   programs.rofi = {
     enable = true;
     plugins = [ pkgs.rofi-calc ];
-  };
-
-  programs.doom-emacs = {
-    enable = true;
-    doomPrivateDir = ./doom.d;
   };
 
   # programs.starship = import ./programs/starship.nix;
