@@ -100,6 +100,7 @@ with pkgs; [
   ## T
   texlive.combined.scheme-full
   thunderbird
+  tmate
 
   ## U
   unrar
