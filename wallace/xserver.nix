@@ -8,8 +8,10 @@
     ## FIXME: add non-breakable spaces on space bar.
     ## FIXME: add longer dashes somewhere.
     ## FIXME: what about three dots?
-    layout = "us";
-    xkbVariant = "intl";
+    xkb = {
+      layout = "us";
+      variant = "intl";
+    };
 
     ## XFCE as desktop manager...
     desktopManager = {
