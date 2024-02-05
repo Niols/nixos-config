@@ -1,15 +1,9 @@
-_: {
+{ lib, ... }: {
   ############################################################################
   ## Time zone and internationalisation
-  ##
-  ## List all available timezones with:
-  ##
-  ##     timedatectl list-timezones
-  ##
 
-  # time.timeZone = "Europe/London";
-  # time.timeZone = "Europe/Paris";
-  time.timeZone = "Iceland";
+  time.timeZone = lib.mkDefault "Europe/Paris";
+  services.automatic-timezoned.enable = true;
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
