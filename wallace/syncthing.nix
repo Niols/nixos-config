@@ -17,7 +17,7 @@
       };
 
       Organiser = {
-        path = "~/.organiser";
+        path = "~/.syncthing/Organiser";
         devices = [ "Barbara" "Oxana" "Philippe" "Siegfried" ];
       };
 
@@ -28,42 +28,42 @@
       };
 
       "Oxana/Documents" = {
-        path = "~/Oxana/Documents";
+        path = "~/.syncthing/Oxana/Documents";
         devices = [ "Oxana" "Philippe" "Siegfried" ];
       };
 
       "Oxana/Notes" = {
-        path = "~/Oxana/Notes";
+        path = "~/.syncthing/Oxana/Notes";
         devices = [ "Oxana" "Philippe" "Siegfried" ];
       };
 
       "Philippe/DCIM/SD Card" = {
-        path = "~/Philippe/DCIM/SD Card";
+        path = "~/.syncthing/Philippe/DCIM/SD Card";
         devices = [ "Philippe" "Siegfried" ];
       };
 
       "Philippe/DCIM/Storage" = {
-        path = "~/Philippe/DCIM/Storage";
+        path = "~/.syncthing/Philippe/DCIM/Storage";
         devices = [ "Philippe" "Siegfried" ];
       };
 
       "Philippe/Movies/Storage" = {
-        path = "~/Philippe/Movies/Storage";
+        path = "~/.syncthing/Philippe/Movies/Storage";
         devices = [ "Philippe" "Siegfried" ];
       };
 
       "Philippe/Pictures/SD Card" = {
-        path = "~/Philippe/Pictures/SD Card";
+        path = "~/.syncthing/Philippe/Pictures/SD Card";
         devices = [ "Philippe" "Siegfried" ];
       };
 
       "Philippe/Pictures/Storage" = {
-        path = "~/Philippe/Pictures/Storage";
+        path = "~/.syncthing/Philippe/Pictures/Storage";
         devices = [ "Philippe" "Siegfried" ];
       };
 
       "Philippe/Scans" = {
-        path = "~/Philippe/Scans";
+        path = "~/.syncthing/Philippe/Scans";
         devices = [ "Philippe" "Siegfried" ];
       };
     };
