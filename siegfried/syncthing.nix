@@ -133,4 +133,41 @@
     "${secrets}/syncthing-siegfried-key.age";
   age.secrets.syncthing-siegfried-cert.file =
     "${secrets}/syncthing-siegfried-cert.age";
+
+  ############################################################################
+  ## Daily backup
+  ##
+  ## Syncing is not backing up, so we call a Borg job on all of
+  ## /hester/services/syncthing.
+  ##
+  ## - It feels a bit silly to backup Hester on Hester, but the snapshot system
+  ##   of Hetzner only allows restoring a snapshot and not exploring it to
+  ##   select what to take so I would rather not rely on it.
+  ##
+  ## - It also feels silly to use an SSH-based `repo` argument to the Borgbackup
+  ##   job when we need to have Hester mounted anyways, but this avoids making
+  ##   an exception of tihs Borgbackup job. They should all look alike.
+
+  services.borgbackup.jobs.syncthing = {
+    startAt = "*-*-* 06:00:00";
+
+    paths = [ "/hester/services/syncthing" ];
+
+    repo = "ssh://u363090@hester.niols.fr:23/./backups/syncthing";
+    encryption = {
+      mode = "repokey";
+      passCommand =
+        "cat ${config.age.secrets.hester-syncthing-backup-repokey.path}";
+    };
+    environment.BORG_RSH =
+      "ssh -i ${config.age.secrets.hester-syncthing-backup-identity.path}";
+  };
+
+  systemd.services.borgbackup-job-syncthing.unitConfig.RequiresMountsFor =
+    "/hester";
+
+  age.secrets.hester-syncthing-backup-identity.file =
+    "${secrets}/hester-syncthing-backup-identity.age";
+  age.secrets.hester-syncthing-backup-repokey.file =
+    "${secrets}/hester-syncthing-backup-repokey.age";
 }
