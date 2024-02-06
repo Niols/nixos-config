@@ -12,6 +12,7 @@ with pkgs; [
   bc
   bintools
   btop
+  borgbackup
 
   ## C
   ## caffeine-ng -> the behaviour is really inconsistent
