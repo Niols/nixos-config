@@ -21,6 +21,12 @@
         devices = [ "Barbara" "Oxana" "Philippe" "Siegfried" ];
       };
 
+      MobileSheets = {
+        path = "~/.syncthing/MobileSheets";
+        ignorePerms = true;
+        devices = [ "Barbara" "Philippe" "Oxana" "Siegfried" ];
+      };
+
       "Oxana/Documents" = {
         path = "~/Oxana/Documents";
         devices = [ "Oxana" "Philippe" "Siegfried" ];

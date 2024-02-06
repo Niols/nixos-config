@@ -28,7 +28,7 @@
       MobileSheets = {
         path = "/hester/services/syncthing/MobileSheets";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Oxana" ];
+        devices = [ "Barbara" "Philippe" "Oxana" "Wallace" ];
       };
 
       "Oxana/Documents" = {
