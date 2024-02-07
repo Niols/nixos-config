@@ -33,7 +33,7 @@ in {
     package = pkgs.nextcloud28;
 
     inherit hostName;
-    config.extraTrustedDomains = otherHostNames;
+    settings.trusted_domains = otherHostNames;
 
     home = "/var/lib/nextcloud";
     datadir = "/var/lib/nextcloud";
@@ -64,14 +64,14 @@ in {
       dbuser = "nextcloud";
       dbhost = "/run/postgresql";
       dbname = "nextcloud";
-
-      defaultPhoneRegion = "FR";
     };
 
-    ## The `file` log type allows reading logs from the NextCloud interface.
-    logType = "file";
+    settings = {
+      default_phone_region = "FR";
 
-    extraOptions = {
+      ## The `file` log type allows reading logs from the NextCloud interface.
+      logType = "file";
+
       ## Mail configuration
       mail_sendmailmode = "smtp";
       mail_from_address = "no-reply";
