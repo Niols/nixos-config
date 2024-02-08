@@ -78,6 +78,18 @@
         ignorePerms = true;
         devices = [ "Philippe" "Wallace" ];
       };
+
+      "Wallace/.config/doom" = {
+        path = "/hester/services/syncthing/Wallace/config/doom";
+        ignorePerms = true;
+        devices = [ "Wallace" ];
+      };
+
+      "Wallace/.config/i3" = {
+        path = "/hester/services/syncthing/Wallace/config/i3";
+        ignorePerms = true;
+        devices = [ "Wallace" ];
+      };
     };
 
     overrideDevices = true;
