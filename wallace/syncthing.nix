@@ -23,7 +23,6 @@
 
       MobileSheets = {
         path = "~/.syncthing/MobileSheets";
-        ignorePerms = true;
         devices = [ "Barbara" "Philippe" "Oxana" "Siegfried" ];
       };
 
@@ -65,6 +64,16 @@
       "Philippe/Scans" = {
         path = "~/.syncthing/Philippe/Scans";
         devices = [ "Philippe" "Siegfried" ];
+      };
+
+      "Wallace/.config/doom" = {
+        path = "~/.config/doom";
+        devices = [ "Siegfried" ];
+      };
+
+      "Wallace/.config/i3" = {
+        path = "~/.config/i3";
+        devices = [ "Siegfried" ];
       };
     };
 
