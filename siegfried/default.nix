@@ -5,6 +5,7 @@
     system = "x86_64-linux";
     modules = [
       ./boot.nix
+      ./git.nix
       ./hardware-configuration.nix
       ./hostname.nix
       ./motd.nix
@@ -18,6 +19,7 @@
       ./syncthing.nix
       ./teamspeak.nix
       ./users.nix
+      ./web.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
