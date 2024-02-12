@@ -94,6 +94,12 @@ jobs:
     steps:
       - name: Maximise build space
         uses: easimon/maximize-build-space@v8
+        with:
+          remove-android: true
+          remove-dotnet: true
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
 
       - name: Check out repository code.
         uses: actions/checkout@v4
