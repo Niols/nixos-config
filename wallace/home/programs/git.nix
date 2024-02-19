@@ -48,7 +48,12 @@
     }
   ];
 
-  extraConfig.init.defaultBranch = "main";
+  extraConfig = {
+    init.defaultBranch = "main";
+
+    ## Used by forge (via ghub) to access GitHub.
+    github.user = "niols";
+  };
 
   ## Rewrite GitHub's https:// URI to ssh://
   extraConfig.url = {
