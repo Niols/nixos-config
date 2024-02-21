@@ -16,7 +16,7 @@
       Music = {
         path = "/hester/medias/music";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Wallace" ];
+        devices = [ "Barbara" "Philippe" ];
       };
 
       Organiser = {

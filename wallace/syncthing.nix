@@ -11,11 +11,6 @@
 
     overrideFolders = true;
     settings.folders = {
-      Music = {
-        path = "~/Music";
-        devices = [ "Barbara" "Philippe" "Siegfried" ];
-      };
-
       Organiser = {
         path = "~/.syncthing/Organiser";
         devices = [ "Barbara" "Oxana" "Philippe" "Siegfried" ];
