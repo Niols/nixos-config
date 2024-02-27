@@ -10,6 +10,7 @@
 
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO3cvIpLy9PzLTNV2OaPI4AynVMhYmxa4WiwsARA+wtK niols@philippe"
     ];
     hashedPasswordFile = config.age.secrets.password-niols.path;
   };
