@@ -35,6 +35,8 @@ in {
       SMTP_SECURITY = "force_tls";
       SMTP_USERNAME = "no-reply@niols.fr";
     };
+
+    environmentFile = config.age.secrets.vaultwarden-environment.path;
   };
 
   age.secrets.vaultwarden-environment.file =
