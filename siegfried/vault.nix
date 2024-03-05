@@ -21,6 +21,8 @@ in {
     dbBackend = "postgresql";
 
     config = {
+      DATABASE_URL = "postgresql://${localhost}";
+
       ## Web interface
       ROCKET_ADDRESS = localhost;
       ROCKET_PORT = port;
