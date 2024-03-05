@@ -21,7 +21,7 @@ in {
     dbBackend = "postgresql";
 
     config = {
-      DATABASE_URL = "postgresql://${localhost}";
+      DATABASE_URL = "unix:postgresql://${localhost}";
 
       ## Web interface
       ROCKET_ADDRESS = localhost;
@@ -39,8 +39,11 @@ in {
     environmentFile = config.age.secrets.vaultwarden-environment.path;
   };
 
-  age.secrets.vaultwarden-environment.file =
-    "${secrets}/vaultwarden-environment.age";
+  age.secrets.vaultwarden-environment = {
+    file = "${secrets}/vaultwarden-environment.age";
+    owner = "vaultwarden";
+    group = "vaultwarden";
+  };
 
   services.nginx.virtualHosts.vault = {
     serverName = "vault.niols.fr";
