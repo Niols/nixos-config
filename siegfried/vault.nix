@@ -26,7 +26,7 @@ in {
       ROCKET_PORT = port;
       SIGNUPS_ALLOWED = false;
 
-      ## Mailing.
+      ## Mailing
       SMTP_HOST = "mail.infomaniak.com";
       SMTP_FROM = "no-reply@niols.fr";
       SMTP_PORT = 465;
@@ -42,6 +42,6 @@ in {
     serverName = "vault.niols.fr";
     forceSSL = true;
     enableACME = true;
-    locations."/".proxyPass = "http://${localhost}:${port}";
+    locations."/".proxyPass = "http://${localhost}:${builtins.toString port}";
   };
 }
