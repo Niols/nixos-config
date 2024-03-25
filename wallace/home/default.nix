@@ -22,7 +22,6 @@
 
   programs.fzf.enable = true;
   programs.bash = import ./programs/bash;
-  programs.firefox = import ./programs/firefox.nix;
   programs.git = import ./programs/git.nix { inherit lib; };
   programs.lsd = {
     enable = true;
