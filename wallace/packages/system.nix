@@ -80,6 +80,7 @@ with pkgs; [
   gnome.nautilus
   nextcloud-client
   nix-output-monitor
+  nodejs # # necessary for Emacs's `copilot`
 
   ## P
   pdfgrep
