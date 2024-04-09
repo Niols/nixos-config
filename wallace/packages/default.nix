@@ -30,5 +30,28 @@ in {
     ]);
 
   environment.systemPackages = (import ./system.nix { inherit pkgs; })
-    ++ (import ./ocaml.nix { inherit pkgs; }) ++ [ hlsWrapperCompatScript ];
+    ++ (import ./ocaml.nix { inherit pkgs; }) ++ [
+      hlsWrapperCompatScript
+
+      (pkgs.writeShellApplication {
+        name = "bropi";
+        runtimeInputs = [ pkgs.gnome.zenity ];
+        excludeShellChecks = [ "SC2009" "SC2016" "SC2046" "SC2086" "SC2155" ];
+        text = builtins.readFile ./bropi.sh;
+      })
+
+      (pkgs.makeDesktopItem {
+        name = "bropi";
+        genericName = "Web Browser picker";
+        desktopName = "Bropi";
+        exec = "bropi %U";
+        categories = [ "Network" "WebBrowser" ];
+        mimeTypes = [
+          "text/html"
+          "text/xml"
+          "x-scheme-handler/http"
+          "x-scheme-handler/https"
+        ];
+      })
+    ];
 }
