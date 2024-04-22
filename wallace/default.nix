@@ -8,6 +8,7 @@
       ./hardware-configuration.nix
       ./motd.nix
       ./storage.nix
+      ./hotspot.nix
 
       ./hostKeys.nix
       ./legacy-configuration.nix
