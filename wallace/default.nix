@@ -9,6 +9,7 @@
       ./motd.nix
       ./storage.nix
       ./hotspot.nix
+      ./weylus.nix
 
       ./hostKeys.nix
       ./legacy-configuration.nix
