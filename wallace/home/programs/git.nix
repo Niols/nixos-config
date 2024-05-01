@@ -51,6 +51,8 @@
   extraConfig = {
     init.defaultBranch = "main";
 
+    rerere.enabled = true;
+
     ## Used by forge (via ghub) to access GitHub.
     github.user = "niols";
   };
