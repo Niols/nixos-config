@@ -18,4 +18,7 @@
   age.secrets.password-niols = {
     file = "${secrets}/password-orianne-niols.age";
   };
+
+  ## It can be pratical for the users to have a cron service running.
+  services.cron.enable = true;
 }
