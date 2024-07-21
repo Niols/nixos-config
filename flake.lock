@@ -32,11 +32,11 @@
         "timidity": "timidity"
       },
       "locked": {
-        "lastModified": 1719447315,
-        "narHash": "sha256-VRfvnsVCfJ43Jo20/mLL/ofIlUOXhK9U4m5PmOXNMLk=",
+        "lastModified": 1721576227,
+        "narHash": "sha256-Uhr+9SIfi7OpKhjE2tUpoBrVXMvalVqODdnsiivXSYQ=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "5641979985816133cd578c75b12848232947e380",
+        "rev": "c41c7074768f6effd197651c67f6916c69d69301",
         "type": "github"
       },
       "original": {
