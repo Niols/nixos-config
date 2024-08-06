@@ -69,8 +69,14 @@ in {
     settings = {
       default_phone_region = "FR";
 
+      ## Resource-intensive maintenance tasks are scheduled to run at night,
+      ## between 1 and 5.
+      maintenance_window_start = 1;
+
       ## The `file` log type allows reading logs from the NextCloud interface.
+      ## REVIEW: One of these two must probably be useless?
       logType = "file";
+      log_type = "file";
 
       ## Mail configuration
       mail_sendmailmode = "smtp";
