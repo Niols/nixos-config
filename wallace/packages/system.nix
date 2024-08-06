@@ -36,7 +36,7 @@ with pkgs; [
   ## F
   fd # # alternative to 'find' needed by Doom Emacs
   ffmpeg-full
-  gnome.file-roller
+  file-roller
   filezilla
   firefox
 
@@ -77,7 +77,7 @@ with pkgs; [
   mosh
 
   ## N
-  gnome.nautilus
+  nautilus
   nextcloud-client
   nix-output-monitor
   nodejs # # necessary for Emacs's `copilot`
@@ -121,7 +121,7 @@ with pkgs; [
 
   ## Y
   yamllint
-  youtube-dl
+  # youtube-dl ## unmaintained; switch to yt-dlp if possible.
 
   ## Z
   zoom-us

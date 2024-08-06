@@ -35,7 +35,7 @@ in {
 
       (pkgs.writeShellApplication {
         name = "bropi";
-        runtimeInputs = [ pkgs.gnome.zenity ];
+        runtimeInputs = [ pkgs.zenity ];
         excludeShellChecks = [ "SC2009" "SC2016" "SC2046" "SC2086" "SC2155" ];
         text = builtins.readFile ./bropi.sh;
       })

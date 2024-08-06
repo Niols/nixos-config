@@ -40,8 +40,6 @@
 
     ## The display manager choses this combination.
     displayManager = {
-      defaultSession = "xfce+i3";
-
       lightdm = {
         enable = true;
         background = ./background-image;
@@ -55,7 +53,16 @@
     ## Enable touchpad support. On the Lenovo X1 Carbon, the touchpad does not
     ## work so great, so we are trying workarounds as described in:
     ## https://github.com/NixOS/nixpkgs/issues/19022
-    libinput.enable = true;
     synaptics.enable = false;
+  };
+
+  services = {
+    ## The display manager choses this combination.
+    displayManager.defaultSession = "xfce+i3";
+
+    ## Enable touchpad support. On the Lenovo X1 Carbon, the touchpad does not
+    ## work so great, so we are trying workarounds as described in:
+    ## https://github.com/NixOS/nixpkgs/issues/19022
+    libinput.enable = true;
   };
 }
