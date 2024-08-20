@@ -15,9 +15,7 @@
     hashedPasswordFile = config.age.secrets.password-niols.path;
   };
 
-  age.secrets.password-niols = {
-    file = "${secrets}/password-siegfried-niols.age";
-  };
+  age.secrets.password-niols.file = "${secrets}/password-siegfried-niols.age";
 
   ## It can be pratical for the users to have a cron service running.
   services.cron.enable = true;

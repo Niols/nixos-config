@@ -8,6 +8,7 @@
       ./git.nix
       ./hardware-configuration.nix
       ./hostname.nix
+      ./money.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix
