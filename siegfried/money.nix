@@ -141,6 +141,11 @@ in {
   ############################################################################
   ############################################################################
 
+  ## Firefly needs it to be able to format all types of currencies and dates.
+  ## Rather than specifying only the exact subset of locales, we support them
+  ## all. FIXME: This should be in another file, somewhere else.
+  i18n.supportedLocales = [ "all" ];
+
   services.phpfpm.pools.firefly-iii-data-importer = {
     inherit (cfg) user group;
     phpPackage = cfg.package.phpPackage;
