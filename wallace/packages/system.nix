@@ -109,6 +109,7 @@ with pkgs; [
   unzip
 
   ## V
+  vdhcoapp # companion for Video DownloadHelper
   vlc
 
   ## W
