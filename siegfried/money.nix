@@ -31,6 +31,10 @@ let
       ln -s ${diDataDir}/storage $out/storage
       cat <<EOF > $out/.env
       FIREFLY_III_URL=https://money.niols.fr
+      NORDIGEN_ID_FILE=${config.age.secrets.firefly-iii-data-importer-nordigen-id.path};
+      NORDIGEN_KEY_FILE=${config.age.secrets.firefly-iii-data-importer-nordigen-key.path};
+      GOCARDLESS_GET_ACCOUNT_DETAILS=true
+      GOCARDLESS_GET_BALANCE_DETAILS=true
       TRUSTED_PROXIES="*"
       LOG_LEVEL=debug
       ASSET_URL=${diUrlPrefix}
@@ -111,6 +115,18 @@ in {
 
   age.secrets.firefly-iii-app-key-file = {
     file = "${secrets}/firefly-iii-app-key-file.age";
+    mode = "600";
+    owner = "firefly-iii";
+  };
+
+  age.secrets.firefly-iii-data-importer-nordigen-id = {
+    file = "${secrets}/firefly-iii-data-importer-nordigen-id.age";
+    mode = "600";
+    owner = "firefly-iii";
+  };
+
+  age.secrets.firefly-iii-data-importer-nordigen-key = {
+    file = "${secrets}/firefly-iii-data-importer-nordigen-key.age";
     mode = "600";
     owner = "firefly-iii";
   };
