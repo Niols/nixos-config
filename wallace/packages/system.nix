@@ -98,6 +98,7 @@ with pkgs; [
   slack
   # spotdl # broken as of 2023-11-10
   steam-run
+  syncthingtray
 
   ## T
   texlive.combined.scheme-full
