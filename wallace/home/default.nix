@@ -42,4 +42,15 @@
 
   programs.nix-index.enable = true;
   programs.nix-index.symlinkToCacheHome = true;
+
+  ############################################################################
+  ## Tmux
+
+  programs.tmux = {
+    enable = true;
+    escapeTime = 0;
+    historyLimit = 1000000;
+    keyMode = "vi";
+    mouse = true;
+  };
 }
