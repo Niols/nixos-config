@@ -38,6 +38,9 @@ let
       TRUSTED_PROXIES="*"
       LOG_LEVEL=debug
       ASSET_URL=${diUrlPrefix}
+
+      ## Must match the timezone of the banks you're importing from.
+      TZ=Europe/Amsterdam
       EOF
     '';
   };
@@ -104,6 +107,9 @@ in {
     settings = {
       APP_URL = url;
       APP_KEY_FILE = config.age.secrets.firefly-iii-app-key-file.path;
+
+      ## Must match the timezone of the banks you're importing from.
+      TZ = "Europe/Amsterdam";
     };
   };
 
