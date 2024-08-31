@@ -14,13 +14,13 @@ let
   diDataDir = "${cfg.dataDir}/data-importer";
   diUrlPrefix = "/import";
   diSettings = { };
-  diVer = "1.5.2";
+  diVer = "1.5.4";
   diSrc = pkgs.stdenv.mkDerivation rec {
     name = "firefly-iii-data-importer-${diVer}";
     src = pkgs.fetchzip {
       url =
         "https://github.com/firefly-iii/data-importer/releases/download/v${diVer}/DataImporter-v${diVer}.tar.gz";
-      hash = "sha256-Z+BQEFbZhxSQIySMJq9FKbuAIQ9LOx8dG3MgkhOV0/w=";
+      hash = "sha256-erRxufz45ZWILKb4agimp7C3h30hZKX2Q9pDE949wPE=";
       stripRoot = false;
     };
     phases = [ "installPhase" ];
