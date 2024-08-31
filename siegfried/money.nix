@@ -31,6 +31,7 @@ let
       ln -s ${diDataDir}/storage $out/storage
       cat <<EOF > $out/.env
       FIREFLY_III_URL=https://money.niols.fr
+      FIREFLY_III_CLIENT_ID=3
       NORDIGEN_ID_FILE=${config.age.secrets.firefly-iii-data-importer-nordigen-id.path};
       NORDIGEN_KEY_FILE=${config.age.secrets.firefly-iii-data-importer-nordigen-key.path};
       GOCARDLESS_GET_ACCOUNT_DETAILS=true
