@@ -5,6 +5,7 @@
     system = "x86_64-linux";
     modules = [
       ./boot.nix
+      ./graphics.nix
       ./hardware-configuration.nix
       ./motd.nix
       ./storage.nix
