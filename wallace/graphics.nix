@@ -24,7 +24,7 @@
         fingerprint = { "eDP-1" = laptop; };
         config = {
           "eDP-1" = {
-            mode = "1920x1080";
+            mode = "1920x1200";
             ## REVIEW: I am hoping that, by not specifying any of the following,
             ## they will naturally get a good default value. For now, I keep
             ## them here, commented out, ready in case I need them one day:
