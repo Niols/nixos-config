@@ -28,7 +28,7 @@
             ## REVIEW: I am hoping that, by not specifying any of the following,
             ## they will naturally get a good default value. For now, I keep
             ## them here, commented out, ready in case I need them one day:
-            # pos = "0x0";
+            # position = "0x0";
             # crtc = 0;
             # rate = "59.88";
             ## REVIEW: Not sure what to do with the following xrandr fields. All
@@ -53,13 +53,13 @@
           "DP-3" = {
             primary = true;
             mode = "2560x1440";
-            pos = "0x392";
+            position = "0x392";
             # crtc = 0;
             # rate = "59.95";
           };
           "HDMI-1" = {
             mode = "2560x1440";
-            pos = "2560x0";
+            position = "2560x0";
             rotate = "left";
             # crtc = 2;
             # rate = "59.95";
@@ -80,14 +80,14 @@
         config = {
           "eDP-1" = {
             mode = "1920x1200";
-            pos = "0x0";
+            position = "0x0";
             # crtc = 1;
             # rate = "59.88";
           };
           "DP-3".enable = false;
           "HDMI-1" = {
             mode = "2560x1440";
-            pos = "2560x0";
+            position = "2560x0";
             # crtc = 2;
             # rate = "59.95";
           };
@@ -104,13 +104,13 @@
           "DP-3" = {
             primary = true;
             mode = "1920x1080";
-            pos = "0x0";
+            position = "0x0";
             # crtc = 0;
             # rate = "60.00";
           };
           "HDMI-1" = {
             mode = "1920x1080";
-            pos = "1920x0";
+            position = "1920x0";
             # crtc = 2;
             # rate = "60.00";
           };
@@ -118,7 +118,7 @@
       };
 
       ## Double screen in Mions, in the office room, with laptop open.
-      mions-mionsOffice-laptop-open = {
+      mions-office-laptop-open = {
         fingerprint = {
           "eDP-1" = laptop;
           "DP-3" = mionsOffice1;
@@ -129,13 +129,13 @@
           "DP-3" = {
             primary = true;
             mode = "1920x1080";
-            pos = "0x0";
+            position = "0x0";
             # crtc = 0;
             # rate = "60.00";
           };
           "HDMI-1" = {
             mode = "1920x1080";
-            pos = "1920x0";
+            position = "1920x0";
             # crtc = 2;
             # rate = "60.00";
           };

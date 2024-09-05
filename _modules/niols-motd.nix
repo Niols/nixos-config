@@ -34,7 +34,8 @@
 
     assertions = [
       {
-        assertion = config.users.motd == null;
+        assertion = config.users.motd == null || config.users.motd == false
+          || config.users.motd == "";
         message = "Should not use both `users.motd` and `niols-motd`.";
       }
       {
