@@ -16,7 +16,6 @@
       ./packages.nix
       ./ssh.nix
       ./starship.nix
-      ./storage.nix
       ./system.nix
       ./syncthing.nix
       ./teamspeak.nix
@@ -26,6 +25,7 @@
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
       { _module.args = { inherit (inputs) secrets nixpkgs; }; }
+      ../_common/hester.nix
     ];
   };
 }
