@@ -5,6 +5,7 @@
     system = "x86_64-linux";
     modules = [
       ./boot.nix
+      ./ftp.nix
       ./git.nix
       ./hardware-configuration.nix
       ./hostname.nix
