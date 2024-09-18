@@ -45,6 +45,7 @@ with pkgs; [
   gimp
   git
   git-lfs
+  gnucash
   gnumake
   gnupg
   guile
