@@ -40,6 +40,19 @@
         inputs.pre-commit-hooks.flakeModule
       ];
 
+      flake.homeConfigurations.niols =
+        inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [
+            ./home
+            {
+              home.username = "niols";
+              home.homeDirectory = "/home/niols";
+            }
+          ];
+        };
+
       perSystem = { config, pkgs, ... }: {
         formatter = pkgs.nixfmt;
 

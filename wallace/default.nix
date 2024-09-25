@@ -57,11 +57,6 @@
           extraSpecialArgs = inputs;
         };
       }
-
-      {
-        home-manager.sharedModules =
-          [ inputs.nix-index-database.hmModules.nix-index ];
-      }
     ];
   };
 }

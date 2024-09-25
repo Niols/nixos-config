@@ -1,5 +1,11 @@
-{ lib, pkgs, config, ... }: {
-  imports = [ ../_modules/niols-starship.nix programs/garbage-collect.nix ];
+{ lib, pkgs, config, inputs, ... }:
+
+{
+  imports = [
+    ../_modules/niols-starship.nix
+    programs/garbage-collect.nix
+    inputs.nix-index-database.hmModules.nix-index
+  ];
 
   home.stateVersion = "21.05";
 
