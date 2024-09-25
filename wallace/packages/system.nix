@@ -18,7 +18,6 @@ with pkgs; [
   ## caffeine-ng -> the behaviour is really inconsistent
   calc
   chromium
-  cmake # # necessary for Emacs's `vterm`
   comma
 
   ## D
@@ -29,12 +28,11 @@ with pkgs; [
 
   ## E
   element-desktop
-  emacs
   entr
   evince
 
   ## F
-  fd # # alternative to 'find' needed by Doom Emacs
+  fd
   ffmpeg-full
   file-roller
   filezilla
@@ -70,7 +68,6 @@ with pkgs; [
   ledger-live-desktop # # Wallet app for Ledger devices
   libqalculate # # provides `qalc`
   libreoffice
-  libtool # # necessary for Emacs's `vterm`
   lilypond
 
   ## M
@@ -81,14 +78,12 @@ with pkgs; [
   nautilus
   nextcloud-client
   nix-output-monitor
-  nodejs # # necessary for Emacs's `copilot`
 
   ## P
   pdfgrep
   pdftk
   picard
   pkg-config
-  python3 # # needed by TreeMacs
 
   ## R
   ripgrep
