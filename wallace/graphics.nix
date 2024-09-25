@@ -20,6 +20,32 @@
       mionsOffice2 =
         "00ffffffffffff0009d1e77845540000081d010380351e782e0565a756529c270f5054a56b80d1c0b300a9c08180810081c001010101023a801871382d40582c45000f282100001e000000ff004e324b30303639383031510a20000000fd00324c1e5311000a202020202020000000fc0042656e51204757323438300a2001a9020322f14f901f04130312021101140607151605230907078301000065030c001000023a801871382d40582c45000f282100001f011d8018711c1620582c25000f282100009f011d007251d01e206e2855000f282100001e8c0ad08a20e02d10103e96000f282100001800000000000000000000000000000000000000000003";
 
+      ## Single Philips screen, with laptop closed.
+      make-philips-laptop-closed = key: {
+        fingerprint = { ${key} = philips; };
+        config = {
+          ${key} = {
+            primary = true;
+            mode = "2560x1440";
+          };
+        };
+      };
+
+      ## Single Philips screen, with laptop open.
+      make-philips-laptop-open = key: {
+        fingerprint = {
+          "eDP-1" = laptop;
+          ${key} = philips;
+        };
+        config = {
+          "eDP-1".enable = false;
+          ${key} = {
+            primary = true;
+            mode = "2560x1440";
+          };
+        };
+      };
+
     in {
       ## Default, with laptop screen only.
       default = {
@@ -46,31 +72,12 @@
         };
       };
 
-      ## Single Philips screen, with laptop closed.
-      philips-laptop-closed = {
-        fingerprint = { "DP-2" = philips; };
-        config = {
-          "DP-2" = {
-            primary = true;
-            mode = "2560x1440";
-          };
-        };
-      };
-
-      ## Single Philips screen, with laptop open.
-      philips-laptop-open = {
-        fingerprint = {
-          "eDP-1" = laptop;
-          "DP-2" = philips;
-        };
-        config = {
-          "eDP-1".enable = false;
-          "DP-2" = {
-            primary = true;
-            mode = "2560x1440";
-          };
-        };
-      };
+      ## Single Philips screen, with laptop open and close and USB-C hub plugged
+      ## on first or second port.
+      philips-laptop-closed-usbc-1st-port = make-philips-laptop-closed "DP-3";
+      philips-laptop-closed-usbc-2nd-port = make-philips-laptop-closed "DP-2";
+      philips-laptop-open-usbc-1st-port = make-philips-laptop-open "DP-3";
+      philips-laptop-open-usbc-2nd-port = make-philips-laptop-open "DP-2";
 
       ## Double screen at Tweag's office, with laptop closed.
       tweag-double-laptop-closed = {
