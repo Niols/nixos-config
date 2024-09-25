@@ -22,6 +22,10 @@
   home.packages = [
     ## Necessary for i3; I much prefer running it standalone.
     pkgs.rofimoji
+
+    ## Fix "error: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name ca.desrt.dconf was not provided by any .service files"
+    ## see https://github.com/nix-community/home-manager/issues/3113
+    pkgs.dconf
   ];
 
   gtk = import ./gtk.nix;
