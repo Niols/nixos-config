@@ -1,12 +1,12 @@
 { lib, pkgs, config, ... }: {
-  imports = [ ../../_modules/niols-starship.nix programs/garbage-collect.nix ];
+  imports = [ ../_modules/niols-starship.nix programs/garbage-collect.nix ];
 
   home.stateVersion = "21.05";
 
   programs.home-manager.enable = true;
 
-  home.file.".face".source = ../face;
-  home.file.".background-image".source = ../background-image;
+  home.file.".face".source = ../_assets/face;
+  home.file.".background-image".source = ../_assets/background-image;
 
   xdg = import ./xdg { inherit config; };
 

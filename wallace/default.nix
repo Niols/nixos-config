@@ -48,8 +48,8 @@
           useUserPackages = true;
 
           users = {
-            niols = import ./home;
-            root = import ./home;
+            niols = import ../home;
+            root = import ../home;
           };
 
           ## The following option gives Home Manager an access to this file's
