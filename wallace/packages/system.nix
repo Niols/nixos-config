@@ -3,7 +3,6 @@ with pkgs; [
   ## A
   arandr
   ardour
-  (aspellWithDicts (dicts: [ dicts.fr dicts.uk ]))
   asunder
   audacity
 
