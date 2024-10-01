@@ -14,6 +14,9 @@
     ## see https://github.com/nix-community/home-manager/issues/3113
     dconf
 
+    gnupg
+    pinentry
+
     ripgrep # provides `rg`
     fd # alternative to `find` needed by Doom Emacs
 
