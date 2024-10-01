@@ -39,10 +39,14 @@
     }
 
     {
-      conditions = [ "gitdir:~/git/tweag/**" "gitdir:~/git/iog/**" ];
+      conditions = [
+        "gitdir:~/git/modus/**"
+        "gitdir:~/git/tweag/**"
+        "gitdir:~/git/iog/**"
+      ];
       contents.user = {
         name = "Nicolas “Niols” Jeannerod";
-        email = "nicolas.jeannerod@tweag.io";
+        email = "nicolas.jeannerod@moduscreate.com";
         signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
       };
     }
