@@ -3,6 +3,9 @@
 let inherit (lib) mkForce;
 
 in {
+  ##############################################################################
+  ## WiFi access point for other devices
+
   services.create_ap = {
     enable = true;
     settings = {
@@ -13,7 +16,6 @@ in {
       FREQ_BAND = "2.4";
     };
   };
-
   ## Do not make the unit wanted by anything, such that it will exist but not
   ## start automatically on start-up.
   systemd.services.create_ap.wantedBy = mkForce [ ];
