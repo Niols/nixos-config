@@ -8,8 +8,8 @@
       ./graphics.nix
       ./hardware-configuration.nix
       ./motd.nix
+      ./network.nix
       ./storage.nix
-      ./hotspot.nix
       ./weylus.nix
 
       ./hostKeys.nix
