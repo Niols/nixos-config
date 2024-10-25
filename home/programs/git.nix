@@ -43,6 +43,7 @@
         "gitdir:~/git/modus/**"
         "gitdir:~/git/tweag/**"
         "gitdir:~/git/iog/**"
+        "gitdir:~/git/fediversity/**"
       ];
       contents.user = {
         name = "Nicolas “Niols” Jeannerod";
