@@ -43,9 +43,8 @@
       flake.homeConfigurations.niols =
         inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs; };
           modules = [
-            ./home
+            (import ./home { inherit inputs; })
             {
               home.username = "niols";
               home.homeDirectory = "/home/niols";

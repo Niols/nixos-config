@@ -48,13 +48,9 @@
           useUserPackages = true;
 
           users = {
-            niols = import ../home;
-            root = import ../home;
+            niols = import ../home { inherit inputs; };
+            root = import ../home { inherit inputs; };
           };
-
-          ## The following option gives Home Manager an access to this file's
-          ## inputs through the `specialArgs` option.
-          extraSpecialArgs = inputs;
         };
       }
     ];

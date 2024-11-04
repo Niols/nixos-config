@@ -1,4 +1,9 @@
-{ lib, pkgs, config, inputs, ... }:
+# # FIXME: Normally, I would pass the `inputs` as an `extraSpecialArgs` both in
+## NixOS and Home Manager configurations. However, doing this leads to infinite
+## recursions, so I am just giving up for the moment.
+{ inputs }:
+
+{ lib, pkgs, config, ... }:
 
 {
   imports = [
