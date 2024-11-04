@@ -1,5 +1,3 @@
-_:
-
 {
   boot = {
     ## Necessary for predictable names, eg. `eth0` for ethernet.

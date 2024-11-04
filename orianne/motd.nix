@@ -1,4 +1,4 @@
-_: {
+{
   imports = [ ../_modules/niols-motd.nix ];
 
   niols-motd = {

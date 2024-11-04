@@ -15,10 +15,12 @@
     };
   };
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 4 * 1024;
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 4 * 1024;
+    }
+  ];
 
   boot = {
     loader.grub = {
@@ -28,8 +30,12 @@
     };
 
     initrd = {
-      availableKernelModules =
-        [ "ata_piix" "uhci_hcd" "xen_blkfront" "vmw_pvscsi" ];
+      availableKernelModules = [
+        "ata_piix"
+        "uhci_hcd"
+        "xen_blkfront"
+        "vmw_pvscsi"
+      ];
       kernelModules = [ "nvme" ];
     };
   };

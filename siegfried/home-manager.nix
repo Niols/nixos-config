@@ -1,5 +1,3 @@
-_:
-
 {
   home-manager = {
     useUserPackages = true;

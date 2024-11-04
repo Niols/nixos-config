@@ -1,6 +1,7 @@
 { pkgs, ... }:
 with pkgs;
-[ opam ] ++ (with ocamlPackages; [
+[ opam ]
+++ (with ocamlPackages; [
   dune_3
   merlin
   ocaml

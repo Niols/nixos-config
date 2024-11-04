@@ -23,7 +23,11 @@
       inputs.dancelor.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
-      { _module.args = { inherit (inputs) secrets nixpkgs; }; }
+      {
+        _module.args = {
+          inherit (inputs) secrets nixpkgs;
+        };
+      }
     ];
   };
 }

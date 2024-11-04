@@ -3,8 +3,7 @@
 {
   services.dancelor = {
     enable = true;
-    databaseRepositoryFile =
-      config.age.secrets.dancelor-database-repository.path;
+    databaseRepositoryFile = config.age.secrets.dancelor-database-repository.path;
     listeningPort = 6872;
   };
 
@@ -18,8 +17,7 @@
   ## it with all the components, this should make things much faster.
   nix.settings = {
     substituters = [ "https://dancelor.cachix.org" ];
-    trusted-public-keys =
-      [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
+    trusted-public-keys = [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
   };
 
   ## A secret `passwd` file containing the users' identifiers.

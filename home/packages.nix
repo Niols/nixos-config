@@ -25,6 +25,9 @@
     libtool # necessary for Emacs's `vterm`
     nodejs # necessary for Emacs's `copilot`
     python3 # needed by TreeMacs
-    (aspellWithDicts (dicts: [ dicts.fr dicts.uk ]))
+    (aspellWithDicts (dicts: [
+      dicts.fr
+      dicts.uk
+    ]))
   ];
 }

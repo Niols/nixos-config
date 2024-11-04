@@ -3,7 +3,12 @@
 ## recursions, so I am just giving up for the moment.
 { inputs }:
 
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 {
   imports = [

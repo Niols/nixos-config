@@ -3,8 +3,11 @@
 {
   services.nginx.virtualHosts."niols.fr" = {
     serverName = "niols.fr";
-    serverAliases =
-      [ "www.niols.fr" "nicolas.jeannerod.fr" "www.nicolas.jeannerod.fr" ];
+    serverAliases = [
+      "www.niols.fr"
+      "nicolas.jeannerod.fr"
+      "www.nicolas.jeannerod.fr"
+    ];
 
     forceSSL = true;
     enableACME = true;
@@ -69,14 +72,11 @@
       mode = "repokey";
       passCommand = "cat ${config.age.secrets.hester-web-backup-repokey.path}";
     };
-    environment.BORG_RSH =
-      "ssh -i ${config.age.secrets.hester-web-backup-identity.path}";
+    environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-web-backup-identity.path}";
   };
 
   systemd.services.borgbackup-job-web.unitConfig.RequiresMountsFor = "/hester";
 
-  age.secrets.hester-web-backup-identity.file =
-    "${secrets}/hester-web-backup-identity.age";
-  age.secrets.hester-web-backup-repokey.file =
-    "${secrets}/hester-web-backup-repokey.age";
+  age.secrets.hester-web-backup-identity.file = "${secrets}/hester-web-backup-identity.age";
+  age.secrets.hester-web-backup-repokey.file = "${secrets}/hester-web-backup-repokey.age";
 }

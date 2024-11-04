@@ -5,6 +5,6 @@
 ## the documentation for this option (e.g. man configuration.nix or on
 ## https://nixos.org/nixos/options.html).
 
-_: {
+{
   system.stateVersion = "23.11"; # # Did you read the comment?
 }

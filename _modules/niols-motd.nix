@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
 
   ## NOTE: This file is very heavily inspired by the NixOS module
   ## `programs.rust-motd`:
@@ -34,8 +40,7 @@
 
     assertions = [
       {
-        assertion = config.users.motd == null || config.users.motd == false
-          || config.users.motd == "";
+        assertion = config.users.motd == null || config.users.motd == false || config.users.motd == "";
         message = "Should not use both `users.motd` and `niols-motd`.";
       }
       {
@@ -45,42 +50,45 @@
     ];
 
     systemd.services.update-motd = {
-      path = with pkgs; [ bash figlet ];
+      path = with pkgs; [
+        bash
+        figlet
+      ];
 
       serviceConfig = {
-        ExecStart = let
-          motd-config = pkgs.writeTextFile {
-            name = "motd.toml";
-            text = ''
-              [global]
-              progress_full_character = "#"
-              progress_empty_character = "-"
-              progress_prefix = "["
-              progress_suffix = "]"
-              time_format = "%Y-%m-%d %H:%M:%S"
+        ExecStart =
+          let
+            motd-config = pkgs.writeTextFile {
+              name = "motd.toml";
+              text = ''
+                [global]
+                progress_full_character = "#"
+                progress_empty_character = "-"
+                progress_prefix = "["
+                progress_suffix = "]"
+                time_format = "%Y-%m-%d %H:%M:%S"
 
-              [banner]
-              color = "${config.niols-motd.hostcolour}"
-              command = """
-                printf -- '\\033[1m%s\\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
-              """
+                [banner]
+                color = "${config.niols-motd.hostcolour}"
+                command = """
+                  printf -- '\\033[1m%s\\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
+                """
 
-              [uptime]
-              prefix = "Up"
+                [uptime]
+                prefix = "Up"
 
-              [filesystems]
-              root = "/"
-              boot = "/boot"
+                [filesystems]
+                root = "/"
+                boot = "/boot"
 
-              [memory]
-              swap_pos = "${
-                if config.niols-motd.noSwap then "none" else "beside"
-              }"
-            '';
-          };
-        in "${pkgs.writeShellScript "update-motd" ''
-          ${pkgs.rust-motd}/bin/rust-motd ${motd-config} > /var/run/motd.dynamic
-        ''}";
+                [memory]
+                swap_pos = "${if config.niols-motd.noSwap then "none" else "beside"}"
+              '';
+            };
+          in
+          "${pkgs.writeShellScript "update-motd" ''
+            ${pkgs.rust-motd}/bin/rust-motd ${motd-config} > /var/run/motd.dynamic
+          ''}";
 
         CapabilityBoundingSet = [ "" ];
         LockPersonality = true;
@@ -111,9 +119,11 @@
       timerConfig.OnCalendar = "*:0/5";
     };
 
-    security.pam.services.sshd.text = lib.mkDefault (lib.mkAfter ''
-      session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/run/motd.dynamic
-    '');
+    security.pam.services.sshd.text = lib.mkDefault (
+      lib.mkAfter ''
+        session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/run/motd.dynamic
+      ''
+    );
 
     services.openssh.extraConfig = ''
       PrintLastLog no

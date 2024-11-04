@@ -25,7 +25,11 @@
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
       inputs.agenix.nixosModules.default
-      { _module.args = { inherit (inputs) secrets nixpkgs; }; }
+      {
+        _module.args = {
+          inherit (inputs) secrets nixpkgs;
+        };
+      }
 
       inputs.nix-index-database.nixosModules.nix-index
 

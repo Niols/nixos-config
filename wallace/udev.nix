@@ -1,5 +1,3 @@
-_:
-
 {
   services.udev.extraRules = ''
     ## For Ledger devices; owned solely by `niols`.

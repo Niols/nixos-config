@@ -6,7 +6,8 @@ let
   pasvMinPort = 30000;
   pasvMaxPort = 31000;
 
-in {
+in
+{
   imports = [ ../_common/hester.nix ];
 
   services.vsftpd = {
@@ -49,10 +50,12 @@ in {
   ## passive ports, however.
   networking.firewall = {
     allowedTCPPorts = [ 21 ];
-    allowedTCPPortRanges = [{
-      from = pasvMinPort;
-      to = pasvMaxPort;
-    }];
+    allowedTCPPortRanges = [
+      {
+        from = pasvMinPort;
+        to = pasvMaxPort;
+      }
+    ];
   };
 
   ## The nginx module already handles the ACME certificate challenge very well,
@@ -64,7 +67,10 @@ in {
     locations."/".return = "204";
   };
   security.acme.certs."ftp.niols.fr".group = "ftp-nginx";
-  users.groups.ftp-nginx.members = [ "ftp" "nginx" ];
+  users.groups.ftp-nginx.members = [
+    "ftp"
+    "nginx"
+  ];
 
   ## Create an actual user for Kerl, with a password, but prevent connection
   ## via SSH to them.

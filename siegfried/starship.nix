@@ -1,4 +1,4 @@
-_: {
+{
   home-manager.users.niols = _: {
     imports = [ ../_modules/niols-starship.nix ];
 

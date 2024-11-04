@@ -1,4 +1,9 @@
-{ config, secrets, lib, ... }:
+{
+  config,
+  secrets,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mkOption;
@@ -23,29 +28,37 @@ let
     };
   };
 
-  mkHesterFileSystem = { path, uid, gid, worldReadable }: {
-    mountPoint = "/hester" + path;
-    device = "//hester.niols.fr/backup" + path;
-    fsType = "cifs";
-    options = [
-      "_netdev"
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      "credentials=${config.age.secrets.hester-samba-credentials.path}"
-      "uid=${uid}"
-      "gid=${gid}"
-      "dir_mode=${if worldReadable then "0775" else "0770"}"
-      "file_mode=${if worldReadable then "0664" else "0660"}"
+  mkHesterFileSystem =
+    {
+      path,
+      uid,
+      gid,
+      worldReadable,
+    }:
+    {
+      mountPoint = "/hester" + path;
+      device = "//hester.niols.fr/backup" + path;
+      fsType = "cifs";
+      options = [
+        "_netdev"
+        "x-systemd.automount"
+        "noauto"
+        "x-systemd.idle-timeout=60"
+        "x-systemd.device-timeout=5s"
+        "x-systemd.mount-timeout=5s"
+        "credentials=${config.age.secrets.hester-samba-credentials.path}"
+        "uid=${uid}"
+        "gid=${gid}"
+        "dir_mode=${if worldReadable then "0775" else "0770"}"
+        "file_mode=${if worldReadable then "0664" else "0660"}"
 
-      ## Symbolic link support on a CIFS share.
-      "mfsymlinks"
-    ];
-  };
+        ## Symbolic link support on a CIFS share.
+        "mfsymlinks"
+      ];
+    };
 
-in {
+in
+{
   options = {
     _common.hester = {
       fileSystems = mkOption {
@@ -56,13 +69,12 @@ in {
   };
 
   config = {
-    fileSystems =
-      concatMapAttrs (name: fs: { "hester-${name}" = mkHesterFileSystem fs; })
-      config._common.hester.fileSystems;
+    fileSystems = concatMapAttrs (name: fs: {
+      "hester-${name}" = mkHesterFileSystem fs;
+    }) config._common.hester.fileSystems;
 
     users.groups.hester.members = [ "niols" ];
 
-    age.secrets.hester-samba-credentials.file =
-      "${secrets}/hester-samba-credentials.age";
+    age.secrets.hester-samba-credentials.file = "${secrets}/hester-samba-credentials.age";
   };
 }

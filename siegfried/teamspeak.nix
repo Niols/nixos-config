@@ -8,8 +8,9 @@
     logPath = "/var/log/teamspeak";
   };
 
-  nixpkgs.config.allowUnfreePredicate =
-    (pkg: builtins.elem (pkgs.lib.getName pkg) [ "teamspeak-server" ]);
+  nixpkgs.config.allowUnfreePredicate = (
+    pkg: builtins.elem (pkgs.lib.getName pkg) [ "teamspeak-server" ]
+  );
 
   services.borgbackup.jobs.teamspeak = {
     paths = "/var/lib/teamspeak";
@@ -18,8 +19,9 @@
     startAt = "*-*-* 06:00:00";
   };
 
-  systemd.services.borgbackup-job-teamspeak.unitConfig.RequiresMountsFor =
-    "/hester";
+  systemd.services.borgbackup-job-teamspeak.unitConfig.RequiresMountsFor = "/hester";
 
-  _common.hester.fileSystems = { backups.path = "/backups"; };
+  _common.hester.fileSystems = {
+    backups.path = "/backups";
+  };
 }

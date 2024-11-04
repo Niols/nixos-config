@@ -1,1 +1,1 @@
-_: { networking.hostName = "orianne"; }
+{ networking.hostName = "orianne"; }

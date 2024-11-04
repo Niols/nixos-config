@@ -16,67 +16,106 @@
       Music = {
         path = "/hester/medias/music";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" ];
+        devices = [
+          "Barbara"
+          "Philippe"
+        ];
       };
 
       Organiser = {
         path = "/hester/organiser";
         ignorePerms = true;
-        devices = [ "Barbara" "Oxana" "Philippe" "Wallace" ];
+        devices = [
+          "Barbara"
+          "Oxana"
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       MobileSheets = {
         path = "/hester/services/syncthing/MobileSheets";
         ignorePerms = true;
-        devices = [ "Barbara" "Philippe" "Oxana" "Wallace" ];
+        devices = [
+          "Barbara"
+          "Philippe"
+          "Oxana"
+          "Wallace"
+        ];
       };
 
       "Oxana/Documents" = {
         path = "/hester/services/syncthing/Oxana/Documents";
         ignorePerms = true;
-        devices = [ "Oxana" "Philippe" "Wallace" ];
+        devices = [
+          "Oxana"
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Oxana/Notes" = {
         path = "/hester/services/syncthing/Oxana/Notes";
         ignorePerms = true;
-        devices = [ "Oxana" "Philippe" "Wallace" ];
+        devices = [
+          "Oxana"
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/DCIM/SD Card" = {
         path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/DCIM/Storage" = {
         path = "/hester/services/syncthing/Philippe/DCIM/Storage";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/Movies/Storage" = {
         path = "/hester/services/syncthing/Philippe/Movies/Storage";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/Pictures/SD Card" = {
         path = "/hester/services/syncthing/Philippe/Pictures/SD Card";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/Pictures/Storage" = {
         path = "/hester/services/syncthing/Philippe/Pictures/Storage";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Philippe/Scans" = {
         path = "/hester/services/syncthing/Philippe/Scans";
         ignorePerms = true;
-        devices = [ "Philippe" "Wallace" ];
+        devices = [
+          "Philippe"
+          "Wallace"
+        ];
       };
 
       "Wallace/.config/doom" = {
@@ -94,16 +133,11 @@
 
     overrideDevices = true;
     settings.devices = {
-      "Barbara".id =
-        "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
-      "Philippe".id =
-        "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
-      "Siegfried".id =
-        "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
-      "Oxana".id =
-        "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
-      "Wallace".id =
-        "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
+      "Barbara".id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
+      "Philippe".id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
+      "Siegfried".id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
+      "Oxana".id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
+      "Wallace".id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
     };
   };
 
@@ -141,10 +175,8 @@
     group = "nginx";
   };
 
-  age.secrets.syncthing-siegfried-key.file =
-    "${secrets}/syncthing-siegfried-key.age";
-  age.secrets.syncthing-siegfried-cert.file =
-    "${secrets}/syncthing-siegfried-cert.age";
+  age.secrets.syncthing-siegfried-key.file = "${secrets}/syncthing-siegfried-key.age";
+  age.secrets.syncthing-siegfried-cert.file = "${secrets}/syncthing-siegfried-cert.age";
 
   _common.hester.fileSystems = {
     medias-music.path = "/medias/music";
@@ -174,18 +206,13 @@
     repo = "ssh://u363090@hester.niols.fr:23/./backups/syncthing";
     encryption = {
       mode = "repokey";
-      passCommand =
-        "cat ${config.age.secrets.hester-syncthing-backup-repokey.path}";
+      passCommand = "cat ${config.age.secrets.hester-syncthing-backup-repokey.path}";
     };
-    environment.BORG_RSH =
-      "ssh -i ${config.age.secrets.hester-syncthing-backup-identity.path}";
+    environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-syncthing-backup-identity.path}";
   };
 
-  systemd.services.borgbackup-job-syncthing.unitConfig.RequiresMountsFor =
-    "/hester";
+  systemd.services.borgbackup-job-syncthing.unitConfig.RequiresMountsFor = "/hester";
 
-  age.secrets.hester-syncthing-backup-identity.file =
-    "${secrets}/hester-syncthing-backup-identity.age";
-  age.secrets.hester-syncthing-backup-repokey.file =
-    "${secrets}/hester-syncthing-backup-repokey.age";
+  age.secrets.hester-syncthing-backup-identity.file = "${secrets}/hester-syncthing-backup-identity.age";
+  age.secrets.hester-syncthing-backup-repokey.file = "${secrets}/hester-syncthing-backup-repokey.age";
 }

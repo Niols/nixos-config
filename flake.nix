@@ -25,9 +25,13 @@
     secrets.flake = false;
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs =
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
       imports = [
         ## NixOS configurations
@@ -40,34 +44,33 @@
         inputs.git-hooks.flakeModule
       ];
 
-      flake.homeConfigurations.niols =
-        inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-          modules = [
-            (import ./home { inherit inputs; })
-            {
-              home.username = "niols";
-              home.homeDirectory = "/home/niols";
-            }
-          ];
-        };
-
-      perSystem = { config, pkgs, ... }: {
-        formatter = pkgs.nixfmt-rfc-style;
-
-        pre-commit.settings.hooks = {
-          nixfmt-rfc-style.enable = true;
-          deadnix.enable = true;
-        };
-
-        devShells.default =
-          pkgs.mkShell { shellHook = config.pre-commit.installationScript; };
+      flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          (import ./home { inherit inputs; })
+          {
+            home.username = "niols";
+            home.homeDirectory = "/home/niols";
+          }
+        ];
       };
+
+      perSystem =
+        { config, pkgs, ... }:
+        {
+          formatter = pkgs.nixfmt-rfc-style;
+
+          pre-commit.settings.hooks = {
+            nixfmt-rfc-style.enable = true;
+            deadnix.enable = true;
+          };
+
+          devShells.default = pkgs.mkShell { shellHook = config.pre-commit.installationScript; };
+        };
 
       ## Improve the way `inputs'` are computed by also handling the case of
       ## flakes having a `lib.${system}` attribute.
       ##
-      perInput = system: flake:
-        if flake ? lib.${system} then { lib = flake.lib.${system}; } else { };
+      perInput = system: flake: if flake ? lib.${system} then { lib = flake.lib.${system}; } else { };
     };
 }

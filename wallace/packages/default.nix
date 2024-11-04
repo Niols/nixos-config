@@ -14,10 +14,12 @@ let
     '';
   };
 
-in {
+in
+{
   ## Packages installed in system profile. Allow a selected set of
   ## unfree packages for this list.
-  nixpkgs.config.allowUnfreePredicate = (pkg:
+  nixpkgs.config.allowUnfreePredicate = (
+    pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "discord"
       "skypeforlinux"
@@ -27,16 +29,25 @@ in {
       "teamspeak-client"
       "unrar"
       "zoom"
-    ]);
+    ]
+  );
 
-  environment.systemPackages = (import ./system.nix { inherit pkgs; })
-    ++ (import ./ocaml.nix { inherit pkgs; }) ++ [
+  environment.systemPackages =
+    (import ./system.nix { inherit pkgs; })
+    ++ (import ./ocaml.nix { inherit pkgs; })
+    ++ [
       hlsWrapperCompatScript
 
       (pkgs.writeShellApplication {
         name = "bropi";
         runtimeInputs = [ pkgs.zenity ];
-        excludeShellChecks = [ "SC2009" "SC2016" "SC2046" "SC2086" "SC2155" ];
+        excludeShellChecks = [
+          "SC2009"
+          "SC2016"
+          "SC2046"
+          "SC2086"
+          "SC2155"
+        ];
         text = builtins.readFile ./bropi.sh;
       })
 
@@ -45,7 +56,10 @@ in {
         genericName = "Web Browser picker";
         desktopName = "Bropi";
         exec = "bropi %U";
-        categories = [ "Network" "WebBrowser" ];
+        categories = [
+          "Network"
+          "WebBrowser"
+        ];
         mimeTypes = [
           "text/html"
           "text/xml"

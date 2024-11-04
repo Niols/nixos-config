@@ -1,10 +1,16 @@
-{ config, secrets, pkgs, ... }:
+{
+  config,
+  secrets,
+  pkgs,
+  ...
+}:
 
 let
   hostName = "cloud.niols.fr";
   otherHostNames = [ "cloud.jeannerod.fr" ];
 
-in {
+in
+{
   services.nextcloud = {
     enable = true;
 
@@ -44,7 +50,14 @@ in {
     ## interface. The latter get updated automatically.
     extraAppsEnable = true;
     extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit calendar contacts cookbook impersonate previewgenerator tasks;
+      inherit
+        calendar
+        contacts
+        cookbook
+        impersonate
+        previewgenerator
+        tasks
+        ;
       ## FIXME: news and keeweb are provided via Nix for Nextcloud 27 so they
       ## should be for Nextcloud 28 eventually.
       ## FIXME: set up onlyoffice
@@ -115,10 +128,12 @@ in {
 
   services.postgresql = {
     ensureDatabases = [ "nextcloud" ];
-    ensureUsers = [{
-      name = "nextcloud";
-      ensureDBOwnership = true;
-    }];
+    ensureUsers = [
+      {
+        name = "nextcloud";
+        ensureDBOwnership = true;
+      }
+    ];
     ## All databases are backed up daily. See `databases.nix`.
   };
 
@@ -145,20 +160,19 @@ in {
   services.borgbackup.jobs.nextcloud = {
     startAt = "*-*-* 04:15:00";
 
-    paths = [ "/var/lib/nextcloud" "/var/backup/postgresql/nextcloud.sql.gz" ];
+    paths = [
+      "/var/lib/nextcloud"
+      "/var/backup/postgresql/nextcloud.sql.gz"
+    ];
 
     repo = "ssh://u363090@hester.niols.fr:23/./backups/nextcloud";
     encryption = {
       mode = "repokey";
-      passCommand =
-        "cat ${config.age.secrets.hester-niolscloud-backup-repokey.path}";
+      passCommand = "cat ${config.age.secrets.hester-niolscloud-backup-repokey.path}";
     };
-    environment.BORG_RSH =
-      "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
+    environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
   };
 
-  age.secrets.hester-niolscloud-backup-identity.file =
-    "${secrets}/hester-niolscloud-backup-identity.age";
-  age.secrets.hester-niolscloud-backup-repokey.file =
-    "${secrets}/hester-niolscloud-backup-repokey.age";
+  age.secrets.hester-niolscloud-backup-identity.file = "${secrets}/hester-niolscloud-backup-identity.age";
+  age.secrets.hester-niolscloud-backup-repokey.file = "${secrets}/hester-niolscloud-backup-repokey.age";
 }

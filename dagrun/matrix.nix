@@ -12,7 +12,7 @@
 
 {
   services.postgresql = {
-    ensureUsers = [{ name = "matrix-synapse"; }];
+    ensureUsers = [ { name = "matrix-synapse"; } ];
     ## Database `matrix-synapse` has to be created manually. Be careful with the
     ## collation. Refer to the documentation:
     ## https://github.com/matrix-org/synapse/blob/be65a8ec0195955c15fdb179c9158b187638e39a/docs/postgres.md#fixing-incorrect-collate-or-ctype
@@ -43,17 +43,27 @@
     settings = {
       server_name = "niols.fr";
       public_baseurl = "https://matrix.niols.fr";
-      listeners = [{
-        port = 8008;
-        bind_addresses = [ "::1" "127.0.0.1" ];
-        type = "http";
-        tls = false;
-        x_forwarded = true;
-        resources = [{
-          names = [ "client" "federation" ];
-          compress = false;
-        }];
-      }];
+      listeners = [
+        {
+          port = 8008;
+          bind_addresses = [
+            "::1"
+            "127.0.0.1"
+          ];
+          type = "http";
+          tls = false;
+          x_forwarded = true;
+          resources = [
+            {
+              names = [
+                "client"
+                "federation"
+              ];
+              compress = false;
+            }
+          ];
+        }
+      ];
       signing_key_path = config.age.secrets.matrix-synapse-signing-key.path;
     };
     extraConfigFiles = [
@@ -94,15 +104,11 @@
     repo = "ssh://u363090@hester.niols.fr:23/./backups/matrix";
     encryption = {
       mode = "repokey";
-      passCommand =
-        "cat ${config.age.secrets.hester-matrix-backup-repokey.path}";
+      passCommand = "cat ${config.age.secrets.hester-matrix-backup-repokey.path}";
     };
-    environment.BORG_RSH =
-      "ssh -i ${config.age.secrets.hester-matrix-backup-identity.path}";
+    environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-matrix-backup-identity.path}";
   };
 
-  age.secrets.hester-matrix-backup-identity.file =
-    "${secrets}/hester-matrix-backup-identity.age";
-  age.secrets.hester-matrix-backup-repokey.file =
-    "${secrets}/hester-matrix-backup-repokey.age";
+  age.secrets.hester-matrix-backup-identity.file = "${secrets}/hester-matrix-backup-identity.age";
+  age.secrets.hester-matrix-backup-repokey.file = "${secrets}/hester-matrix-backup-repokey.age";
 }

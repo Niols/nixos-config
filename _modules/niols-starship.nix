@@ -12,7 +12,8 @@ let
   lbox = style: text: "${obox style}${text}";
   rbox = style: text: "${text}${cbox style}";
 
-in {
+in
+{
   options.niols-starship = with lib; {
     enable = mkEnableOption (mdDoc "niols-starship");
     hostcolour = mkOption {
@@ -34,8 +35,7 @@ in {
 
         status.disabled = false;
         status.format = "$symbol";
-        status.success_symbol =
-          "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
+        status.success_symbol = "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
         status.symbol = "[✗ $status](bold fg:red)";
 
         cmd_duration.min_time = 0;
@@ -48,14 +48,12 @@ in {
         username.style_user = "fg:black bg:${config.niols-starship.hostcolour}";
 
         hostname.ssh_only = false;
-        hostname.format = rbox "${config.niols-starship.hostcolour}"
-          "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
+        hostname.format = rbox "${config.niols-starship.hostcolour}" "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
         hostname.ssh_symbol = "";
 
         directory = {
           format = box "bright-black" "[$path]($style bg:bright-black)";
-          repo_root_format = box "bright-black"
-            "[$before_root_path]($before_repo_root_style bg:bright-black)[$repo_root]($repo_root_style bg:bright-black)[$path]($style bg:bright-black)[$read_only]($read_only_style bg:bright-black)";
+          repo_root_format = box "bright-black" "[$before_root_path]($before_repo_root_style bg:bright-black)[$repo_root]($repo_root_style bg:bright-black)[$path]($style bg:bright-black)[$read_only]($read_only_style bg:bright-black)";
           style = "fg:white";
           repo_root_style = "fg:white";
           before_repo_root_style = "fg:black";
@@ -64,14 +62,10 @@ in {
           truncation_symbol = "…";
         };
 
-        git_branch.format = lbox "bright-yellow"
-          "[ $branch(:$remote_branch)](fg:black bg:bright-yellow)";
-        git_commit.format =
-          lbox "bright-yellow" "[ \\($hash$tag\\)](fg:black bg:bright-yellow)";
-        git_state.format =
-          "[\\($state( $progress_current/$progress_total)\\)](fg:black bg:bright-yellow)";
-        git_status.format = rbox "bright-yellow"
-          "[(\\[$all_status$ahead_behind\\])](fg:black bg:bright-yellow)";
+        git_branch.format = lbox "bright-yellow" "[ $branch(:$remote_branch)](fg:black bg:bright-yellow)";
+        git_commit.format = lbox "bright-yellow" "[ \\($hash$tag\\)](fg:black bg:bright-yellow)";
+        git_state.format = "[\\($state( $progress_current/$progress_total)\\)](fg:black bg:bright-yellow)";
+        git_status.format = rbox "bright-yellow" "[(\\[$all_status$ahead_behind\\])](fg:black bg:bright-yellow)";
 
         nix_shell.format = box "bright-cyan" "[$symbol$state]($style)";
         nix_shell.symbol = "";

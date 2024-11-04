@@ -19,6 +19,5 @@
 
   users.groups.hester.members = [ "niols" ];
 
-  age.secrets.hester-samba-credentials.file =
-    "${secrets}/hester-samba-credentials.age";
+  age.secrets.hester-samba-credentials.file = "${secrets}/hester-samba-credentials.age";
 }

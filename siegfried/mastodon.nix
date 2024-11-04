@@ -25,6 +25,5 @@
     };
   };
 
-  age.secrets.mastodon-noreply-password.file =
-    "${secrets}/mastodon-noreply-password.age";
+  age.secrets.mastodon-noreply-password.file = "${secrets}/mastodon-noreply-password.age";
 }

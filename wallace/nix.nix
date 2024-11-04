@@ -12,15 +12,25 @@
         sshUser = "nix";
         sshKey = "/root/.ssh/id-tweag-builder";
         system = "x86_64-linux";
-        supportedFeatures = [ "benchmark" "big-parallel" "kvm" ];
+        supportedFeatures = [
+          "benchmark"
+          "big-parallel"
+          "kvm"
+        ];
       }
       {
         hostName = "build02.tweag.io";
         maxJobs = 24;
         sshUser = "nix";
         sshKey = "/root/.ssh/id-tweag-builder";
-        systems = [ "aarch64-darwin" "x86_64-darwin" ];
-        supportedFeatures = [ "benchmark" "big-parallel" ];
+        systems = [
+          "aarch64-darwin"
+          "x86_64-darwin"
+        ];
+        supportedFeatures = [
+          "benchmark"
+          "big-parallel"
+        ];
       }
     ];
 
@@ -33,8 +43,10 @@
 
     settings = {
       ## Substituters that are always used.
-      substituters =
-        [ "https://nix-community.cachix.org" "https://cache.nixos.org" ];
+      substituters = [
+        "https://nix-community.cachix.org"
+        "https://cache.nixos.org"
+      ];
 
       ## Not used by default but trusted. If a flake uses `extra-substituters`
       ## with these, they will be accepted without issue.
