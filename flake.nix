@@ -9,8 +9,8 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+    git-hooks.url = "github:cachix/git-hooks.nix";
+    git-hooks.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-index-database.url = "github:Mic92/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
@@ -37,7 +37,7 @@
         ./wallace
 
         ## Other
-        inputs.pre-commit-hooks.flakeModule
+        inputs.git-hooks.flakeModule
       ];
 
       flake.homeConfigurations.niols =
