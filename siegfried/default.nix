@@ -10,7 +10,6 @@
       ./hardware-configuration.nix
       ./hostname.nix
       ./mastodon.nix
-      ./money.nix
       ./motd.nix
       ./nginx.nix
       ./nix.nix
