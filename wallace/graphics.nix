@@ -43,6 +43,88 @@
           };
         };
 
+        ## Double screen at Tweag's office, with laptop closed.
+        make-tweag-double-laptop-closed = key: {
+          fingerprint = {
+            ${key} = tweag1;
+            "HDMI-1" = tweag2;
+          };
+          config = {
+            ${key} = {
+              primary = true;
+              mode = "2560x1440";
+              position = "0x392";
+            };
+            "HDMI-1" = {
+              mode = "2560x1440";
+              position = "2560x0";
+              rotate = "left";
+            };
+          };
+        };
+
+        ## Double screen at Tweag's office, with laptop open.
+        make-tweag-double-laptop-open = key: {
+          fingerprint = {
+            "eDP-1" = laptop;
+            ${key} = tweag1;
+            "HDMI-1" = tweag2;
+          };
+          config = {
+            "eDP-1".enable = false;
+            ${key} = {
+              primary = true;
+              mode = "2560x1440";
+              position = "0x392";
+            };
+            "HDMI-1" = {
+              mode = "2560x1440";
+              position = "2560x0";
+              rotate = "left";
+            };
+          };
+        };
+
+        ## Double screen in Mions, in the office room, with laptop closed.
+        make-mions-office-laptop-closed = key: {
+          fingerprint = {
+            ${key} = mionsOffice1;
+            "HDMI-1" = mionsOffice2;
+          };
+          config = {
+            ${key} = {
+              primary = true;
+              mode = "1920x1080";
+              position = "0x0";
+            };
+            "HDMI-1" = {
+              mode = "1920x1080";
+              position = "1920x0";
+            };
+          };
+        };
+
+        ## Double screen in Mions, in the office room, with laptop open.
+        make-mions-office-laptop-open = key: {
+          fingerprint = {
+            "eDP-1" = laptop;
+            ${key} = mionsOffice1;
+            "HDMI-1" = mionsOffice2;
+          };
+          config = {
+            "eDP-1".enable = false;
+            ${key} = {
+              primary = true;
+              mode = "1920x1080";
+              position = "0x0";
+            };
+            "HDMI-1" = {
+              mode = "1920x1080";
+              position = "1920x0";
+            };
+          };
+        };
+
       in
       {
         ## Default, with laptop screen only.
@@ -54,129 +136,30 @@
             "eDP-1" = {
               primary = true;
               mode = "1920x1200";
-              ## REVIEW: I am hoping that, by not specifying any of the following,
-              ## they will naturally get a good default value. For now, I keep
-              ## them here, commented out, ready in case I need them one day:
-              # position = "0x0";
-              # crtc = 0;
-              # rate = "59.88";
-              ## REVIEW: Not sure what to do with the following xrandr fields. All
-              ## the screens have them and the values vary only slightly. Should
-              ## we add them to all the `config` fields?
-              # x-prop-broadcast_rgb Automatic
-              # x-prop-colorspace Default
-              # x-prop-max_bpc 12
-              # x-prop-non_desktop 0
-              # x-prop-scaling_mode Full aspect
             };
           };
         };
 
-        ## Single Philips screen, with laptop open and close and USB-C hub plugged
-        ## on first or second port.
+        ## Single Philips screen, with laptop open and closed and USB-C hub
+        ## plugged on first or second port.
         philips-laptop-closed-usbc-1st-port = make-philips-laptop-closed "DP-3";
         philips-laptop-closed-usbc-2nd-port = make-philips-laptop-closed "DP-2";
         philips-laptop-open-usbc-1st-port = make-philips-laptop-open "DP-3";
         philips-laptop-open-usbc-2nd-port = make-philips-laptop-open "DP-2";
 
-        ## Double screen at Tweag's office, with laptop closed.
-        tweag-double-laptop-closed = {
-          fingerprint = {
-            "DP-3" = tweag1;
-            "HDMI-1" = tweag2;
-          };
-          config = {
-            "DP-3" = {
-              primary = true;
-              mode = "2560x1440";
-              position = "0x392";
-              # crtc = 0;
-              # rate = "59.95";
-            };
-            "HDMI-1" = {
-              mode = "2560x1440";
-              position = "2560x0";
-              rotate = "left";
-              # crtc = 2;
-              # rate = "59.95";
-            };
-          };
-        };
+        ## Double screen at Tweag's office, with laptop open and closed and USB-C
+        ## hub plugged on first or second port.
+        tweag-double-laptop-closed-usbc-1st-port = make-tweag-double-laptop-closed "DP-3";
+        tweag-double-laptop-closed-usbc-2nd-port = make-tweag-double-laptop-closed "DP-2";
+        tweag-double-laptop-open-usbc-1st-port = make-tweag-double-laptop-open "DP-3";
+        tweag-double-laptop-open-usbc-2nd-port = make-tweag-double-laptop-open "DP-2";
 
-        ## Double screen at Tweag's office, with laptop open.
-        ## REVIEW: The fact that DP-3 is disabled and HDMI-1 is not rotate is
-        ## weird. There is also no primary screen. I think this might be a very
-        ## broken configuration.
-        tweag-double-laptop-open = {
-          fingerprint = {
-            "eDP-1" = laptop;
-            "DP-3" = tweag1;
-            "HDMI-1" = tweag2;
-          };
-          config = {
-            "eDP-1" = {
-              mode = "1920x1200";
-              position = "0x0";
-              # crtc = 1;
-              # rate = "59.88";
-            };
-            "DP-3".enable = false;
-            "HDMI-1" = {
-              mode = "2560x1440";
-              position = "2560x0";
-              # crtc = 2;
-              # rate = "59.95";
-            };
-          };
-        };
-
-        ## Double screen in Mions, in the office room, with laptop closed.
-        mions-office-laptop-closed = {
-          fingerprint = {
-            "DP-3" = mionsOffice1;
-            "HDMI-1" = mionsOffice2;
-          };
-          config = {
-            "DP-3" = {
-              primary = true;
-              mode = "1920x1080";
-              position = "0x0";
-              # crtc = 0;
-              # rate = "60.00";
-            };
-            "HDMI-1" = {
-              mode = "1920x1080";
-              position = "1920x0";
-              # crtc = 2;
-              # rate = "60.00";
-            };
-          };
-        };
-
-        ## Double screen in Mions, in the office room, with laptop open.
-        mions-office-laptop-open = {
-          fingerprint = {
-            "eDP-1" = laptop;
-            "DP-3" = mionsOffice1;
-            "HDMI-1" = mionsOffice2;
-          };
-          config = {
-            "eDP-1".enable = false;
-            "DP-3" = {
-              primary = true;
-              mode = "1920x1080";
-              position = "0x0";
-              # crtc = 0;
-              # rate = "60.00";
-            };
-            "HDMI-1" = {
-              mode = "1920x1080";
-              position = "1920x0";
-              # crtc = 2;
-              # rate = "60.00";
-            };
-          };
-        };
+        ## Double screen in Mions, in the office room, with laptop open and closed
+        ## and USB-C hub plugged on first or second port.
+        mions-office-laptop-closed-usbc-1st-port = make-mions-office-laptop-closed "DP-3";
+        mions-office-laptop-closed-usbc-2nd-port = make-mions-office-laptop-closed "DP-2";
+        mions-office-laptop-open-usbc-1st-port = make-mions-office-laptop-open "DP-3";
+        mions-office-laptop-open-usbc-2nd-port = make-mions-office-laptop-open "DP-2";
       };
   };
 }
