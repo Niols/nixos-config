@@ -92,6 +92,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Free some extra space
+        run: |
+          echo 'Available storage before:'
+          sudo df -h
+          echo
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          echo 'Available storage after:'
+          sudo df -h
+          echo
+
       - name: Check out repository code.
         uses: actions/checkout@v4
 
@@ -106,6 +119,11 @@ jobs:
           nix build \
               .#nixosConfigurations.wallace.config.system.build.toplevel \
               --override-input secrets $(mktemp -d)
+
+      - name: Remaining space
+        run: |
+          echo 'Available storage:'
+          sudo df -h
 
   run-flake-checks:
     name: Run flake checks
