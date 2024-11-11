@@ -70,11 +70,6 @@
   # virtualisation.virtualbox.host.enable = true;
 
   ############################################################################
-  ## Sound
-
-  hardware.pulseaudio.enable = true;
-
-  ############################################################################
   ## Bluetooth
 
   hardware.bluetooth.enable = true;
