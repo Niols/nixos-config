@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Remove unused software
+      - name: Free some extra space
         run: |
           echo 'Available storage before:'
           sudo df -h
@@ -104,15 +104,6 @@ jobs:
           echo 'Available storage after:'
           sudo df -h
           echo
-
-      # - name: Maximise build space
-      #   uses: easimon/maximize-build-space@v10
-      #   # with:
-      #   #   remove-android: true
-      #   #   remove-dotnet: true
-      #   #   remove-haskell: true
-      #   #   remove-codeql: true
-      #   #   remove-docker-images: true
 
       - name: Check out repository code.
         uses: actions/checkout@v4
@@ -128,6 +119,11 @@ jobs:
           nix build \
               .#nixosConfigurations.wallace.config.system.build.toplevel \
               --override-input secrets $(mktemp -d)
+
+      - name: Remaining space
+        run: |
+          echo 'Available storage:'
+          sudo df -h
 
   run-flake-checks:
     name: Run flake checks
