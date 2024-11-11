@@ -34,7 +34,7 @@
         dmenu
         i3status
         i3lock
-        python39Packages.py3status # # wrapper around i3status
+        python3Packages.py3status # # wrapper around i3status
       ];
     };
 
