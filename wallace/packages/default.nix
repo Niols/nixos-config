@@ -26,6 +26,7 @@ in
       "slack"
       "steam-run"
       "steam-original"
+      "steam-unwrapped"
       "teamspeak-client"
       "unrar"
       "zoom"
