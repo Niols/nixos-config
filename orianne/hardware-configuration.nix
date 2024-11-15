@@ -3,6 +3,8 @@
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
+  nixpkgs.hostPlatform = "aarch64-linux";
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/4a1a8170-c1cf-4ef2-b27a-ced57fa60ad7";
@@ -29,7 +31,6 @@
     extraModulePackages = [ ];
   };
 
-  ## REVIEW: not sure if we need those
+  ## REVIEW: not sure if we need this
   networking.useDHCP = lib.mkDefault true;
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 }
