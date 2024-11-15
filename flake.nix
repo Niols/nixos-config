@@ -2,6 +2,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixops4.url = "github:nixops4/nixops4";
+    nixops4-nixos.url = "github:nixops4/nixops4/eval";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -42,6 +45,7 @@
 
         ## Other
         inputs.git-hooks.flakeModule
+        inputs.nixops4-nixos.modules.flake.default
       ];
 
       flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {
@@ -56,7 +60,12 @@
       };
 
       perSystem =
-        { config, pkgs, ... }:
+        {
+          config,
+          pkgs,
+          inputs',
+          ...
+        }:
         {
           formatter = pkgs.nixfmt-rfc-style;
 
@@ -65,7 +74,13 @@
             deadnix.enable = true;
           };
 
-          devShells.default = pkgs.mkShell { shellHook = config.pre-commit.installationScript; };
+          devShells.default = pkgs.mkShell {
+            packages = [
+              pkgs.nil
+              inputs'.nixops4.packages.default
+            ];
+            shellHook = config.pre-commit.installationScript;
+          };
         };
 
       ## Improve the way `inputs'` are computed by also handling the case of
