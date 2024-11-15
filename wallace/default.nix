@@ -1,9 +1,8 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.nixosConfigurations.wallace = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
+  flake.nixosModules.wallace = {
+    imports = [
       ./boot.nix
       ./graphics.nix
       ./hardware-configuration.nix
@@ -58,5 +57,10 @@
         };
       }
     ];
+  };
+
+  flake.nixosConfigurations.wallace = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [ self.nixosModules.wallace ];
   };
 }

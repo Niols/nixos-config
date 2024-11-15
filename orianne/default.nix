@@ -1,9 +1,8 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.nixosConfigurations.orianne = inputs.nixpkgs.lib.nixosSystem {
-    system = "aarch64-linux";
-    modules = [
+  flake.nixosModules.orianne = {
+    imports = [
       ./boot.nix
       ./cloud.nix
       ./databases.nix
@@ -28,5 +27,10 @@
         };
       }
     ];
+  };
+
+  flake.nixosConfigurations.orianne = inputs.nixpkgs.lib.nixosSystem {
+    system = "aarch64-linux";
+    modules = [ self.nixosModules.orianne ];
   };
 }

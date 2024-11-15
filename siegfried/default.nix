@@ -1,9 +1,8 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.nixosConfigurations.siegfried = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
+  flake.nixosModules.siegfried = {
+    imports = [
       ./boot.nix
       ./ftp.nix
       ./git.nix
@@ -31,5 +30,10 @@
       }
       ../_common/hester.nix
     ];
+  };
+
+  flake.nixosConfigurations.siegfried = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [ self.nixosModules.siegfried ];
   };
 }

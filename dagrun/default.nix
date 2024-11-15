@@ -1,9 +1,8 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.nixosConfigurations.dagrun = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
+  flake.nixosModules.dagrun = {
+    imports = [
       ./boot.nix
       ./dancelor.nix
       ./databases.nix
@@ -29,5 +28,10 @@
         };
       }
     ];
+  };
+
+  flake.nixosConfigurations.dagrun = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [ self.nixosModules.dagrun ];
   };
 }
