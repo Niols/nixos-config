@@ -19,6 +19,10 @@
     file = "${secrets}/password-orianne-niols.age";
   };
 
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
+  ];
+
   ## It can be pratical for the users to have a cron service running.
   services.cron.enable = true;
 }

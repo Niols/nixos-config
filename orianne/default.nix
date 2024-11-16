@@ -1,9 +1,8 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
-  flake.nixosConfigurations.orianne = inputs.nixpkgs.lib.nixosSystem {
-    system = "aarch64-linux";
-    modules = [
+  flake.nixosModules.orianne = {
+    imports = [
       ./boot.nix
       ./cloud.nix
       ./databases.nix
@@ -29,4 +28,22 @@
       }
     ];
   };
+
+  flake.nixops4Resources.orianne =
+    { providers, ... }:
+    {
+      type = providers.local.exec;
+      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+
+      ssh = {
+        host = "89.168.38.231";
+        opts = "";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUAVk+u2veGt3xmwhsbNP8KVIcnnYmzoBbwswdIxKHO";
+      };
+
+      nixpkgs = inputs.nixpkgs;
+      nixos.module = {
+        imports = [ self.nixosModules.orianne ];
+      };
+    };
 }
