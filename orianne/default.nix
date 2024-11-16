@@ -29,29 +29,21 @@
     ];
   };
 
-  flake.nixosConfigurations.orianne = inputs.nixpkgs.lib.nixosSystem {
-    modules = [ self.nixosModules.orianne ];
-  };
-
-  nixops4Deployments.orianne =
+  flake.nixops4Resources.orianne =
     { providers, ... }:
     {
-      providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+      type = providers.local.exec;
+      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
 
-      resources.orianne = {
-        type = providers.local.exec;
-        imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+      ssh = {
+        host = "89.168.38.231";
+        opts = "";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUAVk+u2veGt3xmwhsbNP8KVIcnnYmzoBbwswdIxKHO";
+      };
 
-        ssh = {
-          host = "89.168.38.231";
-          opts = "";
-          hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUAVk+u2veGt3xmwhsbNP8KVIcnnYmzoBbwswdIxKHO";
-        };
-
-        nixpkgs = inputs.nixpkgs;
-        nixos.module = {
-          imports = [ self.nixosModules.orianne ];
-        };
+      nixpkgs = inputs.nixpkgs;
+      nixos.module = {
+        imports = [ self.nixosModules.orianne ];
       };
     };
 }

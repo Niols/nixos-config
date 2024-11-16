@@ -32,29 +32,21 @@
     ];
   };
 
-  flake.nixosConfigurations.siegfried = inputs.nixpkgs.lib.nixosSystem {
-    modules = [ self.nixosModules.siegfried ];
-  };
-
-  nixops4Deployments.siegfried =
+  flake.nixops4Resources.siegfried =
     { providers, ... }:
     {
-      providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+      type = providers.local.exec;
+      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
 
-      resources.siegfried = {
-        type = providers.local.exec;
-        imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+      ssh = {
+        host = "158.178.201.160";
+        opts = "";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHKNHteo/srejmG5pgYRvmsZXqA+NJKCjI9H3f7l6TUb";
+      };
 
-        ssh = {
-          host = "158.178.201.160";
-          opts = "";
-          hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHKNHteo/srejmG5pgYRvmsZXqA+NJKCjI9H3f7l6TUb";
-        };
-
-        nixpkgs = inputs.nixpkgs;
-        nixos.module = {
-          imports = [ self.nixosModules.siegfried ];
-        };
+      nixpkgs = inputs.nixpkgs;
+      nixos.module = {
+        imports = [ self.nixosModules.siegfried ];
       };
     };
 }

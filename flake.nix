@@ -29,8 +29,8 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    inputs@{ self, ... }:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -46,7 +46,50 @@
         ## Other
         inputs.git-hooks.flakeModule
         inputs.nixops4-nixos.modules.flake.default
+
+        { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
       ];
+
+      flake.machines = [
+        "dagrun"
+        "orianne"
+        "siegfried"
+        "wallace"
+      ];
+
+      flake.nixosConfigurations =
+        let
+          inherit (builtins) map listToAttrs;
+        in
+        listToAttrs (
+          map (machine: {
+            name = machine;
+            value = inputs.nixpkgs.lib.nixosSystem {
+              modules = [ self.nixosModules.${machine} ];
+            };
+          }) self.machines
+        );
+
+      nixops4Deployments =
+        let
+          inherit (builtins) mapAttrs;
+        in
+        mapAttrs (
+          machine: makeResource:
+          nixops4Inputs@{ providers, ... }:
+          {
+            providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+            resources.${machine} = makeResource nixops4Inputs;
+          }
+        ) self.nixops4Resources
+        // {
+          default =
+            nixops4Inputs@{ providers, ... }:
+            {
+              providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+              resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
+            };
+        };
 
       flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;

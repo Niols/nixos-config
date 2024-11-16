@@ -30,29 +30,21 @@
     ];
   };
 
-  flake.nixosConfigurations.dagrun = inputs.nixpkgs.lib.nixosSystem {
-    modules = [ self.nixosModules.dagrun ];
-  };
-
-  nixops4Deployments.dagrun =
+  flake.nixops4Resources.dagrun =
     { providers, ... }:
     {
-      providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+      type = providers.local.exec;
+      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
 
-      resources.dagrun = {
-        type = providers.local.exec;
-        imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+      ssh = {
+        host = "141.145.213.115";
+        opts = "";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVmK67fRJIc826wSfR3Thi+mUTZCwucaM4gnKiw6c4J";
+      };
 
-        ssh = {
-          host = "141.145.213.115";
-          opts = "";
-          hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVmK67fRJIc826wSfR3Thi+mUTZCwucaM4gnKiw6c4J";
-        };
-
-        nixpkgs = inputs.nixpkgs;
-        nixos.module = {
-          imports = [ self.nixosModules.dagrun ];
-        };
+      nixpkgs = inputs.nixpkgs;
+      nixos.module = {
+        imports = [ self.nixosModules.dagrun ];
       };
     };
 }

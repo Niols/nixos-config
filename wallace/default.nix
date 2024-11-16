@@ -1,4 +1,4 @@
-{ self, inputs, ... }:
+{ inputs, ... }:
 
 {
   flake.nixosModules.wallace = {
@@ -57,9 +57,5 @@
         };
       }
     ];
-  };
-
-  flake.nixosConfigurations.wallace = inputs.nixpkgs.lib.nixosSystem {
-    modules = [ self.nixosModules.wallace ];
   };
 }
