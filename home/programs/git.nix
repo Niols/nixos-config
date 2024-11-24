@@ -67,8 +67,6 @@
   extraConfig = {
     init.defaultBranch = "main";
 
-    rerere.enabled = true;
-
     ## FIXME: Maybe this should rather be in Siegfried's configuration?
     safe.directory = [ "/hester/services/git/niols.fr.git" ];
 
