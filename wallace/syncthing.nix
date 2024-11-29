@@ -107,6 +107,44 @@
         ];
       };
 
+      "Phineas/DCIM" = {
+        path = "~/.syncthing/Phineas/DCIM";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Siegfried"
+        ];
+      };
+
+      "Phineas/Documents" = {
+        path = "~/.syncthing/Phineas/Documents";
+        devices = [
+          "Barbara"
+          "Oxana"
+          "Philippe"
+          "Phineas"
+          "Siegfried"
+        ];
+      };
+
+      "Phineas/Download" = {
+        path = "~/.syncthing/Phineas/Download";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Siegfried"
+        ];
+      };
+
+      "Phineas/Pictures" = {
+        path = "~/.syncthing/Phineas/Pictures";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Siegfried"
+        ];
+      };
+
       "Wallace/.config/doom" = {
         path = "~/.config/doom";
         devices = [ "Siegfried" ];

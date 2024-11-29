@@ -129,6 +129,44 @@
         ];
       };
 
+      "Phineas/DCIM" = {
+        path = "/hester/services/syncthing/Phineas/DCIM";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Wallace"
+        ];
+      };
+
+      "Phineas/Documents" = {
+        path = "/hester/services/syncthing/Phineas/Documents";
+        devices = [
+          "Barbara"
+          "Oxana"
+          "Philippe"
+          "Phineas"
+          "Wallace"
+        ];
+      };
+
+      "Phineas/Download" = {
+        path = "/hester/services/syncthing/Phineas/Download";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Wallace"
+        ];
+      };
+
+      "Phineas/Pictures" = {
+        path = "/hester/services/syncthing/Phineas/Pictures";
+        devices = [
+          "Philippe"
+          "Phineas"
+          "Wallace"
+        ];
+      };
+
       "Wallace/.config/doom" = {
         path = "/hester/services/syncthing/Wallace/config/doom";
         ignorePerms = true;
