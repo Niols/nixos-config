@@ -19,6 +19,7 @@
         devices = [
           "Barbara"
           "Philippe"
+          "Phineas"
         ];
       };
 
@@ -29,6 +30,7 @@
           "Barbara"
           "Oxana"
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -39,6 +41,7 @@
         devices = [
           "Barbara"
           "Philippe"
+          "Phineas"
           "Oxana"
           "Wallace"
         ];
@@ -50,6 +53,7 @@
         devices = [
           "Oxana"
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -60,6 +64,7 @@
         devices = [
           "Oxana"
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -69,6 +74,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -78,6 +84,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -87,6 +94,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -96,6 +104,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -105,6 +114,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -114,6 +124,7 @@
         ignorePerms = true;
         devices = [
           "Philippe"
+          "Phineas"
           "Wallace"
         ];
       };
@@ -135,6 +146,7 @@
     settings.devices = {
       "Barbara".id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
       "Philippe".id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
+      "Phineas".id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
       "Siegfried".id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
       "Oxana".id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
       "Wallace".id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";

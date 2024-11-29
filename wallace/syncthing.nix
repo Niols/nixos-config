@@ -17,6 +17,7 @@
           "Barbara"
           "Oxana"
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -26,6 +27,7 @@
         devices = [
           "Barbara"
           "Philippe"
+          "Phineas"
           "Oxana"
           "Siegfried"
         ];
@@ -36,6 +38,7 @@
         devices = [
           "Oxana"
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -45,6 +48,7 @@
         devices = [
           "Oxana"
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -53,6 +57,7 @@
         path = "~/.syncthing/Philippe/DCIM/SD Card";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -61,6 +66,7 @@
         path = "~/.syncthing/Philippe/DCIM/Storage";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -69,6 +75,7 @@
         path = "~/.syncthing/Philippe/Movies/Storage";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -77,6 +84,7 @@
         path = "~/.syncthing/Philippe/Pictures/SD Card";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -85,6 +93,7 @@
         path = "~/.syncthing/Philippe/Pictures/Storage";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -93,6 +102,7 @@
         path = "~/.syncthing/Philippe/Scans";
         devices = [
           "Philippe"
+          "Phineas"
           "Siegfried"
         ];
       };
@@ -112,6 +122,7 @@
     settings.devices = {
       "Barbara".id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
       "Philippe".id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
+      "Phineas".id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
       "Oxana".id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
       "Wallace".id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
       "Siegfried" = {
