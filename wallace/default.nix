@@ -3,6 +3,8 @@
 {
   flake.nixosModules.wallace = {
     imports = [
+      ../_common
+
       ./boot.nix
       ./graphics.nix
       ./hardware-configuration.nix
