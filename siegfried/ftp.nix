@@ -83,11 +83,9 @@ in
   age.secrets.ftp-password-kerl.file = "${secrets}/ftp-password-kerl.age";
 
   ## Home on Hester for Kerl.
-  _common.hester.fileSystems = {
-    ftp-kerl = {
-      path = "/services/ftp/kerl";
-      uid = "kerl";
-      gid = "ftp";
-    };
+  fileSystems.x_niols.hesterMounts.ftp-kerl = {
+    path = "/services/ftp/kerl";
+    uid = "kerl";
+    gid = "ftp";
   };
 }

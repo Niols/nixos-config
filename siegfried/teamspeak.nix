@@ -21,7 +21,5 @@
 
   systemd.services.borgbackup-job-teamspeak.unitConfig.RequiresMountsFor = "/hester";
 
-  _common.hester.fileSystems = {
-    backups.path = "/backups";
-  };
+  fileSystems.x_niols.hesterMounts.backups.path = "/backups";
 }
