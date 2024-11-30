@@ -26,6 +26,10 @@ let
 
         ## Symbolic link support on a CIFS share.
         "mfsymlinks"
+
+        ## Attempt to make things much faster at the cost of, in case of
+        ## multiple readers/writers, cache coherency. See mount.cifs (8).
+        "cache=loose"
       ];
     };
 
