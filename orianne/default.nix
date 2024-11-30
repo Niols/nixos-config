@@ -3,7 +3,7 @@
 {
   flake.nixosModules.orianne = {
     imports = [
-      ../_common
+      ../x_niols
 
       ./boot.nix
       ./cloud.nix

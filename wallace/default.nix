@@ -3,7 +3,7 @@
 {
   flake.nixosModules.wallace = {
     imports = [
-      ../_common
+      ../x_niols
 
       ./boot.nix
       ./graphics.nix
