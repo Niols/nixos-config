@@ -16,9 +16,7 @@
 
   systemd.services.borgbackup-job-git.unitConfig.RequiresMountsFor = "/hester";
 
-  _common.hester.fileSystems = {
-    services-git.path = "/services/git";
-  };
+  fileSystems.x_niols.hesterMounts.services-git.path = "/services/git";
 
   age.secrets.hester-git-backup-identity.file = "${secrets}/hester-git-backup-identity.age";
   age.secrets.hester-git-backup-repokey.file = "${secrets}/hester-git-backup-repokey.age";

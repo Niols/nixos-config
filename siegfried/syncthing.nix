@@ -64,7 +64,7 @@
   age.secrets.syncthing-siegfried-key.file = "${secrets}/syncthing-siegfried-key.age";
   age.secrets.syncthing-siegfried-cert.file = "${secrets}/syncthing-siegfried-cert.age";
 
-  _common.hester.fileSystems = {
+  fileSystems.x_niols.hesterMounts = {
     medias-music.path = "/medias/music";
     organiser.path = "/organiser";
     services-syncthing.path = "/services/syncthing";

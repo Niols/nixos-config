@@ -52,11 +52,9 @@
     after = [ "hester.automount" ];
   };
 
-  _common.hester.fileSystems = {
-    services-web = {
-      path = "/services/web";
-      worldReadable = true;
-    };
+  fileSystems.x_niols.hesterMounts.services-web = {
+    path = "/services/web";
+    worldReadable = true;
   };
 
   ############################################################################
