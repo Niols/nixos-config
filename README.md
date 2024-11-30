@@ -1,6 +1,13 @@
 Niols's NixOS Configuration/s
 =============================
 
+In this repository
+------------------
+
+- `x_niols` contains me-specific configuration. I happily add options to the
+  options tree of nixpkgs, but whenever you see an `x_niols` option, then it is
+  custom and comes from this directory. It is included in all the machines.
+
 Installing NixOS
 ----------------
 
