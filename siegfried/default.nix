@@ -3,6 +3,8 @@
 {
   flake.nixosModules.siegfried = {
     imports = [
+      ../_common
+
       ./boot.nix
       ./ftp.nix
       ./git.nix
@@ -28,7 +30,6 @@
           inherit (inputs) secrets nixpkgs;
         };
       }
-      ../_common/hester.nix
     ];
   };
 

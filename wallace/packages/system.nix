@@ -76,6 +76,7 @@ with pkgs;
 
   ## N
   nautilus
+  nautilus-open-any-terminal
   nextcloud-client
   nix-output-monitor
 

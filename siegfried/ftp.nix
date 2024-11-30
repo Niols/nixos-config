@@ -8,8 +8,6 @@ let
 
 in
 {
-  imports = [ ../_common/hester.nix ];
-
   services.vsftpd = {
     enable = true;
 

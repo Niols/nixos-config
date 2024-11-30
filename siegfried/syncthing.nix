@@ -11,184 +11,20 @@
     guiAddress = "127.0.0.1:8384";
     settings.gui.insecureSkipHostcheck = true;
 
-    overrideFolders = true;
+    x_niols = {
+      enableCommonFoldersAndDevices = true;
+      thisDevice = "Siegfried";
+      defaultFolderPrefix = "/hester/services/syncthing";
+      extraDefaultFolderConfig.ignorePerms = true;
+    };
+
     settings.folders = {
-      Music = {
-        path = "/hester/medias/music";
-        ignorePerms = true;
-        devices = [
-          "Barbara"
-          "Philippe"
-          "Phineas"
-        ];
-      };
-
-      Organiser = {
-        path = "/hester/organiser";
-        ignorePerms = true;
-        devices = [
-          "Barbara"
-          "Oxana"
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      MobileSheets = {
-        path = "/hester/services/syncthing/MobileSheets";
-        ignorePerms = true;
-        devices = [
-          "Barbara"
-          "Philippe"
-          "Phineas"
-          "Oxana"
-          "Wallace"
-        ];
-      };
-
-      "Oxana/Documents" = {
-        path = "/hester/services/syncthing/Oxana/Documents";
-        ignorePerms = true;
-        devices = [
-          "Oxana"
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Oxana/Notes" = {
-        path = "/hester/services/syncthing/Oxana/Notes";
-        ignorePerms = true;
-        devices = [
-          "Oxana"
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/DCIM/SD Card" = {
-        path = "/hester/services/syncthing/Philippe/DCIM/SD Card";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/DCIM/Storage" = {
-        path = "/hester/services/syncthing/Philippe/DCIM/Storage";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/Movies/Storage" = {
-        path = "/hester/services/syncthing/Philippe/Movies/Storage";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/Pictures/SD Card" = {
-        path = "/hester/services/syncthing/Philippe/Pictures/SD Card";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/Pictures/Storage" = {
-        path = "/hester/services/syncthing/Philippe/Pictures/Storage";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Philippe/Scans" = {
-        path = "/hester/services/syncthing/Philippe/Scans";
-        ignorePerms = true;
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Phineas/DCIM" = {
-        path = "/hester/services/syncthing/Phineas/DCIM";
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Phineas/Documents" = {
-        path = "/hester/services/syncthing/Phineas/Documents";
-        devices = [
-          "Barbara"
-          "Oxana"
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Phineas/Download" = {
-        path = "/hester/services/syncthing/Phineas/Download";
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Phineas/Pictures" = {
-        path = "/hester/services/syncthing/Phineas/Pictures";
-        devices = [
-          "Philippe"
-          "Phineas"
-          "Wallace"
-        ];
-      };
-
-      "Wallace/.config/doom" = {
-        path = "/hester/services/syncthing/Wallace/config/doom";
-        ignorePerms = true;
-        devices = [ "Wallace" ];
-      };
-
-      "Wallace/.config/i3" = {
-        path = "/hester/services/syncthing/Wallace/config/i3";
-        ignorePerms = true;
-        devices = [ "Wallace" ];
-      };
+      Organiser.path = "/hester/organiser";
+      Music.path = "/hester/medias/music";
     };
 
-    overrideDevices = true;
-    settings.devices = {
-      "Barbara".id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
-      "Philippe".id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
-      "Phineas".id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
-      "Siegfried".id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
-      "Oxana".id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
-      "Wallace".id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
-    };
+    ## REVIEW: Should I override settings.devices.Siegfried.addresses? Will it
+    ## break? I expect not but who knows.
   };
 
   users.groups.hester.members = [ "syncthing" ];
