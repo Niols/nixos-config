@@ -68,5 +68,7 @@ in
           "x-scheme-handler/https"
         ];
       })
+
+      (import ./tmosh.nix { inherit pkgs; })
     ];
 }
