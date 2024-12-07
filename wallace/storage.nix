@@ -14,6 +14,7 @@
       "gid=hester"
       "dir_mode=0775"
       "file_mode=0664"
+      "cache=loose"
     ];
   };
 
