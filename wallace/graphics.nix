@@ -151,6 +151,10 @@
             "HDMI-1" = {
               primary = true;
               mode = "4096x2160";
+              scale = {
+                x = 0.5;
+                y = 0.5;
+              };
             };
           };
         };
