@@ -69,6 +69,7 @@ in
         ];
       })
 
+      (import ./rnix.nix { inherit pkgs; })
       (import ./tmosh.nix { inherit pkgs; })
     ];
 }
