@@ -125,6 +125,8 @@
     ls = "ls --quoting-style=literal --color=auto";
     rnix = "nix --builders '@/etc/nix/machines' ";
     rrnix = "nix --builders '@/etc/nix/machines' --max-jobs 0 ";
+    rnom = "nom --builders '@/etc/nix/machines' ";
+    rrnom = "nom --builders '@/etc/nix/machines' --max-jobs 0 ";
   };
 
   programs.bash = {
