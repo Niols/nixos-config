@@ -11,11 +11,13 @@
         maxJobs = 24;
         sshUser = "nix";
         sshKey = "/root/.ssh/id-tweag-builder";
+        protocol = "ssh-ng";
         system = "x86_64-linux";
         supportedFeatures = [
           "benchmark"
           "big-parallel"
           "kvm"
+          "nixos-test"
         ];
       }
       {
@@ -23,6 +25,7 @@
         maxJobs = 24;
         sshUser = "nix";
         sshKey = "/root/.ssh/id-tweag-builder";
+        protocol = "ssh-ng";
         systems = [
           "aarch64-darwin"
           "x86_64-darwin"
