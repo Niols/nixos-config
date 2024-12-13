@@ -74,12 +74,12 @@
     github.user = "niols";
   };
 
-  ## Rewrite GitHub's https:// URI to ssh://
-  extraConfig.url = {
-    "ssh://git@github.com" = {
-      insteadOf = "https://github.com";
-    };
-  };
+  # ## Rewrite GitHub's https:// URI to ssh://
+  # extraConfig.url = {
+  #   "ssh://git@github.com" = {
+  #     insteadOf = "https://github.com";
+  #   };
+  # };
 
   ## Enable git LFS
   lfs.enable = true;
