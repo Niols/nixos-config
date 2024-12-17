@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ./motd.nix
       ./network.nix
+      ./sound.nix
       ./storage.nix
       ./weylus.nix
 
