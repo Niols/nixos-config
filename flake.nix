@@ -50,6 +50,7 @@
         { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
 
         ./keys
+        ./secrets
       ];
 
       flake.machines = [
@@ -123,6 +124,12 @@
             packages = [
               pkgs.nil
               inputs'.nixops4.packages.default
+
+              ## FIXME: Move the following to `secrets/default.nix`
+              inputs'.agenix.packages.default
+              pkgs.borgbackup
+              pkgs.apacheHttpd # provides the `htpasswd` utility
+              pkgs.easyrsa # for OpenVPN's `easyrsa` command
             ];
             shellHook = config.pre-commit.installationScript;
           };
