@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
   flake.nixosModules.orianne = {
@@ -28,6 +28,7 @@
           inherit (inputs) secrets nixpkgs;
         };
       }
+      self.nixosModules.keys
     ];
   };
 
@@ -40,7 +41,7 @@
   #     ssh = {
   #       host = "89.168.38.231";
   #       opts = "";
-  #       hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUAVk+u2veGt3xmwhsbNP8KVIcnnYmzoBbwswdIxKHO";
+  #       hostPublicKey = self.keys.machines.orianne;
   #     };
 
   #     nixpkgs = inputs.nixpkgs;

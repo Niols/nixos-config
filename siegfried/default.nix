@@ -30,6 +30,7 @@
           inherit (inputs) secrets nixpkgs;
         };
       }
+      self.nixosModules.keys
     ];
   };
 
@@ -42,7 +43,7 @@
       ssh = {
         host = "158.178.201.160";
         opts = "";
-        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHKNHteo/srejmG5pgYRvmsZXqA+NJKCjI9H3f7l6TUb";
+        hostPublicKey = self.keys.machines.siegfried;
       };
 
       nixpkgs = inputs.nixpkgs;

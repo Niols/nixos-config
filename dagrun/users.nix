@@ -1,4 +1,13 @@
-{ config, secrets, ... }:
+{
+  config,
+  keys,
+  secrets,
+  ...
+}:
+
+let
+  inherit (builtins) attrValues;
+in
 
 {
   ## Make each system activation forcefully replace the current status of users.
@@ -8,10 +17,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
 
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOwbbryqtVcJgJ/kgIFyDa8FQaWEPK/dsCV0yYdsZNBy niols@philippe"
-    ];
+    openssh.authorizedKeys.keys = attrValues keys.niols;
     hashedPasswordFile = config.age.secrets.password-niols.path;
   };
 
@@ -19,9 +25,7 @@
     file = "${secrets}/password-dagrun-niols.age";
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEElREJN0AC7lbp+5X204pQ5r030IbgCllsIxyU3iiKY niols@wallace"
-  ];
+  users.users.root.openssh.authorizedKeys.keys = [ keys.niols.wallace ];
 
   ## It can be pratical for the users to have a cron service running.
   services.cron.enable = true;

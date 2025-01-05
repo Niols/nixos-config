@@ -48,6 +48,8 @@
         inputs.nixops4-nixos.modules.flake.default
 
         { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
+
+        ./keys
       ];
 
       flake.machines = [
