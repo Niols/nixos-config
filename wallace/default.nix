@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
   flake.nixosModules.wallace = {
@@ -29,9 +29,13 @@
       inputs.agenix.nixosModules.default
       {
         _module.args = {
-          inherit (inputs) secrets nixpkgs;
+          inherit (inputs) nixpkgs;
         };
       }
+
+      self.nixosModules.keys
+      self.nixosModules.secrets
+      { x_niols.hostPublicKey = self.keys.niols.wallace; }
 
       inputs.nix-index-database.nixosModules.nix-index
 

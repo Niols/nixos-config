@@ -20,7 +20,4 @@
       "Wallace/.config/i3".path = "~/.config/i3";
     };
   };
-
-  age.secrets.syncthing-wallace-key.file = "${secrets}/syncthing-wallace-key.age";
-  age.secrets.syncthing-wallace-cert.file = "${secrets}/syncthing-wallace-cert.age";
 }

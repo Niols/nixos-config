@@ -112,18 +112,17 @@ in
     phpOptions."opcache.interned_strings_buffer" = "16";
   };
 
-  age.secrets.niolscloud-admin-password = {
-    file = "${secrets}/niolscloud-admin-password.age";
-    mode = "640";
-    owner = "nextcloud";
-    group = "nextcloud";
-  };
-
-  age.secrets.niolscloud-secrets = {
-    file = "${secrets}/niolscloud-secrets.age";
-    mode = "640";
-    owner = "nextcloud";
-    group = "nextcloud";
+  age.secrets = {
+    niolscloud-admin-password = {
+      mode = "640";
+      owner = "nextcloud";
+      group = "nextcloud";
+    };
+    niolscloud-secrets = {
+      mode = "640";
+      owner = "nextcloud";
+      group = "nextcloud";
+    };
   };
 
   services.postgresql = {
@@ -172,7 +171,4 @@ in
     };
     environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
   };
-
-  age.secrets.hester-niolscloud-backup-identity.file = "${secrets}/hester-niolscloud-backup-identity.age";
-  age.secrets.hester-niolscloud-backup-repokey.file = "${secrets}/hester-niolscloud-backup-repokey.age";
 }

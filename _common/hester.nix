@@ -74,7 +74,5 @@ in
     }) config._common.hester.fileSystems;
 
     users.groups.hester.members = [ "niols" ];
-
-    age.secrets.hester-samba-credentials.file = "${secrets}/hester-samba-credentials.age";
   };
 }

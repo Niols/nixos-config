@@ -24,6 +24,4 @@
       passwordFile = config.age.secrets.mastodon-noreply-password.path;
     };
   };
-
-  age.secrets.mastodon-noreply-password.file = "${secrets}/mastodon-noreply-password.age";
 }

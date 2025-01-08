@@ -7,12 +7,6 @@
     listeningPort = 6872;
   };
 
-  ## A secret Git repository for the database. It will be cloned by the
-  ## `dancelor-init` service and used by the `dancelor` service.
-  age.secrets.dancelor-database-repository = {
-    file = "${secrets}/dancelor-database-repository.age";
-  };
-
   ## Use Dancelor's Cachix instance as a substituter. Since Dancelor's CI fill
   ## it with all the components, this should make things much faster.
   nix.settings = {
@@ -22,7 +16,6 @@
 
   ## A secret `passwd` file containing the users' identifiers.
   age.secrets.dancelor-passwd = {
-    file = "${secrets}/dancelor-passwd.age";
     mode = "600";
     owner = "nginx";
     group = "nginx";

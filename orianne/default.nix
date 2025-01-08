@@ -25,10 +25,12 @@
       ./home-manager.nix
       {
         _module.args = {
-          inherit (inputs) secrets nixpkgs;
+          inherit (inputs) nixpkgs;
         };
       }
       self.nixosModules.keys
+      self.nixosModules.secrets
+      { x_niols.hostPublicKey = self.keys.machines.orianne; }
     ];
   };
 

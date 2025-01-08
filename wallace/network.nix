@@ -53,6 +53,4 @@ in
       };
     };
   };
-
-  age.secrets.wireguard-wallace-fediversity-private-key.file = "${secrets}/wireguard-wallace-fediversity-private-key.age";
 }

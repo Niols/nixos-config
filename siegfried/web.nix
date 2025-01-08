@@ -76,7 +76,4 @@
   };
 
   systemd.services.borgbackup-job-web.unitConfig.RequiresMountsFor = "/hester";
-
-  age.secrets.hester-web-backup-identity.file = "${secrets}/hester-web-backup-identity.age";
-  age.secrets.hester-web-backup-repokey.file = "${secrets}/hester-web-backup-repokey.age";
 }

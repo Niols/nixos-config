@@ -55,14 +55,10 @@
   };
 
   age.secrets.syncthing-siegfried-passwd = {
-    file = "${secrets}/syncthing-siegfried-passwd.age";
     mode = "600";
     owner = "nginx";
     group = "nginx";
   };
-
-  age.secrets.syncthing-siegfried-key.file = "${secrets}/syncthing-siegfried-key.age";
-  age.secrets.syncthing-siegfried-cert.file = "${secrets}/syncthing-siegfried-cert.age";
 
   _common.hester.fileSystems = {
     medias-music.path = "/medias/music";
@@ -98,7 +94,4 @@
   };
 
   systemd.services.borgbackup-job-syncthing.unitConfig.RequiresMountsFor = "/hester";
-
-  age.secrets.hester-syncthing-backup-identity.file = "${secrets}/hester-syncthing-backup-identity.age";
-  age.secrets.hester-syncthing-backup-repokey.file = "${secrets}/hester-syncthing-backup-repokey.age";
 }

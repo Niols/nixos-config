@@ -18,11 +18,7 @@ in
     extraGroups = [ "wheel" ];
 
     openssh.authorizedKeys.keys = attrValues keys.niols;
-    hashedPasswordFile = config.age.secrets.password-niols.path;
-  };
-
-  age.secrets.password-niols = {
-    file = "${secrets}/password-orianne-niols.age";
+    hashedPasswordFile = config.age.secrets.password-orianne-niols.path;
   };
 
   users.users.root.openssh.authorizedKeys.keys = [ keys.niols.wallace ];

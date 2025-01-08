@@ -79,9 +79,6 @@ in
   };
   services.openssh.settings.DenyUsers = [ "kerl" ];
 
-  ## Password secret file for Kerl.
-  age.secrets.ftp-password-kerl.file = "${secrets}/ftp-password-kerl.age";
-
   ## Home on Hester for Kerl.
   _common.hester.fileSystems = {
     ftp-kerl = {

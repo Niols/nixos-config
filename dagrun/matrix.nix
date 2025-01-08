@@ -72,17 +72,10 @@
     ];
   };
 
-  age.secrets.matrix-synapse-macaroon-secret = {
-    file = "${secrets}/matrix-synapse-macaroon-secret.age";
-    owner = "matrix-synapse";
-  };
-  age.secrets.matrix-synapse-registration-secret = {
-    file = "${secrets}/matrix-synapse-registration-secret.age";
-    owner = "matrix-synapse";
-  };
-  age.secrets.matrix-synapse-signing-key = {
-    file = "${secrets}/matrix-synapse-signing-key.age";
-    owner = "matrix-synapse";
+  age.secrets = {
+    matrix-synapse-macaroon-secret.owner = "matrix-synapse";
+    matrix-synapse-registration-secret.owner = "matrix-synapse";
+    matrix-synapse-signing-key.owner = "matrix-synapse";
   };
 
   ############################################################################
@@ -108,7 +101,4 @@
     };
     environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-matrix-backup-identity.path}";
   };
-
-  age.secrets.hester-matrix-backup-identity.file = "${secrets}/hester-matrix-backup-identity.age";
-  age.secrets.hester-matrix-backup-repokey.file = "${secrets}/hester-matrix-backup-repokey.age";
 }
