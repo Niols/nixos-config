@@ -5,6 +5,9 @@
     enable = true;
     databaseRepositoryFile = config.age.secrets.dancelor-database-repository.path;
     listeningPort = 6872;
+    githubTokenFile = config.age.secrets.dancelor-github-token.path;
+    githubRepository = "paris-branch/dancelor";
+    githubDatabaseRepository = "paris-branch/dancelor-database";
   };
 
   ## Use Dancelor's Cachix instance as a substituter. Since Dancelor's CI fill
@@ -15,10 +18,17 @@
   };
 
   ## A secret `passwd` file containing the users' identifiers.
-  age.secrets.dancelor-passwd = {
-    mode = "600";
-    owner = "nginx";
-    group = "nginx";
+  age.secrets = {
+    dancelor-passwd = {
+      mode = "600";
+      owner = "nginx";
+      group = "nginx";
+    };
+    dancelor-github-token = {
+      mode = "600";
+      owner = "dancelor";
+      group = "dancelor";
+    };
   };
 
   ## A simple Nginx proxy in front of Dancelor. Handles HTTPS, the generation of

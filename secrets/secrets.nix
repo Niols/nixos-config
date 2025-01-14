@@ -22,6 +22,8 @@ concatMapAttrs
 
       dancelor-passwd = [ dagrun ];
       dancelor-database-repository = [ dagrun ];
+      dancelor-github-token = [ dagrun ];
+
       password-dagrun-niols = [ dagrun ];
       password-orianne-niols = [ orianne ];
       password-siegfried-niols = [ siegfried ];
