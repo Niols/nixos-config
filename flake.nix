@@ -23,9 +23,6 @@
     agenix.inputs.darwin.follows = ""; # saves some resources on Linux
 
     dancelor.url = "github:paris-branch/dancelor";
-
-    secrets.url = "github:niols/nixos-secrets";
-    secrets.flake = false;
   };
 
   outputs =

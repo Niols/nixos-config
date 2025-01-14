@@ -1139,8 +1139,7 @@
         "nixops4": "nixops4",
         "nixops4-nixos": "nixops4-nixos",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_4",
-        "secrets": "secrets"
+        "nixpkgs": "nixpkgs_4"
       }
     },
     "rust-overlay": {
@@ -1178,22 +1177,6 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "secrets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1731330482,
-        "narHash": "sha256-ye9YUjMA05Wc6yX2rErs7gnxch5Epb0kSx0yITAXbWc=",
-        "owner": "niols",
-        "repo": "nixos-secrets",
-        "rev": "8d941ba50caad943473b9ac7890412cb145dc3bb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "niols",
-        "repo": "nixos-secrets",
         "type": "github"
       }
     },
