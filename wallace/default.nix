@@ -36,7 +36,7 @@
       self.nixosModules.x_niols
       self.nixosModules.keys
       self.nixosModules.secrets
-      { x_niols.hostPublicKey = self.keys.niols.wallace; }
+      { x_niols.hostPublicKey = self.keys.machines.wallace; }
 
       inputs.nix-index-database.nixosModules.nix-index
 

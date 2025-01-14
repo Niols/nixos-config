@@ -15,7 +15,6 @@ concatMapAttrs
 
   (
     with keys.machines;
-    with keys.niols;
 
     {
       ############################################################################
