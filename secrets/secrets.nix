@@ -69,6 +69,8 @@ concatMapAttrs
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
 
+      rutorrent-passwd = [ dagrun ];
+
       vaultwarden-environment = [ siegfried ];
 
       wireguard-wallace-fediversity-private-key = [ wallace ];
