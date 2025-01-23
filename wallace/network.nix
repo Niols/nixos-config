@@ -35,8 +35,8 @@ in
     interfaces = {
       fediversity = {
         ips = [
-          "10.197.16.4/20"
-          "fd3d:b64f:631d:8284::4/64"
+          "10.197.16.9/20"
+          "fd3d:b64f:631d:8284::9/64"
         ];
         privateKeyFile = config.age.secrets.wireguard-wallace-fediversity-private-key.path;
         peers = [
