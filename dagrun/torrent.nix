@@ -56,4 +56,8 @@ in
       basicAuthFile = config.age.secrets.rutorrent-passwd.path;
     };
   };
+  age.secrets.rutorrent-passwd = {
+    owner = "nginx";
+    group = "nginx";
+  };
 }
