@@ -90,6 +90,7 @@ with pkgs;
   ripgrep
 
   ## S
+  scrcpy
   signal-desktop
   skypeforlinux
   slack
