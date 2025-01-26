@@ -107,3 +107,14 @@ nix build \
     .#nixosConfigurations.<name>.config.system.build.toplevel \
     --override-input secrets $(mktemp -d)
 ```
+
+Backups
+-------
+
+borg list <repo>
+borg list <repo>::<archive>
+borg export-tar <repo>::<archive> output.tar
+borg extract <repo>::<archive> <path>
+
+borg list ssh://u363090@hester.niols.fr:23/backups/syncthing
+borg list ssh://u363090@hester.niols.fr:23/backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00 output.tar
