@@ -58,6 +58,7 @@ with pkgs;
   imagemagick
 
   ## J
+  jless
   jq
 
   ## K
