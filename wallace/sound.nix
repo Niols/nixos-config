@@ -1,4 +1,6 @@
 {
-  services.pipewire.enable = false;
-  hardware.pulseaudio.enable = true;
+  services = {
+    pipewire.enable = false;
+    pulseaudio.enable = true;
+  };
 }
