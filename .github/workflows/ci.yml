@@ -43,9 +43,7 @@ jobs:
 
       - name: Build Orianne
         run: |
-          nix build \
-              .#nixosConfigurations.orianne.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
+          nix build .#nixosConfigurations.orianne.config.system.build.toplevel
 
   build-siegfried:
     name: Build Siegfried
@@ -63,9 +61,7 @@ jobs:
 
       - name: Build Siegfried
         run: |
-          nix build  \
-              .#nixosConfigurations.siegfried.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
+          nix build .#nixosConfigurations.siegfried.config.system.build.toplevel
 
   build-dagrun:
     name: Build Dagrún
@@ -83,9 +79,7 @@ jobs:
 
       - name: Build Dagrún
         run: |
-          nix build  \
-              .#nixosConfigurations.dagrun.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
+          nix build .#nixosConfigurations.dagrun.config.system.build.toplevel
 
   build-wallace:
     name: Build Wallace
@@ -116,9 +110,7 @@ jobs:
 
       - name: Build Wallace
         run: |
-          nix build \
-              .#nixosConfigurations.wallace.config.system.build.toplevel \
-              --override-input secrets $(mktemp -d)
+          nix build .#nixosConfigurations.wallace.config.system.build.toplevel
 
       - name: Remaining space
         run: |
@@ -141,6 +133,4 @@ jobs:
 
       - name: Run flake checks
         run: |
-          nix flake check \
-              --print-build-logs \
-              --override-input secrets $(mktemp -d)
+          nix flake check --print-build-logs
