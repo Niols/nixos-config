@@ -3,7 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixops4.url = "github:nixops4/nixops4";
-    nixops4-nixos.url = "github:nixops4/nixops4/eval";
+    nixops4-nixos.url = "github:nixops4/nixops4-nixos";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -42,7 +42,7 @@
 
         ## Other
         inputs.git-hooks.flakeModule
-        inputs.nixops4-nixos.modules.flake.default
+        inputs.nixops4.modules.flake.default
         ./x_niols
 
         { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
@@ -79,7 +79,7 @@
           machine: makeResource:
           nixops4Inputs@{ providers, ... }:
           {
-            providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+            providers.local = inputs.nixops4.modules.nixops4Provider.local;
             resources.${machine} = makeResource nixops4Inputs;
           }
         ) self.nixops4Resources
@@ -87,7 +87,7 @@
           default =
             nixops4Inputs@{ providers, ... }:
             {
-              providers.local = inputs.nixops4-nixos.modules.nixops4Provider.local;
+              providers.local = inputs.nixops4.modules.nixops4Provider.local;
               resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
             };
         };
