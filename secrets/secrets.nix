@@ -47,6 +47,8 @@ concatMapAttrs
       ];
       hester-matrix-backup-repokey = [ dagrun ];
       hester-matrix-backup-identity = [ dagrun ];
+      hester-galene-backup-repokey = [ orianne ];
+      hester-galene-backup-identity = [ orianne ];
       hester-niolscloud-backup-repokey = [ orianne ];
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];

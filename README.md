@@ -108,13 +108,49 @@ nix build \
     --override-input secrets $(mktemp -d)
 ```
 
-Backups
--------
+## Backups
+
+Typically, because we use Hester for backup, in all the following section,
+`<repo>` will be of the form:
+
+```
+ssh://u363090@hester.niols.fr:23/./backups/<service>
+```
+
+### Create
+
+1. Choose a random key. Add it here as a secret.
+
+2. Initialise the repository with that key:
+   ```
+   borg init --encryption repokey <repo>
+   ```
+   > [!NOTE]
+   > The `/./` trick is necessary.
+
+3. Generate a new identity with no passphrase:
+   ```
+   ssh-keygen -t ed25519 -f id_ed25519 -C "<service>-backup@<machine>"
+   ```
+   Store the private key here as a secret. Add the public key to Hester's
+   authorized keys. Remove the remnant files.
+
+4. If this is the first time that this machine connects to Hester for backups,
+   establish a first SSH connection manually.
+
+5. Deploy the configuration, run a first backup:
+
+   and check that it works indeed. (See next section for listing.)
+
+### Recover
 
 borg list <repo>
 borg list <repo>::<archive>
 borg export-tar <repo>::<archive> output.tar
 borg extract <repo>::<archive> <path>
 
-borg list ssh://u363090@hester.niols.fr:23/backups/syncthing
-borg list ssh://u363090@hester.niols.fr:23/backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00 output.tar
+borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing
+borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00 output.tar
+
+> [!NOTE]
+> The `/./` trick is necessary.

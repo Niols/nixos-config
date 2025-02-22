@@ -81,7 +81,7 @@ in
 
   ## Home on Hester for Kerl.
   _common.hester.fileSystems = {
-    ftp-kerl = {
+    services-ftp-kerl = {
       path = "/services/ftp/kerl";
       uid = "kerl";
       gid = "ftp";

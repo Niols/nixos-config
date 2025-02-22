@@ -6,6 +6,7 @@
       ../_common
 
       ./boot.nix
+      ./call.nix
       ./cloud.nix
       ./databases.nix
       ./hardware-configuration.nix
