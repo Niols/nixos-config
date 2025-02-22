@@ -16,6 +16,7 @@
     programs/garbage-collect.nix
     inputs.nix-index-database.hmModules.nix-index
     ./packages.nix
+    ./direnv.nix
   ];
 
   home.stateVersion = "21.05";

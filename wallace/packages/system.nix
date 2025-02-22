@@ -22,8 +22,6 @@ with pkgs;
 
   ## D
   dig
-  direnv
-  nix-direnv
   discord
 
   ## E
