@@ -1,17 +1,56 @@
 { config, ... }:
 
+let
+  turnPort = 1194;
+
+in
 {
   services.galene = {
     enable = true;
     insecure = true; # because behind nginx
-    httpAddress = "";
+    turnAddress = ":${toString turnPort}";
     recordingsDir = "/hester/services/galene/recordings";
+  };
+
+  networking.firewall = {
+    ## NOTE: We do not open `services.galene.httpPort` because we run it behind
+    ## a reverse proxy.
+    ##
+    ## NOTE: The TURN port MUST be open for TCP, and MAY be open for UDP for
+    ## increased performances.
+
+    allowedTCPPorts = [ turnPort ];
+    allowedUDPPorts = [ turnPort ];
   };
 
   _common.hester.fileSystems.services-galene = {
     path = "/services/galene";
     uid = config.services.galene.user;
     gid = config.services.galene.group;
+  };
+
+  ############################################################################
+  ## Reverse proxy
+
+  services.nginx.virtualHosts.call = {
+    serverName = "call.niols.fr";
+
+    forceSSL = true;
+    enableACME = true;
+
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
+      recommendedProxySettings = true;
+    };
+
+    locations."/ws" = {
+      proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
+      recommendedProxySettings = true;
+      extraConfig = ''
+        proxy_set_header = "Upgrade $http_upgrade";
+        proxy_set_header = "Connection Upgrade";
+      '';
+    };
   };
 
   ############################################################################
