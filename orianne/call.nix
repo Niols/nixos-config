@@ -21,6 +21,12 @@ in
 
     allowedTCPPorts = [ turnPort ];
     allowedUDPPorts = [ turnPort ];
+    allowedUDPPortRanges = [
+      {
+        from = 56000;
+        to = 57000;
+      }
+    ];
   };
 
   _common.hester.fileSystems.services-galene = {
