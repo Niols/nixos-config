@@ -10,6 +10,7 @@ in
     insecure = true; # because behind nginx
     turnAddress = ":${toString turnPort}";
     recordingsDir = "/hester/services/galene/recordings";
+    httpPort = 8443;
   };
 
   networking.firewall = {
