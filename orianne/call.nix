@@ -19,8 +19,14 @@ in
     ## NOTE: The TURN port MUST be open for TCP, and MAY be open for UDP for
     ## increased performances.
 
-    allowedTCPPorts = [ turnPort ];
-    allowedUDPPorts = [ turnPort ];
+    allowedTCPPorts = [
+      turnPort
+      config.services.galene.httpPort
+    ];
+    allowedUDPPorts = [
+      turnPort
+      config.services.galene.httpPort
+    ];
     allowedUDPPortRanges = [
       {
         from = 56000;
