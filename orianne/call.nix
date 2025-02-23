@@ -47,6 +47,11 @@ in
       proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
       recommendedProxySettings = true;
       extraConfig = ''
+        # Add some extra headers to handle Websocket connections correctly.
+        # Source: https://www.nginx.com/blog/websocket-nginx/
+        proxy_buffering off;
+        proxy_http_version 1.1;
+
         proxy_set_header = "Upgrade $http_upgrade";
         proxy_set_header = "Connection Upgrade";
       '';
