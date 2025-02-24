@@ -62,7 +62,7 @@ in
 
     locations."/ws" = {
       proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
-      recommendedProxySettings = true;
+      recommendedProxySettings = false;
       extraConfig = ''
         ## Add some extra headers to handle Websocket connections correctly.
         ## Source: https://www.nginx.com/blog/websocket-nginx/
