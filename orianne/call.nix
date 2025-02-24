@@ -14,9 +14,6 @@ in
   };
 
   networking.firewall = {
-
-    enable = false; # # FIXME: remove
-
     ## NOTE: We do not open `services.galene.httpPort` because we run it behind
     ## a reverse proxy.
     ##
@@ -25,11 +22,9 @@ in
 
     allowedTCPPorts = [
       turnPort
-      config.services.galene.httpPort # # FIXME: proxy
     ];
     allowedUDPPorts = [
       turnPort
-      config.services.galene.httpPort # # FIXME: proxy
     ];
     allowedUDPPortRanges = [
       # # FIXME: pass `-udp-range` to Galène
