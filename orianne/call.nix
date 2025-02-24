@@ -64,8 +64,6 @@ in
       proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
       recommendedProxySettings = false;
       extraConfig = ''
-        include proxy_params;
-
         ## Add some extra headers to handle Websocket connections correctly.
         ## Source: https://www.nginx.com/blog/websocket-nginx/
         proxy_buffering off;
