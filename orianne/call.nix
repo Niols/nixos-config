@@ -22,13 +22,14 @@ in
 
     allowedTCPPorts = [
       turnPort
-      config.services.galene.httpPort
+      config.services.galene.httpPort # # FIXME: proxy
     ];
     allowedUDPPorts = [
       turnPort
-      config.services.galene.httpPort
+      config.services.galene.httpPort # # FIXME: proxy
     ];
     allowedUDPPortRanges = [
+      # # FIXME: pass `-udp-range` to Galène
       {
         from = 56000;
         to = 57000;
@@ -60,8 +61,8 @@ in
       proxyPass = "http://127.0.0.1:${toString config.services.galene.httpPort}";
       recommendedProxySettings = true;
       extraConfig = ''
-        # Add some extra headers to handle Websocket connections correctly.
-        # Source: https://www.nginx.com/blog/websocket-nginx/
+        ## Add some extra headers to handle Websocket connections correctly.
+        ## Source: https://www.nginx.com/blog/websocket-nginx/
         proxy_buffering off;
         proxy_http_version 1.1;
 
