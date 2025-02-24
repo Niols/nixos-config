@@ -14,6 +14,9 @@ in
   };
 
   networking.firewall = {
+
+    enable = false; # # FIXME: remove
+
     ## NOTE: We do not open `services.galene.httpPort` because we run it behind
     ## a reverse proxy.
     ##
