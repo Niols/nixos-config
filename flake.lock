@@ -65,11 +65,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1738138733,
-        "narHash": "sha256-Ewuvh3mGvTftG2Lj1G2ktDYmFn7mFsge/PadYLO/KGU=",
+        "lastModified": 1740782467,
+        "narHash": "sha256-z4aPAq5J5/LMV3Kp+qXWOnd9sY94jVCR2x9jbqHadEk=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "36c96b819d1c1d3e6f965e14bc1990b014255c6b",
+        "rev": "7c304b1ca34bc0df60ede4b3b7bb6ca60f1f37ab",
         "type": "github"
       },
       "original": {
