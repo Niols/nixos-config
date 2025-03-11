@@ -72,6 +72,9 @@
 
     ## Used by forge (via ghub) to access GitHub.
     github.user = "niols";
+
+    ## Set remote automatically for branches without a tracking upstream.
+    push.autoSetupRemote = true;
   };
 
   # ## Rewrite GitHub's https:// URI to ssh://
