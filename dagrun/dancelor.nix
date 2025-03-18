@@ -6,8 +6,8 @@
     databaseRepositoryFile = config.age.secrets.dancelor-database-repository.path;
     listeningPort = 6872;
     githubTokenFile = config.age.secrets.dancelor-github-token.path;
-    githubRepository = "paris-branch/dancelor";
-    githubDatabaseRepository = "paris-branch/dancelor-database";
+    githubRepository = "github.com/paris-branch/dancelor";
+    githubDatabaseRepository = "github.com/paris-branch/dancelor-database";
   };
 
   ## Use Dancelor's Cachix instance as a substituter. Since Dancelor's CI fill
