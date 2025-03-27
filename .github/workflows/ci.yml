@@ -19,8 +19,8 @@ concurrency:
 
 jobs:
 
-  build-orianne:
-    name: Build Orianne
+  build-and-deploy-orianne:
+    name: Build and deploy Orianne
     runs-on: ubuntu-latest
 
     steps:
@@ -44,6 +44,17 @@ jobs:
       - name: Build Orianne
         run: |
           nix build .#nixosConfigurations.orianne.config.system.build.toplevel
+
+      - name: Deploy Orianne
+        if: ${{ github.event.workflow_run.event == 'push'
+          && github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          cat <<\EOF > deploy_key
+          ${{ secrets.DEPLOY_ORIANNE_KEY }}
+          EOF
+          nix develop --command sh -c '
+            SSH_IDENTITY_FILE=deploy_key nixops4 apply orianne
+          '
 
   build-and-deploy-siegfried:
     name: Build and deploy Siegfried
