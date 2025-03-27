@@ -45,8 +45,8 @@ jobs:
         run: |
           nix build .#nixosConfigurations.orianne.config.system.build.toplevel
 
-  build-siegfried:
-    name: Build Siegfried
+  build-and-deploy-siegfried:
+    name: Build and deploy Siegfried
     runs-on: ubuntu-latest
 
     steps:
@@ -62,6 +62,17 @@ jobs:
       - name: Build Siegfried
         run: |
           nix build .#nixosConfigurations.siegfried.config.system.build.toplevel
+
+      - name: Deploy Siegfried
+        if: ${{ github.event.workflow_run.event == 'push'
+          && github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          cat <<\EOF > deploy_key
+          ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
+          EOF
+          nix develop --command sh -c '
+            SSH_IDENTITY_FILE=deploy_key nixops4 apply siegfried
+          '
 
   build-dagrun:
     name: Build Dagrún
