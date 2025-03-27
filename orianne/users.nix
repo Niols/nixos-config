@@ -21,7 +21,10 @@ in
     hashedPasswordFile = config.age.secrets.password-orianne-niols.path;
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [ keys.niols.wallace ];
+  users.users.root.openssh.authorizedKeys.keys = with keys; [
+    niols.wallace
+    github-actions.deploy-orianne
+  ];
 
   ## It can be pratical for the users to have a cron service running.
   services.cron.enable = true;
