@@ -42,4 +42,5 @@ in
 {
   machines = collectKeys ./machines;
   niols = collectKeys ./niols;
+  github-actions = collectKeys ./github-actions;
 }

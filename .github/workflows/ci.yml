@@ -19,8 +19,8 @@ concurrency:
 
 jobs:
 
-  build-orianne:
-    name: Build Orianne
+  build-and-deploy-orianne:
+    name: Build and deploy Orianne
     runs-on: ubuntu-latest
 
     steps:
@@ -45,8 +45,19 @@ jobs:
         run: |
           nix build .#nixosConfigurations.orianne.config.system.build.toplevel
 
-  build-siegfried:
-    name: Build Siegfried
+      - name: Deploy Orianne
+        if: ${{ github.event.workflow_run.event == 'push'
+          && github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          cat <<\EOF > deploy_key
+          ${{ secrets.DEPLOY_ORIANNE_KEY }}
+          EOF
+          nix develop --command sh -c '
+            SSH_OPTS="-i deploy_key" nixops4 apply orianne
+          '
+
+  build-and-deploy-siegfried:
+    name: Build and deploy Siegfried
     runs-on: ubuntu-latest
 
     steps:
@@ -63,8 +74,19 @@ jobs:
         run: |
           nix build .#nixosConfigurations.siegfried.config.system.build.toplevel
 
-  build-dagrun:
-    name: Build Dagrún
+      - name: Deploy Siegfried
+        # if: ${{ github.event.workflow_run.event == 'push'
+        #   && github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          cat <<\EOF > deploy_key
+          ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
+          EOF
+          nix develop --command sh -c '
+            SSH_OPTS="-v -i deploy_key" nixops4 apply siegfried
+          '
+
+  build-and-deploy-dagrun:
+    name: Build and deploy Dagrún
     runs-on: ubuntu-latest
 
     steps:
@@ -80,6 +102,17 @@ jobs:
       - name: Build Dagrún
         run: |
           nix build .#nixosConfigurations.dagrun.config.system.build.toplevel
+
+      - name: Deploy Dagrún
+        if: ${{ github.event.workflow_run.event == 'push'
+          && github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          cat <<\EOF > deploy_key
+          ${{ secrets.DEPLOY_DAGRUN_KEY }}
+          EOF
+          nix develop --command sh -c '
+            SSH_OPTS="-i deploy_key" nixops4 apply dagrun
+          '
 
   build-wallace:
     name: Build Wallace
