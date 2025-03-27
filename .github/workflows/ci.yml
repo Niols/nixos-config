@@ -82,7 +82,7 @@ jobs:
           ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
           EOF
           nix develop --command sh -c '
-            SSH_OPTS="-i deploy_key" nixops4 apply siegfried
+            SSH_OPTS="-v -i deploy_key" nixops4 apply siegfried
           '
 
   build-and-deploy-dagrun:
