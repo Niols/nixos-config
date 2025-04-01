@@ -1,0 +1,62 @@
+---
+
+inputs:
+  machineName:
+    description: |
+      Name of the machine. This composite action will look for a NixOS
+      configuration by that name, as well as a NixOps4 deployment.
+    required: true
+
+  githubAccessToken:
+    description: |
+      GitHub access token; used in the Nix configuration to avoid triggering
+      rate limiting with heavy downloads.
+    required: true
+
+  deployPrivateKey:
+    description: |
+      A private SSH key that allows deploying on the machine in question. If not
+      provided, then deployment is skipped.
+    required: false
+
+  nixSystem:
+    description: |
+      A string representing the system of the machine in question. Defaults to
+      `x86_64-linux` if not provided.
+    required: false
+    default: x86_64-linux
+
+runs:
+  using: composite
+
+  steps:
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+      with:
+        extra_nix_config: |
+          ## Access token to avoid triggering GitHub's rate limiting.
+          access-tokens = github.com=${{ inputs.githubAccessToken }}
+
+    - name: Build ${{ inputs.machineName }}
+      shell: bash
+      run: |
+        echo "$NIX_CONFIG"
+        export NIX_CONFIG="system = ${{ inputs.nixSystem }}"
+        nix build .#nixosConfigurations.${{ inputs.machineName }}.config.system.build.toplevel
+
+    - name: Deploy ${{ inputs.machineName }}
+      if: ${{ github.event.workflow_run.event == 'push'
+        && github.event.workflow_run.head_branch == 'main'
+        && inputs.deployPrivateKey != '' }}
+      shell: bash
+      run: |
+        echo "$NIX_CONFIG"
+        cat <<\EOF > deploy_key
+        ${{ inputs.deployPrivateKey }}
+        EOF
+        chmod 600 deploy_key
+        nix develop --command ssh-agent bash -c '
+          ssh-add deploy_key
+          export NIX_CONFIG="system = ${{ inputs.nixSystem }}"
+          nixops4 apply ${{ inputs.machineName }}
+        '

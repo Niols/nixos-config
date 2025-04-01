@@ -19,12 +19,42 @@ concurrency:
 
 jobs:
 
-  build-orianne:
-    name: Build Orianne
+  build-and-deploy-dagrun:
+    name: Build and deploy Dagrún
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build and deploy Dagrún
+        uses: ./.github/composites/build-and-deploy
+        with:
+          machineName: dagrun
+          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          deployPrivateKey: ${{ secrets.DEPLOY_DAGRUN_KEY }}
+
+  build-and-deploy-siegfried:
+    name: Build and deploy Siegfried
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code.
+        uses: actions/checkout@v4
+
+      - name: Build and deploy Siegfried
+        uses: ./.github/composites/build-and-deploy
+        with:
+          machineName: siegfried
+          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          deployPrivateKey: ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
+
+  build-and-deploy-orianne:
+    name: Build and deploy Orianne
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
         uses: actions/checkout@v4
 
         ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
@@ -34,52 +64,13 @@ jobs:
       - name: Install emulation binaries for QEMU
         run: sudo apt-get update -y && sudo apt-get install -y qemu-user-static
 
-      - name: Install and configure Nix
-        uses: cachix/install-nix-action@v31
+      - name: Build and deploy Orianne
+        uses: ./.github/composites/build-and-deploy
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            system = aarch64-linux
-
-      - name: Build Orianne
-        run: |
-          nix build .#nixosConfigurations.orianne.config.system.build.toplevel
-
-  build-siegfried:
-    name: Build Siegfried
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Siegfried
-        run: |
-          nix build .#nixosConfigurations.siegfried.config.system.build.toplevel
-
-  build-dagrun:
-    name: Build Dagrún
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Dagrún
-        run: |
-          nix build .#nixosConfigurations.dagrun.config.system.build.toplevel
+          machineName: orianne
+          nixSystem: aarch64-linux
+          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          deployPrivateKey: ${{ secrets.DEPLOY_ORIANNE_KEY }}
 
   build-wallace:
     name: Build Wallace
@@ -99,18 +90,14 @@ jobs:
           sudo df -h
           echo
 
-      - name: Check out repository code.
+      - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
       - name: Build Wallace
-        run: |
-          nix build .#nixosConfigurations.wallace.config.system.build.toplevel
+        uses: ./.github/composites/build-and-deploy
+        with:
+          machineName: wallace
+          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Remaining space
         run: |
@@ -122,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository code.
+      - name: Check out repository code
         uses: actions/checkout@v4
 
       - name: Install Nix

@@ -35,6 +35,10 @@
     };
     kernelModules = [ ];
     extraModulePackages = [ ];
+
+    ## Allows Wallace to emulate aarch64, useful in particular to build
+    ## Orianne's configuration.
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
