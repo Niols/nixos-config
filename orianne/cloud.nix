@@ -36,7 +36,7 @@ in
     ## Nextcloud to see whether it recommends further processing, such as
     ## database reindexing or conversion.
     ##
-    package = pkgs.nextcloud30;
+    package = pkgs.nextcloud31;
 
     inherit hostName;
     settings.trusted_domains = otherHostNames;
