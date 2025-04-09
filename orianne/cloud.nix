@@ -55,11 +55,12 @@ in
         contacts
         cookbook
         impersonate
+        news
         previewgenerator
+        quota_warning
+        recognize
         tasks
         ;
-      ## FIXME: news and keeweb are provided via Nix for Nextcloud 27 so they
-      ## should be for Nextcloud 28 eventually.
       ## FIXME: set up onlyoffice
     };
     appstoreEnable = true;
