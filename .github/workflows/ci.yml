@@ -34,6 +34,21 @@ jobs:
           githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           deployPrivateKey: ${{ secrets.DEPLOY_DAGRUN_KEY }}
 
+  build-and-deploy-helga:
+    name: Build and deploy Helga
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build and deploy Helga
+        uses: ./.github/composites/build-and-deploy
+        with:
+          machineName: helga
+          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          deployPrivateKey: ${{ secrets.DEPLOY_HELGA_KEY }}
+
   build-and-deploy-siegfried:
     name: Build and deploy Siegfried
     runs-on: ubuntu-latest

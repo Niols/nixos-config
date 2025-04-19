@@ -1,4 +1,5 @@
 { nixpkgs, ... }:
+
 {
   nix = {
     settings.trusted-users = [ "@wheel" ];

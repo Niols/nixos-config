@@ -36,6 +36,7 @@
       imports = [
         ## NixOS configurations
         ./dagrun
+        ./helga
         ./orianne
         ./siegfried
         ./wallace

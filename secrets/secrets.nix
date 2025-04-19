@@ -20,11 +20,21 @@ concatMapAttrs
       ############################################################################
       ## Files and their host keys
 
-      dancelor-passwd = [ dagrun ];
-      dancelor-database-repository = [ dagrun ];
-      dancelor-github-token = [ dagrun ];
+      dancelor-passwd = [
+        dagrun
+        helga
+      ];
+      dancelor-database-repository = [
+        dagrun
+        helga
+      ];
+      dancelor-github-token = [
+        dagrun
+        helga
+      ];
 
       password-dagrun-niols = [ dagrun ];
+      password-helga-niols = [ helga ];
       password-orianne-niols = [ orianne ];
       password-siegfried-niols = [ siegfried ];
 
@@ -41,6 +51,7 @@ concatMapAttrs
 
       hester-samba-credentials = [
         dagrun
+        helga
         orianne
         siegfried
         wallace

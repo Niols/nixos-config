@@ -1,25 +1,23 @@
 { self, inputs, ... }:
 
 {
-  flake.nixosModules.siegfried = {
+  flake.nixosModules.helga = {
     imports = [
       ../_common
 
       ./boot.nix
-      ./ftp.nix
-      ./git.nix
+      ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./mastodon.nix
+      # ./matrix.nix
       ./motd.nix
       ./nginx.nix
       ./starship.nix
       ./system.nix
-      ./syncthing.nix
-      ./teamspeak.nix
+      # ./torrent.nix
       ./users.nix
-      ./web.nix
       inputs.agenix.nixosModules.default
+      inputs.dancelor.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
       {
@@ -30,26 +28,26 @@
       self.nixosModules.x_niols
       self.nixosModules.keys
       self.nixosModules.secrets
-      { x_niols.hostPublicKey = self.keys.machines.siegfried; }
+      { x_niols.hostPublicKey = self.keys.machines.helga; }
       { x_niols.autoreboot.enable = true; }
     ];
   };
 
-  flake.nixops4Resources.siegfried =
+  flake.nixops4Resources.helga =
     { providers, ... }:
     {
       type = providers.local.exec;
       imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
 
       ssh = {
-        host = "158.178.201.160";
+        host = "188.245.212.11";
         opts = "";
-        hostPublicKey = self.keys.machines.siegfried;
+        hostPublicKey = self.keys.machines.helga;
       };
 
       nixpkgs = inputs.nixpkgs;
       nixos.module = {
-        imports = [ self.nixosModules.siegfried ];
+        imports = [ self.nixosModules.helga ];
       };
     };
 }

@@ -7,18 +7,14 @@
 
       ./boot.nix
       ./dancelor.nix
-      ./databases.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      ./matrix.nix
+      # ./matrix.nix
       ./motd.nix
       ./nginx.nix
-      ./nix.nix
-      ./packages.nix
-      ./ssh.nix
       ./starship.nix
       ./system.nix
-      ./torrent.nix
+      # ./torrent.nix
       ./users.nix
       inputs.agenix.nixosModules.default
       inputs.dancelor.nixosModules.default

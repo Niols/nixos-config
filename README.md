@@ -28,6 +28,18 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 [install-manual]: https://web.archive.org/web/20230325142657/https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning
 [jonringer-config]: https://github.com/jonringer/server-configuration/blob/6c0e8b85dfd99c40bb72c5825bbf259a85d9f18d/configuration.nix
 
+### Installing on a Hetzner Cloud machine
+
+## CX22
+
+I did not manage to reproduce the instructions for Oracle VM.Standard.A1.Flex,
+using the tutorial and commit hash `ccf0985677903aff729794180bdaf4b390f35023` of
+the [nix-tests] repository.
+
+However, it looks like [nixos-infect] did a fine job, but I had to restart the
+machine a few times? Unsure, because I also made a mess of my AAAA DNS record
+and that caused some very slow commands that looked like things were broken.
+
 ### Installing on an Oracle Cloud machine
 
 #### VM.Standard.A1.Flex
