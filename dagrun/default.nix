@@ -5,8 +5,9 @@
     imports = [
       (import ../_common).server
 
+      # ../_modules/dancelor.nix
+
       ./boot.nix
-      ./dancelor.nix
       ./hardware-configuration.nix
       ./hostname.nix
       # ./matrix.nix
