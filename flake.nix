@@ -54,6 +54,7 @@
 
       flake.machines = [
         "dagrun"
+        "helga"
         "orianne"
         "siegfried"
         "wallace"
