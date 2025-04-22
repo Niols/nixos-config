@@ -123,10 +123,49 @@ nix build \
 Backups
 -------
 
-borg list <repo>
-borg list <repo>::<archive>
-borg export-tar <repo>::<archive> output.tar
-borg extract <repo>::<archive> <path>
+### Don't forget the `.well-known`
 
-borg list ssh://u363090@hester.niols.fr:23/backups/syncthing
-borg list ssh://u363090@hester.niols.fr:23/backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00 output.tar
+Some services (eg. Matrix) rely on a `.well-known` file at the root of the
+`niols.fr` web pages. Restarting these services requires checking that
+`niols.fr` is up and that the `.well-known` files are up to date.
+
+### Borg backups
+
+Borg CLI excerpts:
+
+``` console
+$ borg list <repo>
+$ borg list <repo>::<archive>
+$ borg export-tar <repo>::<archive> output.tar
+$ borg extract <repo>::<archive> <path>
+```
+
+Example restore workflow:
+
+``` console
+$ borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing
+$ borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00
+$ mkdir where-to-restore
+$ cd where-to-restore
+$ borg extract ssh://u363090@hester.niols.fr:23/./backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00
+$ ls
+```
+
+### Restore a Postgres backup
+
+Typically, the backup lives in `/var/backup/postgres`. It is probably
+compressed:
+
+``` console
+$ gunzip the-backup.sql.gz
+```
+
+Import it in Postgres. If restoring on a machine that does not have the service
+yet, you might have to create the role first. Creating it only with `LOGIN`
+means it is the Unix user that will have access.
+
+```console
+$ sudo -u postgres psql
+postgres=# CREATE ROLE "the-role" WITH LOGIN;
+$ sudo -u postgres psql < the-backup.sql
+```
