@@ -3,7 +3,7 @@
 {
   flake.nixosModules.dagrun = {
     imports = [
-      ../_common
+      (import ../_common).server
 
       ./boot.nix
       ./dancelor.nix

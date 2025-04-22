@@ -3,7 +3,7 @@
 {
   flake.nixosModules.siegfried = {
     imports = [
-      ../_common
+      (import ../_common).server
 
       ./boot.nix
       ./ftp.nix
