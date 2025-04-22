@@ -10,6 +10,8 @@
       ../_modules/teamspeak.nix
       ../_modules/web.nix
 
+      inputs.dancelor.nixosModules.default
+
       ./boot.nix
       ./hardware-configuration.nix
       ./hostname.nix
@@ -20,7 +22,6 @@
       # ./torrent.nix
       ./users.nix
       inputs.agenix.nixosModules.default
-      inputs.dancelor.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
       {
