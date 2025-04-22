@@ -4,6 +4,7 @@
   environment.systemPackages = with pkgs; [
     emacs
     btop
+    borgbackup
     tmux
     wget
     git
