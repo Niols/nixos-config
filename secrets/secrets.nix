@@ -72,8 +72,14 @@ concatMapAttrs
       hester-firefly-iii-backup-identity = [ siegfried ];
       hester-git-backup-repokey = [ siegfried ];
       hester-git-backup-identity = [ siegfried ];
-      hester-web-backup-repokey = [ siegfried ];
-      hester-web-backup-identity = [ siegfried ];
+      hester-web-backup-repokey = [
+        siegfried
+        helga
+      ];
+      hester-web-backup-identity = [
+        siegfried
+        helga
+      ];
 
       ftp-password-kerl = [ siegfried ];
 

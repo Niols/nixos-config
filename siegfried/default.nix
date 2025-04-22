@@ -5,6 +5,8 @@
     imports = [
       (import ../_common).server
 
+      # ../_modules/web.nix
+
       ./boot.nix
       ./ftp.nix
       ./git.nix
@@ -18,7 +20,6 @@
       ./syncthing.nix
       ./teamspeak.nix
       ./users.nix
-      ./web.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       ./home-manager.nix
