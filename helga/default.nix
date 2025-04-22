@@ -6,7 +6,7 @@
       (import ../_common).server
 
       ../_modules/dancelor.nix
-      # ../_modules/matrix.nix
+      ../_modules/matrix.nix
       ../_modules/web.nix
 
       ./boot.nix
