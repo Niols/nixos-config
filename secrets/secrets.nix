@@ -56,8 +56,14 @@ concatMapAttrs
         siegfried
         wallace
       ];
-      hester-matrix-backup-repokey = [ dagrun ];
-      hester-matrix-backup-identity = [ dagrun ];
+      hester-matrix-backup-repokey = [
+        dagrun
+        helga
+      ];
+      hester-matrix-backup-identity = [
+        dagrun
+        helga
+      ];
       hester-niolscloud-backup-repokey = [ orianne ];
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];
@@ -73,9 +79,18 @@ concatMapAttrs
 
       mastodon-noreply-password = [ siegfried ];
 
-      matrix-synapse-signing-key = [ dagrun ];
-      matrix-synapse-macaroon-secret = [ dagrun ];
-      matrix-synapse-registration-secret = [ dagrun ];
+      matrix-synapse-signing-key = [
+        dagrun
+        helga
+      ];
+      matrix-synapse-macaroon-secret = [
+        dagrun
+        helga
+      ];
+      matrix-synapse-registration-secret = [
+        dagrun
+        helga
+      ];
 
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];

@@ -6,11 +6,11 @@
       (import ../_common).server
 
       ../_modules/dancelor.nix
+      # ../_modules/matrix.nix
 
       ./boot.nix
       ./hardware-configuration.nix
       ./hostname.nix
-      # ./matrix.nix
       ./motd.nix
       ./nginx.nix
       ./starship.nix
