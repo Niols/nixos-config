@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   services.teamspeak3 = {
@@ -12,16 +12,24 @@
     pkg: builtins.elem (pkgs.lib.getName pkg) [ "teamspeak-server" ]
   );
 
+  ############################################################################
+  ## Daily backup
+  ##
+  ## They have to happen some time after 04:00 so as to include the dump of the
+  ## database. See ./databases.nix.
+
   services.borgbackup.jobs.teamspeak = {
-    paths = "/var/lib/teamspeak";
-    encryption.mode = "none";
-    repo = "/hester/backups/teamspeak";
     startAt = "*-*-* 06:00:00";
-  };
 
-  systemd.services.borgbackup-job-teamspeak.unitConfig.RequiresMountsFor = "/hester";
+    paths = [
+      "/var/lib/teamspeak"
+    ];
 
-  _common.hester.fileSystems = {
-    backups.path = "/backups";
+    repo = "ssh://u363090@hester.niols.fr:23/./backups/teamspeak";
+    encryption = {
+      mode = "repokey";
+      passCommand = "cat ${config.age.secrets.hester-teamspeak-backup-repokey.path}";
+    };
+    environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-teamspeak-backup-identity.path}";
   };
 }
