@@ -7,6 +7,7 @@
 
       ../_modules/dancelor.nix
       ../_modules/matrix.nix
+      ../_modules/teamspeak.nix
       ../_modules/web.nix
 
       ./boot.nix

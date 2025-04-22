@@ -6,6 +6,7 @@
       (import ../_common).server
 
       # ../_modules/web.nix
+      # ../_modules/teamspeak.nix
 
       ./boot.nix
       ./ftp.nix
@@ -18,7 +19,6 @@
       ./starship.nix
       ./system.nix
       ./syncthing.nix
-      ./teamspeak.nix
       ./users.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
