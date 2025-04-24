@@ -8,6 +8,7 @@
       ../_modules/dancelor.nix
       ../_modules/matrix.nix
       ../_modules/teamspeak.nix
+      ../_modules/torrent.nix
       ../_modules/web.nix
 
       inputs.dancelor.nixosModules.default
@@ -19,7 +20,6 @@
       ./nginx.nix
       ./starship.nix
       ./system.nix
-      # ./torrent.nix
       ./users.nix
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager

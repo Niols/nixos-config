@@ -20,18 +20,9 @@ concatMapAttrs
       ############################################################################
       ## Files and their host keys
 
-      dancelor-passwd = [
-        dagrun
-        helga
-      ];
-      dancelor-database-repository = [
-        dagrun
-        helga
-      ];
-      dancelor-github-token = [
-        dagrun
-        helga
-      ];
+      dancelor-passwd = [ helga ];
+      dancelor-database-repository = [ helga ];
+      dancelor-github-token = [ helga ];
 
       password-dagrun-niols = [ dagrun ];
       password-helga-niols = [ helga ];
@@ -56,14 +47,8 @@ concatMapAttrs
         siegfried
         wallace
       ];
-      hester-matrix-backup-repokey = [
-        dagrun
-        helga
-      ];
-      hester-matrix-backup-identity = [
-        dagrun
-        helga
-      ];
+      hester-matrix-backup-repokey = [ helga ];
+      hester-matrix-backup-identity = [ helga ];
       hester-niolscloud-backup-repokey = [ orianne ];
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];
@@ -74,36 +59,21 @@ concatMapAttrs
       hester-git-backup-identity = [ siegfried ];
       hester-teamspeak-backup-repokey = [ helga ];
       hester-teamspeak-backup-identity = [ helga ];
-      hester-web-backup-repokey = [
-        siegfried
-        helga
-      ];
-      hester-web-backup-identity = [
-        siegfried
-        helga
-      ];
+      hester-web-backup-repokey = [ helga ];
+      hester-web-backup-identity = [ helga ];
 
       ftp-password-kerl = [ siegfried ];
 
       mastodon-noreply-password = [ siegfried ];
 
-      matrix-synapse-signing-key = [
-        dagrun
-        helga
-      ];
-      matrix-synapse-macaroon-secret = [
-        dagrun
-        helga
-      ];
-      matrix-synapse-registration-secret = [
-        dagrun
-        helga
-      ];
+      matrix-synapse-signing-key = [ helga ];
+      matrix-synapse-macaroon-secret = [ helga ];
+      matrix-synapse-registration-secret = [ helga ];
 
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
 
-      rutorrent-passwd = [ dagrun ];
+      rutorrent-passwd = [ helga ];
 
       vaultwarden-environment = [ siegfried ];
 
