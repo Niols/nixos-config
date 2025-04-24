@@ -25,6 +25,15 @@
       printf 'Call Nix garbage collection...\n'
       sudo nix-collect-garbage -d
       printf 'done.\n'
+
+      printf 'Removing old Docker images and containers...\n'
+      docker system prune --all
+      printf 'done.\n'
+
+      printf 'Emptying wastebasket...\n'
+      du -sh "''${XDG_DATA_HOME:-~/.local/share}"/Trash
+      find "''${XDG_DATA_HOME:-~/.local/share}"/Trash -type f -print -delete
+      printf 'done.\n'
     '')
   ];
 }
