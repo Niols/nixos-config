@@ -20,7 +20,6 @@ concatMapAttrs
       ############################################################################
       ## Files and their host keys
 
-      dancelor-passwd = [ helga ];
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
 

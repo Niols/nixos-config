@@ -18,28 +18,20 @@
   };
 
   ## A secret `passwd` file containing the users' identifiers.
-  age.secrets = {
-    dancelor-passwd = {
-      mode = "600";
-      owner = "nginx";
-      group = "nginx";
-    };
-    dancelor-github-token = {
-      mode = "600";
-      owner = "dancelor";
-      group = "dancelor";
-    };
+  age.secrets.dancelor-github-token = {
+    mode = "600";
+    owner = "dancelor";
+    group = "dancelor";
   };
 
-  ## A simple Nginx proxy in front of Dancelor. Handles HTTPS, the generation of
-  ## the certificate, and the `passwd` authentication.
+  ## Simple Nginx HTTPS proxy in front of Dancelor. Used to handle HTTP auth,
+  ## but not anymore, now that it is in Dancelor directly.
   services.nginx.virtualHosts.dancelor = {
     serverName = "dancelor.org";
     forceSSL = true;
     enableACME = true;
     locations."/" = {
-      proxyPass = "http://127.0.0.1:6872";
-      basicAuthFile = config.age.secrets.dancelor-passwd.path;
+      proxyPass = "http://127.0.0.1:${toString config.services.dancelor.listeningPort}";
       extraConfig = ''
         ## Dancelor relies on SVGs being embedded as objects, which can trigger
         ## the `X-Frame-Options` policy. We therefore relax it a tiny bit
