@@ -36,6 +36,7 @@
       {
         conditions = [
           "gitdir:~/git/perso/**"
+          "gitdir:~/git/jana/**"
           "gitdir:~/git/boloss/**"
           "gitdir:~/git/colis/**"
           "gitdir:~/git/rscds/**"
