@@ -22,7 +22,6 @@ in
     pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "discord"
-      "skypeforlinux"
       "slack"
       "steam-run"
       "steam-original"
