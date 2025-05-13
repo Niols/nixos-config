@@ -19,53 +19,53 @@ concurrency:
 
 jobs:
 
-  build-and-deploy-dagrun:
-    name: Build and deploy Dagrún
+  dagrun:
+    name: Dagrún
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Build and deploy Dagrún
+      - name: Build (and deploy) Dagrún
         uses: ./.github/composites/build-and-deploy
         with:
           machineName: dagrun
           githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           deployPrivateKey: ${{ secrets.DEPLOY_DAGRUN_KEY }}
 
-  build-and-deploy-helga:
-    name: Build and deploy Helga
+  helga:
+    name: Helga
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Build and deploy Helga
+      - name: Build (and deploy) Helga
         uses: ./.github/composites/build-and-deploy
         with:
           machineName: helga
           githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           deployPrivateKey: ${{ secrets.DEPLOY_HELGA_KEY }}
 
-  build-and-deploy-siegfried:
-    name: Build and deploy Siegfried
+  siegfried:
+    name: Siegfried
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code.
         uses: actions/checkout@v4
 
-      - name: Build and deploy Siegfried
+      - name: Build (and deploy) Siegfried
         uses: ./.github/composites/build-and-deploy
         with:
           machineName: siegfried
           githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           deployPrivateKey: ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
 
-  build-and-deploy-orianne:
-    name: Build and deploy Orianne
+  orianne:
+    name: Orianne
     runs-on: ubuntu-latest
 
     steps:
@@ -79,7 +79,7 @@ jobs:
       - name: Install emulation binaries for QEMU
         run: sudo apt-get update -y && sudo apt-get install -y qemu-user-static
 
-      - name: Build and deploy Orianne
+      - name: Build (and deploy) Orianne
         uses: ./.github/composites/build-and-deploy
         with:
           machineName: orianne
@@ -87,8 +87,8 @@ jobs:
           githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           deployPrivateKey: ${{ secrets.DEPLOY_ORIANNE_KEY }}
 
-  build-wallace:
-    name: Build Wallace
+  wallace:
+    name: Wallace (build only)
     runs-on: ubuntu-latest
 
     steps:
