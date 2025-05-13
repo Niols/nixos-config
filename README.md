@@ -159,6 +159,7 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
    ``` console
    $ borg init --encryption repokey ssh://u363090@hester.niols.fr:23/./backups/<service>
    ```
+   Use as “passphrase” the repokey chosen above.
 
 6. Check that everything works fine:
    ``` console
