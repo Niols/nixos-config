@@ -56,6 +56,8 @@ concatMapAttrs
       hester-firefly-iii-backup-identity = [ siegfried ];
       hester-git-backup-repokey = [ siegfried ];
       hester-git-backup-identity = [ siegfried ];
+      hester-jellyfin-backup-repokey = [ orianne ];
+      hester-jellyfin-backup-identity = [ orianne ];
       hester-teamspeak-backup-repokey = [ helga ];
       hester-teamspeak-backup-identity = [ helga ];
       hester-web-backup-repokey = [ helga ];
