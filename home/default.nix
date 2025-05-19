@@ -33,10 +33,7 @@
   programs.fzf.enable = true;
   programs.bash = import ./programs/bash;
   programs.git = import ./programs/git.nix { inherit lib; };
-  programs.lsd = {
-    enable = true;
-    enableAliases = true;
-  };
+  programs.lsd.enable = true;
   programs.urxvt = import ./programs/urxvt.nix;
 
   programs.rofi = {
