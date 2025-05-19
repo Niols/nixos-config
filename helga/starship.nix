@@ -4,7 +4,7 @@
 
     niols-starship = {
       enable = true;
-      hostcolour = "purple"; # FIXME
+      hostcolour = "blue";
     };
   };
 

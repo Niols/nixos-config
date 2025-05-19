@@ -3,8 +3,8 @@
 
   niols-motd = {
     enable = true;
-    hostname = "Helga"; # FIXME
-    hostcolour = "magenta"; # FIXME
+    hostname = "Helga";
+    hostcolour = "blue";
     noSwap = true;
   };
 }
