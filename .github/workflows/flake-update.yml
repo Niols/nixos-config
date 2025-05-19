@@ -1,0 +1,19 @@
+name: Flake update
+
+on:
+  workflow_dispatch:  # manual triggering
+  schedule:
+    - cron: '0 4 * * MON'  # weekly, 04:00 on Monday
+
+jobs:
+  flake-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v25
