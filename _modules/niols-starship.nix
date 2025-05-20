@@ -4,6 +4,8 @@
 ## cf https://starship.rs/ for configuration options etc.
 
 let
+  cfg = config.niols-starship;
+
   ## open and close box
   obox = style: "[▐](${style})";
   cbox = style: "[▌](${style})";
@@ -11,6 +13,17 @@ let
   box = style: text: "${obox style}${text}${cbox style}";
   lbox = style: text: "${obox style}${text}";
   rbox = style: text: "${text}${cbox style}";
+
+  fgColourFor =
+    let
+      t = {
+        blue = "white";
+      };
+    in
+    x: if t ? ${x} then t.${x} else "black";
+
+  ## FIXME: Not a great name.
+  fgFor = x: builtins.trace "fg:${fgColourFor x} bg:${x}" "fg:${fgColourFor x} bg:${x}";
 
 in
 {
@@ -22,7 +35,7 @@ in
     };
   };
 
-  config = lib.mkIf config.niols-starship.enable {
+  config = lib.mkIf cfg.enable {
     programs.starship = {
       enable = true;
 
@@ -35,7 +48,7 @@ in
 
         status.disabled = false;
         status.format = "$symbol";
-        status.success_symbol = "[✓ $status](bold fg:${config.niols-starship.hostcolour})";
+        status.success_symbol = "[✓ $status](bold fg:${cfg.hostcolour})";
         status.symbol = "[✗ $status](bold fg:red)";
 
         cmd_duration.min_time = 0;
@@ -44,11 +57,11 @@ in
 
         username.show_always = true;
         username.format = "[$user@]($style)";
-        username.style_root = "fg:black bg:red";
-        username.style_user = "fg:black bg:${config.niols-starship.hostcolour}";
+        username.style_root = fgFor "red";
+        username.style_user = fgFor cfg.hostcolour;
 
         hostname.ssh_only = false;
-        hostname.format = rbox "${config.niols-starship.hostcolour}" "[$hostname$ssh_symbol](fg:black bg:${config.niols-starship.hostcolour})";
+        hostname.format = rbox "${cfg.hostcolour}" "[$hostname$ssh_symbol](${fgFor cfg.hostcolour})";
         hostname.ssh_symbol = "";
 
         directory = {
