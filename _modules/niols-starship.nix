@@ -23,7 +23,7 @@ let
     x: if t ? ${x} then t.${x} else "black";
 
   ## FIXME: Not a great name.
-  fgFor = x: builtins.trace "fg:${fgColourFor x} bg:${x}" "fg:${fgColourFor x} bg:${x}";
+  fgFor = x: "fg:${fgColourFor x} bg:${x}";
 
 in
 {
