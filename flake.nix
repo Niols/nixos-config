@@ -2,8 +2,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixops4.url = "github:nixops4/nixops4";
     nixops4-nixos.url = "github:nixops4/nixops4-nixos";
+    nixops4.follows = "nixops4-nixos/nixops4";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
