@@ -20,6 +20,7 @@
 
     settings.folders = {
       Organiser.path = "/hester/organiser";
+      Audiobooks.path = "/hester/medias/audiobooks";
       Music.path = "/hester/medias/music";
     };
 
@@ -61,6 +62,7 @@
   };
 
   _common.hester.fileSystems = {
+    medias-audiobooks.path = "/medias/audiobooks";
     medias-music.path = "/medias/music";
     organiser.path = "/organiser";
     services-syncthing.path = "/services/syncthing";
