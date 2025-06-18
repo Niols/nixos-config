@@ -17,7 +17,6 @@
         ./motd.nix
         ./nginx.nix
         ./starship.nix
-        ./system.nix
         ./syncthing.nix
         inputs.agenix.nixosModules.default
         inputs.home-manager.nixosModules.home-manager

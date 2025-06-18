@@ -14,7 +14,6 @@
         ./nginx.nix
         ./starship.nix
         ./storage.nix
-        ./system.nix
         inputs.agenix.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         ./home-manager.nix
