@@ -14,7 +14,6 @@
         # inputs.dancelor.nixosModules.default
 
         ./hardware-configuration.nix
-        ./hostname.nix
         ./motd.nix
         ./nginx.nix
         ./starship.nix
@@ -33,6 +32,11 @@
         { x_niols.hostPublicKey = self.keys.machines.dagrun; }
         { x_niols.autoreboot.enable = true; }
       ];
+
+      networking = {
+        hostName = "dagrun";
+        domain = "niols.fr";
+      };
 
       users.users = {
         niols.hashedPasswordFile = config.age.secrets.password-dagrun-niols.path;
