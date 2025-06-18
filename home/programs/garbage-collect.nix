@@ -25,6 +25,16 @@
           -delete
       printf '\e[0mdone.\n'
 
+      ## Remove all the `.direnv/flake-inputs` directories.
+      printf 'Remove flake inputs...\n\e[37m'
+      find                                                                   \
+          ~                                                                  \
+          -type d                                                            \
+          -regex '.*/.direnv/flake-inputs'                                   \
+          -print                                                             \
+          -exec rm -Rf '{}' +
+      printf '\e[0mdone.\n'
+
       printf 'Call Nix garbage collection...\n\e[37m'
       sudo nix-collect-garbage -d
       printf '\e[0mdone.\n'
