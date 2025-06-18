@@ -47,8 +47,9 @@
       du -sh "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash
       printf '\e[37m'
       find "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash/files -type f -print -delete
+      printf '\e[0m'
       du -sh "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash
-      printf '\e[0mdone.\n'
+      printf 'done.\n'
     '')
   ];
 }
