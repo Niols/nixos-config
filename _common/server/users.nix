@@ -1,9 +1,4 @@
-{
-  config,
-  keys,
-  secrets,
-  ...
-}:
+{ keys, ... }:
 
 let
   inherit (builtins) attrValues;
@@ -18,13 +13,9 @@ in
     extraGroups = [ "wheel" ];
 
     openssh.authorizedKeys.keys = attrValues keys.niols;
-    hashedPasswordFile = config.age.secrets.password-dagrun-niols.path;
   };
 
-  users.users.root.openssh.authorizedKeys.keys = with keys; [
-    niols.wallace
-    github-actions.deploy-dagrun
-  ];
+  users.users.root.openssh.authorizedKeys.keys = [ keys.niols.wallace ];
 
   ## It can be pratical for the users to have a cron service running.
   services.cron.enable = true;
