@@ -25,11 +25,9 @@
             inherit (inputs) nixpkgs;
           };
         }
-        self.nixosModules.x_niols
         self.nixosModules.keys
         self.nixosModules.secrets
         { x_niols.hostPublicKey = self.keys.machines.dagrun; }
-        { x_niols.autoreboot.enable = true; }
       ];
 
       networking = {
