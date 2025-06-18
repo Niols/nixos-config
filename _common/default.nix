@@ -3,12 +3,14 @@
 
 {
   server.imports = [
-    ./databases.nix
     ./hester.nix
     ./nix.nix
     ./packages.nix
-    ./ssh.nix
     ./syncthing.nix
+
+    ./server/databases.nix
+    ./server/ssh.nix
+    ./server/users.nix
   ];
 
   laptop.imports = [
@@ -16,5 +18,7 @@
     ./nix.nix
     ./packages.nix
     ./syncthing.nix
+
+    ./laptop/users.nix
   ];
 }
