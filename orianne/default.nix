@@ -22,7 +22,6 @@
             inherit (inputs) nixpkgs;
           };
         }
-        self.nixosModules.x_niols
         self.nixosModules.keys
         self.nixosModules.secrets
         { x_niols.hostPublicKey = self.keys.machines.orianne; }

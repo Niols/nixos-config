@@ -24,6 +24,7 @@ in
 
     ./both/boot.nix
 
+    ./server/autoreboot.nix
     ./server/databases.nix
     ./server/ssh.nix
     ./server/users.nix
