@@ -19,10 +19,10 @@ in
 
     ./hester.nix
     ./nix.nix
-    ./packages.nix
     ./syncthing.nix
 
     ./both/boot.nix
+    ./both/packages.nix
 
     ./server/autoreboot.nix
     ./server/databases.nix
@@ -39,7 +39,9 @@ in
     ./syncthing.nix
 
     ./both/boot.nix
+    ./both/packages.nix
 
+    ./laptop/packages
     ./laptop/users.nix
   ];
 }
