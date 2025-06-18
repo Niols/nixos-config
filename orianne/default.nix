@@ -7,7 +7,6 @@
       imports = [
         (import ../_common).server
 
-        ./boot.nix
         ./cloud.nix
         ./hardware-configuration.nix
         ./hostname.nix
@@ -30,6 +29,11 @@
         self.nixosModules.secrets
         { x_niols.hostPublicKey = self.keys.machines.orianne; }
       ];
+
+      boot.loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+      };
 
       users.users = {
         niols.hashedPasswordFile = config.age.secrets.password-orianne-niols.path;

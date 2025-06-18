@@ -8,6 +8,8 @@
     ./packages.nix
     ./syncthing.nix
 
+    ./both/boot.nix
+
     ./server/databases.nix
     ./server/ssh.nix
     ./server/users.nix
@@ -18,6 +20,8 @@
     ./nix.nix
     ./packages.nix
     ./syncthing.nix
+
+    ./both/boot.nix
 
     ./laptop/users.nix
   ];

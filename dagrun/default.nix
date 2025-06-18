@@ -13,7 +13,6 @@
 
         # inputs.dancelor.nixosModules.default
 
-        ./boot.nix
         ./hardware-configuration.nix
         ./hostname.nix
         ./motd.nix
