@@ -46,7 +46,8 @@
       printf 'Emptying wastebasket...\n'
       du -sh "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash
       printf '\e[37m'
-      find "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash -type f -print -delete
+      find "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash/files -type f -print -delete
+      du -sh "''${XDG_DATA_HOME:-$HOME/.local/share}"/Trash
       printf '\e[0mdone.\n'
     '')
   ];
