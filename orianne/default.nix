@@ -9,7 +9,6 @@
 
         ./cloud.nix
         ./hardware-configuration.nix
-        ./hostname.nix
         ./medias.nix
         ./motd.nix
         ./nginx.nix
@@ -34,6 +33,8 @@
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
+
+      networking.hostName = "orianne";
 
       users.users = {
         niols.hashedPasswordFile = config.age.secrets.password-orianne-niols.path;

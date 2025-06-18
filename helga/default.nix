@@ -16,7 +16,6 @@
         inputs.dancelor.nixosModules.default
 
         ./hardware-configuration.nix
-        ./hostname.nix
         ./motd.nix
         ./nginx.nix
         ./starship.nix
@@ -35,6 +34,11 @@
         { x_niols.hostPublicKey = self.keys.machines.helga; }
         { x_niols.autoreboot.enable = true; }
       ];
+
+      networking = {
+        hostName = "helga";
+        domain = "niols.fr";
+      };
 
       users.users = {
         niols.hashedPasswordFile = config.age.secrets.password-helga-niols.path;

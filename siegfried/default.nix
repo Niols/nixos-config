@@ -13,7 +13,6 @@
         ./ftp.nix
         ./git.nix
         ./hardware-configuration.nix
-        ./hostname.nix
         ./mastodon.nix
         ./motd.nix
         ./nginx.nix
@@ -34,6 +33,8 @@
         { x_niols.hostPublicKey = self.keys.machines.siegfried; }
         { x_niols.autoreboot.enable = true; }
       ];
+
+      networking.hostName = "siegfried";
 
       users.users = {
         niols.hashedPasswordFile = config.age.secrets.password-siegfried-niols.path;
