@@ -17,7 +17,6 @@
       ./hostKeys.nix
       ./legacy-configuration.nix
       ./nix.nix
-      ./packages
       ./syncthing.nix
       ./timezone.nix
       ./udev.nix
