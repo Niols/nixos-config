@@ -12,29 +12,33 @@ pkgs.stdenv.mkDerivation {
 
     cat <<'EOF' > $out/bin/rnix
       #!/bin/sh
-      exec ${pkgs.nix}/bin/nix "$@" \
-        --builders '@/etc/nix/machines'
+      exec ${pkgs.nix}/bin/nix \
+        --builders '@/etc/nix/machines' \
+        "$@"
     EOF
     chmod +x $out/bin/rnix
 
     cat <<'EOF' > $out/bin/rrnix
       #!/bin/sh
-      exec ${pkgs.nix}/bin/nix "$@" \
-        --builders '@/etc/nix/machines' --max-jobs 0
+      exec ${pkgs.nix}/bin/nix \
+        --builders '@/etc/nix/machines' --max-jobs 0 \
+        "$@"
     EOF
     chmod +x $out/bin/rrnix
 
     cat <<'EOF' > $out/bin/rnom
       #!/bin/sh
-      exec ${pkgs.nix-output-monitor}/bin/nom "$@" \
-        --builders '@/etc/nix/machines'
+      exec ${pkgs.nix-output-monitor}/bin/nom \
+        --builders '@/etc/nix/machines' \
+        "$@"
     EOF
     chmod +x $out/bin/rnom
 
     cat <<'EOF' > $out/bin/rrnom
       #!/bin/sh
-      exec ${pkgs.nix-output-monitor}/bin/nom "$@" \
-        --builders '@/etc/nix/machines' --max-jobs 0
+      exec ${pkgs.nix-output-monitor}/bin/nom \
+        --builders '@/etc/nix/machines' --max-jobs 0 \
+        "$@"
     EOF
     chmod +x $out/bin/rrnom
 
