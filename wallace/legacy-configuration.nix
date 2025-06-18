@@ -1,5 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
+let
+  inherit (lib) mkForce;
+
+in
 {
   ############################################################################
   ## Fonts
@@ -115,5 +119,6 @@
   ## first install of this system.  Before changing this value read
   ## the documentation for this option (e.g. man configuration.nix or
   ## on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = mkForce "21.05"; # Did you read the comment?
+  # ^ FIXME: unify with other system.stateVersion in _common.
 }
