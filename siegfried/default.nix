@@ -10,7 +10,6 @@
         # ../_modules/web.nix
         # ../_modules/teamspeak.nix
 
-        ./boot.nix
         ./ftp.nix
         ./git.nix
         ./hardware-configuration.nix
