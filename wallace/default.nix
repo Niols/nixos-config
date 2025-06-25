@@ -33,7 +33,6 @@
         };
       }
 
-      self.nixosModules.x_niols
       self.nixosModules.keys
       self.nixosModules.secrets
       { x_niols.hostPublicKey = self.keys.machines.wallace; }
