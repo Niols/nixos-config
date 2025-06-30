@@ -18,14 +18,15 @@ in
     x
 
     ./hester.nix
-    ./nix.nix
     ./syncthing.nix
 
     ./both/boot.nix
+    ./both/nix.nix
     ./both/packages.nix
 
     ./server/autoreboot.nix
     ./server/databases.nix
+    ./server/nix.nix
     ./server/ssh.nix
     ./server/users.nix
   ];
@@ -34,10 +35,10 @@ in
     x
 
     ./hester.nix
-    ./nix.nix
     ./syncthing.nix
 
     ./both/boot.nix
+    ./both/nix.nix
     ./both/packages.nix
 
     ./laptop/packages
