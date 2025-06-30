@@ -17,7 +17,6 @@
       ./hostKeys.nix
       ./legacy-configuration.nix
       ./nix.nix
-      ./packages
       ./syncthing.nix
       ./timezone.nix
       ./udev.nix
@@ -33,7 +32,6 @@
         };
       }
 
-      self.nixosModules.x_niols
       self.nixosModules.keys
       self.nixosModules.secrets
       { x_niols.hostPublicKey = self.keys.machines.wallace; }

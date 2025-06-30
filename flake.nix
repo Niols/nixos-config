@@ -44,7 +44,6 @@
         ## Other
         inputs.git-hooks.flakeModule
         inputs.nixops4.modules.flake.default
-        ./x_niols
 
         { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
 

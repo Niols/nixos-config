@@ -1,35 +1,44 @@
 { self, inputs, ... }:
 
 {
-  flake.nixosModules.orianne = {
-    imports = [
-      (import ../_common).server
+  flake.nixosModules.orianne =
+    { config, keys, ... }:
+    {
+      imports = [
+        (import ../_common).server
 
-      ./boot.nix
-      ./cloud.nix
-      ./hardware-configuration.nix
-      ./hostname.nix
-      ./medias.nix
-      ./motd.nix
-      ./nginx.nix
-      ./starship.nix
-      ./storage.nix
-      ./system.nix
-      ./users.nix
-      inputs.agenix.nixosModules.default
-      inputs.home-manager.nixosModules.home-manager
-      ./home-manager.nix
-      {
-        _module.args = {
-          inherit (inputs) nixpkgs;
-        };
-      }
-      self.nixosModules.x_niols
-      self.nixosModules.keys
-      self.nixosModules.secrets
-      { x_niols.hostPublicKey = self.keys.machines.orianne; }
-    ];
-  };
+        ./cloud.nix
+        ./hardware-configuration.nix
+        ./medias.nix
+        ./motd.nix
+        ./nginx.nix
+        ./starship.nix
+        ./storage.nix
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
+        ./home-manager.nix
+        {
+          _module.args = {
+            inherit (inputs) nixpkgs;
+          };
+        }
+        self.nixosModules.keys
+        self.nixosModules.secrets
+        { x_niols.hostPublicKey = self.keys.machines.orianne; }
+      ];
+
+      boot.loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+      };
+
+      networking.hostName = "orianne";
+
+      users.users = {
+        niols.hashedPasswordFile = config.age.secrets.password-orianne-niols.path;
+        root.openssh.authorizedKeys.keys = [ keys.github-actions.deploy-orianne ];
+      };
+    };
 
   flake.nixops4Resources.orianne =
     { providers, ... }:

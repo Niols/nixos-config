@@ -1,40 +1,43 @@
 { self, inputs, ... }:
 
 {
-  flake.nixosModules.siegfried = {
-    imports = [
-      (import ../_common).server
+  flake.nixosModules.siegfried =
+    { config, keys, ... }:
+    {
+      imports = [
+        (import ../_common).server
 
-      # ../_modules/web.nix
-      # ../_modules/teamspeak.nix
+        # ../_modules/web.nix
+        # ../_modules/teamspeak.nix
 
-      ./boot.nix
-      ./ftp.nix
-      ./git.nix
-      ./hardware-configuration.nix
-      ./hostname.nix
-      ./mastodon.nix
-      ./motd.nix
-      ./nginx.nix
-      ./starship.nix
-      ./system.nix
-      ./syncthing.nix
-      ./users.nix
-      inputs.agenix.nixosModules.default
-      inputs.home-manager.nixosModules.home-manager
-      ./home-manager.nix
-      {
-        _module.args = {
-          inherit (inputs) nixpkgs;
-        };
-      }
-      self.nixosModules.x_niols
-      self.nixosModules.keys
-      self.nixosModules.secrets
-      { x_niols.hostPublicKey = self.keys.machines.siegfried; }
-      { x_niols.autoreboot.enable = true; }
-    ];
-  };
+        ./ftp.nix
+        ./git.nix
+        ./hardware-configuration.nix
+        ./mastodon.nix
+        ./motd.nix
+        ./nginx.nix
+        ./starship.nix
+        ./syncthing.nix
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
+        ./home-manager.nix
+        {
+          _module.args = {
+            inherit (inputs) nixpkgs;
+          };
+        }
+        self.nixosModules.keys
+        self.nixosModules.secrets
+        { x_niols.hostPublicKey = self.keys.machines.siegfried; }
+      ];
+
+      networking.hostName = "siegfried";
+
+      users.users = {
+        niols.hashedPasswordFile = config.age.secrets.password-siegfried-niols.path;
+        root.openssh.authorizedKeys.keys = [ keys.github-actions.deploy-siegfried ];
+      };
+    };
 
   flake.nixops4Resources.siegfried =
     { providers, ... }:
