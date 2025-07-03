@@ -24,7 +24,7 @@ jobs:
 
       - name: Update flake.lock
         id: update
-        uses: determinatesystems/update-flake-lock@v25
+        uses: determinatesystems/update-flake-lock@v26
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           pr-title: "Bump flake dependencies"
@@ -50,7 +50,7 @@ jobs:
 
       - name: Update flake.lock
         id: update
-        uses: determinatesystems/update-flake-lock@v25
+        uses: determinatesystems/update-flake-lock@v26
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           inputs: dancelor
