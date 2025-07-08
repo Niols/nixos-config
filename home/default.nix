@@ -14,6 +14,7 @@
   imports = [
     ../_modules/niols-starship.nix
     programs/garbage-collect.nix
+    programs/update.nix
     inputs.nix-index-database.hmModules.nix-index
     ./packages.nix
     ./direnv.nix
