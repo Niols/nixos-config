@@ -38,6 +38,7 @@ with pkgs;
 
   ## G
   gcc
+  ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
   gimp
   git
   git-lfs
