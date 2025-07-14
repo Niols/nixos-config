@@ -15,7 +15,7 @@
     ../_modules/niols-starship.nix
     programs/garbage-collect.nix
     programs/update.nix
-    inputs.nix-index-database.hmModules.nix-index
+    inputs.nix-index-database.homeModules.nix-index
     ./packages.nix
     ./direnv.nix
   ];
