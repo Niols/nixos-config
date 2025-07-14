@@ -20,11 +20,11 @@ in
     ./hester.nix
     ./syncthing.nix
 
-    ./both/boot.nix
     ./both/nix.nix
     ./both/packages.nix
 
     ./server/autoreboot.nix
+    ./server/boot.nix
     ./server/databases.nix
     ./server/nix.nix
     ./server/ssh.nix
@@ -37,7 +37,6 @@ in
     ./hester.nix
     ./syncthing.nix
 
-    ./both/boot.nix
     ./both/nix.nix
     ./both/packages.nix
 
