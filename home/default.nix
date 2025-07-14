@@ -51,11 +51,6 @@
   programs.nix-index.enable = true;
   programs.nix-index.symlinkToCacheHome = true;
 
-  programs.carapace = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
   ############################################################################
   ## Tmux
 
