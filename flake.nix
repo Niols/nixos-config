@@ -43,6 +43,7 @@
         ./orianne
         ./siegfried
         ./wallace
+        ./gromit
 
         ## Other
         inputs.git-hooks.flakeModule
