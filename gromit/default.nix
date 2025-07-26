@@ -17,6 +17,8 @@
         };
       }
 
+      inputs.disko.nixosModules.disko
+
       self.nixosModules.keys
       self.nixosModules.secrets
       { x_niols.hostPublicKey = self.keys.machines.wallace; }
