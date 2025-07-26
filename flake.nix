@@ -61,6 +61,7 @@
         "orianne"
         "siegfried"
         "wallace"
+        "gromit"
       ];
 
       flake.nixosConfigurations =
