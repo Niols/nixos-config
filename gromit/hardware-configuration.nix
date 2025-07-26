@@ -25,8 +25,8 @@
       content = {
         type = "gpt";
         partitions = {
-
           ## Boot partition, 1GB outside of LUKS.
+          ##
           ESP = {
             size = "1G";
             type = "EF00";
@@ -59,7 +59,8 @@
       };
     };
 
-    ## LVM pool, containing the `swap` and `root` logical volumes.
+    ## LVM pool, inside the LUKS partition, containing the `swap` and `root`
+    ## logical volumes.
     ##
     lvm_vg.pool = {
       type = "lvm_vg";
