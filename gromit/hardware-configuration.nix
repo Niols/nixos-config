@@ -1,10 +1,11 @@
 ## Usage: import this file and set the `disko.devices.disk.root.device`.
 
 {
+  nixpkgs.hostPlatform = "x86_64-linux";
+
   disko.devices.disk.root.device = "/dev/nvme0n1";
 
-  ## Common part:
-
+  ## FIXME: factorise
   disko.devices.disk = {
     root = {
       type = "disk";
