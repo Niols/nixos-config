@@ -16,11 +16,11 @@
   boot.tmp.useTmpfs = true;
   boot.tmp.cleanOnBoot = true;
 
-  disko.devices.disk.root.device = "/dev/nvme0n1";
+  disko.devices.disk.main.device = "/dev/nvme0n1";
 
   ## FIXME: factorise
-  disko.devices.disk = {
-    root = {
+  disko.devices = {
+    disk.main = {
       type = "disk";
       content = {
         type = "gpt";
@@ -39,7 +39,7 @@
           };
 
           ## LUKS encrypted partition, 100% of the remaining space. It contains
-          ## only one filesystem, the root of everything.
+          ## an LVM pool of physical volumes. See `lvm_vg.pool` later.
           ##
           ## NOTE: LUKS passphrase will be prompted interactively only.
           ##
@@ -50,11 +50,31 @@
               name = "crypted";
               settings.allowDiscards = true;
               content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
+                type = "lvm_pv";
+                vg = "pool";
               };
             };
+          };
+        };
+      };
+    };
+
+    ## LVM pool, containing the `swap` and `root` logical volumes.
+    ##
+    lvm_vg.pool = {
+      type = "lvm_vg";
+      lvs = {
+        swap = {
+          size = "32G";
+          content.type = "swap";
+        };
+
+        root = {
+          size = "100%";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/";
           };
         };
       };
