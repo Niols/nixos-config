@@ -22,6 +22,9 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = ""; # saves some resources on Linux
 
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     dancelor.url = "github:paris-branch/dancelor";
   };
 
@@ -123,6 +126,9 @@
             packages = [
               pkgs.nil
               inputs'.nixops4.packages.default
+
+              inputs'.disko.packages.disko
+              inputs'.disko.packages.disko-install
 
               ## FIXME: Move the following to `secrets/default.nix`
               inputs'.agenix.packages.default
