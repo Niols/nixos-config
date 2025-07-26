@@ -3,6 +3,12 @@
 {
   nixpkgs.hostPlatform = "x86_64-linux";
 
+  ## The device on which the GRUB boot loader will be installed. The special
+  ## value nodev means that a GRUB boot menu will be generated, but GRUB itself
+  ## will not actually be installed. To install GRUB on multiple devices, use
+  ## boot.loader.grub.devices.
+  boot.loader.grub.device = "nodev";
+
   disko.devices.disk.root.device = "/dev/nvme0n1";
 
   ## FIXME: factorise
