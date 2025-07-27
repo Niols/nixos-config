@@ -10,7 +10,7 @@
   boot.loader.grub.device = "nodev"; # Add this line - don't install to MBR
   boot.loader.grub.useOSProber = false; # Disable OS probing
 
-  boot.loader.efi.canTouchEfiVariables = false; # Try with false for removable
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
   boot.tmp.useTmpfs = true;
