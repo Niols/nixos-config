@@ -6,6 +6,12 @@
       (import ../_common).laptopBootstrap
       ./hardware-configuration.nix
       inputs.disko.nixosModules.disko
+
+      {
+        _module.args = {
+          inherit (inputs) nixpkgs;
+        };
+      }
     ];
   };
 
@@ -26,6 +32,12 @@
       # }
 
       inputs.disko.nixosModules.disko
+
+      {
+        _module.args = {
+          inherit (inputs) nixpkgs;
+        };
+      }
 
       # self.nixosModules.keys
       # self.nixosModules.secrets
