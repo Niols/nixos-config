@@ -6,6 +6,7 @@
       (import ../_common).laptopBootstrap
       ./hardware-configuration.nix
       inputs.disko.nixosModules.disko
+      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
       {
         _module.args = {

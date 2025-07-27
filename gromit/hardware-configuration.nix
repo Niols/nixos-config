@@ -12,6 +12,7 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.grub.forcei686 = false; # Ensure this is not set to true
 
   boot.tmp.useTmpfs = true;
   boot.tmp.cleanOnBoot = true;
