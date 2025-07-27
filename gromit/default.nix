@@ -1,6 +1,14 @@
 { inputs, ... }:
 
 {
+  flake.nixosModules.gromitBootstrap = {
+    imports = [
+      (import ../_common).laptop
+      ./hardware-configuration.nix
+      inputs.disko.nixosModules.disko
+    ];
+  };
+
   flake.nixosModules.gromit = {
     imports = [
       (import ../_common).laptop

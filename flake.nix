@@ -62,6 +62,7 @@
         "siegfried"
         "wallace"
         "gromit"
+        "gromitBootstrap"
       ];
 
       flake.nixosConfigurations =

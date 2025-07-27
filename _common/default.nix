@@ -22,6 +22,7 @@ in
 
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
 
     ./server/autoreboot.nix
     ./server/boot.nix
@@ -29,6 +30,15 @@ in
     ./server/nix.nix
     ./server/ssh.nix
     ./server/users.nix
+  ];
+
+  laptopBootstrap.imports = [
+    x
+
+    ./both/nix.nix
+    ./both/ssh.nix
+
+    ./laptopBootstrap.nix
   ];
 
   laptop.imports = [
@@ -39,6 +49,7 @@ in
 
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
 
     ./laptop/packages
     ./laptop/users.nix
