@@ -3,13 +3,15 @@
 {
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.enableCryptodisk = true;
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev"; # Add this line - don't install to MBR
   boot.loader.grub.useOSProber = false; # Disable OS probing
+
+  boot.loader.efi.canTouchEfiVariables = false; # Try with false for removable
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   boot.tmp.useTmpfs = true;
   boot.tmp.cleanOnBoot = true;
