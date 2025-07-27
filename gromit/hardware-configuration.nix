@@ -6,12 +6,7 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.enableCryptodisk = true;
-
-  ## The device on which the GRUB boot loader will be installed. The special
-  ## value nodev means that a GRUB boot menu will be generated, but GRUB itself
-  ## will not actually be installed. To install GRUB on multiple devices, use
-  ## boot.loader.grub.devices.
-  boot.loader.grub.device = "nodev";
+  boot.loader.grub.efiInstallAsRemovable = true;
 
   boot.tmp.useTmpfs = true;
   boot.tmp.cleanOnBoot = true;
