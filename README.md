@@ -4,6 +4,56 @@ Niols's NixOS Configuration/s
 Installing NixOS
 ----------------
 
+### Installing on a ThinkPad X1 Carbon Gen 9
+
+1. Boot into the USB stick.
+
+2. (Optional) Set up WiFi:
+   ```console
+   $ sudo systemctl start wpa_supplicant
+   $ wpa_cli
+   [...]
+   Selected interface 'wlp0s20f3'
+   Interactive mode
+   > scan
+   OK
+   [...]
+   > scan_results
+   bssid / frequency / signal level / flags / ssid
+   4a:ed:00:1b:60:54     5220     -41     [WPA-PSK+SAE-CCMP][ESS]     Name of hotspot
+   [...]
+   > add_network
+   0
+   [...]
+   > set_network 0 ssid "<SSID>"
+   OK
+   > set_network 0 psk "<PASSPHRASE>"
+   OK
+   > enable_network 0
+   OK
+   [...]
+   > quit
+   ```
+
+3. Clone this repository and go in it.
+   ```console
+   $ git clone https://github.com/niols/nixos-config
+   $ cd nixos-config
+   $ nix --extra-experimental-features 'nix-command flakes' develop
+   [...]
+   ```
+
+4. Run `disko-install`.
+   ```console
+   $ disko-install --flake .#<machine>Bootstrap --disk main /dev/<device>
+   ```
+
+
+
+
+
+
+
 ### On an OVH's “Bare Metal Cloud” dedicated instance
 
 /!\ I never managed to reproduce this.
@@ -30,7 +80,7 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 
 ### Installing on a Hetzner Cloud machine
 
-## CX22
+#### CX22
 
 I did not manage to reproduce the instructions for Oracle VM.Standard.A1.Flex,
 using the tutorial and commit hash `ccf0985677903aff729794180bdaf4b390f35023` of
@@ -85,7 +135,7 @@ Confirmed in August 2023.
 
 See Oracle's VM.Standard.A1.Flex above.
 
-### e2-micro
+#### e2-micro
 
 See Oracle's VM.Standard.E2.1.Micro above.
 
