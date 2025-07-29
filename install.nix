@@ -9,7 +9,7 @@
           runtimeInputs = with pkgs; [ disko ];
           text = ''
             #!${pkgs.runtimeShell}
-            set -euCx
+            set -euC
 
             if [ $# -ne 1 ]; then
               printf 'Usage: install <machine>\n'
