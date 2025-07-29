@@ -37,8 +37,6 @@ in
 
     ./both/nix.nix
     ./both/ssh.nix
-
-    ./laptopBootstrap/ssh.nix
   ];
 
   laptop.imports = [

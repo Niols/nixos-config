@@ -1,4 +1,8 @@
 {
+  ## Useful for servers, obviously, but also for laptops because we use Age and
+  ## we want it to pick up on the SSH host keys.
+  services.openssh.enable = true;
+
   services.openssh.hostKeys = [
     {
       bits = 4096;
