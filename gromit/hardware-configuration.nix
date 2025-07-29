@@ -6,10 +6,8 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.enableCryptodisk = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev"; # Add this line - don't install to MBR
   boot.loader.grub.useOSProber = false; # Disable OS probing
-
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
   boot.loader.grub.forcei686 = false; # Ensure this is not set to true
