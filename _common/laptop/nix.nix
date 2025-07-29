@@ -3,6 +3,6 @@
   ## not garbage-collect results of `direnv` or `nix build` as long as there
   ## is a link.
   ##
-  settings.keep-outputs = true;
-  settings.keep-derivations = true;
+  nix.settings.keep-outputs = true;
+  nix.settings.keep-derivations = true;
 }
