@@ -4,6 +4,7 @@
     {
       apps.install = {
         type = "app";
+        runtimeInputs = with pkgs; [ disko ];
         program = pkgs.writeShellApplication {
           name = "install";
           text = ''
