@@ -2,6 +2,8 @@
 
 {
   flake.nixosModules.gromitBootstrap = {
+    networking.hostName = "gromit";
+
     imports = [
       (import ../_common).laptopBootstrap
       ./hardware-configuration.nix
@@ -17,6 +19,8 @@
   };
 
   flake.nixosModules.gromit = {
+    networking.hostName = "gromit";
+
     imports = [
       (import ../_common).laptop
 
