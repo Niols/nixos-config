@@ -1,14 +1,14 @@
 {
   perSystem =
-    { pkgs, ... }:
+    { inputs', pkgs, ... }:
     {
       apps.install = {
         type = "app";
         program = pkgs.writeShellApplication {
           name = "install";
-          runtimeInputs = with pkgs; [ disko ];
+          runtimeInputs = [ inputs'.disko.packages.disko ];
           text = ''
-            #!${pkgs.runtimeShell}
+            /bin/sh
             set -euC
 
             if [ $# -ne 1 ]; then
