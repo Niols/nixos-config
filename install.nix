@@ -4,9 +4,9 @@
     {
       apps.install = {
         type = "app";
-        runtimeInputs = with pkgs; [ disko ];
         program = pkgs.writeShellApplication {
           name = "install";
+          runtimeInputs = with pkgs; [ disko ];
           text = ''
             #!${pkgs.runtimeShell}
             set -euCx
