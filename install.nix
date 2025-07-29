@@ -9,7 +9,7 @@
           name = "install";
           text = ''
             #!${pkgs.runtimeShell}
-            set -euC
+            set -euCx
 
             if [ $# -ne 1 ]; then
               printf 'Usage: install <machine>\n'
