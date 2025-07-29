@@ -53,6 +53,7 @@
 
         ./keys
         ./secrets
+        ./install.nix
       ];
 
       flake.machines = [
