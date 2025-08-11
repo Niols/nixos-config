@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build (and deploy) Dagrún
         uses: ./.github/composites/build-and-deploy
@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build (and deploy) Helga
         uses: ./.github/composites/build-and-deploy
@@ -55,7 +55,7 @@ jobs:
 
     steps:
       - name: Check out repository code.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build (and deploy) Siegfried
         uses: ./.github/composites/build-and-deploy
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
         ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
         ## machines. We therefore install the emulation binaries for QEMU and
@@ -106,7 +106,7 @@ jobs:
           echo
 
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build Wallace
         uses: ./.github/composites/build-and-deploy
@@ -125,7 +125,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
