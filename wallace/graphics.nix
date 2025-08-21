@@ -182,6 +182,27 @@
           };
         };
 
+        ## Desktop screen at Aggelandros, plugging via HDMI, with laptop open.
+        ## The angle is peculiar and might not work always.
+        aggelandros-reykjavik-desktop = {
+          fingerprint = {
+            "eDP-1" = laptop;
+            "HDMI-1" =
+              "00ffffffffffff0030aec860010101013219010380351e782e2195a756529c26105054bdcf00714f8180818c9500b300d1c001010101023a801871382d40582c45000f282100001e000000ff0056314137353534380a20202020000000fd00324b1e5311000a202020202020000000fc004c454e20543234323470410a20013e02031ef14b010203040514111213901f230907078301000065030c001000011d007251d01e206e2855000f282100001e8c0ad08a20e02d10103e96000f28210000188c0ad090204031200c4055000f282100001800000000000000000000000000000000000000000000000000000000000000000000000000000000000000ce";
+          };
+          config = {
+            "eDP-1" = {
+              primary = true;
+              mode = "1920x1200";
+              position = "0x1080";
+            };
+            "HDMI-1" = {
+              mode = "1920x1200";
+              position = "1056x0";
+            };
+          };
+        };
+
         ## Single Philips screen, with laptop open and closed and USB-C hub
         ## plugged on first or second port.
         philips-hdmi-laptop-closed-usbc-1st-port = make-only-laptop-closed "DP-3" philipsHdmi;
