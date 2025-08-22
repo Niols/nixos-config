@@ -197,7 +197,7 @@
               position = "0x1080";
             };
             "HDMI-1" = {
-              mode = "1920x1200";
+              mode = "1920x1080";
               position = "1056x0";
             };
           };
