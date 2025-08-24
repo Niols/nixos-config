@@ -56,7 +56,7 @@ in
         cookbook
         impersonate
         news
-        previewgenerator
+        # previewgenerator # FIXME: bring back when we have more space
         quota_warning
         recognize
         tasks
