@@ -80,11 +80,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1755963171,
-        "narHash": "sha256-6NpqDZd1m9vcVFhyCM0jkHlCvbTCNIyef0P4I2M22Hg=",
+        "lastModified": 1756105853,
+        "narHash": "sha256-jMBtnvWMMqFIlgreSF4ZPfBInrog/c7ykqZ0XZ55yag=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "31c06699398867806284deee62f54906442a7fff",
+        "rev": "68c7fe6c00caf1f466fa7bd610b53a84c7c22831",
         "type": "github"
       },
       "original": {
@@ -922,11 +922,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1755446520,
-        "narHash": "sha256-I0Ok1OGDwc1jPd8cs2VvAYZsHriUVFGIUqW+7uSsOUM=",
+        "lastModified": 1755960406,
+        "narHash": "sha256-RF7j6C1TmSTK9tYWO6CdEMtg6XZaUKcvZwOCD2SICZs=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "4b04db83821b819bbbe32ed0a025b31e7971f22e",
+        "rev": "e891a93b193fcaf2fc8012d890dc7f0befe86ec2",
         "type": "github"
       },
       "original": {
