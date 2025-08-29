@@ -74,16 +74,16 @@
     "dancelor": {
       "inputs": {
         "flake-parts": "flake-parts",
+        "git-hooks-nix": "git-hooks-nix",
         "nixpkgs": "nixpkgs",
-        "pre-commit-hooks": "pre-commit-hooks",
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1756506382,
-        "narHash": "sha256-VYseTO0m5lK0IBZfVtKnHQQBxotDKZdHVjix7qmNdJQ=",
+        "lastModified": 1756508930,
+        "narHash": "sha256-GSEeciUMSola+cHgwMmdJj2eftT70ymamsht+Kkl/3w=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "e24318770661645ae96b702980425905c0246eba",
+        "rev": "9d9a2d50cc3f08eedf77b412cb87425db3b8cfe0",
         "type": "github"
       },
       "original": {
@@ -334,6 +334,29 @@
     },
     "git-hooks-nix": {
       "inputs": {
+        "flake-compat": "flake-compat",
+        "gitignore": "gitignore",
+        "nixpkgs": [
+          "dancelor",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1755960406,
+        "narHash": "sha256-RF7j6C1TmSTK9tYWO6CdEMtg6XZaUKcvZwOCD2SICZs=",
+        "owner": "cachix",
+        "repo": "git-hooks.nix",
+        "rev": "e891a93b193fcaf2fc8012d890dc7f0befe86ec2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cachix",
+        "repo": "git-hooks.nix",
+        "type": "github"
+      }
+    },
+    "git-hooks-nix_2": {
+      "inputs": {
         "flake-compat": "flake-compat_3",
         "gitignore": "gitignore_3",
         "nixpkgs": "nixpkgs_4"
@@ -352,7 +375,7 @@
         "type": "github"
       }
     },
-    "git-hooks-nix_2": {
+    "git-hooks-nix_3": {
       "inputs": {
         "flake-compat": [
           "nixops4-nixos",
@@ -395,7 +418,7 @@
       "inputs": {
         "nixpkgs": [
           "dancelor",
-          "pre-commit-hooks",
+          "git-hooks-nix",
           "nixpkgs"
         ]
       },
@@ -517,7 +540,7 @@
       "inputs": {
         "flake-compat": "flake-compat_4",
         "flake-parts": "flake-parts_5",
-        "git-hooks-nix": "git-hooks-nix_2",
+        "git-hooks-nix": "git-hooks-nix_3",
         "nixfmt": "nixfmt",
         "nixpkgs": [
           "nixops4-nixos",
@@ -633,7 +656,7 @@
     "nixops4-nixos": {
       "inputs": {
         "flake-parts": "flake-parts_3",
-        "git-hooks-nix": "git-hooks-nix",
+        "git-hooks-nix": "git-hooks-nix_2",
         "nixops4": "nixops4",
         "nixops4-nixos": [
           "nixops4-nixos"
@@ -895,29 +918,6 @@
         "type": "github"
       }
     },
-    "pre-commit-hooks": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "gitignore": "gitignore",
-        "nixpkgs": [
-          "dancelor",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1755960406,
-        "narHash": "sha256-RF7j6C1TmSTK9tYWO6CdEMtg6XZaUKcvZwOCD2SICZs=",
-        "owner": "cachix",
-        "repo": "pre-commit-hooks.nix",
-        "rev": "e891a93b193fcaf2fc8012d890dc7f0befe86ec2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cachix",
-        "repo": "pre-commit-hooks.nix",
-        "type": "github"
-      }
-    },
     "purescript-overlay": {
       "inputs": {
         "flake-compat": "flake-compat_5",
@@ -1082,11 +1082,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1755511680,
-        "narHash": "sha256-xGx+PgUntLZ6KH+r7LRljMSTZ2vpqwl81T3wiP2RRI0=",
+        "lastModified": 1756498771,
+        "narHash": "sha256-WDl2GMTQgUTMqIBTYXt+UbIS1LMo9+9rp0HeYVGllWQ=",
         "owner": "tweag",
         "repo": "topiary",
-        "rev": "66686bd02247fec2abf4ffe8f83b356f0d2754eb",
+        "rev": "439f0d15571140dc29c1d5893d262c94470fb93f",
         "type": "github"
       },
       "original": {
