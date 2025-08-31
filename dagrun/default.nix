@@ -11,7 +11,7 @@
         # ../_modules/matrix.nix
         # ../_modules/torrent.nix
 
-        # inputs.dancelor.nixosModules.default
+        # inputs.dancelor.nixosModules.dancelor
 
         ./hardware-configuration.nix
         ./motd.nix
