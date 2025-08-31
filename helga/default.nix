@@ -13,7 +13,7 @@
         ../_modules/torrent.nix
         ../_modules/web.nix
 
-        inputs.dancelor.nixosModules.default
+        inputs.dancelor.nixosModules.dancelor
 
         ./hardware-configuration.nix
         ./motd.nix
