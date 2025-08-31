@@ -61,11 +61,6 @@ in
           "Wallace"
         ];
 
-        Audiobooks.devices = [
-          "Phineas"
-          "Siegfried"
-        ];
-
         Music.devices = [
           "Barbara"
           "Philippe"
