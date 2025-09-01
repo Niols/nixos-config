@@ -11,6 +11,7 @@
       "steam-original"
       "steam-unwrapped"
       "teamspeak-client"
+      "teamspeak-server"
       "unrar"
       "zoom"
     ]
