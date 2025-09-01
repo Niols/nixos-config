@@ -1,6 +1,21 @@
 { pkgs, ... }:
 
 {
+  ## Allow a selected set of unfree packages for this list.
+  nixpkgs.config.allowUnfreePredicate = (
+    pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "discord"
+      "slack"
+      "steam-run"
+      "steam-original"
+      "steam-unwrapped"
+      "teamspeak-client"
+      "unrar"
+      "zoom"
+    ]
+  );
+
   environment.systemPackages = with pkgs; [
     ## B
     bat

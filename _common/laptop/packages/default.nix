@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   ## Emacs for Haskell is not very Nix-aware and expects a binary called
@@ -16,22 +16,6 @@ let
 
 in
 {
-  ## Packages installed in system profile. Allow a selected set of
-  ## unfree packages for this list.
-  nixpkgs.config.allowUnfreePredicate = (
-    pkg:
-    builtins.elem (pkgs.lib.getName pkg) [
-      "discord"
-      "slack"
-      "steam-run"
-      "steam-original"
-      "steam-unwrapped"
-      "teamspeak-client"
-      "unrar"
-      "zoom"
-    ]
-  );
-
   environment.systemPackages =
     (import ./system.nix { inherit pkgs; })
     ++ (import ./ocaml.nix { inherit pkgs; })
