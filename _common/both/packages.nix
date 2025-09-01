@@ -2,14 +2,42 @@
 
 {
   environment.systemPackages = with pkgs; [
-    emacs
-    btop
-    borgbackup
-    tmux
-    wget
-    git
+    ## B
     bat
-    ripgrep
+    bc
+    borgbackup
+    btop
+
+    ## C
+    calc
+
+    ## E
+    emacs
+
+    ## F
     fd
+
+    ## G
+    git
+    git-lfs
+
+    ## H
+    htop
+
+    ## J
+    jq
+
+    ## R
+    ripgrep
+
+    ## T
+    tmux
+
+    ## U
+    unrar
+    unzip
+
+    ## W
+    wget
   ];
 }

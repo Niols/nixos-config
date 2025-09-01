@@ -8,15 +8,12 @@ with pkgs;
   audacity
 
   ## B
-  bat
-  bc
   bintools
   btop
   borgbackup
 
   ## C
   ## caffeine-ng -> the behaviour is really inconsistent
-  calc
   chromium
   comma
 
@@ -30,7 +27,6 @@ with pkgs;
   evince
 
   ## F
-  fd
   ffmpeg-full
   file-roller
   filezilla
@@ -40,8 +36,6 @@ with pkgs;
   gcc
   ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
   gimp
-  git
-  git-lfs
   gnucash
   gnumake
   gnupg
@@ -49,7 +43,6 @@ with pkgs;
   guvcview
 
   ## H
-  htop
   httpie
 
   ## I
@@ -58,7 +51,6 @@ with pkgs;
 
   ## J
   jless
-  jq
 
   ## K
   keepassxc
@@ -86,9 +78,6 @@ with pkgs;
   picard
   pkg-config
 
-  ## R
-  ripgrep
-
   ## S
   scrcpy
   signal-desktop
@@ -102,16 +91,9 @@ with pkgs;
   thunderbird
   tmate
 
-  ## U
-  unrar
-  unzip
-
   ## V
   vdhcoapp # companion for Video DownloadHelper
   vlc
-
-  ## W
-  wget
 
   ## X
   xf86_input_wacom # # wacom tablet support + `xsetwacom`
