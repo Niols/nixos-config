@@ -70,7 +70,7 @@ in
           "Siegfried"
         ];
 
-        "Oxana/Documents".devices = [
+        "Boox/Documents".devices = [
           "Camille"
           "Oxana"
           "Philippe"
@@ -79,7 +79,7 @@ in
           "Wallace"
         ];
 
-        "Oxana/Notes".devices = [
+        "Boox/Notes".devices = [
           "Camille"
           "Oxana"
           "Philippe"
