@@ -23,7 +23,6 @@ concatMapAttrs
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
 
-      password-dagrun-niols = [ dagrun ];
       password-helga-niols = [ helga ];
       password-orianne-niols = [ orianne ];
       password-siegfried-niols = [ siegfried ];
@@ -40,7 +39,6 @@ concatMapAttrs
       syncthing-wallace-key = [ wallace ];
 
       hester-samba-credentials = [
-        dagrun
         helga
         orianne
         siegfried

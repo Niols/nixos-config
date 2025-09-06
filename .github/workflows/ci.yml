@@ -19,21 +19,6 @@ concurrency:
 
 jobs:
 
-  dagrun:
-    name: Dagrún
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v5
-
-      - name: Build (and deploy) Dagrún
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: dagrun
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-          deployPrivateKey: ${{ secrets.DEPLOY_DAGRUN_KEY }}
-
   helga:
     name: Helga
     runs-on: ubuntu-latest

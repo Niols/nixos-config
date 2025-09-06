@@ -35,7 +35,6 @@
 
       imports = [
         ## NixOS configurations
-        ./dagrun
         ./helga
         ./orianne
         ./siegfried
@@ -52,7 +51,6 @@
       ];
 
       flake.machines = [
-        "dagrun"
         "helga"
         "orianne"
         "siegfried"
