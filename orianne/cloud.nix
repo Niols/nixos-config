@@ -56,9 +56,9 @@ in
         cookbook
         impersonate
         news
-        # previewgenerator # FIXME: bring back when we have more space
+        previewgenerator
         quota_warning
-        # recognize # FIXME: requires preview generator - bring back when we have more space
+        recognize
         tasks
         ;
       ## FIXME: set up onlyoffice
