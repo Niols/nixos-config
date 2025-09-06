@@ -58,7 +58,7 @@ in
         news
         # previewgenerator # FIXME: bring back when we have more space
         quota_warning
-        recognize
+        # recognize # FIXME: requires preview generator - bring back when we have more space
         tasks
         ;
       ## FIXME: set up onlyoffice
