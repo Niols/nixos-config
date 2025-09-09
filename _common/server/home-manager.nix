@@ -1,8 +1,7 @@
+## FIXME: Merge laptop and server home managers.
+
 {
   home-manager = {
-    useUserPackages = true;
-    useGlobalPkgs = true;
-
     ## NOTE: It is important to enable Bash so that Home Manager active
     ## properly. Otherwise, see Home Manager's documentation.
 

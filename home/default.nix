@@ -24,8 +24,8 @@
 
   programs.home-manager.enable = true;
 
-  home.file.".face".source = ../_assets/face;
-  home.file.".background-image".source = ../_assets/background-image;
+  home.file.".face".source = ../_assets/face.jpg;
+  home.file.".background-image".source = ../_assets/background-image.jpg;
 
   xdg = import ./xdg { inherit config; };
 

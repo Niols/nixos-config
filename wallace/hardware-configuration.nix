@@ -10,6 +10,10 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
+  ## NOTE: Wallace was installed pre-Disko and therefore we will handle its disk
+  ## configuration by hand. New laptops should not use this.
+  x_niols.enableDiskoConfig = false;
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/root";

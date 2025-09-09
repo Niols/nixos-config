@@ -17,15 +17,17 @@ in
   server.imports = [
     x
 
-    ./hester.nix
-    ./syncthing.nix
-
+    ./both/hester.nix
+    ./both/home-manager.nix
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
+    ./both/syncthing.nix
 
     ./server/autoreboot.nix
     ./server/boot.nix
     ./server/databases.nix
+    ./server/home-manager.nix
     ./server/nix.nix
     ./server/ssh.nix
     ./server/users.nix
@@ -34,13 +36,21 @@ in
   laptop.imports = [
     x
 
-    ./hester.nix
-    ./syncthing.nix
-
+    ./both/hester.nix
+    ./both/home-manager.nix
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
+    ./both/syncthing.nix
 
+    ./laptop/autorandr.nix
+    ./laptop/boot.nix
+    ./laptop/disk-config.nix
+    ./laptop/nix.nix
     ./laptop/packages
+    ./laptop/timezone.nix
+    ./laptop/udev.nix
     ./laptop/users.nix
+    ./laptop/xserver.nix
   ];
 }
