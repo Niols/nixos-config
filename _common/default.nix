@@ -40,6 +40,7 @@ in
     ./both/ssh.nix
     ./both/syncthing.nix
 
+    ./laptop/autorandr.nix
     ./laptop/boot.nix
     ./laptop/disk-config.nix
     ./laptop/nix.nix
