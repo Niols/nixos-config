@@ -165,11 +165,6 @@ in
           "Siegfried"
           "Wallace"
         ];
-
-        "Wallace/.config/i3".devices = [
-          "Siegfried"
-          "Wallace"
-        ];
       };
 
       overrideDevices = true;
