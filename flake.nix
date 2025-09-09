@@ -42,6 +42,7 @@
         ./orianne
         ./siegfried
         ./wallace
+        ./gromit
 
         ## Other
         inputs.git-hooks.flakeModule
@@ -58,6 +59,7 @@
         "orianne"
         "siegfried"
         "wallace"
+        "gromit"
       ];
 
       flake.nixosConfigurations =
