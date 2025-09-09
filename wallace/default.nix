@@ -14,7 +14,6 @@
       ./weylus.nix
 
       ./legacy-configuration.nix
-      ./nix.nix
       ./syncthing.nix
       ./timezone.nix
       ./udev.nix
