@@ -4,6 +4,10 @@ Niols's NixOS Configuration/s
 Installing NixOS
 ----------------
 
+### Installing on a laptop
+
+See [Laptop installation](./docs/laptop-install.md).
+
 ### On an OVH's “Bare Metal Cloud” dedicated instance
 
 /!\ I never managed to reproduce this.
@@ -30,7 +34,7 @@ Here is the protocol I followed successfuly to install my OVH “Bare Metal Clou
 
 ### Installing on a Hetzner Cloud machine
 
-## CX22
+#### CX22
 
 I did not manage to reproduce the instructions for Oracle VM.Standard.A1.Flex,
 using the tutorial and commit hash `ccf0985677903aff729794180bdaf4b390f35023` of
@@ -85,7 +89,7 @@ Confirmed in August 2023.
 
 See Oracle's VM.Standard.A1.Flex above.
 
-### e2-micro
+#### e2-micro
 
 See Oracle's VM.Standard.E2.1.Micro above.
 
