@@ -11,7 +11,6 @@
       ./network.nix
       ./sound.nix
       ./storage.nix
-      ./weylus.nix
 
       ./legacy-configuration.nix
       ./syncthing.nix
@@ -62,6 +61,12 @@
       enable = true;
       hostname = "Wallace";
       hostcolour = "green";
+    };
+
+    programs.weylus = {
+      enable = true;
+      openFirewall = true;
+      users = [ "niols" ];
     };
   };
 }
