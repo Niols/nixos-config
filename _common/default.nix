@@ -17,12 +17,11 @@ in
   server.imports = [
     x
 
-    ./hester.nix
-    ./syncthing.nix
-
+    ./both/hester.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix
+    ./both/syncthing.nix
 
     ./server/autoreboot.nix
     ./server/boot.nix
@@ -35,12 +34,11 @@ in
   laptop.imports = [
     x
 
-    ./hester.nix
-    ./syncthing.nix
-
+    ./both/hester.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix
+    ./both/syncthing.nix
 
     ./laptop/boot.nix
     ./laptop/disk-config.nix
