@@ -18,6 +18,7 @@
     inputs.nix-index-database.homeModules.nix-index
     ./packages.nix
     ./direnv.nix
+    ./i3.nix
   ];
 
   home.stateVersion = "21.05";
