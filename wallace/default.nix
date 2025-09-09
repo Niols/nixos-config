@@ -5,7 +5,6 @@
     imports = [
       (import ../_common).laptop
 
-      ./boot.nix
       ./graphics.nix
       ./hardware-configuration.nix
       ./motd.nix

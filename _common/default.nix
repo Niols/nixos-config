@@ -42,6 +42,7 @@ in
     ./both/packages.nix
     ./both/ssh.nix
 
+    ./laptop/boot.nix
     ./laptop/disk-config.nix
     ./laptop/nix.nix
     ./laptop/packages
