@@ -22,6 +22,7 @@ in
 
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
 
     ./server/autoreboot.nix
     ./server/boot.nix
@@ -39,6 +40,7 @@ in
 
     ./both/nix.nix
     ./both/packages.nix
+    ./both/ssh.nix
 
     ./laptop/nix.nix
     ./laptop/packages

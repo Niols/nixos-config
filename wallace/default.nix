@@ -14,7 +14,6 @@
       ./storage.nix
       ./weylus.nix
 
-      ./hostKeys.nix
       ./legacy-configuration.nix
       ./nix.nix
       ./syncthing.nix
