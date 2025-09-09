@@ -7,8 +7,7 @@
     builtins.elem (pkgs.lib.getName pkg) [
       "discord"
       "slack"
-      "steam-run"
-      "steam-original"
+      "steam"
       "steam-unwrapped"
       "teamspeak-client"
       "teamspeak-server"
