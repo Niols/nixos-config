@@ -4,32 +4,32 @@
   flake.nixosModules.helga =
     { config, keys, ... }:
     {
+      _module.args = {
+        inherit (inputs) nixpkgs;
+      };
+
       imports = [
         (import ../_common).server
-
         ../_modules/dancelor.nix
         ../_modules/matrix.nix
         ../_modules/teamspeak.nix
         ../_modules/torrent.nix
         ../_modules/web.nix
 
+        self.nixosModules.keys
+        self.nixosModules.secrets
+
         inputs.dancelor.nixosModules.dancelor
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
 
         ./hardware-configuration.nix
         ./motd.nix
         ./nginx.nix
         ./starship.nix
-        inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
-        {
-          _module.args = {
-            inherit (inputs) nixpkgs;
-          };
-        }
-        self.nixosModules.keys
-        self.nixosModules.secrets
-        { x_niols.hostPublicKey = self.keys.machines.helga; }
       ];
+
+      x_niols.hostPublicKey = self.keys.machines.helga;
 
       ## FIXME: This is an experiment to improve responsiveness of the system
       ## when Dancelor uses the Nix builds so intensely. It might however starve

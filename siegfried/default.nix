@@ -4,11 +4,18 @@
   flake.nixosModules.siegfried =
     { config, keys, ... }:
     {
+      _module.args = {
+        inherit (inputs) nixpkgs;
+      };
+
       imports = [
         (import ../_common).server
 
-        # ../_modules/web.nix
-        # ../_modules/teamspeak.nix
+        self.nixosModules.keys
+        self.nixosModules.secrets
+
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
 
         ./ftp.nix
         ./git.nix
@@ -18,17 +25,9 @@
         ./nginx.nix
         ./starship.nix
         ./syncthing.nix
-        inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
-        {
-          _module.args = {
-            inherit (inputs) nixpkgs;
-          };
-        }
-        self.nixosModules.keys
-        self.nixosModules.secrets
-        { x_niols.hostPublicKey = self.keys.machines.siegfried; }
       ];
+
+      x_niols.hostPublicKey = self.keys.machines.siegfried;
 
       networking.hostName = "siegfried";
 

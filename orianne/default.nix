@@ -4,8 +4,18 @@
   flake.nixosModules.orianne =
     { config, keys, ... }:
     {
+      _module.args = {
+        inherit (inputs) nixpkgs;
+      };
+
       imports = [
         (import ../_common).server
+
+        self.nixosModules.keys
+        self.nixosModules.secrets
+
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
 
         ./cloud.nix
         ./hardware-configuration.nix
@@ -14,17 +24,9 @@
         ./nginx.nix
         ./starship.nix
         ./storage.nix
-        inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
-        {
-          _module.args = {
-            inherit (inputs) nixpkgs;
-          };
-        }
-        self.nixosModules.keys
-        self.nixosModules.secrets
-        { x_niols.hostPublicKey = self.keys.machines.orianne; }
       ];
+
+      x_niols.hostPublicKey = self.keys.machines.orianne;
 
       boot.loader = {
         systemd-boot.enable = true;
