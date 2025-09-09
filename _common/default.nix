@@ -45,6 +45,7 @@ in
     ./laptop/nix.nix
     ./laptop/packages
     ./laptop/timezone.nix
+    ./laptop/udev.nix
     ./laptop/users.nix
   ];
 }

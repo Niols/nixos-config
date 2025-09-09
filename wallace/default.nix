@@ -15,7 +15,6 @@
 
       ./legacy-configuration.nix
       ./syncthing.nix
-      ./udev.nix
       ./xserver.nix
 
       ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
