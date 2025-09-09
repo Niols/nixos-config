@@ -17,7 +17,6 @@
 
     settings.folders = {
       "Wallace/.config/doom".path = "~/.config/doom";
-      "Wallace/.config/i3".path = "~/.config/i3";
     };
   };
 }
