@@ -38,6 +38,11 @@
   programs.lsd.enable = true;
   programs.urxvt = import ./programs/urxvt.nix;
 
+  programs.nextcloud-client = {
+    enable = true;
+    startInBackground = true; # REVIEW: does this allow cleaning up i3's startup.sh?
+  };
+
   programs.rofi = {
     enable = true;
     plugins = [ pkgs.rofi-calc ];
