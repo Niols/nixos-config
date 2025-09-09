@@ -5,6 +5,30 @@ let
 
 in
 {
+  ############################################################################
+  ## Networking
+  ##
+  ## The global useDHCP flag is deprecated, therefore explicitly set
+  ## to false here. wPer-interface useDHCP will be mandatory in the
+  ## future, so this generated config replicates the default
+  ## behaviour.
+
+  networking = {
+    hostName = "wallace";
+
+    useDHCP = false;
+    interfaces.wlp0s20f3.useDHCP = true;
+
+    networkmanager.enable = true;
+
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1" # # Cloudflare
+      "8.8.8.8"
+      "8.8.4.4" # # Google
+    ];
+  };
+
   ##############################################################################
   ## WiFi access point for other devices
 
