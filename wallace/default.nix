@@ -4,10 +4,10 @@
   flake.nixosModules.wallace = {
     imports = [
       (import ../_common).laptop
+      ../_modules/niols-motd.nix
 
       ./graphics.nix
       ./hardware-configuration.nix
-      ./motd.nix
       ./network.nix
       ./sound.nix
       ./storage.nix
@@ -57,5 +57,11 @@
         };
       }
     ];
+
+    niols-motd = {
+      enable = true;
+      hostname = "Wallace";
+      hostcolour = "green";
+    };
   };
 }
