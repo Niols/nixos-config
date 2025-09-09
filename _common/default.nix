@@ -44,6 +44,7 @@ in
     ./laptop/disk-config.nix
     ./laptop/nix.nix
     ./laptop/packages
+    ./laptop/timezone.nix
     ./laptop/users.nix
   ];
 }

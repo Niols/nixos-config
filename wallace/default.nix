@@ -15,7 +15,6 @@
 
       ./legacy-configuration.nix
       ./syncthing.nix
-      ./timezone.nix
       ./udev.nix
       ./xserver.nix
 
