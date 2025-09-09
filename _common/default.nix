@@ -47,5 +47,6 @@ in
     ./laptop/timezone.nix
     ./laptop/udev.nix
     ./laptop/users.nix
+    ./laptop/xserver.nix
   ];
 }
