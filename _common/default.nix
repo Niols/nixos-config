@@ -40,6 +40,7 @@ in
     ./both/nix.nix
     ./both/packages.nix
 
+    ./laptop/nix.nix
     ./laptop/packages
     ./laptop/users.nix
   ];

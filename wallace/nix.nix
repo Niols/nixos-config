@@ -1,9 +1,5 @@
-{ nixpkgs, ... }:
-
 {
   nix = {
-    settings.trusted-users = [ "@wheel" ];
-
     buildMachines = [
       ## Tweag Remote Builders
       {
@@ -39,9 +35,6 @@
 
     extraOptions = ''
       builders-use-substitutes = true
-
-      ## Required to use the `nix` CLI and `nix search` in particular.
-      experimental-features = nix-command flakes
     '';
 
     settings = {
@@ -69,20 +62,5 @@
         "tweag-tree-sitter-formatter.cachix.org-1:R95oCa9JV/Cu8dtdFZY55HLFqJ3ASh34dXh7o7LeL5Y="
       ];
     };
-
-    ## Garbage-collect automatically everything that is at least a month old. Do
-    ## not garbage-collect results of `direnv` or `nix build` as long as there
-    ## is a link.
-    ##
-    settings.auto-optimise-store = true;
-    settings.keep-outputs = true;
-    settings.keep-derivations = true;
-    # gc = {
-    #   automatic = true;
-    #   dates = "daily";
-    #   options = "--delete-older-than 31d";
-    # };
-
-    registry.nixpkgs.flake = nixpkgs;
   };
 }
