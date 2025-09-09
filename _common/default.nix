@@ -18,6 +18,7 @@ in
     x
 
     ./both/hester.nix
+    ./both/home-manager.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix
@@ -26,6 +27,7 @@ in
     ./server/autoreboot.nix
     ./server/boot.nix
     ./server/databases.nix
+    ./server/home-manager.nix
     ./server/nix.nix
     ./server/ssh.nix
     ./server/users.nix
@@ -35,6 +37,7 @@ in
     x
 
     ./both/hester.nix
+    ./both/home-manager.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix

@@ -16,7 +16,6 @@
         ./storage.nix
         inputs.agenix.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
-        ./home-manager.nix
         {
           _module.args = {
             inherit (inputs) nixpkgs;
