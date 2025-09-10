@@ -14,7 +14,6 @@ with pkgs;
 
   ## C
   ## caffeine-ng -> the behaviour is really inconsistent
-  chromium
   comma
 
   ## D
@@ -81,7 +80,6 @@ with pkgs;
   ## S
   scrcpy
   signal-desktop
-  slack
   # spotdl # broken as of 2023-11-10
   steam-run
 
@@ -102,7 +100,4 @@ with pkgs;
   ## Y
   yamllint
   # youtube-dl ## unmaintained; switch to yt-dlp if possible.
-
-  ## Z
-  zoom-us
 ]
