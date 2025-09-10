@@ -21,9 +21,6 @@
         inputs.home-manager.nixosModules.home-manager
         ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
         inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
-
-        ./hardware.nix
-        ./storage.nix
       ];
 
       x_niols.thisDevicesName = "Wallace";
@@ -50,6 +47,47 @@
         niols = import ../home { inherit inputs; };
         root = import ../home { inherit inputs; };
       };
+
+      ############################################################################
+      ## Hardware configuration
+      ##
+      ## NOTE: Wallace was installed pre-Disko and therefore we will handle its
+      ## disk configuration by hand. New laptops should not use this.
+
+      x_niols.enableDiskoConfig = false;
+      fileSystems = {
+        "/" = {
+          device = "/dev/disk/by-label/root";
+          fsType = "ext4";
+        };
+        "/boot" = {
+          device = "/dev/disk/by-uuid/1873-B7F4";
+          fsType = "vfat";
+        };
+      };
+      swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+
+      ############################################################################
+      ## Hester configuration
+      ##
+      ## TODO: For new laptops, use the new better common interface.
+      fileSystems."/hester" = {
+        device = "//hester.niols.fr/backup";
+        fsType = "cifs";
+        options = [
+          "x-systemd.automount"
+          "noauto"
+          "x-systemd.idle-timeout=60"
+          "x-systemd.device-timeout=5s"
+          "x-systemd.mount-timeout=5s"
+          "credentials=${config.age.secrets.hester-samba-credentials.path}"
+          "gid=hester"
+          "dir_mode=0775"
+          "file_mode=0664"
+          "cache=loose"
+        ];
+      };
+      users.groups.hester.members = [ "niols" ];
 
       ############################################################################
       ## This value determines the NixOS release from which the default
