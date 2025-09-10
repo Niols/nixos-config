@@ -53,6 +53,7 @@ in
     ./laptop/network.nix
     ./laptop/nix.nix
     ./laptop/packages
+    ./laptop/syncthing.nix
     ./laptop/timezone.nix
     ./laptop/udev.nix
     ./laptop/users.nix
