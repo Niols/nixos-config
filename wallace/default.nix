@@ -24,7 +24,6 @@
 
         ./hardware.nix
         ./storage.nix
-        ./syncthing.nix
       ];
 
       x_niols.thisDevicesName = "Wallace";
