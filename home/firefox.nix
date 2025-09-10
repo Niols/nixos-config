@@ -19,7 +19,7 @@
 
       extensions = {
         # force = true; # REVIEW: only when ready
-        packages = { };
+        packages = [ ];
       };
 
       search = {
