@@ -5,8 +5,8 @@
     languagePacks = [ "en-GB" ];
 
     profiles.default = {
-      # force = true; # REVIEW: only when ready
       bookmarks = {
+        force = true;
         settings = [
           {
             name = "wikipedia";

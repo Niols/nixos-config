@@ -19,7 +19,7 @@
     ./packages.nix
     ./direnv.nix
     ./i3.nix
-    ./firefox.nix
+    ./firefox
   ];
 
   home.stateVersion = "21.05";
