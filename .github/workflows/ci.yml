@@ -104,8 +104,8 @@ jobs:
           echo 'Available storage:'
           sudo df -h
 
-  run-flake-checks:
-    name: Run flake checks
+  check-pre-commit:
+    name: Check pre-commit
     runs-on: ubuntu-latest
 
     steps:
@@ -121,5 +121,4 @@ jobs:
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=
 
       - name: Run flake checks
-        run: |
-          nix flake check --print-build-logs
+        run: nix build .#checks.x86_64-linux.pre-commit --print-build-logs

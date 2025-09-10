@@ -5,15 +5,15 @@
     enable = true;
     user = "syncthing";
 
-    key = config.age.secrets.syncthing-siegfried-key.path;
-    cert = config.age.secrets.syncthing-siegfried-cert.path;
+    key = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-key".path;
+    cert = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-cert".path;
 
     guiAddress = "127.0.0.1:8384";
     settings.gui.insecureSkipHostcheck = true;
 
     x_niols = {
       enableCommonFoldersAndDevices = true;
-      thisDevice = "Siegfried";
+      thisDevice = config.x_niols.thisDevicesName;
       defaultFolderPrefix = "/hester/services/syncthing";
       extraDefaultFolderConfig.ignorePerms = true;
     };
@@ -23,7 +23,7 @@
       Music.path = "/hester/medias/music";
     };
 
-    ## REVIEW: Should I override settings.devices.Siegfried.addresses? Will it
+    ## REVIEW: Should I override settings.devices.siegfried.addresses? Will it
     ## break? I expect not but who knows.
   };
 
@@ -50,11 +50,11 @@
 
     locations."/" = {
       proxyPass = "http://127.0.0.1:8384";
-      basicAuthFile = config.age.secrets.syncthing-siegfried-passwd.path;
+      basicAuthFile = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-passwd".path;
     };
   };
 
-  age.secrets.syncthing-siegfried-passwd = {
+  age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-passwd" = {
     mode = "600";
     owner = "nginx";
     group = "nginx";

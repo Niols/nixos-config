@@ -27,13 +27,15 @@
         ./syncthing.nix
       ];
 
-      x_niols.hostPublicKey = self.keys.machines.siegfried;
-
-      networking.hostName = "siegfried";
+      x_niols.thisDevicesName = "Siegfried";
+      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
 
       users.users = {
-        niols.hashedPasswordFile = config.age.secrets.password-siegfried-niols.path;
-        root.openssh.authorizedKeys.keys = [ keys.github-actions.deploy-siegfried ];
+        niols.hashedPasswordFile =
+          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
+        root.openssh.authorizedKeys.keys = [
+          keys.github-actions."deploy-${config.x_niols.thisDevicesNameLower}"
+        ];
       };
     };
 

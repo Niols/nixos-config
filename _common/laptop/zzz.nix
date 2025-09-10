@@ -1,10 +1,21 @@
-{ pkgs, lib, ... }:
+## FIXME: A file for everthing that does not have a good spot elsewhere. This
+## should probably just be a file `laptop.nix` that imports everything else.
 
-let
-  inherit (lib) mkForce;
+{ config, pkgs, ... }:
 
-in
 {
+  niols-motd = {
+    enable = true;
+    hostname = config.x_niols.thisDevicesName;
+    hostcolour = "green";
+  };
+
+  programs.weylus = {
+    enable = true;
+    openFirewall = true;
+    users = [ "niols" ];
+  };
+
   ############################################################################
   ## Fonts
 
@@ -86,15 +97,4 @@ in
   ## that hook. FIXME: this and all the `nix-index` stuff should go in the same
   ## file.
   programs.command-not-found.enable = false;
-
-  ############################################################################
-  ## This value determines the NixOS release from which the default
-  ## settings for stateful data, like file locations and database
-  ## versions on your system were taken. It‘s perfectly fine and
-  ## recommended to leave this value at the release version of the
-  ## first install of this system.  Before changing this value read
-  ## the documentation for this option (e.g. man configuration.nix or
-  ## on https://nixos.org/nixos/options.html).
-  system.stateVersion = mkForce "21.05"; # Did you read the comment?
-  # ^ FIXME: unify with other system.stateVersion in _common.
 }
