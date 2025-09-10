@@ -39,11 +39,6 @@
       nix.daemonCPUSchedPolicy = "idle";
       nix.daemonIOSchedClass = "idle";
 
-      networking = {
-        hostName = config.x_niols.thisDevicesNameLower;
-        domain = "niols.fr";
-      };
-
       users.users = {
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;

@@ -30,8 +30,6 @@
       x_niols.thisDevicesName = "Siegfried";
       x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
 
-      networking.hostName = config.x_niols.thisDevicesName;
-
       users.users = {
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;

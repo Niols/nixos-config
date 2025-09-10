@@ -23,7 +23,6 @@
         inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
 
         ./hardware.nix
-        ./network.nix
         ./storage.nix
         ./legacy-configuration.nix
         ./syncthing.nix
@@ -31,6 +30,7 @@
 
       x_niols.thisDevicesName = "Wallace";
       x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
+      x_niols.thisLaptopsWifiInterface = "wlp0s20f3";
 
       nixpkgs.hostPlatform = "x86_64-linux";
 
