@@ -26,18 +26,22 @@
         ./storage.nix
       ];
 
-      x_niols.hostPublicKey = self.keys.machines.orianne;
+      x_niols.thisDevicesName = "Orianne";
+      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
 
       boot.loader = {
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
 
-      networking.hostName = "orianne";
+      networking.hostName = config.x_niols.thisDevicesName;
 
       users.users = {
-        niols.hashedPasswordFile = config.age.secrets.password-orianne-niols.path;
-        root.openssh.authorizedKeys.keys = [ keys.github-actions.deploy-orianne ];
+        niols.hashedPasswordFile =
+          config.age.secrets."password-${config.x_niols.thisDevicesName}-niols".path;
+        root.openssh.authorizedKeys.keys = [
+          keys.github-actions."deploy-${config.x_niols.thisDevicesName}"
+        ];
       };
     };
 

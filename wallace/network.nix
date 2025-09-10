@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 let
   inherit (lib) mkForce;
@@ -14,7 +14,7 @@ in
   ## behaviour.
 
   networking = {
-    hostName = "wallace";
+    hostName = config.x_niols.thisDevicesNameLower;
 
     useDHCP = false;
     interfaces.wlp0s20f3.useDHCP = true;
@@ -23,9 +23,9 @@ in
 
     nameservers = [
       "1.1.1.1"
-      "1.0.0.1" # # Cloudflare
+      "1.0.0.1" # Cloudflare
       "8.8.8.8"
-      "8.8.4.4" # # Google
+      "8.8.4.4" # Google
     ];
   };
 
@@ -37,7 +37,7 @@ in
     settings = {
       INTERNET_IFACE = "wlp0s20f3";
       WIFI_IFACE = "wlp0s20f3";
-      SSID = "Wallace";
+      SSID = config.x_niols.thisDevicesName;
       PASSPHRASE = "ReKuYm05";
       FREQ_BAND = "2.4";
     };

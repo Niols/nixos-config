@@ -1,9 +1,11 @@
+{ config, ... }:
+
 {
   imports = [ ../_modules/niols-motd.nix ];
 
   niols-motd = {
     enable = true;
-    hostname = "Orianne";
+    hostname = config.x_niols.thisDevicesName;
     hostcolour = "cyan";
     noSwap = true;
   };
