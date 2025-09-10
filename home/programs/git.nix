@@ -36,6 +36,7 @@
       {
         conditions = [
           "gitdir:~/git/perso/**"
+          "gitdir:~/git/niols/**"
           "gitdir:~/git/jana/**"
           "gitdir:~/git/boloss/**"
           "gitdir:~/git/colis/**"
@@ -47,20 +48,6 @@
           name = "Niols";
           email = "niols@niols.fr";
           signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
-        };
-      }
-
-      {
-        conditions = [
-          "gitdir:~/git/modus/**"
-          "gitdir:~/git/tweag/**"
-          "gitdir:~/git/iog/**"
-          "gitdir:~/git/fediversity/**"
-        ];
-        contents.user = {
-          name = "Nicolas “Niols” Jeannerod";
-          email = "nicolas.jeannerod@moduscreate.com";
-          signingKey = "71CBB1B508F0E85DE8E5B5E735DB9EC8886E1CB8";
         };
       }
     ];

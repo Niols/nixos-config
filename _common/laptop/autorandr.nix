@@ -7,9 +7,12 @@ in
 {
   options.services.autorandr.x_niols.thisLaptopsFingerprint = mkOption {
     description = ''
-      The fingerprint of the current laptop's screen.
+      The fingerprint of the current laptop's screen. This option has a default
+      that has no chance to work, but that allows running
+      `autorandr --fingerprint` without errors.
     '';
     type = types.str;
+    default = "0000";
   };
 
   config.services.autorandr = {

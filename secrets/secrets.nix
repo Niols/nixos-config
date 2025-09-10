@@ -73,22 +73,5 @@ concatMapAttrs
       niolscloud-secrets = [ orianne ];
 
       rutorrent-passwd = [ helga ];
-
-      vaultwarden-environment = [ siegfried ];
-
-      wireguard-wallace-fediversity-private-key = [ wallace ];
-
-      ## See section “Key Files” of
-      ## https://openvpn.net/community-resources/how-to/#determining-whether-to-use-a-routed-or-bridged-vpn
-      ## for more information on which is actually secret and which is not.
-      vpn-ca-crt = [
-        orianne
-        wallace
-      ];
-      vpn-dh-pem = [ orianne ];
-      vpn-orianne-crt = [ orianne ];
-      vpn-orianne-key = [ orianne ];
-      vpn-wallace-crt = [ wallace ];
-      vpn-wallace-key = [ wallace ];
     }
   )
