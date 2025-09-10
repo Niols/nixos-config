@@ -5,5 +5,14 @@
 
     ## Nintendo Switch
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0955", ATTRS{idProduct}=="7321", GROUP="plugdev"
+
+    ## Nintendo Switch Pro Controller over USB hidraw
+    KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0660", TAG+="uaccess"
+
+    ## Nintendo Switch Pro Controller over bluetooth hidraw
+    KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0660", TAG+="uaccess"
   '';
+
+  ## Valve maintains udev rules for a lot of devices. See:
+  ## https://github.com/ValveSoftware/steam-devices/blob/master/60-steam-input.rules
 }
