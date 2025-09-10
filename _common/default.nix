@@ -57,5 +57,6 @@ in
     ./laptop/udev.nix
     ./laptop/users.nix
     ./laptop/xserver.nix
+    ./laptop/zzz.nix
   ];
 }
