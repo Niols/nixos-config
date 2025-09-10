@@ -1,9 +1,21 @@
 ## FIXME: A file for everthing that does not have a good spot elsewhere. This
 ## should probably just be a file `laptop.nix` that imports everything else.
 
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
+  niols-motd = {
+    enable = true;
+    hostname = config.x_niols.thisDevicesName;
+    hostcolour = "green";
+  };
+
+  programs.weylus = {
+    enable = true;
+    openFirewall = true;
+    users = [ "niols" ];
+  };
+
   ############################################################################
   ## Fonts
 
