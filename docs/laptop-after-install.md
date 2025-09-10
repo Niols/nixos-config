@@ -33,7 +33,7 @@
   directory. Start Steam, log in, and go into the configuration, in the
   “Storage” tab. Add `/opt/steam` as a “drive”. Try installing a game and check
   that the choice appears to install it there. While you're at it, disable the
-  Steam overlay.
+  Steam overlay. See [About Steam](./steam.md).
 
 - Set up Thunderbird. ???
 
