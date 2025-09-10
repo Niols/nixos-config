@@ -83,13 +83,6 @@
     ## build Orianne's configuration.
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    initrd.luks.devices = {
-      crypt = {
-        device = "/dev/nvme0n1p2";
-        preLVM = true;
-      };
-    };
-
     tmp = {
       useTmpfs = true;
       cleanOnBoot = true;
