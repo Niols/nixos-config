@@ -43,6 +43,7 @@
       ## disk configuration by hand. New laptops should not use this.
 
       x_niols.enableDiskoConfig = false;
+
       fileSystems = {
         "/" = {
           device = "/dev/disk/by-label/root";
@@ -53,7 +54,15 @@
           fsType = "vfat";
         };
       };
+
       swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+
+      initrd.luks.devices = {
+        crypt = {
+          device = "/dev/nvme0n1p2";
+          preLVM = true;
+        };
+      };
 
       ############################################################################
       ## Hester configuration
