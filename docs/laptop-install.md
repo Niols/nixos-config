@@ -123,7 +123,7 @@ The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
    $ sudo mv ssh_host_ed25519_key* /mnt/etc/ssh/
    ```
 
-8. Reboot.
+8. Reboot and see [Laptop installation — what to do afterwards](./laptop-after-install.md).
 
 ### Notes on `disko-install`
 
