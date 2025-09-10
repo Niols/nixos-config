@@ -26,7 +26,18 @@
   `autorandr --fingerprint`, find the fingerprint for the display, and set
   `services.autorandr.x_niols.thisLaptopsFingerprint`.
 
-- Transfer GPG and SSH keys. ???
+- Transfer GPG keys. On a machine that has the keys:
+  ```console
+  $ gpg --list-secret-keys
+  $ gpg --export-secret-keys --armor <key-id>
+  ```
+  Then move the keys in a safe way between machines, and on the new machine:
+  ```console
+  $ gpg --import <key-file>
+  ```
+
+- Transfer SSH keys. You just need to copy the key files — typically in `~/.ssh`
+  — to the new machine. They are already in a text-compatible format.
 
 - If using the unencrypted `/opt` for video games, set up Steam. Create a
   directory `/opt/steam` and make sure that the user has permission on this
