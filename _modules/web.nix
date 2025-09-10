@@ -1,5 +1,33 @@
 { config, secrets, ... }:
 
+let
+  mailConfig = ''
+    <?xml version="1.0"?>
+    <clientConfig version="1.1">
+        <emailProvider id="niols.fr">
+          <domain>niols.fr</domain>
+          <domain>jeannerod.fr</domain>
+          <displayName>Niols Mail</displayName>
+          <incomingServer type="imap">
+             <hostname>mail.infomaniak.com</hostname>
+             <port>993</port>
+             <socketType>SSL</socketType>
+             <username>%EMAILADDRESS%</username>
+             <authentication>password-cleartext</authentication>
+          </incomingServer>
+          <outgoingServer type="smtp">
+             <hostname>mail.infomaniak.com</hostname>
+             <port>465</port>
+             <socketType>SSL</socketType>
+             <username>%EMAILADDRESS%</username>
+             <authentication>password-cleartext</authentication>
+          </outgoingServer>
+        </emailProvider>
+        <clientConfigUpdate url="https://www.example.com/config/mozilla.xml" />
+    </clientConfig>
+  '';
+
+in
 {
   services.nginx.virtualHosts."niols.fr" = {
     serverName = "niols.fr";
@@ -38,6 +66,19 @@
       default_type application/json;
       add_header Access-Control-Allow-Origin *;
       return 200 '{"m.homeserver": {"base_url": "https://matrix.niols.fr/"}}';
+      ## Repeat headers from the server context.
+      add_header Strict-Transport-Security $hsts_header;
+      add_header Referrer-Policy origin-when-cross-origin;
+      add_header X-Frame-Options DENY;
+      add_header X-Content-Type-Options nosniff;
+      add_header X-XSS-Protection "1; mode=block";
+    '';
+
+    ## Well-known entry for e-mail.
+    locations."= /.well-known/autoconfig/mail/config-v1.1.xml".extraConfig = ''
+      default_type application/xml;
+      add_header Access-Control-Allow-Origin *;
+      return 200 '${mailConfig}';
       ## Repeat headers from the server context.
       add_header Strict-Transport-Security $hsts_header;
       add_header Referrer-Policy origin-when-cross-origin;
