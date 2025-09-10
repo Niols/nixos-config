@@ -50,6 +50,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -60,6 +61,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -76,6 +78,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -85,6 +88,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -92,6 +96,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -99,6 +104,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -106,6 +112,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -113,6 +120,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -120,6 +128,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -127,6 +136,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -134,6 +144,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -144,6 +155,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -151,6 +163,7 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
@@ -158,11 +171,13 @@ in
           "Philippe"
           "Phineas"
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
 
         "Wallace/.config/doom".devices = [
           "Siegfried"
+          "Gromit"
           "Wallace"
         ];
       };
@@ -174,6 +189,7 @@ in
         Philippe.id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
         Phineas.id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
+        Gromit.id = "TKMS33R-MUJALFM-DOXFCQO-NS7UWJ2-FHW4EBE-EJMZZGZ-HSM3EO7-JAQEHQ5";
         Wallace.id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
         Siegfried = {
           id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
