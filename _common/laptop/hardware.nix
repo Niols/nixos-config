@@ -1,17 +1,26 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkMerge;
+  inherit (lib)
+    mkOption
+    mkIf
+    mkMerge
+    types
+    ;
 
 in
 {
-  options.x_niols.enableDiskoConfig = mkEnableOption {
-    description = "Whether to use Disko for the definition of disks.";
+  options.x_niols.enableDiskoConfig = mkOption {
+    description = ''
+      Whether to use Disko for the definition of disks. This is enabled by
+      default and should only be disabled for legacy devices, installed before
+      Disko was a thing in this configuration.
+    '';
+    type = types.bool;
     default = true;
   };
 
   config = mkMerge [
-
     ## Disk configuration via Disko, unless specifically disabled.
     (mkIf config.x_niols.enableDiskoConfig {
       disko.devices = {
