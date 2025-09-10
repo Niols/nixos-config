@@ -34,7 +34,8 @@ concatMapAttrs
       syncthing-siegfried-passwd = [ siegfried ];
       syncthing-siegfried-cert = [ siegfried ];
       syncthing-siegfried-key = [ siegfried ];
-
+      syncthing-gromit-cert = [ gromit ];
+      syncthing-gromit-key = [ gromit ];
       syncthing-wallace-cert = [ wallace ];
       syncthing-wallace-key = [ wallace ];
 
@@ -42,6 +43,7 @@ concatMapAttrs
         helga
         orianne
         siegfried
+        gromit
         wallace
       ];
       hester-matrix-backup-repokey = [ helga ];
