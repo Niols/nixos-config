@@ -17,6 +17,7 @@ in
   server.imports = [
     x
 
+    ./both/constants.nix
     ./both/hester.nix
     ./both/home-manager.nix
     ./both/nix.nix
@@ -36,6 +37,7 @@ in
   laptop.imports = [
     x
 
+    ./both/constants.nix
     ./both/hester.nix
     ./both/home-manager.nix
     ./both/nix.nix

@@ -29,7 +29,8 @@
         ./starship.nix
       ];
 
-      x_niols.hostPublicKey = self.keys.machines.helga;
+      x_niols.thisDevicesName = "Helga";
+      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
 
       ## FIXME: This is an experiment to improve responsiveness of the system
       ## when Dancelor uses the Nix builds so intensely. It might however starve
@@ -39,13 +40,16 @@
       nix.daemonIOSchedClass = "idle";
 
       networking = {
-        hostName = "helga";
+        hostName = config.x_niols.thisDevicesNameLower;
         domain = "niols.fr";
       };
 
       users.users = {
-        niols.hashedPasswordFile = config.age.secrets.password-helga-niols.path;
-        root.openssh.authorizedKeys.keys = [ keys.github-actions.deploy-helga ];
+        niols.hashedPasswordFile =
+          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
+        root.openssh.authorizedKeys.keys = [
+          keys.github-actions."deploy-${config.x_niols.thisDevicesNameLower}"
+        ];
       };
     };
 

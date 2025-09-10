@@ -6,12 +6,12 @@
     user = "niols";
     configDir = "/home/niols/.config/syncthing/";
 
-    key = config.age.secrets.syncthing-wallace-key.path;
-    cert = config.age.secrets.syncthing-wallace-cert.path;
+    key = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-key".path;
+    cert = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-cert".path;
 
     x_niols = {
       enableCommonFoldersAndDevices = true;
-      thisDevice = "Wallace";
+      thisDevice = config.x_niols.thisDevicesName; # FIXME: duplicate options
       defaultFolderPrefix = "~/.syncthing";
     };
 
