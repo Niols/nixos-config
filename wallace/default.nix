@@ -57,7 +57,7 @@
 
       swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
-      initrd.luks.devices = {
+      boot.initrd.luks.devices = {
         crypt = {
           device = "/dev/nvme0n1p2";
           preLVM = true;
