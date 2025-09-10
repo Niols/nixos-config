@@ -127,9 +127,6 @@
               pkgs.nil
               inputs'.nixops4.packages.default
 
-              inputs'.disko.packages.disko
-              inputs'.disko.packages.disko-install
-
               ## FIXME: Move the following to `secrets/default.nix`
               inputs'.agenix.packages.default
               pkgs.borgbackup
@@ -137,6 +134,14 @@
               pkgs.easyrsa # for OpenVPN's `easyrsa` command
             ];
             shellHook = config.pre-commit.installationScript;
+          };
+
+          devShells.install = pkgs.mkShell {
+            packages = [
+              inputs'.disko.packages.disko
+              pkgs.autorandr
+              pkgs.gh
+            ];
           };
         };
 
