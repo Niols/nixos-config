@@ -132,6 +132,7 @@
               pkgs.borgbackup
               pkgs.apacheHttpd # provides the `htpasswd` utility
               pkgs.easyrsa # for OpenVPN's `easyrsa` command
+              pkgs.openssl # for key/cert pair generation
             ];
             shellHook = config.pre-commit.installationScript;
           };
