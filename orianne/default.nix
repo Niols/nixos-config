@@ -34,8 +34,6 @@
         efi.canTouchEfiVariables = true;
       };
 
-      networking.hostName = config.x_niols.thisDevicesName;
-
       users.users = {
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;

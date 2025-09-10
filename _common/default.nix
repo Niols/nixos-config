@@ -20,6 +20,7 @@ in
     ./both/constants.nix
     ./both/hester.nix
     ./both/home-manager.nix
+    ./both/network.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix
@@ -40,6 +41,7 @@ in
     ./both/constants.nix
     ./both/hester.nix
     ./both/home-manager.nix
+    ./both/network.nix
     ./both/nix.nix
     ./both/packages.nix
     ./both/ssh.nix
@@ -48,6 +50,7 @@ in
     ./laptop/autorandr.nix
     ./laptop/boot.nix
     ./laptop/hardware.nix
+    ./laptop/network.nix
     ./laptop/nix.nix
     ./laptop/packages
     ./laptop/timezone.nix
