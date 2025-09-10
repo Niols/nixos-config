@@ -45,7 +45,7 @@ in
 
     ./laptop/autorandr.nix
     ./laptop/boot.nix
-    ./laptop/disk-config.nix
+    ./laptop/hardware.nix
     ./laptop/nix.nix
     ./laptop/packages
     ./laptop/timezone.nix
