@@ -96,10 +96,11 @@
             printf '\e[31mError: no current generation found.\n\e[0m'
             exit 2
           fi
+          hostname=$(hostname --short)
           generation=$(echo "$output" | jq -r .generation)
           date=$(echo "$output" | jq -r .date | cut -d ' ' -f 1)
           nixosVersion=$(echo "$output" | jq -r .nixosVersion)
-          git tag "$generation" -m "NixOS - Configuration $generation ($date - $nixosVersion)"
+          git tag "$hostname-$generation" -m "$hostname — Configuration $generation ($date - $nixosVersion)"
           printf 'done.\nPushing changes to remote...\n'
           git push --tags
           printf 'done.\n'
