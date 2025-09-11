@@ -103,7 +103,7 @@
           tag=$hostname-$generation
           if [ -n "$(git tag --list "$tag")" ]; then
             printf '\e[36mThe tag already exists. This means that you rebuilt something\n'
-            printf 'that did not change the configuration at all. Tagging anyway...\n\e[e0m'
+            printf 'that did not change the configuration at all. Tagging anyway...\n\e[0m'
             offset=2
             while [ -n "$(git tag --list "$tag-$offset")" ]; do
               offset=$((offset + 1))
