@@ -91,16 +91,27 @@
 
         else
           printf 'Adding a Git tag for the current generation...\n'
+          hostname=$(hostname --short)
           output=$(nixos-rebuild list-generations --json | jq '.[] | select(.current == true)')
           if [ -z "$output" ]; then
             printf '\e[31mError: no current generation found.\n\e[0m'
             exit 2
           fi
-          hostname=$(hostname --short)
           generation=$(echo "$output" | jq -r .generation)
           date=$(echo "$output" | jq -r .date | cut -d ' ' -f 1)
           nixosVersion=$(echo "$output" | jq -r .nixosVersion)
-          git tag "$hostname-$generation" -m "$hostname — Configuration $generation ($date - $nixosVersion)"
+          tag=$hostname-$generation
+          if [ -n "$(git tag --list "$tag")" ]; then
+            printf '\e[36mThe tag already exists. This means that you rebuilt something\n'
+            printf 'that did not change the configuration at all. Tagging anyway...\n\e[0m'
+            offset=2
+            while [ -n "$(git tag --list "$tag-$offset")" ]; do
+              offset=$((offset + 1))
+            done
+            tag=$tag-$offset
+          fi
+          printf 'Tagging as: %s\n' "$tag"
+          git tag "$tag" -m "$hostname — Configuration $generation ($date - $nixosVersion)"
           printf 'done.\nPushing changes to remote...\n'
           git push --tags
           printf 'done.\n'

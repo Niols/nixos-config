@@ -43,6 +43,10 @@
   $ chmod 600 ~/.ssh/id_ed25519
   ```
 
+- Set up Git repositories. With the SSH and GPG key, everything should work fine
+  immediately: cloning, committing, etc. Don't forget to create the symbolic
+  link from `/etc/nixos` to the configuration's repository.
+
 - If using the unencrypted `/opt` for video games, set up Steam. Create a
   directory `/opt/steam` and make sure that the user has permission on this
   directory. Start Steam, log in, and go into the configuration, in the
