@@ -91,7 +91,7 @@
 
         else
           printf 'Adding a Git tag for the current generation...\n'
-          hostname=$(hostname --short)
+          hostname=$(hostname -s)
           output=$(nixos-rebuild list-generations --json | jq '.[] | select(.current == true)')
           if [ -z "$output" ]; then
             printf '\e[31mError: no current generation found.\n\e[0m'
