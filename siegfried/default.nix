@@ -10,8 +10,6 @@
         self.nixosModules.keys
         self.nixosModules.secrets
 
-        inputs.agenix.nixosModules.default
-
         ./ftp.nix
         ./git.nix
         ./hardware-configuration.nix

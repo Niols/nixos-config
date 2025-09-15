@@ -10,8 +10,6 @@
         self.nixosModules.keys
         self.nixosModules.secrets
 
-        inputs.agenix.nixosModules.default
-
         ./cloud.nix
         ./hardware-configuration.nix
         ./medias.nix

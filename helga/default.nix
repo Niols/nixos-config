@@ -16,7 +16,6 @@
         self.nixosModules.secrets
 
         inputs.dancelor.nixosModules.dancelor
-        inputs.agenix.nixosModules.default
 
         ./hardware-configuration.nix
         ./motd.nix
