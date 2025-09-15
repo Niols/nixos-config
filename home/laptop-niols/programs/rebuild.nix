@@ -57,7 +57,7 @@
         readonly update
         readonly proceed_if_dirty
 
-        cd /etc/nixos
+        cd ~/.config/nixos
 
         current_branch=$(git branch --show-current)
         readonly current_branch
