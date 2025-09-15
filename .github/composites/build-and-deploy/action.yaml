@@ -37,14 +37,14 @@ runs:
           ## Access token to avoid triggering GitHub's rate limiting.
           access-tokens = github.com=${{ inputs.githubAccessToken }}
 
-    - name: Build ${{ inputs.machineName }}
+    - name: Build NixOS configuration “${{ inputs.machineName }}”
       shell: bash
       run: |
         echo "$NIX_CONFIG"
         export NIX_CONFIG="system = ${{ inputs.nixSystem }}"
         nix build .#nixosConfigurations.${{ inputs.machineName }}.config.system.build.toplevel --print-build-logs
 
-    - name: Deploy ${{ inputs.machineName }}
+    - name: Deploy NixOps4 resource “${{ inputs.machineName }}”
       if: ${{ github.ref == 'refs/heads/main' && inputs.deployPrivateKey != '' }}
       shell: bash
       run: |
