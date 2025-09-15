@@ -8,13 +8,9 @@
 - Set up this Git repository. Because we do not yet have the GPG and SSH keys,
   this will have to be as read-only for now:
   ```console
-  $ mkdir -p git/niols
-  $ cd git/niols
-  $ git clone https://github.com/niols/nixos-config.git
-  $ cd nixos-config
+  $ git clone https://github.com/niols/nixos-config.git ~/.config/nixos
+  $ cd ~/.config/nixos
   $ git checkout <machine>
-  $ sudo rmdir /etc/nixos
-  $ sudo ln -s $PWD /etc/nixos
   ```
   It should now be possible to run `rebuild --update` whenever another machine
   adds things to the configuration. It will fail when trying to add a tag to
@@ -66,7 +62,15 @@
   ```
 
 - Set up Git repositories. With the SSH and GPG key, everything should work fine
-  immediately: cloning, committing, etc.
+  immediately: cloning, committing, etc. Do not forget to update the URL of the
+  NixOS configuration repository to now use SSH:
+  ```console
+  $ cd ~/.config/nixo
+  $ git remote set-url origin git@github.com:niols/nixos-config.git
+  $ git remote -v
+  origin	git@github.com:niols/nixos-config.git (fetch)
+  origin	git@github.com:niols/nixos-config.git (push)
+  ```
 
 - If using the unencrypted `/opt` for video games, set up Steam. Create a
   directory `/opt/steam` and make sure that the user has permission on this

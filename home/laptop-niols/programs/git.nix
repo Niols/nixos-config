@@ -44,6 +44,7 @@
           "gitdir:~/git/rscds/**"
           "gitdir:~/.opam/plugins/opam-publish/repos/**"
           "gitdir:/etc/nixos/**"
+          "gitdir:~/.config/nixos/**"
         ];
         contents.user = {
           name = "Niols";
