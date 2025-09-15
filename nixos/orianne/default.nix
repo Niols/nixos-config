@@ -4,18 +4,8 @@
   flake.nixosModules.orianne =
     { config, keys, ... }:
     {
-      _module.args = {
-        inherit (inputs) nixpkgs;
-      };
-
       imports = [
-        (import ../_common).server
-
-        self.nixosModules.keys
-        self.nixosModules.secrets
-
-        inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
+        ../_common/server.nix
 
         ./cloud.nix
         ./hardware-configuration.nix

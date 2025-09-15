@@ -1,4 +1,8 @@
+{ inputs, ... }:
+
 {
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
+
   home-manager = {
     ## By default, Home Manager uses a private pkgs instance that is
     ## configured via the `home-manager.users.<name>.nixpkgs` options.

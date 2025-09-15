@@ -26,7 +26,6 @@
 
     ## C
     calc
-    comma
 
     ## D
     dig

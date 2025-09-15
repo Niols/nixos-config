@@ -120,8 +120,8 @@ jobs:
           echo 'Available storage:'
           sudo df -h
 
-  home-niols:
-    name: Home / Niols
+  home-laptop-niols:
+    name: Home / Laptop / Niols
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code.
@@ -132,9 +132,9 @@ jobs:
           extra_nix_config: |
             ## Access token to avoid triggering GitHub's rate limiting.
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Build Home configuration “niols”
+      - name: Build Home configuration “laptop-niols”
         shell: bash
-        run: nix build .#homeConfigurations.niols.activationPackage --print-build-logs
+        run: nix build .#homeConfigurations.laptop-niols.activationPackage --print-build-logs
 
   check-pre-commit:
     name: Check pre-commit

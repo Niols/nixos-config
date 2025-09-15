@@ -4,24 +4,15 @@
   flake.nixosModules.helga =
     { config, keys, ... }:
     {
-      _module.args = {
-        inherit (inputs) nixpkgs;
-      };
-
       imports = [
-        (import ../_common).server
-        ../_modules/dancelor.nix
-        ../_modules/matrix.nix
-        ../_modules/teamspeak.nix
-        ../_modules/torrent.nix
-        ../_modules/web.nix
-
-        self.nixosModules.keys
-        self.nixosModules.secrets
+        ../_common/server.nix
+        ../../_modules/dancelor.nix
+        ../../_modules/matrix.nix
+        ../../_modules/teamspeak.nix
+        ../../_modules/torrent.nix
+        ../../_modules/web.nix
 
         inputs.dancelor.nixosModules.dancelor
-        inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
 
         ./hardware-configuration.nix
         ./motd.nix

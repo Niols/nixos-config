@@ -1,10 +1,7 @@
 {
   programs.ssh = {
     enable = true;
-
-    ## REVIEW: This option exists in the web documentation, but not on my
-    ## system. I would like to get rid of the `Host *` block, though.
-    # enableDefaultConfig = false;
+    enableDefaultConfig = false;
 
     extraOptionOverrides = {
       AddKeysToAgent = "yes";
