@@ -11,7 +11,6 @@
         self.nixosModules.secrets
 
         inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
 
         ./ftp.nix
         ./git.nix

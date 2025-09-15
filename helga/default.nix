@@ -17,7 +17,6 @@
 
         inputs.dancelor.nixosModules.dancelor
         inputs.agenix.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
 
         ./hardware-configuration.nix
         ./motd.nix
