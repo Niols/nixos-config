@@ -20,14 +20,20 @@
     ## B
     bat
     bc
+    bintools
     borgbackup
     btop
 
     ## C
     calc
+    comma
+
+    ## D
+    dig
 
     ## E
     emacs
+    entr
 
     ## F
     fd
@@ -38,9 +44,17 @@
 
     ## H
     htop
+    httpie
 
     ## J
     jq
+    jless
+
+    ## K
+    killall
+
+    ## N
+    nix-output-monitor
 
     ## R
     ripgrep
@@ -56,6 +70,7 @@
     wget
 
     ## Y
+    yamllint
     yq
   ];
 }

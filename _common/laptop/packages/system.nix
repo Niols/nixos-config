@@ -2,85 +2,61 @@
 with pkgs;
 [
   ## A
-  arandr
+  arandr # REVIEW: probably not needed now that we have autorandr
   ardour
   asunder
   audacity
 
-  ## B
-  bintools
-  btop
-  borgbackup
-
   ## C
   ## caffeine-ng -> the behaviour is really inconsistent
-  comma
-
-  ## D
-  dig
-  discord
 
   ## E
   element-desktop
-  entr
   evince
 
   ## F
   ffmpeg-full
-  file-roller
+  file-roller # REVIEW: what is this for?
   filezilla
   firefox
 
   ## G
-  gcc
   ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
   gimp
   gnucash
-  gnumake
   gnupg
-  guile
-  guvcview
-
-  ## H
-  httpie
+  guile # REVIEW: is it needed? maybe for LilyPond?
+  guvcview # REVIEW: what is this for?
 
   ## I
   inkscape
   imagemagick
 
-  ## J
-  jless
-
   ## K
   keepassxc
-  killall
 
   ## L
-  ledger-live-desktop # # Wallet app for Ledger devices
-  libqalculate # # provides `qalc`
+  ledger-live-desktop # Wallet app for Ledger devices
   libreoffice
   lilypond
 
   ## M
-  mattermost-desktop
   mosh
 
   ## N
   nautilus
   nautilus-open-any-terminal
   nextcloud-client
-  nix-output-monitor
 
   ## P
   pdfgrep
   pdftk
   picard
-  pkg-config
+  pkg-config # REVIEW: remove, move to `both`, or move to a new `dev` packages module
 
   ## S
-  scrcpy
+  scrcpy # REVIEW: remove, move to `both`, or move to a new `dev` packages module
   signal-desktop
-  # spotdl # broken as of 2023-11-10
   steam-run
 
   ## T
@@ -93,11 +69,9 @@ with pkgs;
   vlc
 
   ## X
-  xf86_input_wacom # # wacom tablet support + `xsetwacom`
-  xorg.xev
+  xf86_input_wacom # wacom tablet support + `xsetwacom`
   xournalpp
 
   ## Y
-  yamllint
   # youtube-dl ## unmaintained; switch to yt-dlp if possible.
 ]
