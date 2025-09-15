@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -10,6 +15,8 @@ let
 
 in
 {
+  imports = [ inputs.disko.nixosModules.disko ];
+
   options.x_niols = {
     enableDiskoConfig = mkOption {
       description = ''

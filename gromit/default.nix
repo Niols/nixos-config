@@ -12,7 +12,6 @@
         self.nixosModules.secrets
 
         inputs.agenix.nixosModules.default
-        inputs.disko.nixosModules.disko
         inputs.nix-index-database.nixosModules.nix-index
         ## Specific hardware optimisations for Lenovo ThinkPad X1 9th gen
         inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
