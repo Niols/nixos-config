@@ -42,6 +42,19 @@ in
   );
 
   nixops4Deployments =
+    let
+      ## A NixOps4 resource module that injects the necessary dependencies into
+      ## the NixOS configuration. This looks awfully like the call to
+      ## `nixosSystem` above, and that is normal. REVIEW: Maybe we can actually
+      ## factorise both of these call sites.
+      nixosDepsInjectionModule = {
+        nixos.module.imports = [
+          self.nixosModules.keys
+          self.nixosModules.secrets
+        ];
+        nixos.specialArgs = { inherit inputs; };
+      };
+    in
     mapAttrs (
       machine: makeResource:
       ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
@@ -53,7 +66,10 @@ in
       nixops4Inputs@{ providers, ... }:
       {
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources.${machine} = makeResource nixops4Inputs;
+        resources.${machine}.imports = [
+          (makeResource nixops4Inputs)
+          nixosDepsInjectionModule
+        ];
       }
     ) self.nixops4Resources
     // {
@@ -67,7 +83,12 @@ in
         nixops4Inputs@{ providers, ... }:
         {
           providers.local = inputs.nixops4.modules.nixops4Provider.local;
-          resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
+          resources = mapAttrs (_: makeResource: {
+            imports = [
+              (makeResource nixops4Inputs)
+              nixosDepsInjectionModule
+            ];
+          }) self.nixops4Resources;
         };
     };
 }
