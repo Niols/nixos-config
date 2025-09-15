@@ -34,6 +34,8 @@ concatMapAttrs
       syncthing-siegfried-passwd = [ siegfried ];
       syncthing-siegfried-cert = [ siegfried ];
       syncthing-siegfried-key = [ siegfried ];
+      syncthing-ahlaya-cert = [ ahlaya ];
+      syncthing-ahlaya-key = [ ahlaya ];
       syncthing-gromit-cert = [ gromit ];
       syncthing-gromit-key = [ gromit ];
       syncthing-wallace-cert = [ wallace ];
@@ -43,6 +45,7 @@ concatMapAttrs
         helga
         orianne
         siegfried
+        ahlaya
         gromit
         wallace
       ];
