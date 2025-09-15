@@ -12,9 +12,6 @@
         ../_modules/torrent.nix
         ../_modules/web.nix
 
-        self.nixosModules.keys
-        self.nixosModules.secrets
-
         inputs.dancelor.nixosModules.dancelor
 
         ./hardware-configuration.nix

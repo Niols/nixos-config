@@ -7,9 +7,6 @@
       imports = [
         ../_common/server.nix
 
-        self.nixosModules.keys
-        self.nixosModules.secrets
-
         ./ftp.nix
         ./git.nix
         ./hardware-configuration.nix

@@ -70,8 +70,11 @@
           map (machine: {
             name = machine;
             value = inputs.nixpkgs.lib.nixosSystem {
-              ## FIXME: inject inputs (eg. home manager module) here
-              modules = [ self.nixosModules.${machine} ];
+              modules = [
+                self.nixosModules.keys
+                self.nixosModules.secrets
+                self.nixosModules.${machine}
+              ];
               specialArgs = { inherit inputs; };
             };
           }) self.machines

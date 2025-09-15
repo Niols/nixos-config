@@ -7,9 +7,6 @@
       imports = [
         ../_common/server.nix
 
-        self.nixosModules.keys
-        self.nixosModules.secrets
-
         ./cloud.nix
         ./hardware-configuration.nix
         ./medias.nix
