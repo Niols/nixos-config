@@ -1,5 +1,10 @@
 { self, inputs, ... }:
 
+let
+  inherit (builtins) map mapAttrs listToAttrs;
+
+in
+
 {
   imports = [
     ## NixOS configurations
@@ -22,28 +27,21 @@
     "gromit"
   ];
 
-  flake.nixosConfigurations =
-    let
-      inherit (builtins) map listToAttrs;
-    in
-    listToAttrs (
-      map (machine: {
-        name = machine;
-        value = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            self.nixosModules.keys
-            self.nixosModules.secrets
-            self.nixosModules.${machine}
-          ];
-          specialArgs = { inherit inputs; };
-        };
-      }) self.machines
-    );
+  flake.nixosConfigurations = listToAttrs (
+    map (machine: {
+      name = machine;
+      value = inputs.nixpkgs.lib.nixosSystem {
+        modules = [
+          self.nixosModules.keys
+          self.nixosModules.secrets
+          self.nixosModules.${machine}
+        ];
+        specialArgs = { inherit inputs; };
+      };
+    }) self.machines
+  );
 
   nixops4Deployments =
-    let
-      inherit (builtins) mapAttrs;
-    in
     mapAttrs (
       machine: makeResource:
       ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
