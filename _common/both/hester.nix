@@ -1,9 +1,4 @@
-{
-  config,
-  secrets,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   inherit (lib) mkOption;

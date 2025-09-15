@@ -1,4 +1,4 @@
-{ config, secrets, ... }:
+{ config, ... }:
 
 {
   services.borgbackup.jobs.git = {
