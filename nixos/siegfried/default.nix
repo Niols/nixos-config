@@ -23,9 +23,7 @@
       users.users = {
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
-        root.openssh.authorizedKeys.keys = [
-          keys.github-actions."deploy-${config.x_niols.thisDevicesNameLower}"
-        ];
+        root.openssh.authorizedKeys.keys = [ keys.github-actions ];
       };
     };
 
