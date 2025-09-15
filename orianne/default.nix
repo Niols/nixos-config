@@ -5,7 +5,7 @@
     { config, keys, ... }:
     {
       imports = [
-        (import ../_common).server
+        ../_common/server.nix
 
         self.nixosModules.keys
         self.nixosModules.secrets

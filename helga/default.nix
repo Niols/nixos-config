@@ -5,7 +5,7 @@
     { config, keys, ... }:
     {
       imports = [
-        (import ../_common).server
+        ../_common/server.nix
         ../_modules/dancelor.nix
         ../_modules/matrix.nix
         ../_modules/teamspeak.nix

@@ -5,7 +5,7 @@
     { config, inputs, ... }:
     {
       imports = [
-        (import ../_common).laptop
+        ../_common/laptop.nix
         ../_modules/niols-motd.nix
 
         self.nixosModules.keys
