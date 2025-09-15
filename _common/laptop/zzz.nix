@@ -92,9 +92,4 @@
       fi
     '';
   };
-
-  ## For using `nix-index` as the `command-not-found` hook, we need to disable
-  ## that hook. FIXME: this and all the `nix-index` stuff should go in the same
-  ## file.
-  programs.command-not-found.enable = false;
 }

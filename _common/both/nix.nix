@@ -1,6 +1,10 @@
 { inputs, ... }:
 
 {
+  imports = [
+    inputs.nix-index-database.nixosModules.nix-index
+  ];
+
   nix = {
     settings.trusted-users = [ "@wheel" ];
 
@@ -37,4 +41,11 @@
       ];
     };
   };
+
+  ## Enable Comma, powered by `nix-index-database`.
+  programs.nix-index-database.comma.enable = true;
+
+  ## For using `nix-index` as the `command-not-found` hook, we need to disable
+  ## that hook.
+  programs.command-not-found.enable = false;
 }
