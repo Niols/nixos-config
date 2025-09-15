@@ -39,21 +39,10 @@
       imports = [
         inputs.git-hooks.flakeModule
         ./nixos
+        ./home
         ./keys
         ./secrets
       ];
-
-      flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-        modules = [
-          ./home
-          {
-            home.username = "niols";
-            home.homeDirectory = "/home/niols";
-          }
-        ];
-        extraSpecialArgs = { inherit inputs; };
-      };
 
       perSystem =
         {
