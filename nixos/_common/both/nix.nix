@@ -42,6 +42,8 @@
     };
   };
 
+  programs.nix-index.enable = true;
+
   ## Enable Comma, powered by `nix-index-database`.
   programs.nix-index-database.comma.enable = true;
 
