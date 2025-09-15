@@ -81,21 +81,15 @@
         let
           inherit (builtins) mapAttrs;
         in
-        mapAttrs (
-          machine: makeResource:
-          nixops4Inputs@{ providers, ... }:
-          {
-            providers.local = inputs.nixops4.modules.nixops4Provider.local;
-            resources.${machine} = makeResource nixops4Inputs;
-          }
-        ) self.nixops4Resources
+        mapAttrs (machine: makeResource: nixops4Inputs: {
+          providers.local = inputs.nixops4.modules.nixops4Provider.local;
+          resources.${machine} = makeResource nixops4Inputs;
+        }) self.nixops4Resources
         // {
-          default =
-            nixops4Inputs@{ providers, ... }:
-            {
-              providers.local = inputs.nixops4.modules.nixops4Provider.local;
-              resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
-            };
+          default = nixops4Inputs: {
+            providers.local = inputs.nixops4.modules.nixops4Provider.local;
+            resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
+          };
         };
 
       flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {

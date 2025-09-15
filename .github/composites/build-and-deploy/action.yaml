@@ -42,7 +42,7 @@ runs:
       run: |
         echo "$NIX_CONFIG"
         export NIX_CONFIG="system = ${{ inputs.nixSystem }}"
-        nix build .#nixosConfigurations.${{ inputs.machineName }}.config.system.build.toplevel
+        nix build .#nixosConfigurations.${{ inputs.machineName }}.config.system.build.toplevel --print-build-logs
 
     - name: Deploy ${{ inputs.machineName }}
       if: ${{ github.ref == 'refs/heads/main' && inputs.deployPrivateKey != '' }}

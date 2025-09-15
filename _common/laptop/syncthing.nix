@@ -1,9 +1,4 @@
-{
-  config,
-  secrets,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
 {
   services.syncthing = {

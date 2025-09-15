@@ -1,4 +1,4 @@
-{ config, secrets, ... }:
+{ config, ... }:
 
 ## NOTE: The nginx reverse proxy makes both the client and the federation
 ## services accessible at <public_baseurl>:443. However, other servers will by
