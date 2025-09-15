@@ -44,6 +44,7 @@ in
       overrideFolders = true;
       settings.folders = makeSyncthingFolders {
         Organiser.devices = [
+          "Ahlaya"
           "Barbara"
           "Camille"
           "Oxana"
@@ -55,6 +56,7 @@ in
         ];
 
         MobileSheets.devices = [
+          "Ahlaya"
           "Barbara"
           "Camille"
           "Oxana"
@@ -73,6 +75,7 @@ in
         ];
 
         "Boox/Documents".devices = [
+          "Ahlaya"
           "Camille"
           "Oxana"
           "Philippe"
@@ -83,6 +86,7 @@ in
         ];
 
         "Boox/Notes".devices = [
+          "Ahlaya"
           "Camille"
           "Oxana"
           "Philippe"
@@ -93,6 +97,7 @@ in
         ];
 
         "Philippe/DCIM/SD Card".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -101,6 +106,7 @@ in
         ];
 
         "Philippe/DCIM/Storage".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -109,6 +115,7 @@ in
         ];
 
         "Philippe/Movies/Storage".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -117,6 +124,7 @@ in
         ];
 
         "Philippe/Pictures/SD Card".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -125,6 +133,7 @@ in
         ];
 
         "Philippe/Pictures/Storage".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -133,6 +142,7 @@ in
         ];
 
         "Philippe/Scans".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -141,6 +151,7 @@ in
         ];
 
         "Phineas/DCIM".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -149,6 +160,7 @@ in
         ];
 
         "Phineas/Documents".devices = [
+          "Ahlaya"
           "Barbara"
           "Camille"
           "Oxana"
@@ -160,6 +172,7 @@ in
         ];
 
         "Phineas/Download".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -168,6 +181,7 @@ in
         ];
 
         "Phineas/Pictures".devices = [
+          "Ahlaya"
           "Philippe"
           "Phineas"
           "Siegfried"
@@ -176,6 +190,7 @@ in
         ];
 
         "Wallace/.config/doom".devices = [
+          "Ahlaya"
           "Siegfried"
           "Gromit"
           "Wallace"
@@ -189,6 +204,7 @@ in
         Philippe.id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
         Phineas.id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
+        Ahlaya.id = "SGAFF5O-IMVLLWM-G5JG6R3-Y6HWZBH-I4R7NPO-5YK3HL3-CABWEYB-IB27KAB";
         Gromit.id = "TKMS33R-MUJALFM-DOXFCQO-NS7UWJ2-FHW4EBE-EJMZZGZ-HSM3EO7-JAQEHQ5";
         Wallace.id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
         Siegfried = {
