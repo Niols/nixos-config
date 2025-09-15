@@ -82,7 +82,7 @@
 
         printf 'Rebuilding NixOS configuration...\n'
         sudo true
-        sudo nixos-rebuild $action --builders '@/etc/nix/machines' |& nom
+        sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
         printf 'done.\n'
 
         if $is_dirty; then
