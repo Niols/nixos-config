@@ -42,5 +42,5 @@ in
 {
   machines = collectKeys ./machines;
   niols = collectKeys ./niols;
-  github-actions = collectKeys ./github-actions;
+  github-actions = removeTrailingWhitespace (readFile ./github-actions.pub);
 }
