@@ -1,5 +1,10 @@
 { self, inputs, ... }:
 
+let
+  inherit (builtins) map mapAttrs listToAttrs;
+
+in
+
 {
   imports = [
     ## NixOS configurations
@@ -22,36 +27,68 @@
     "gromit"
   ];
 
-  flake.nixosConfigurations =
-    let
-      inherit (builtins) map listToAttrs;
-    in
-    listToAttrs (
-      map (machine: {
-        name = machine;
-        value = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            self.nixosModules.keys
-            self.nixosModules.secrets
-            self.nixosModules.${machine}
-          ];
-          specialArgs = { inherit inputs; };
-        };
-      }) self.machines
-    );
+  flake.nixosConfigurations = listToAttrs (
+    map (machine: {
+      name = machine;
+      value = inputs.nixpkgs.lib.nixosSystem {
+        modules = [
+          self.nixosModules.keys
+          self.nixosModules.secrets
+          self.nixosModules.${machine}
+        ];
+        specialArgs = { inherit inputs; };
+      };
+    }) self.machines
+  );
 
   nixops4Deployments =
     let
-      inherit (builtins) mapAttrs;
-    in
-    mapAttrs (machine: makeResource: nixops4Inputs: {
-      providers.local = inputs.nixops4.modules.nixops4Provider.local;
-      resources.${machine} = makeResource nixops4Inputs;
-    }) self.nixops4Resources
-    // {
-      default = nixops4Inputs: {
-        providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
+      ## A NixOps4 resource module that injects the necessary dependencies into
+      ## the NixOS configuration. This looks awfully like the call to
+      ## `nixosSystem` above, and that is normal. REVIEW: Maybe we can actually
+      ## factorise both of these call sites.
+      nixosDepsInjectionModule = {
+        nixos.module.imports = [
+          self.nixosModules.keys
+          self.nixosModules.secrets
+        ];
+        nixos.specialArgs = { inherit inputs; };
       };
+    in
+    mapAttrs (
+      machine: makeResource:
+      ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
+      ## fails with: “error: function '<deployment>' called without required
+      ## argument 'providers'”. However, deadnix does not like this, so we
+      ## have to inform it that this is OK.
+      ##
+      # deadnix: skip
+      nixops4Inputs@{ providers, ... }:
+      {
+        providers.local = inputs.nixops4.modules.nixops4Provider.local;
+        resources.${machine}.imports = [
+          (makeResource nixops4Inputs)
+          nixosDepsInjectionModule
+        ];
+      }
+    ) self.nixops4Resources
+    // {
+      default =
+        ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
+        ## fails with: “error: function '<deployment>' called without required
+        ## argument 'providers'”. However, deadnix does not like this, so we
+        ## have to inform it that this is OK.
+        ##
+        # deadnix: skip
+        nixops4Inputs@{ providers, ... }:
+        {
+          providers.local = inputs.nixops4.modules.nixops4Provider.local;
+          resources = mapAttrs (_: makeResource: {
+            imports = [
+              (makeResource nixops4Inputs)
+              nixosDepsInjectionModule
+            ];
+          }) self.nixops4Resources;
+        };
     };
 }

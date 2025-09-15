@@ -52,6 +52,7 @@
       };
 
       nixpkgs = inputs.nixpkgs;
+
       nixos.module = {
         imports = [ self.nixosModules.helga ];
       };
