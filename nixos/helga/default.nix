@@ -6,11 +6,11 @@
     {
       imports = [
         ../_common/server.nix
-        ../_modules/dancelor.nix
-        ../_modules/matrix.nix
-        ../_modules/teamspeak.nix
-        ../_modules/torrent.nix
-        ../_modules/web.nix
+        ../../_modules/dancelor.nix
+        ../../_modules/matrix.nix
+        ../../_modules/teamspeak.nix
+        ../../_modules/torrent.nix
+        ../../_modules/web.nix
 
         inputs.dancelor.nixosModules.dancelor
 

@@ -42,7 +42,7 @@
     displayManager = {
       lightdm = {
         enable = true;
-        background = ../../_assets/background-image.jpg;
+        background = ../../../_assets/background-image.jpg;
         extraConfig = ''
           ## Do not hide users, show their `.face`!
           greeter-hide-users = false
