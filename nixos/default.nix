@@ -11,8 +11,8 @@ in
     ./helga
     ./orianne
     ./siegfried
-    ./wallace
-    ./gromit
+    ./wallace.nix
+    ./gromit.nix
 
     ## NixOps4
     inputs.nixops4.modules.flake.default
