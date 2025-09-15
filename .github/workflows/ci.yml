@@ -19,112 +19,15 @@ concurrency:
 
 jobs:
 
-  nixos-helga:
-    name: NixOS / Helga
+  prepare:
+    name: Prepare
     runs-on: ubuntu-latest
+    outputs:
+      checks: ${{ steps.json.outputs.checks }}
+      homeConfigurations: ${{ steps.json.outputs.homeConfigurations }}
+      nixosConfigurations: ${{ steps.json.outputs.nixosConfigurations }}
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v5
-      - name: Build (and deploy) Helga
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: helga
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-          deployPrivateKey: ${{ secrets.DEPLOY_HELGA_KEY }}
-
-  nixos-siegfried:
-    name: NixOS / Siegfried
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v5
-      - name: Build (and deploy) Siegfried
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: siegfried
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-          deployPrivateKey: ${{ secrets.DEPLOY_SIEGFRIED_KEY }}
-
-  nixos-orianne:
-    name: NixOS / Orianne
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v5
-        ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
-        ## machines. We therefore install the emulation binaries for QEMU and
-        ## tell Nix to behave as an `aarch64-linux` machine.
-      - name: Install emulation binaries for QEMU
-        run: sudo apt-get update -y && sudo apt-get install -y qemu-user-static
-      - name: Build (and deploy) Orianne
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: orianne
-          nixSystem: aarch64-linux
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-          deployPrivateKey: ${{ secrets.DEPLOY_ORIANNE_KEY }}
-
-  nixos-gromit:
-    name: NixOS / Gromit (build only)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Free some extra space
-        run: |
-          echo 'Available storage before:'
-          sudo df -h
-          echo
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-          echo 'Available storage after:'
-          sudo df -h
-          echo
-      - name: Check out repository code
-        uses: actions/checkout@v5
-      - name: Build Gromit
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: gromit
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Remaining space
-        run: |
-          echo 'Available storage:'
-          sudo df -h
-
-  nixos-wallace:
-    name: NixOS / Wallace (build only)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Free some extra space
-        run: |
-          echo 'Available storage before:'
-          sudo df -h
-          echo
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-          echo 'Available storage after:'
-          sudo df -h
-          echo
-      - name: Check out repository code
-        uses: actions/checkout@v5
-      - name: Build Wallace
-        uses: ./.github/composites/build-and-deploy
-        with:
-          machineName: wallace
-          githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Remaining space
-        run: |
-          echo 'Available storage:'
-          sudo df -h
-
-  home-laptop-niols:
-    name: Home / Laptop / Niols
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code.
+      - name: Check out repository
         uses: actions/checkout@v5
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -132,22 +35,134 @@ jobs:
           extra_nix_config: |
             ## Access token to avoid triggering GitHub's rate limiting.
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Build Home configuration “laptop-niols”
-        shell: bash
-        run: nix build .#homeConfigurations.laptop-niols.activationPackage --print-build-logs
+      - name: Gather outputs from the flake
+        id: json
+        run: |
+          read_and_output () {
+            printf '%s=' "$1"
+            nix eval --impure --raw --expr "
+              with builtins;
+              let flake = getFlake (toString ./.); in
+              toJSON (attrNames flake.$2)
+            "
+            echo
+          }
+          {
+            read_and_output checks checks.x86_64-linux
+            read_and_output homeConfigurations homeConfigurations
+            read_and_output nixosConfigurations nixosConfigurations
+          } | tee $GITHUB_OUTPUT
 
-  check-pre-commit:
-    name: Check pre-commit
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
+    needs:
+      - checks
+      - homeConfigurations
+      - nixosConfigurations
+    if: ${{ !cancelled() }}
     steps:
-      - name: Check out repository code
+      - name: At least one CI job failed
+        if: ${{ needs.checks.result == 'failure' || needs.homeConfigurations.result == 'failure' || needs.nixosConfigurations.result == 'failure' }}
+        run: false
+      - name: All CI jobs succeeded
+        run: true
+
+  checks:
+    name: Check
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check: ${{ fromJson(needs.prepare.outputs.checks) }}
+      fail-fast: false
+    steps:
+      - name: Check out repository code.
         uses: actions/checkout@v5
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            substituters = https://cache.nixos.org https://nix-community.cachix.org https://dancelor.cachix.org
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=
-      - name: Run flake checks
-        run: nix build .#checks.x86_64-linux.pre-commit --print-build-logs
+          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Run check “${{ matrix.check }}”
+        run: nix build .#checks.x86_64-linux.${{ matrix.check }} --print-build-logs
+
+  homeConfigurations:
+    name: Home
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        home: ${{ fromJson(needs.prepare.outputs.homeConfigurations) }}
+      fail-fast: false
+    steps:
+      - name: Check out repository code.
+        uses: actions/checkout@v5
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Build Home configuration “${{ matrix.home }}”
+        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --print-build-logs
+
+  nixosConfigurations:
+    name: NixOS
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nixos: ${{ fromJson(needs.prepare.outputs.nixosConfigurations) }}
+      fail-fast: false
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        ## FIXME: Freeing space takes about 3-4 minutes as of 15 September 2025,
+        ## which is lost time on small configurations. It would be nicer if we
+        ## could decide whether that is actually necessary.
+      - name: Free some extra space
+        run: |
+          echo 'Available storage before:'
+          sudo df -h
+          echo
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          echo 'Available storage after:'
+          sudo df -h
+          echo
+      - name: Set up emulation layer if necessary
+        run: |
+          ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
+          ## machines, so we detect that, install the emulation binaries for
+          ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
+          system=$(nix eval --impure --raw .#nixosConfigurations.${{ matrix.nixos }}.pkgs.stdenv.hostPlatform.system)
+          echo "system = $system" > nix-config
+          if [ $system != x86_64-linux ]; then
+            printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
+            sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+          fi
+      - name: Build NixOS configuration “${{ matrix.nixos }}”
+        run: |
+          export NIX_CONFIG=$(cat nix-config)
+          nix build .#nixosConfigurations.${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
+      - name: Remaining space
+        run: |
+          echo 'Available storage:'
+          sudo df -h
+      - name: Deploy NixOps4 resource “${{ matrix.nixos }}” if it exists
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          has_deployment=$(nix eval --impure --raw --expr 'with builtins; if (getFlake (toString ./.)).nixops4Deployments ? ${{ matrix.nixos }} then "true" else "false"')
+          if $has_deployment; then
+            echo "${{ secrets.DEPLOY_KEY }}" > deploy-key
+            chmod 600 deploy-key
+            nix develop --command ssh-agent bash -c '
+              ssh-add deploy-key
+              export NIX_CONFIG=$(cat nix-config)
+              nixops4 apply ${{ matrix.nixos }}
+            '
+          fi
