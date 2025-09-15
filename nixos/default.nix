@@ -44,14 +44,32 @@
     let
       inherit (builtins) mapAttrs;
     in
-    mapAttrs (machine: makeResource: nixops4Inputs: {
-      providers.local = inputs.nixops4.modules.nixops4Provider.local;
-      resources.${machine} = makeResource nixops4Inputs;
-    }) self.nixops4Resources
-    // {
-      default = nixops4Inputs: {
+    mapAttrs (
+      machine: makeResource:
+      ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
+      ## fails with: “error: function '<deployment>' called without required
+      ## argument 'providers'”. However, deadnix does not like this, so we
+      ## have to inform it that this is OK.
+      ##
+      # deadnix: skip
+      nixops4Inputs@{ providers, ... }:
+      {
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
-      };
+        resources.${machine} = makeResource nixops4Inputs;
+      }
+    ) self.nixops4Resources
+    // {
+      default =
+        ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
+        ## fails with: “error: function '<deployment>' called without required
+        ## argument 'providers'”. However, deadnix does not like this, so we
+        ## have to inform it that this is OK.
+        ##
+        # deadnix: skip
+        nixops4Inputs@{ providers, ... }:
+        {
+          providers.local = inputs.nixops4.modules.nixops4Provider.local;
+          resources = mapAttrs (_: makeResource: makeResource nixops4Inputs) self.nixops4Resources;
+        };
     };
 }
