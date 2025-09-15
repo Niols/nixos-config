@@ -1,4 +1,4 @@
-{ nixpkgs, ... }:
+{ inputs, ... }:
 
 {
   nix = {
@@ -11,7 +11,7 @@
 
     settings.auto-optimise-store = true;
 
-    registry.nixpkgs.flake = nixpkgs;
+    registry.nixpkgs.flake = inputs.nixpkgs;
 
     settings = {
       ## Substituters that are always used.

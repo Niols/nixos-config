@@ -4,10 +4,6 @@
   flake.nixosModules.wallace =
     { config, lib, ... }:
     {
-      _module.args = {
-        inherit (inputs) nixpkgs;
-      };
-
       imports = [
         (import ../_common).laptop
         ../_modules/niols-motd.nix
@@ -31,9 +27,10 @@
 
       services.autorandr.x_niols.thisLaptopsFingerprint = "00ffffffffffff000e6f031400000000001e0104b51e1378032594af5042b0250d4e550000000101010101010101010101010101010180e800a0f0605090302036002ebd10000018000000fd00303c95953c010a202020202020000000fe0043534f542054330a2020202020000000fe004d4e453030375a41312d320a2001a102030f00e3058000e60605016a6a24000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009a";
 
+      home-manager.extraSpecialArgs = { inherit inputs; };
       home-manager.users = {
-        niols = import ../home { inherit inputs; };
-        root = import ../home { inherit inputs; };
+        niols.imports = [ ../home ];
+        root.imports = [ ../home ];
       };
 
       ############################################################################

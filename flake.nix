@@ -70,9 +70,9 @@
           map (machine: {
             name = machine;
             value = inputs.nixpkgs.lib.nixosSystem {
-              ## FIXME: specialArgs = { inherit inputs; }
               ## FIXME: inject inputs (eg. home manager module) here
               modules = [ self.nixosModules.${machine} ];
+              specialArgs = { inherit inputs; };
             };
           }) self.machines
         );
@@ -95,12 +95,13 @@
       flake.homeConfigurations.niols = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          (import ./home { inherit inputs; })
+          ./home
           {
             home.username = "niols";
             home.homeDirectory = "/home/niols";
           }
         ];
+        extraSpecialArgs = { inherit inputs; };
       };
 
       perSystem =
