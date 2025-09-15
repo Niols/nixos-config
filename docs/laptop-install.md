@@ -1,6 +1,7 @@
 # Laptop installation
 
-The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
+The following steps have been tested on a ThinkPad X1 Carbon Gen 9 and another
+Gen 13 in September 2025.
 
 1. Boot into the USB stick.
 
@@ -31,11 +32,12 @@ The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
    > quit
    ```
 
-3. Clone this repository, go in it, and spin the installation-specific Shell
-   environment.
+3. Clone this repository, go in it, check out the machine-specific branch if
+   there is one, and spin the installation-specific Shell environment.
    ```console
    $ git clone https://github.com/niols/nixos-config
    $ cd nixos-config
+   $ git checkout <machine>
    $ nix --extra-experimental-features 'nix-command flakes' develop .#install
    [...]
    ```
@@ -57,7 +59,7 @@ The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
       [...]
       2. wlp0s20f3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu [...]
       [...]
-      $ vi <machine>/default.nix
+      $ vi nixos/<machine>.nix
       ```
 
    3. Commit and push those changes. Beware NOT to push the private key.
@@ -66,12 +68,13 @@ The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
       $ git config user.email <email>
       $ git add keys
       $ git commit --message='Add <machine> public key'
-      $ git add <machine>
+      $ git add nixos/<machine>.nix
       $ git commit --message='Add <machine> WiFi interface'
       $ git push
       ```
       If the repository is hosted on GitHub, pushing with credentials will not
-      be possible. A solution is to log in with `gh` and a personal token:
+      be possible. A solution is to log in with `gh` and
+      [a personal token](https://github.com/settings/tokens):
       ```console
       $ gh auth login
       ? Where do you use GitHub? GitHub.com
@@ -86,7 +89,10 @@ The following steps have been tested on a ThinkPad X1 Carbon Gen 9.
       sure it has the required scopes above.
 
    4. On another machine, pull the new public key, update `secrets/secrets.nix`
-      to add the new machine wherever necessary, then rekey, commit and push.
+      to add the new machine wherever necessary, potentially adding secrets. An
+      easy method is to look where other laptops are used an mimmick them. As of
+      September 2025, this involves creating secrets for Syncthing. Rekey the
+      old secrets, commit and push.
       ```console
       $ git pull
       $ cd secrets && agenix --rekey

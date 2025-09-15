@@ -5,17 +5,39 @@
   $ systemctl status
   ```
 
+- Set up this Git repository. Because we do not yet have the GPG and SSH keys,
+  this will have to be as read-only for now:
+  ```console
+  $ mkdir -p git/niols
+  $ cd git/niols
+  $ git clone https://github.com/niols/nixos-config.git
+  $ cd nixos-config
+  $ git checkout <machine>
+  $ sudo rmdir /etc/nixos
+  $ sudo ln -s $PWD /etc/nixos
+  ```
+  It should now be possible to run `rebuild --update` whenever another machine
+  adds things to the configuration. It will fail when trying to add a tag to
+  the repository, but that is of little impact.
+
 - Set up Signal. This is easy via the phone and will allow using the other
   devices to send passwords in a secure way, before the new laptop is fully
   connected to the password manager and able to make Git commits.
 
 - Set up Syncthing. Start `syncthingtray`, accept to “Start guided setup”, make
   sure to “Configure Syncthing Tray for currently running Syncthing instance”.
-  Get the device's id, and add it to the other devices' configuration. Syncing
-  should start.
+  Get the device's id, and add it to the common configuration. Rebuild the new
+  device, _but also one of the other devices_! Syncing should start syncing
+  everything.
 
-- Check access to the password manager `keepassxc`, once the `Organiser`
-  Syncthing folder has been synced.
+- Set up the password manager `keepassxc`, once the `Organiser` Syncthing folder
+  has been synced. In particular, in the settings, enable:
+  - General > Automatically launch KeePassXC at system startup.
+  - General > Minimise window at application startup.
+  - General > Minimise instead of app exit.
+  - General > Show a system tray icon. (Colourful)
+  - Browser Integration: enable, and check Firefox.
+  - [REVIEW] SSH Agent?
 
 - Set up Firefox. This will automatically install the right add-ons and bring
   back the bookmarks. Nothing else to do.
@@ -44,8 +66,7 @@
   ```
 
 - Set up Git repositories. With the SSH and GPG key, everything should work fine
-  immediately: cloning, committing, etc. Don't forget to create the symbolic
-  link from `/etc/nixos` to the configuration's repository.
+  immediately: cloning, committing, etc.
 
 - If using the unencrypted `/opt` for video games, set up Steam. Create a
   directory `/opt/steam` and make sure that the user has permission on this

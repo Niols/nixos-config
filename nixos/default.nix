@@ -8,6 +8,7 @@ in
 {
   imports = [
     ## NixOS configurations
+    ./ahlaya.nix
     ./helga
     ./orianne
     ./siegfried
@@ -20,6 +21,7 @@ in
   ];
 
   flake.machines = [
+    "ahlaya"
     "helga"
     "orianne"
     "siegfried"
