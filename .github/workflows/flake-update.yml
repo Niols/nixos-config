@@ -22,14 +22,15 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
-      - name: Update flake.lock
+      - name: Update flake.lock and create the pull request
         id: update
         uses: determinatesystems/update-flake-lock@v27
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           pr-title: "Bump flake dependencies"
+          branch: auto/flake-update
 
-      - name: Set up auto-merge
+      - name: Set up auto-merge for the pull request
         run: "gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
@@ -48,15 +49,18 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
-      - name: Update flake.lock
+      - name: Update flake.lock and create the pull request
         id: update
         uses: determinatesystems/update-flake-lock@v27
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           inputs: dancelor
           pr-title: "Bump Dancelor"
+          branch: auto/flake-update-dancelor
+          ## It is important that the branches are unique, such that workflows
+          ## do not interfere with one another.
 
-      - name: Set up auto-merge
+      - name: Set up auto-merge for the pull request
         run: "gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
