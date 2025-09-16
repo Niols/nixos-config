@@ -80,7 +80,7 @@
           };
         };
       };
-      networking.firewall.allowedTCPPorts = [ ];
-      networking.firewall.allowedUDPPorts = [ ];
+      networking.firewall.allowedTCPPorts = [ 51820 ];
+      networking.firewall.allowedUDPPorts = [ 51820 ];
     };
 }
