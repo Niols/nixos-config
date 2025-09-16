@@ -78,5 +78,7 @@ concatMapAttrs
       niolscloud-secrets = [ orianne ];
 
       rutorrent-passwd = [ helga ];
+
+      wireguard-ahlaya-ahrefs-key = [ ahlaya ];
     }
   )
