@@ -1,4 +1,17 @@
+{ config, lib, ... }:
+
+let
+  inherit (lib) mkOption types genAttrs;
+
+  users = [ "niols" ] ++ (if config.x_niols.enableWorkUser then [ "work" ] else [ ]);
+
+in
 {
+  options.x_niols.enableWorkUser = mkOption {
+    default = false;
+    type = types.bool;
+  };
+
   ############################################################################
   ## User account.
 
@@ -16,8 +29,8 @@
   ##
   ## - `plugdev` needs to be explicitly created in `users.groups`.
 
-  users = {
-    users.niols = {
+  config = {
+    users.users = genAttrs users (_user: {
       isNormalUser = true;
       extraGroups = [
         "adbusers"
@@ -27,11 +40,13 @@
         "wheel"
       ];
 
-      ## NOTE: Not great, but necessary for the `.face`.
+      ## NOTE: Not great, but necessary for the `.face`, and will allow `niols`
+      ## and `work` to see each other's files if necessary. This works because
+      ## this is a one-person laptop.
       ## cf https://github.com/NixOS/nixpkgs/issues/73976
       homeMode = "755";
-    };
+    });
 
-    groups.plugdev.members = [ "niols" ];
+    users.groups.plugdev.members = users;
   };
 }
