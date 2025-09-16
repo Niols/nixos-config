@@ -74,4 +74,7 @@ with pkgs;
 
   ## Y
   # youtube-dl ## unmaintained; switch to yt-dlp if possible.
+
+  ## Z
+  zoom-us
 ]
