@@ -231,10 +231,12 @@ in
 
         ## Single LG screen, with laptop open and closed and USB-C hub
         ## plugged on first or second port.
-        lg-laptop-closed-usbc-1st-port = make-only-laptop-closed "DP-3" lg "3440x1440";
-        lg-laptop-closed-usbc-2nd-port = make-only-laptop-closed "DP-2" lg "3440x1440";
-        lg-laptop-open-usbc-1st-port = make-only-laptop-open "DP-3" lg "3440x1440";
-        lg-laptop-open-usbc-2nd-port = make-only-laptop-open "DP-2" lg "3440x1440";
+        lg-laptop-closed-usbc-dp-1 = make-only-laptop-closed "DP-1" lg "3440x1440";
+        lg-laptop-closed-usbc-dp-2 = make-only-laptop-closed "DP-2" lg "3440x1440";
+        lg-laptop-closed-usbc-dp-3 = make-only-laptop-closed "DP-3" lg "3440x1440";
+        lg-laptop-open-usbc-dp-1 = make-only-laptop-open "DP-1" lg "3440x1440";
+        lg-laptop-open-usbc-dp-2 = make-only-laptop-open "DP-2" lg "3440x1440";
+        lg-laptop-open-usbc-dp-3 = make-only-laptop-open "DP-3" lg "3440x1440";
 
         ## Double screen at Tweag's office, with laptop open and closed and USB-C
         ## hub plugged on first or second port.
