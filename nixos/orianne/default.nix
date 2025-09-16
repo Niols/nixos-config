@@ -1,4 +1,4 @@
-{ self, inputs, ... }:
+{ self, ... }:
 
 {
   flake.nixosModules.orianne =
@@ -28,24 +28,6 @@
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
         root.openssh.authorizedKeys.keys = [ keys.github-actions ];
-      };
-    };
-
-  flake.nixops4Resources.orianne =
-    { providers, ... }:
-    {
-      type = providers.local.exec;
-      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
-
-      ssh = {
-        host = "89.168.38.231";
-        opts = "";
-        hostPublicKey = self.keys.machines.orianne;
-      };
-
-      nixpkgs = inputs.nixpkgs;
-      nixos.module = {
-        imports = [ self.nixosModules.orianne ];
       };
     };
 }

@@ -1,8 +1,13 @@
-{ self, inputs, ... }:
+{ self, ... }:
 
 {
   flake.nixosModules.helga =
-    { config, keys, ... }:
+    {
+      config,
+      keys,
+      inputs,
+      ...
+    }:
     {
       imports = [
         ../_common/server.nix
@@ -34,25 +39,6 @@
         niols.hashedPasswordFile =
           config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
         root.openssh.authorizedKeys.keys = [ keys.github-actions ];
-      };
-    };
-
-  flake.nixops4Resources.helga =
-    { providers, ... }:
-    {
-      type = providers.local.exec;
-      imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
-
-      ssh = {
-        host = "188.245.212.11";
-        opts = "";
-        hostPublicKey = self.keys.machines.helga;
-      };
-
-      nixpkgs = inputs.nixpkgs;
-
-      nixos.module = {
-        imports = [ self.nixosModules.helga ];
       };
     };
 }
