@@ -8,9 +8,12 @@ let
     nixosSystem
     ;
 
-  nixosSystemFor = machine: {
-    specialArgs = { inherit inputs; };
-    modules = [
+  ## The special arguments that we need to propagate throughout the whole
+  ## codebase and all the modules.
+  specialArgs = { inherit inputs; };
+
+  nixosModuleFor = machine: {
+    imports = [
       self.nixosModules.keys
       self.nixosModules.secrets
       self.nixosModules.${machine}
@@ -32,7 +35,7 @@ let
           ## default value in the future.
           useUserPackages = true;
 
-          extraSpecialArgs = { inherit inputs; };
+          extraSpecialArgs = specialArgs;
         };
       }
     ];
@@ -47,7 +50,10 @@ let
       hostPublicKey = self.keys.machines.${machine};
     };
     inherit (inputs) nixpkgs;
-    nixos = nixosSystemFor machine;
+    nixos = {
+      module = nixosModuleFor machine;
+      inherit specialArgs;
+    };
   };
 
 in
@@ -82,7 +88,13 @@ in
     siegfried = "158.178.201.160";
   };
 
-  flake.nixosConfigurations = genAttrs self.machines (machine: nixosSystem (nixosSystemFor machine));
+  flake.nixosConfigurations = genAttrs self.machines (
+    machine:
+    nixosSystem {
+      inherit specialArgs;
+      modules = [ (nixosModuleFor machine) ];
+    }
+  );
 
   nixops4Deployments =
     mapAttrs (
