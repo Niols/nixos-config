@@ -1,7 +1,54 @@
 { self, inputs, ... }:
 
 let
-  inherit (builtins) map mapAttrs listToAttrs;
+  inherit (inputs.nixpkgs.lib)
+    genAttrs
+    mapAttrs
+    mkOption
+    nixosSystem
+    ;
+
+  nixosSystemFor = machine: {
+    specialArgs = { inherit inputs; };
+    modules = [
+      self.nixosModules.keys
+      self.nixosModules.secrets
+      self.nixosModules.${machine}
+      {
+        imports = [ inputs.home-manager.nixosModules.home-manager ];
+        home-manager = {
+          ## By default, Home Manager uses a private pkgs instance that is
+          ## configured via the `home-manager.users.<name>.nixpkgs` options.
+          ## The following option instead uses the global pkgs that is
+          ## configured via the system level nixpkgs options; This saves an
+          ## extra Nixpkgs evaluation, adds consistency, and removes the
+          ## dependency on `NIX_PATH`, which is otherwise used for importing
+          ## Nixpkgs.
+          useGlobalPkgs = true;
+
+          ## By default packages will be installed to `$HOME/.nix-profile` but
+          ## they can be installed to `/etc/profiles` if the following is
+          ## added to the system configuration. This option may become the
+          ## default value in the future.
+          useUserPackages = true;
+
+          extraSpecialArgs = { inherit inputs; };
+        };
+      }
+    ];
+  };
+
+  nixops4ResourceFor = machine: providers: {
+    type = providers.local.exec;
+    imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+    ssh = {
+      host = self.nixops4Hosts.${machine};
+      opts = "";
+      hostPublicKey = self.keys.machines.${machine};
+    };
+    inherit (inputs) nixpkgs;
+    nixos = nixosSystemFor machine;
+  };
 
 in
 
@@ -17,7 +64,7 @@ in
 
     ## NixOps4
     inputs.nixops4.modules.flake.default
-    { options.flake.nixops4Resources = inputs.nixpkgs.lib.mkOption { }; }
+    { options.flake.nixops4Hosts = mkOption { }; }
   ];
 
   flake.machines = [
@@ -29,68 +76,29 @@ in
     "gromit"
   ];
 
-  flake.nixosConfigurations = listToAttrs (
-    map (machine: {
-      name = machine;
-      value = inputs.nixpkgs.lib.nixosSystem {
-        modules = [
-          self.nixosModules.keys
-          self.nixosModules.secrets
-          self.nixosModules.${machine}
-        ];
-        specialArgs = { inherit inputs; };
-      };
-    }) self.machines
-  );
+  flake.nixops4Hosts = {
+    helga = "188.245.212.11";
+    orianne = "89.168.38.231";
+    siegfried = "158.178.201.160";
+  };
+
+  flake.nixosConfigurations = genAttrs self.machines (machine: nixosSystem (nixosSystemFor machine));
 
   nixops4Deployments =
-    let
-      ## A NixOps4 resource module that injects the necessary dependencies into
-      ## the NixOS configuration. This looks awfully like the call to
-      ## `nixosSystem` above, and that is normal. REVIEW: Maybe we can actually
-      ## factorise both of these call sites.
-      nixosDepsInjectionModule = {
-        nixos.module.imports = [
-          self.nixosModules.keys
-          self.nixosModules.secrets
-        ];
-        nixos.specialArgs = { inherit inputs; };
-      };
-    in
     mapAttrs (
-      machine: makeResource:
-      ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
-      ## fails with: “error: function '<deployment>' called without required
-      ## argument 'providers'”. However, deadnix does not like this, so we
-      ## have to inform it that this is OK.
-      ##
-      # deadnix: skip
-      nixops4Inputs@{ providers, ... }:
+      machine: _:
+      { providers, ... }:
       {
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources.${machine}.imports = [
-          (makeResource nixops4Inputs)
-          nixosDepsInjectionModule
-        ];
+        resources.${machine} = nixops4ResourceFor machine providers;
       }
-    ) self.nixops4Resources
+    ) self.nixops4Hosts
     // {
       default =
-        ## NOTE: We need to “use” the argument `providers`, otherwise NixOps4
-        ## fails with: “error: function '<deployment>' called without required
-        ## argument 'providers'”. However, deadnix does not like this, so we
-        ## have to inform it that this is OK.
-        ##
-        # deadnix: skip
-        nixops4Inputs@{ providers, ... }:
+        { providers, ... }:
         {
           providers.local = inputs.nixops4.modules.nixops4Provider.local;
-          resources = mapAttrs (_: makeResource: {
-            imports = [
-              (makeResource nixops4Inputs)
-              nixosDepsInjectionModule
-            ];
-          }) self.nixops4Resources;
+          resources = mapAttrs (machine: _: nixops4ResourceFor machine providers) self.nixops4Hosts;
         };
     };
 }
