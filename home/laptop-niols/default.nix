@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../_common/laptop
+    ../_common/laptop.nix
     ./ocaml.nix
     ./ssh.nix
   ];
