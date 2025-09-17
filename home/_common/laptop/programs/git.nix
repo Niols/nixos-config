@@ -52,6 +52,16 @@
           signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
         };
       }
+      {
+        conditions = [
+          "gitdir:~/git/ahrefs/**"
+        ];
+        contents.user = {
+          name = "Nicolas Jeannerod";
+          email = "nicolas.jeannerod@ahrefs.com";
+          signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54"; # FIXME: Ahrefs signing key
+        };
+      }
     ];
 
   extraConfig = {
@@ -66,13 +76,6 @@
     ## Set remote automatically for branches without a tracking upstream.
     push.autoSetupRemote = true;
   };
-
-  # ## Rewrite GitHub's https:// URI to ssh://
-  # extraConfig.url = {
-  #   "ssh://git@github.com" = {
-  #     insteadOf = "https://github.com";
-  #   };
-  # };
 
   ## Enable git LFS
   lfs.enable = true;

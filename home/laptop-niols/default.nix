@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  imports = [ ../_common/laptop ];
+  imports = [
+    ../_common/laptop
+    ./ssh.nix
+  ];
 
   home.username = "niols";
   home.homeDirectory = "/home/niols";
