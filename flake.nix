@@ -26,6 +26,9 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     dancelor.url = "github:paris-branch/dancelor";
+
+    doomemacs.url = "github:doomemacs/doomemacs/8f55404781edacf66fa330205533b002de3fb5eeb";
+    doomemacs.flake = false;
   };
 
   outputs =
