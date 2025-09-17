@@ -82,6 +82,12 @@
               pkgs.gh
             ];
           };
+
+          ## Expose Home Manager as one of the packages of the flake. This is
+          ## useful when trying to use it on a random machine as it avoids
+          ## having to first get Home Manager (and probably a nixpkgs), and then
+          ## also get this flake.
+          packages.home-manager = inputs'.home-manager.packages.home-manager;
         };
 
       ## Improve the way `inputs'` are computed by also handling the case of
