@@ -2,5 +2,5 @@ let
   allFilesFrom = import ../../_utils/allFilesFrom.nix;
 in
 {
-  imports = allFilesFrom ./both;
+  imports = allFilesFrom ./both ++ allFilesFrom ./headless;
 }

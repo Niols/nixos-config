@@ -18,19 +18,5 @@
     pinentry
 
     ripgrep # provides `rg`
-    fd # alternative to `find` needed by Doom Emacs
-
-    emacs
-    cmake # necessary for Emacs's `vterm`
-    libtool # necessary for Emacs's `vterm`
-    nodejs # necessary for Emacs's `copilot`
-    python3 # needed by TreeMacs
-    (aspellWithDicts (
-      dicts: with dicts; [
-        fr
-        uk
-      ]
-    ))
-    vim # useful when Emacs is broken/not set-up yet
   ];
 }

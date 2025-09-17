@@ -82,8 +82,8 @@
 - Set up Thunderbird. This should be straightforward if the Autoconfig mechanism
   is set correctly for Niols Mail.
 
-- Set up Doom Emacs. Check first that `~/.config/doom` has been synced correctly
-  by Syncthing.
+- Set up Doom Emacs. Check first that `~/.config/doom` has been installed correctly
+  by Home Manager.
   ```console
   $ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
   $ ~/.config/emacs/bin/doom install
