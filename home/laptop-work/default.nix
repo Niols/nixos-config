@@ -25,4 +25,15 @@
     slack
     zoom-us
   ];
+
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    extraOptionOverrides.AddKeysToAgent = "yes";
+
+    matchBlocks."*" = {
+      identitiesOnly = true;
+      identityFile = "~/.ssh/id_ahrefs";
+    };
+  };
 }
