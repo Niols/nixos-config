@@ -16,15 +16,11 @@ let
 
 in
 {
-  environment.systemPackages =
-    (import ./system.nix { inherit pkgs; })
-    ++ (import ./ocaml.nix { inherit pkgs; })
-    ++ [
-      hlsWrapperCompatScript
-
-      (import ./rnix.nix { inherit pkgs; })
-      (import ./tmosh.nix { inherit pkgs; })
-    ];
+  environment.systemPackages = (import ./system.nix { inherit pkgs; }) ++ [
+    hlsWrapperCompatScript
+    (import ./rnix.nix { inherit pkgs; })
+    (import ./tmosh.nix { inherit pkgs; })
+  ];
 
   programs.steam.enable = true;
   hardware.steam-hardware.enable = true; # support for controllers
