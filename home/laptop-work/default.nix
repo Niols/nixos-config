@@ -25,4 +25,9 @@
     slack
     zoom-us
   ];
+
+  programs.ssh.matchBlocks."*" = {
+    identitiesOnly = true;
+    identityFile = "~/.ssh/id_ahrefs";
+  };
 }
