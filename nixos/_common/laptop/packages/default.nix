@@ -22,36 +22,6 @@ in
     ++ [
       hlsWrapperCompatScript
 
-      (pkgs.writeShellApplication {
-        name = "bropi";
-        runtimeInputs = [ pkgs.zenity ];
-        excludeShellChecks = [
-          "SC2009"
-          "SC2016"
-          "SC2046"
-          "SC2086"
-          "SC2155"
-        ];
-        text = builtins.readFile ./bropi.sh;
-      })
-
-      (pkgs.makeDesktopItem {
-        name = "bropi";
-        genericName = "Web Browser picker";
-        desktopName = "Bropi";
-        exec = "bropi %U";
-        categories = [
-          "Network"
-          "WebBrowser"
-        ];
-        mimeTypes = [
-          "text/html"
-          "text/xml"
-          "x-scheme-handler/http"
-          "x-scheme-handler/https"
-        ];
-      })
-
       (import ./rnix.nix { inherit pkgs; })
       (import ./tmosh.nix { inherit pkgs; })
     ];
