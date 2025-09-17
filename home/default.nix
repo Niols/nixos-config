@@ -12,4 +12,10 @@
     modules = [ ./laptop-work ];
     extraSpecialArgs = { inherit inputs; };
   };
+
+  flake.homeConfigurations.headless-work = inputs.home-manager.lib.homeManagerConfiguration {
+    pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+    modules = [ ./headless-work ];
+    extraSpecialArgs = { inherit inputs; };
+  };
 }

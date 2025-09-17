@@ -1,6 +1,6 @@
 {
   imports = [
-    ../_common/laptop
+    ../_common/laptop.nix
     ./packages.nix
     ./ssh.nix
   ];

@@ -18,8 +18,6 @@
     ./ssh.nix
   ];
 
-  home.stateVersion = "21.05";
-
   programs.home-manager.enable = true;
 
   home.file.".background-image".source = ../../../_assets/background-image.jpg;
