@@ -24,8 +24,6 @@ let
   '';
 
   startupScript = writeShellScript "startup.sh" ''
-    (sleep 60; nextcloud) &
-
     ## Mute pulseaudio at startup
     pactl set-sink-mute 0 on
   '';

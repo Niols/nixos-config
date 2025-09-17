@@ -3,6 +3,7 @@
 {
   imports = [
     ../_common/laptop
+    ./ocaml.nix
     ./ssh.nix
   ];
 
@@ -10,6 +11,11 @@
   home.homeDirectory = "/home/niols";
 
   home.file.".face".source = ./face.jpg;
+
+  services.nextcloud-client = {
+    enable = true;
+    startInBackground = true;
+  };
 
   ## Packages that are only ever used on my personal laptops. They should not
   ## clutter work's environment, (and that eliminates the temptation to have
@@ -25,7 +31,6 @@
     picard
     signal-desktop
     thunderbird
-    nextcloud-client
     vlc
   ];
 }
