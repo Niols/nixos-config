@@ -15,6 +15,4 @@
 
     createDirectories = false;
   };
-
-  configFile."xfce4/terminal/terminalrc".source = ./xfce4-terminalrc;
 }
