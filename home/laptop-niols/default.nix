@@ -11,6 +11,7 @@
   home.homeDirectory = "/home/niols";
 
   home.file.".face".source = ./face.jpg;
+  home.file.".background-image".source = ./background.jpg;
 
   services.nextcloud-client = {
     enable = true;
