@@ -152,6 +152,11 @@ in
           command = "${startupScript}";
           notification = false;
         }
+        {
+          command = "${pkgs.feh}/bin/feh --no-fehbg --bg-max ~/.background-image";
+          always = true;
+          notification = false;
+        }
       ];
     };
   };
