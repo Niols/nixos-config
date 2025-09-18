@@ -61,4 +61,9 @@
     echo Syncing Doom with config
     "$HOME"/.config/emacs/bin/doom sync --force
   '';
+
+  ## Enable true color/24-bit color support. This makes Emacs pretty in the
+  ## terminal (otherwise it is okay-ish but not really usable). However, this
+  ## might break some terminals that do not have support for it.
+  home.sessionVariables.TERM = "xterm-direct";
 }
