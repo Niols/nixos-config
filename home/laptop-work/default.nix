@@ -9,4 +9,5 @@
   home.homeDirectory = "/home/work";
 
   home.file.".face".source = ./face.jpg;
+  home.file.".background-image".source = ./background.jpg;
 }
