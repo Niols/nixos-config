@@ -20,7 +20,7 @@
 
   programs.home-manager.enable = true;
 
-  xdg = import ./xdg { inherit config; };
+  xdg = import ./xdg.nix { inherit config; };
 
   gtk = import ./gtk.nix;
 
