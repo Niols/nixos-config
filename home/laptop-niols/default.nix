@@ -11,7 +11,17 @@
   home.homeDirectory = "/home/niols";
 
   home.file.".face".source = ./face.jpg;
+
+  ## FIXME: This is an indeirection. Our feh script could take the store
+  ## path directly.
   home.file.".background-image".source = ./background.jpg;
+
+  ## It is important that the path ends in `.jpg`, without which xfce4-terminal
+  ## will not pick it up.
+  xfconf.settings.xfce4-terminal.background-image-file = "${./background.jpg}";
+
+  ## FIXME: A common option that feeds into the background with feh and the
+  ## terminal's background.
 
   services.nextcloud-client = {
     enable = true;

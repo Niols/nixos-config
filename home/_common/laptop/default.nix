@@ -16,6 +16,7 @@
     ./direnv.nix
     ./i3.nix
     ./ssh.nix
+./xfce.nix
   ];
 
   programs.home-manager.enable = true;
