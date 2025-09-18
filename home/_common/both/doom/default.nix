@@ -1,4 +1,9 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 
 # let
 #   doom = pkgs.runCommand "doom" {
@@ -42,7 +47,7 @@
 
   ## FIXME: Detect when Doom has not been updated.
   ## FIXME: Detect when ~/.config/emacs is not under our control.
-  home.activation.doom = lib.hm.dag.entryAfter ["linkGeneration"] ''
+  home.activation.doom = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     # rm -Rf "$HOME"/.config/emacs
     # cp -R ''${doom} "$HOME"/.config/emacs
     # chmod -R u+w "$HOME/.config/emacs
@@ -56,4 +61,9 @@
     echo Syncing Doom with config
     "$HOME"/.config/emacs/bin/doom sync --force
   '';
+
+  ## Enable true color/24-bit color support. This makes Emacs pretty in the
+  ## terminal (otherwise it is okay-ish but not really usable). However, this
+  ## might break some terminals that do not have support for it.
+  sessionVariables.TERM = "xterm-direct";
 }
