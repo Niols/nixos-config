@@ -86,22 +86,12 @@
 ;; In Forge, show up to 20open topics and 0 closed topics.
 (setq forge-topic-list-limit '(20 . 0))
 
-(after! forge
-  (use-package! gitea-forge)
-  (add-to-list 'forge-alist '("git.fediversity.eu" "git.fediversity.eu/api/v1" "git.fediversity.eu" forge-gitea-repository))
-
-  ;; FIXME: finish the local PR merge
-  )
-
 ;; (defun forge-checkout-pullreq (pullreq)
 ;;   "Create, configure and checkout a new branch from a pull-request.
 ;; Please see the manual for more information."
 ;;   (interactive (list (forge-read-pullreq "Checkout pull request")))
 ;;   (magit--checkout (forge--branch-pullreq (forge-get-pullreq pullreq)))
 ;;   (forge-refresh-buffer))
-
-
-
 
 ;; (defun magit-merge-into (branch &optional args)
 ;;   "Merge the current branch into BRANCH and remove the former.
