@@ -40,6 +40,9 @@ in
 
     ## NOTE: Most of the `autorandr` configuration happens at the NixOS level,
     ## except for this one thing.
-    programs.autorandr.hooks.postswitch.feh = setBackgroundCommand;
+    programs.autorandr = {
+      enable = true;
+      hooks.postswitch.feh = setBackgroundCommand;
+    };
   };
 }
