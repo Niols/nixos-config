@@ -28,8 +28,7 @@ in
   };
 
   config = {
-    ## Background handling, when restarting i3, but also when switching outputs
-    ## with `autorandr`.
+    ## Set background when (re)starting i3.
     xsession.windowManager.i3.config.startup = [
       {
         command = setBackgroundCommand;
@@ -38,8 +37,9 @@ in
       }
     ];
 
+    ## Also set background whenever autorandr changes the configuration.
     ## NOTE: Most of the `autorandr` configuration happens at the NixOS level,
-    ## except for this one thing.
+    ## but this one thing depends per user.
     programs.autorandr = {
       enable = true;
       hooks.postswitch.set-background = setBackgroundCommand;
