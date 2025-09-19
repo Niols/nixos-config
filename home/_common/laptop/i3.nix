@@ -4,15 +4,6 @@ let
   inherit (pkgs) writeShellScript;
   modifier = config.xsession.windowManager.i3.config.modifier;
 
-  terminalScript = writeShellScript "terminal.sh" ''
-    for bin in xfce4-terminal i3-sensible-terminal; do
-      if command -v "$bin" >/dev/null 2>&1; then
-        exec "$bin"
-      fi
-    done
-    exit 7
-  '';
-
   explorerScript = writeShellScript "explorer.sh" ''
     ## FIXME: others?
     for bin in nautilus thunar; do
@@ -100,8 +91,8 @@ in
 
       ## Other keybindings
       keybindings = {
-        "${modifier}+Return" = "exec ${terminalScript}";
-        "${modifier}+Enter" = "exec ${terminalScript}";
+        "${modifier}+Return" = "exec ${config.x_niols.terminalCommand}";
+        "${modifier}+Enter" = "exec ${config.x_niols.terminalCommand}";
         "${modifier}+BackSpace" = "exec ${explorerScript}";
 
         "${modifier}+Shift+q" = "kill";

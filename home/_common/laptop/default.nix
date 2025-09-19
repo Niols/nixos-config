@@ -16,7 +16,7 @@
     ./direnv.nix
     ./i3.nix
     ./ssh.nix
-    ./xfce.nix
+    ./terminal.nix
     ./background.nix
   ];
 
@@ -30,7 +30,6 @@
   programs.bash = import ./programs/bash;
   programs.git = import ./programs/git.nix { inherit lib; };
   programs.lsd.enable = true;
-  programs.urxvt = import ./programs/urxvt.nix;
 
   programs.rofi = {
     enable = true;
