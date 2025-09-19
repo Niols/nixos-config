@@ -242,4 +242,41 @@ in
       };
     };
   };
+
+  ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
+  ## so we erase them here. In case of annoying keyboard shortcuts, the best is
+  ## to run
+  ##
+  ##     xfconf-query -c xfce4-keyboard-shortcuts -l
+  ##
+  ## to find the offending shortcut, and then to set it to `null` in the
+  ## following configuration. The shortcuts of the form `/*/default/*` are
+  ## defaults and therefore not relevant.
+  xfconf.settings.xfce4-keyboard-shortcuts = {
+    "commands/custom/<Alt>F1" = null;
+    "commands/custom/<Alt>F2" = null;
+    "commands/custom/<Alt>F2/startup-notify" = null;
+    "commands/custom/<Alt>F3" = null;
+    "commands/custom/<Alt>F3/startup-notify" = null;
+    "commands/custom/<Alt>Print" = null;
+    "commands/custom/<Alt><Super>s" = null;
+    "commands/custom/HomePage" = null;
+    "commands/custom/override" = null;
+    "commands/custom/<Primary><Alt>Delete" = null;
+    "commands/custom/<Primary><Alt>Escape" = null;
+    "commands/custom/<Primary><Alt>f" = null;
+    "commands/custom/<Primary><Alt>l" = null;
+    "commands/custom/<Primary><Alt>t" = null;
+    "commands/custom/<Primary>Escape" = null;
+    "commands/custom/<Primary><Shift>Escape" = null;
+    "commands/custom/Print" = null;
+    "commands/custom/<Shift>Print" = null;
+    "commands/custom/<Super>e" = null;
+    "commands/custom/<Super>p" = null;
+    "commands/custom/<Super>r" = null;
+    "commands/custom/<Super>r/startup-notify" = null;
+    "commands/custom/XF86Display" = null;
+    "commands/custom/XF86Mail" = null;
+    "commands/custom/XF86WWW" = null;
+  };
 }
