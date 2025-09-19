@@ -19,10 +19,12 @@ in
     description = ''
       Path to the image to use as background.
 
-      It is important that this path ends with an image extension.
+      This must be a string so as to avoid the path being imported. Use string
+      interpolation, eg. "''${./path/to/my/image.jpg}". The path MUST end with
+      an image extension to ensure that all the services pick it up properly.
       ## FIXME: check that in this option.
     '';
-    type = types.path;
+    type = types.str;
   };
 
   config = {

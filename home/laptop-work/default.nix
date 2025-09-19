@@ -10,5 +10,5 @@
 
   home.file.".face".source = ./face.jpg;
 
-  x_niols.backgroundImageFile = ./background.jpg;
+  x_niols.backgroundImageFile = "${./background.jpg}";
 }
