@@ -23,11 +23,6 @@ let
     exit 7
   '';
 
-  startupScript = writeShellScript "startup.sh" ''
-    ## Mute pulseaudio at startup
-    pactl set-sink-mute 0 on
-  '';
-
 in
 {
   xsession.windowManager.i3 = {
@@ -146,18 +141,6 @@ in
           '';
         }
       ];
-
-      startup = [
-        {
-          command = "${startupScript}";
-          notification = false;
-        }
-        {
-          command = "${pkgs.feh}/bin/feh --no-fehbg --bg-max ~/.background-image";
-          always = true;
-          notification = false;
-        }
-      ];
     };
   };
 
@@ -242,6 +225,19 @@ in
       };
     };
   };
+
+  ## Background handling, when restarting i3, but also when switching outputs
+  ## with `autorandr`. Most of the `autorandr` configuration happens at the
+  ## NixOS level, except for this one.
+  xsession.windowManager.i3.config.startup = [
+    {
+      command = "${pkgs.feh}/bin/feh --no-fehbg --bg-max ~/.background-image";
+      always = true;
+      notification = false;
+    }
+  ];
+  programs.autorandr.hooks.postswitch.feh =
+    "${pkgs.feh}/bin/feh --no-fehbg --bg-max ~/.background-image";
 
   ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
   ## so we erase them here. In case of annoying keyboard shortcuts, the best is
