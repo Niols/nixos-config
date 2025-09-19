@@ -9,7 +9,7 @@ let
   inherit (lib) mkOption types;
 
   setBackgroundCommand = ''
-    ${pkgs.feh}/bin/feh --no-fehbg --bg-max ${config.x_niols.backgroundImageFile}
+    ${pkgs.feh}/bin/feh --no-fehbg --bg-center ${config.x_niols.backgroundImageFile}
   '';
 
 in
@@ -42,7 +42,7 @@ in
     ## except for this one thing.
     programs.autorandr = {
       enable = true;
-      hooks.postswitch.feh = setBackgroundCommand;
+      hooks.postswitch.background = setBackgroundCommand;
     };
   };
 }
