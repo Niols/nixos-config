@@ -42,7 +42,7 @@ in
     ## except for this one thing.
     programs.autorandr = {
       enable = true;
-      hooks.postswitch.background = setBackgroundCommand;
+      hooks.postswitch.set-background = setBackgroundCommand;
     };
   };
 }
