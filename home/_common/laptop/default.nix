@@ -17,6 +17,7 @@
     ./i3.nix
     ./ssh.nix
     ./xfce.nix
+    ./background.nix
   ];
 
   programs.home-manager.enable = true;
