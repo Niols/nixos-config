@@ -28,6 +28,11 @@
     ]
   );
 
+  home.file.".config/doom/config.el".source = ./config.el;
+  home.file.".config/doom/custom.el".source = ./custom.el;
+  home.file.".config/doom/init.el".source = ./init.el;
+  home.file.".config/doom/packages.el".source = ./packages.el;
+
   home.activation.doom = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     set -xeuC
 
@@ -45,7 +50,7 @@
     ## but otherwise the compilation of company-math hangs, somehow.
     doom () {
       ${pkgs.libfaketime}/bin/faketime "$(date --date="@$lastmodified" +'%F %T')" \
-        "$emacsdir"/bin/doom --emacsdir "$emacsdir" --doomdir ${./.} "$@"
+        "$emacsdir"/bin/doom --emacsdir "$emacsdir" "$@"
     }
 
     ## A temporary directory to move (parts of) the .local directory to.
