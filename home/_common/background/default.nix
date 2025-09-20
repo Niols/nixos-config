@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption mkIf types;
 
   setBackgroundCommand = ''
     ${pkgs.feh}/bin/feh --no-fehbg --bg-center ${config.x_niols.backgroundImageFile}
@@ -25,9 +25,10 @@ in
       ## FIXME: check that in this option.
     '';
     type = types.str;
+    default = "${if config.x_niols.isWork then ./work.jpg else ./niols.jpg}";
   };
 
-  config = {
+  config = mkIf (!config.x_niols.isHeadless) {
     ## Set background when (re)starting i3.
     xsession.windowManager.i3.config.startup = [
       {

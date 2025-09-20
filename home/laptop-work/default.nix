@@ -1,10 +1,9 @@
 {
   imports = [
-    ../_common/laptop.nix
-    ./packages.nix
+    ../_common
     ./ssh.nix
   ];
 
-  home.file.".face".source = ./face.jpg;
-  x_niols.backgroundImageFile = "${./background.jpg}";
+  x_niols.isWork = true;
+  x_niols.isHeadless = false;
 }

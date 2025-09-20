@@ -42,7 +42,7 @@
       imports = [
         inputs.git-hooks.flakeModule
         ./nixos
-        ./home
+        ./home/flake-part.nix
         ./keys
         ./secrets
       ];
