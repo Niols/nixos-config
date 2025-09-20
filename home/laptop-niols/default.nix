@@ -7,11 +7,7 @@
     ./ssh.nix
   ];
 
-  home.username = "niols";
-  home.homeDirectory = "/home/niols";
-
   home.file.".face".source = ./face.jpg;
-
   x_niols.backgroundImageFile = "${./background.jpg}";
 
   services.nextcloud-client = {
