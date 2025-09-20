@@ -62,5 +62,35 @@ in
         yojson
       ]);
     })
+
+    {
+      ## FIXME: Some things like this would deserve to be shared between `nixos/`
+      ## and `home/`, so probably we need something `_common` at the root too?
+      ##
+      ## FIXME: We shouldn't be setting things in `nixpkgs` because we are using
+      ## `useGlobalPkgs` in the NixOS configurations. Figure it out.
+      ##
+      nixpkgs.config.allowUnfreePredicate =
+        pkg:
+        builtins.elem (pkgs.lib.getName pkg) [
+          "slack"
+          "zoom"
+        ];
+    }
+
+    ## Development tools considered available by default
+    (mkIf config.x_niols.isWork {
+      home.packages = with pkgs; [
+        gnumake
+      ];
+    })
+
+    ## Desktop software for work
+    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
+      home.packages = with pkgs; [
+        slack
+        zoom-us
+      ];
+    })
   ];
 }

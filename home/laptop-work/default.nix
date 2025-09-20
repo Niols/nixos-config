@@ -1,7 +1,6 @@
 {
   imports = [
     ../_common
-    ./packages.nix
     ./ssh.nix
   ];
 
