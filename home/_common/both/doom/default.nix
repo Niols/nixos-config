@@ -66,7 +66,7 @@
     if ! [ -e "$emacsdir" ]; then
       echo "$emacsdir does not exist; we will proceed with a fresh installation."
       must_install=true
-    elif ! [ -e "$narhashfile" ] || ! [ -e "$lastmodifiedfile" ] || [ "$(cat "$narhashfile")" != "$narHash" ] || [ "$(cat "$lastmodifiedfile")" != "$lastmodified" ]; then
+    elif ! [ -e "$narhashfile" ] || ! [ -e "$lastmodifiedfile" ] || [ "$(cat "$narhashfile")" != "$narhash" ] || [ "$(cat "$lastmodifiedfile")" != "$lastmodified" ]; then
       echo "$emacsdir exists, but does not match that of the flake; we will proceed with a re-installation."
       must_install=true
       save_local_file etc
