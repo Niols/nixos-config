@@ -35,7 +35,7 @@
     readonly emacslocaldir=$emacsdir/.local
 
     readonly narhash=${inputs.doomemacs.narHash}
-    readonly narhashfile=$emacslocaldir/narhashfile
+    readonly narhashfile=$emacslocaldir/narhash
     readonly lastmodified=${toString inputs.doomemacs.lastModified}
     readonly lastmodifiedfile=$emacslocaldir/lastmodified
 
