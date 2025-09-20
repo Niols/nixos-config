@@ -31,6 +31,7 @@ in
     ./terminal-emulator.nix
     ./background.nix
     ./doom
+    ./gtk.nix
   ];
 
   options.x_niols = {
@@ -68,7 +69,6 @@ in
 
     (mkIf (!config.x_niols.isHeadless) {
       xdg = import ./xdg.nix { inherit config; };
-      gtk = import ./gtk.nix;
 
       programs.rofi = {
         enable = true;
@@ -102,7 +102,6 @@ in
       };
 
       programs.git = import ./programs/git.nix { inherit lib; };
-      programs.lsd.enable = true;
 
       # programs.starship = import ./programs/starship.nix;
       niols-starship = {

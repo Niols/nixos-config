@@ -225,6 +225,8 @@ in
       };
     };
 
+    home.packages = with pkgs; [ rofimoji ];
+
     ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
     ## so we erase them here. In case of annoying keyboard shortcuts, the best is
     ## to run
