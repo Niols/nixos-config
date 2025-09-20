@@ -25,6 +25,7 @@ in
       ## FIXME: check that in this option.
     '';
     type = types.str;
+    default = "${if config.x_niols.isWork then ./work.jpg else ./niols.jpg}";
   };
 
   config = mkIf (!config.x_niols.isHeadless) {

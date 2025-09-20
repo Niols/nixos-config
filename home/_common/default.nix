@@ -29,7 +29,7 @@ in
     ./i3.nix
     ./ssh.nix
     ./terminal-emulator.nix
-    ./background.nix
+    ./background
     ./doom
     ./gtk.nix
   ];
