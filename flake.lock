@@ -113,6 +113,22 @@
         "type": "github"
       }
     },
+    "doomemacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758296187,
+        "narHash": "sha256-rbdKF2wGHEK29pXohXU69qccx4yI4i2iLS15b72KakQ=",
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "rev": "6ea4332b854d311d7ec8ae6384fae8d9871f5730",
+        "type": "github"
+      },
+      "original": {
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "type": "github"
+      }
+    },
     "dream2nix": {
       "inputs": {
         "nixpkgs": [
@@ -1003,6 +1019,7 @@
         "agenix": "agenix",
         "dancelor": "dancelor",
         "disko": "disko",
+        "doomemacs": "doomemacs",
         "flake-parts": "flake-parts_2",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager_2",

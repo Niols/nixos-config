@@ -14,12 +14,6 @@
       thisDevice = config.x_niols.thisDevicesName; # FIXME: duplicate options
       defaultFolderPrefix = "~/.syncthing";
     };
-
-    ## FIXME: rename folder - or better, add Doom to Nix configuration.
-    ## nix-doom-emacs used to exist, but was discontinued, I believe?
-    settings.folders = {
-      "Wallace/.config/doom".path = "~/.config/doom";
-    };
   };
 
   environment.systemPackages = [ pkgs.syncthingtray ];

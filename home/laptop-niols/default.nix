@@ -2,15 +2,13 @@
 
 {
   imports = [
-    ../_common/laptop
+    ../_common/laptop.nix
     ./ocaml.nix
     ./ssh.nix
   ];
 
-  home.username = "niols";
-  home.homeDirectory = "/home/niols";
-
   home.file.".face".source = ./face.jpg;
+  x_niols.backgroundImageFile = "${./background.jpg}";
 
   services.nextcloud-client = {
     enable = true;

@@ -188,13 +188,6 @@ in
           "Gromit"
           "Wallace"
         ];
-
-        "Wallace/.config/doom".devices = [
-          "Ahlaya"
-          "Siegfried"
-          "Gromit"
-          "Wallace"
-        ];
       };
 
       overrideDevices = true;

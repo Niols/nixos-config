@@ -101,8 +101,11 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        ## NOTE: We build the home configurations as impure because they get
+        ## their `home.username` and `home.homeDirectory` from the environment
+        ## when they are not used via the Home Manager NixOS module.
       - name: Build Home configuration “${{ matrix.home }}”
-        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --print-build-logs
+        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --impure --print-build-logs
 
   nixosConfigurations:
     name: NixOS

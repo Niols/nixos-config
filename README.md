@@ -1,6 +1,36 @@
 Niols's NixOS Configuration/s
 =============================
 
+Setting up Home on another machine
+----------------------------------
+
+On a Nix-enabled machine, replace `<home>` in the following command and go:
+
+```
+$ git clone git@github.com:niols/nixos-config ~/.config/nixos
+$ nix --extra-experimental-features 'nix-command flakes' run ~/.config/nixos#home-manager -- --extra-experimental-features 'nix-command flakes' switch --impure --flake ~/.config/nixos#<home>
+```
+
+TODO: Make a `switch` command, similar to `rebuild`.
+
+Nix should preferrably be installed via the package manager, provided the
+packaged version is recent enough. Otherwise, one can follow [the instructions
+on nixos.org](https://nixos.org/download/), eg.:
+```console
+$ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  4267  100  4267    0     0  13180      0 --:--:-- --:--:-- --:--:-- 13180
+[...]
+Installation finished!  To ensure that the necessary environment
+variables are set, either log in again, or type
+
+    . <home>/.nix-profile/etc/profile.d/nix.sh
+
+in your shell.
+```
+
 Installing NixOS
 ----------------
 

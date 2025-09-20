@@ -16,15 +16,13 @@
     ./direnv.nix
     ./i3.nix
     ./ssh.nix
+    ./terminal.nix
+    ./background.nix
   ];
-
-  home.stateVersion = "21.05";
 
   programs.home-manager.enable = true;
 
-  home.file.".background-image".source = ../../../_assets/background-image.jpg;
-
-  xdg = import ./xdg { inherit config; };
+  xdg = import ./xdg.nix { inherit config; };
 
   gtk = import ./gtk.nix;
 
@@ -32,7 +30,6 @@
   programs.bash = import ./programs/bash;
   programs.git = import ./programs/git.nix { inherit lib; };
   programs.lsd.enable = true;
-  programs.urxvt = import ./programs/urxvt.nix;
 
   programs.rofi = {
     enable = true;
