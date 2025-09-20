@@ -1,12 +1,12 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption mkIf types;
 
 in
 
 {
-  options.x_niols.terminalCommand = mkOption {
+  options.x_niols.terminalEmulatorCommand = mkOption {
     description = ''
       Command to run the terminal emulator. This option is meant to be used in
       other places in the configuration, so as to avoid hardcoding the terminal
@@ -16,7 +16,7 @@ in
     default = "xfce4-terminal";
   };
 
-  config = {
+  config = mkIf (!config.x_niols.isHeadless) {
     xfconf.settings.xfce4-terminal = {
       background-mode = "TERMINAL_BACKGROUND_IMAGE";
       background-image-file = config.x_niols.backgroundImageFile;

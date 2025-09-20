@@ -2,11 +2,12 @@
 
 {
   imports = [
-    ../_common/laptop.nix
+    ../_common
     ./ocaml.nix
     ./ssh.nix
   ];
 
+  x_niols.isHeadless = false;
   home.file.".face".source = ./face.jpg;
   x_niols.backgroundImageFile = "${./background.jpg}";
 

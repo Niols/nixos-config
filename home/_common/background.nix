@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption mkIf types;
 
   setBackgroundCommand = ''
     ${pkgs.feh}/bin/feh --no-fehbg --bg-center ${config.x_niols.backgroundImageFile}
@@ -27,7 +27,7 @@ in
     type = types.str;
   };
 
-  config = {
+  config = mkIf (!config.x_niols.isHeadless) {
     ## Set background when (re)starting i3.
     xsession.windowManager.i3.config.startup = [
       {
