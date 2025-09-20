@@ -32,6 +32,7 @@ in
     ./background
     ./doom
     ./gtk.nix
+    ./face
   ];
 
   options.x_niols = {

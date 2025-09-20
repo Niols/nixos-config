@@ -7,5 +7,4 @@
   ];
 
   x_niols.isHeadless = false;
-  home.file.".face".source = ./face.jpg;
 }
