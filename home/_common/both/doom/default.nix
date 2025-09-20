@@ -44,14 +44,11 @@
     readonly lastmodified=${toString inputs.doomemacs.lastModified}
     readonly lastmodifiedfile=$emacslocaldir/lastmodified
 
-    ## For increased reproducibility, always run doom as if from the exact time
-    ## where the lastModified commit is from. NOTE: We do not use the flake
-    ## `-f`, such that we allow time to pass. This gives less reproducibility,
-    ## but otherwise the compilation of company-math hangs, somehow.
-    doom () {
-      ${pkgs.libfaketime}/bin/faketime "$(date --date="@$lastmodified" +'%F %T')" \
-        "$emacsdir"/bin/doom --emacsdir "$emacsdir" "$@"
-    }
+    ## NOTE: We would like to run Doom in faketime, but things go wrong. If
+    ## time does not move, then the compilation of company-math hangs. If time
+    ## moves but in the past, then installation goes fine but some things go
+    ## wrong in normal use later on.
+    doom () { "$emacsdir"/bin/doom --emacsdir "$emacsdir" "$@"; }
 
     ## A temporary directory to move (parts of) the .local directory to.
     readonly tmplocaldir=$(mktemp -d)
