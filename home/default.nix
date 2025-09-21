@@ -20,7 +20,7 @@ in
 
 {
   imports = [
-    ../../_modules/niols-starship.nix
+    ../_modules/niols-starship.nix
     programs/garbage-collect.nix
     programs/rebuild.nix
     inputs.nix-index-database.homeModules.nix-index
@@ -49,6 +49,7 @@ in
         Whether this home environment is headless.
       '';
       type = types.bool;
+      default = false;
     };
   };
 

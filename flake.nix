@@ -42,10 +42,25 @@
       imports = [
         inputs.git-hooks.flakeModule
         ./nixos
-        ./home/flake-part.nix
         ./keys
         ./secrets
       ];
+
+      ## ==================== [ Home Configurations ] ==================== ##
+
+      flake.homeConfigurations.headless-work = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [
+          ./home
+          {
+            x_niols.isWork = true;
+            x_niols.isHeadless = true;
+          }
+        ];
+      };
+
+      ## ==================== [ Development environment ] ==================== ##
 
       perSystem =
         {
