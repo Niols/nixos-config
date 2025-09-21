@@ -52,7 +52,7 @@
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
-          ./home/_common
+          ./home
           {
             x_niols.isWork = true;
             x_niols.isHeadless = true;
