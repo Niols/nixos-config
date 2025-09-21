@@ -49,6 +49,7 @@ in
         Whether this home environment is headless.
       '';
       type = types.bool;
+      default = false;
     };
   };
 
