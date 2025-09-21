@@ -45,5 +45,11 @@ in
       enable = true;
       hooks.postswitch.set-background = setBackgroundCommand;
     };
+
+    ## Disable the Xfce-specific equivalent of autorandr.
+    xfconf.settings.displays = {
+      Notify = 0;
+      AutoEnableProfiles = 0;
+    };
   };
 }
