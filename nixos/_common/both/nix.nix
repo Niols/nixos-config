@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 
 {
   imports = [
@@ -14,6 +14,21 @@
     '';
 
     settings.auto-optimise-store = true;
+
+    ## Automatic garbage collection on servers.
+    ##
+    gc = {
+      automatic = config.x_niols.isServer;
+      dates = "daily";
+      options = "--delete-old"; # Delete all old generations of profiles.
+    };
+
+    ## Do not garbage-collect results of `direnv` or `nix build` as long as
+    ## there is a link. This makes sense on laptops that are there for
+    ## development purposes.
+    ##
+    settings.keep-outputs = !config.x_niols.isServer;
+    settings.keep-derivations = !config.x_niols.isServer;
 
     registry.nixpkgs.flake = inputs.nixpkgs;
 

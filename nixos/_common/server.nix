@@ -3,4 +3,5 @@ let
 in
 {
   imports = allFilesFrom ./both ++ allFilesFrom ./server;
+  x_niols.isServer = true;
 }
