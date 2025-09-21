@@ -1,7 +1,6 @@
 {
   imports = [
     ../_common
-    ./ssh.nix
   ];
 
   x_niols.isWork = true;
