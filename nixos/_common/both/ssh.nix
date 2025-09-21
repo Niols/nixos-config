@@ -1,6 +1,9 @@
+{ config, ... }:
+
 {
   ## Useful for servers, obviously, but also for laptops because we use Age and
-  ## we want it to pick up on the SSH host keys.
+  ## we want it to pick up on the SSH host keys. REVIEW: Maybe not on laptops,
+  ## as we generate them manually?
   services.openssh.enable = true;
 
   services.openssh.hostKeys = [
@@ -14,4 +17,6 @@
       type = "ed25519";
     }
   ];
+
+  programs.mosh.enable = config.x_niols.isServer;
 }
