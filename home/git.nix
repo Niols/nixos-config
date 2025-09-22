@@ -1,5 +1,9 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
+let
+  inherit (lib) mkIf concatMap map;
+
+in
 {
   programs.git = {
     enable = true;
@@ -25,9 +29,9 @@
       let
         processConditions =
           entries:
-          lib.lists.concatMap (
+          concatMap (
             entry:
-            lib.lists.map (condition: {
+            map (condition: {
               condition = condition;
               contents.user = entry.contents.user;
             }) entry.conditions
@@ -92,4 +96,9 @@
          yellow)%d%C(reset)%n %C(white)%s%C(reset)"'';
     };
   };
+
+  programs.bash.initExtra = mkIf config.x_niols.isHeadless ''
+    ## Pinentry fix for GPG on headless machines.
+    export GPG_TTY=$(tty)
+  '';
 }
