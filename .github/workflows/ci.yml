@@ -38,19 +38,35 @@ jobs:
       - name: Gather outputs from the flake
         id: json
         run: |
-          read_and_output () {
-            printf '%s=' "$1"
-            nix eval --impure --raw --expr "
-              with builtins;
-              let flake = getFlake (toString ./.); in
-              toJSON (attrNames flake.$2)
-            "
-            echo
-          }
           {
-            read_and_output checks checks.x86_64-linux
-            read_and_output homeConfigurations homeConfigurations
-            read_and_output nixosConfigurations nixosConfigurations
+            if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
+              echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
+              echo checks=[]
+              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-gen- ]]; then
+                echo homeConfigurations="[\"${BASH_REMATCH[1]}\"]"
+                echo nixosConfigurations=[]
+              elif [[ "$GITHUB_REF" =~ ^refs/tags/nixos-(.+)-gen- ]]; then
+                echo homeConfigurations=[]
+                echo nixosConfigurations="[\"${BASH_REMATCH[1]}\"]"
+              else
+                echo >&2 "This is neither a home nor a NixOS configuration, so I do not know what to do."
+                exit 2
+              fi
+            else
+              echo >&2 "This CI was not triggered by a tag, so all available checks, home and NixOS configurations will be built."
+              read_and_output () {
+                printf '%s=' "$1"
+                nix eval --impure --raw --expr "
+                  with builtins;
+                  let flake = getFlake (toString ./.); in
+                  toJSON (attrNames flake.$2)
+                "
+                echo
+              }
+              read_and_output checks checks.x86_64-linux
+              read_and_output homeConfigurations homeConfigurations
+              read_and_output nixosConfigurations nixosConfigurations
+            fi
           } | tee $GITHUB_OUTPUT
 
   summarise:
@@ -72,6 +88,8 @@ jobs:
     name: Check
     needs: discover
     runs-on: ubuntu-latest
+    ## Only run if checks != [], which we test indirectly.
+    if: contains(needs.discover.outputs.checks, '"')
     strategy:
       matrix:
         check: ${{ fromJson(needs.discover.outputs.checks) }}
@@ -90,6 +108,8 @@ jobs:
     name: Home
     needs: discover
     runs-on: ubuntu-latest
+    ## Only run if homeConfigurations != [], which we test indirectly.
+    if: contains(needs.discover.outputs.homeConfigurations, '"')
     strategy:
       matrix:
         home: ${{ fromJson(needs.discover.outputs.homeConfigurations) }}
@@ -111,6 +131,8 @@ jobs:
     name: NixOS
     needs: discover
     runs-on: ubuntu-latest
+    ## Only run if nixosConfigurations != [], which we test indirectly.
+    if: contains(needs.discover.outputs.nixosConfigurations, '"')
     strategy:
       matrix:
         nixos: ${{ fromJson(needs.discover.outputs.nixosConfigurations) }}
