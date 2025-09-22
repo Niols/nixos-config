@@ -62,6 +62,7 @@
               name = "motd.kdl";
               text = ''
                 global {
+                  version "1.0"
                   progress-full-character "#"
                   progress-empty-character "-"
                   progress-prefix "["
