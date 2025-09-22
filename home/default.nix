@@ -51,6 +51,14 @@ in
       type = types.bool;
       default = false;
     };
+
+    isStandalone = mkOption {
+      description = ''
+        Whether this home environment is set up in a standalone way, that is not
+        as part as a NixOS configuration.
+      '';
+      default = false;
+    };
   };
 
   config = mkMerge [
@@ -64,6 +72,8 @@ in
 
       home.username = mkDefault (getEnv "USER");
       home.homeDirectory = mkDefault (getEnv "HOME");
+
+      targets.genericLinux.enable = config.x_niols.isStandalone;
     }
 
     ############################################################################
@@ -93,7 +103,9 @@ in
           ## cf https://discourse.nixos.org/t/*/8488/23
           ##
           NIX_SHELL_PRESERVE_PROMPT=yes
+        '';
 
+        initExtra = ''
           ## If there is a MOTD and we are not entering a Nix shell, then we print the
           ## MOTD in question.
           ##
