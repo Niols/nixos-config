@@ -51,6 +51,13 @@ in
       type = types.bool;
       default = false;
     };
+
+    isStandalone = mkOption {
+      description = ''
+        Whether this home environment is set up in a standalone way, that is not
+        as part as a NixOS configuration.
+      '';
+    };
   };
 
   config = mkMerge [
@@ -64,6 +71,8 @@ in
 
       home.username = mkDefault (getEnv "USER");
       home.homeDirectory = mkDefault (getEnv "HOME");
+
+      targets.genericLinux.enable = config.x_niols.isStandalone;
     }
 
     ############################################################################
