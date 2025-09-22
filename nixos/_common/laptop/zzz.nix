@@ -79,17 +79,4 @@
     cal = "cal --monday";
     ls = "ls --quoting-style=literal --color=auto";
   };
-
-  programs.bash = {
-    interactiveShellInit = ''
-      ## If OPAM is available on the system and it has been initialised, then we
-      ## set it up for this Shell.
-      ##
-      if command -v opam >/dev/null; then
-        if opam switch >/dev/null 2>&1; then
-          eval "$(opam env)"
-        fi
-      fi
-    '';
-  };
 }
