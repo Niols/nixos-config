@@ -79,7 +79,7 @@ in
         openssh.authorizedKeys.keys = attrValues keys.niols;
       };
 
-      users.users.root.openssh.authorizedKeys.keys = [ keys.niols.wallace ];
+      users.users.root.openssh.authorizedKeys.keys = attrValues keys.niols;
 
       ## It can be pratical for the users to have a cron service running.
       services.cron.enable = true;
