@@ -59,30 +59,28 @@
         ExecStart =
           let
             motd-config = pkgs.writeTextFile {
-              name = "motd.toml";
+              name = "motd.kdl";
               text = ''
-                [global]
-                progress_full_character = "#"
-                progress_empty_character = "-"
-                progress_prefix = "["
-                progress_suffix = "]"
-                time_format = "%Y-%m-%d %H:%M:%S"
+                global {
+                  progress-full-character "#"
+                  progress-empty-character "-"
+                  progress-prefix "["
+                  progress-suffix "]"
+                  time-format "%Y-%m-%d %H:%M:%S"
+                }
 
-                [banner]
-                color = "${config.niols-motd.hostcolour}"
-                command = """
+                command color="${config.niols-motd-hostcolour}" "
                   printf -- '\\033[1m%s\\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
-                """
+                "
 
-                [uptime]
-                prefix = "Up"
+                uptime prefix="Uptime"
 
-                [filesystems]
-                root = "/"
-                boot = "/boot"
+                filesystems {
+                  filesystem name="root" mount-point="/"
+                  filesystem name="boot" mount-point="/boot"
+                }
 
-                [memory]
-                swap_pos = "${if config.niols-motd.noSwap then "none" else "beside"}"
+                memory swap-pos="${if config.niols-motd.noSwap then "none" else "beside"}"
               '';
             };
           in
