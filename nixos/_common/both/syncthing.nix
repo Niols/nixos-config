@@ -52,7 +52,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         MobileSheets.devices = [
@@ -64,7 +63,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         Music.devices = [
@@ -82,7 +80,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Boox/Notes".devices = [
@@ -93,7 +90,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/DCIM/SD Card".devices = [
@@ -102,7 +98,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/DCIM/Storage".devices = [
@@ -111,7 +106,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/Movies/Storage".devices = [
@@ -120,7 +114,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/Pictures/SD Card".devices = [
@@ -129,7 +122,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/Pictures/Storage".devices = [
@@ -138,7 +130,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Philippe/Scans".devices = [
@@ -147,7 +138,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Phineas/DCIM".devices = [
@@ -156,7 +146,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Phineas/Documents".devices = [
@@ -168,7 +157,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Phineas/Download".devices = [
@@ -177,7 +165,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
 
         "Phineas/Pictures".devices = [
@@ -186,7 +173,6 @@ in
           "Phineas"
           "Siegfried"
           "Gromit"
-          "Wallace"
         ];
       };
 
@@ -199,7 +185,6 @@ in
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
         Ahlaya.id = "SGAFF5O-IMVLLWM-G5JG6R3-Y6HWZBH-I4R7NPO-5YK3HL3-CABWEYB-IB27KAB";
         Gromit.id = "TKMS33R-MUJALFM-DOXFCQO-NS7UWJ2-FHW4EBE-EJMZZGZ-HSM3EO7-JAQEHQ5";
-        Wallace.id = "4CGPDOY-WHAWYRZ-OIOF4RN-75UA5QO-JEUBXAA-AWFRAAR-3MTBXFM-IGM3GQG";
         Siegfried = {
           id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
           addresses = [ "tcp://siegfried.niols.fr/" ];
