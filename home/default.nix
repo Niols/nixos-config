@@ -93,7 +93,9 @@ in
           ## cf https://discourse.nixos.org/t/*/8488/23
           ##
           NIX_SHELL_PRESERVE_PROMPT=yes
+        '';
 
+        profileExtra = ''
           ## If there is a MOTD and we are not entering a Nix shell, then we print the
           ## MOTD in question.
           ##
