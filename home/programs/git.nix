@@ -59,7 +59,7 @@
         contents.user = {
           name = "Nicolas Jeannerod";
           email = "nicolas.jeannerod@ahrefs.com";
-          signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54"; # FIXME: Ahrefs signing key
+          signingKey = "887C5375CE689ADC9EAD8496F161F305A3223417";
         };
       }
     ];
