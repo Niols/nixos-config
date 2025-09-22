@@ -18,6 +18,8 @@ in
         enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
       };
+
+      services.ssh-agent.enable = true;
     }
 
     ## Personal stuff
