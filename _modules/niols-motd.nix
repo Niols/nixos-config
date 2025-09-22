@@ -70,7 +70,7 @@
                 }
 
                 command color="${config.niols-motd.hostcolour}" "
-                  printf -- '\\033[1m%s\\033[0m' "$(echo ${config.niols-motd.hostname} | figlet -f standard)"
+                  printf -- '\\033[1m%s\\033[0m' \"$(echo ${config.niols-motd.hostname} | figlet -f standard)\"
                 "
 
                 uptime prefix="Uptime"
