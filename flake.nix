@@ -56,6 +56,7 @@
           {
             x_niols.isWork = true;
             x_niols.isHeadless = true;
+            target.genericLinux.enable = true;
           }
         ];
       };
