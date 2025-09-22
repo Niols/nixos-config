@@ -100,7 +100,7 @@
           generation=$(echo "$output" | jq -r .generation)
           date=$(echo "$output" | jq -r .date | cut -d ' ' -f 1)
           nixosVersion=$(echo "$output" | jq -r .nixosVersion)
-          tag=$hostname-$generation
+          tag=nixos-$hostname-gen-$generation
           if [ -n "$(git tag --list "$tag")" ]; then
             printf '\e[36mThe tag already exists. This means that you rebuilt something\n'
             printf 'that did not change the configuration at all. Tagging anyway...\n\e[0m'
