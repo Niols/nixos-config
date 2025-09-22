@@ -105,7 +105,7 @@ in
           NIX_SHELL_PRESERVE_PROMPT=yes
         '';
 
-        profileExtra = ''
+        initExtra = ''
           ## If there is a MOTD and we are not entering a Nix shell, then we print the
           ## MOTD in question.
           ##
