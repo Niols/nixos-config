@@ -33,6 +33,7 @@ in
     ./doom
     ./gtk.nix
     ./face
+    ./git.nix
   ];
 
   options.x_niols = {
@@ -114,8 +115,6 @@ in
           fi
         '';
       };
-
-      programs.git = import ./programs/git.nix { inherit lib; };
 
       # programs.starship = import ./programs/starship.nix;
       niols-starship = {
