@@ -13,8 +13,6 @@ in
   config = mkMerge [
     {
       home.packages = with pkgs; [
-        gnupg # ?
-        pinentry # ?
         ripgrep # provides `rg`
       ];
       programs.lsd.enable = true;

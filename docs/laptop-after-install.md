@@ -44,7 +44,7 @@
   `autorandr --fingerprint`, find the fingerprint for the display, and set
   `services.autorandr.x_niols.thisLaptopsFingerprint`.
 
-- Transfer GPG keys. On a machine that has the keys:
+- (REVIEW: obsolete?) Transfer GPG keys. On a machine that has the keys:
   ```console
   $ gpg --list-secret-keys
   $ gpg --export-secret-keys --armor <key-id>
@@ -58,14 +58,14 @@
   — to the new machine. They are already in a text-compatible format. Make sure
   that the private key has restrictive permissions:
   ```console
-  $ chmod 600 ~/.ssh/id_ed25519
+  $ chmod 600 ~/.ssh/id_niols
   ```
 
 - Set up Git repositories. With the SSH and GPG key, everything should work fine
   immediately: cloning, committing, etc. Do not forget to update the URL of the
   NixOS configuration repository to now use SSH:
   ```console
-  $ cd ~/.config/nixo
+  $ cd ~/.config/nixos
   $ git remote set-url origin git@github.com:niols/nixos-config.git
   $ git remote -v
   origin	git@github.com:niols/nixos-config.git (fetch)
