@@ -69,18 +69,20 @@
                   time-format "%Y-%m-%d %H:%M:%S"
                 }
 
-                command color="${config.niols-motd.hostcolour}" "
-                  printf -- '\\033[1m%s\\033[0m' \"$(echo ${config.niols-motd.hostname} | figlet -f standard)\"
-                "
+                components {
+                  command color="${config.niols-motd.hostcolour}" "
+                    printf -- '\\033[1m%s\\033[0m' \"$(echo ${config.niols-motd.hostname} | figlet -f standard)\"
+                  "
 
-                uptime prefix="Uptime"
+                  uptime prefix="Uptime"
 
-                filesystems {
-                  filesystem name="root" mount-point="/"
-                  filesystem name="boot" mount-point="/boot"
+                  filesystems {
+                    filesystem name="root" mount-point="/"
+                    filesystem name="boot" mount-point="/boot"
+                  }
+
+                  memory swap-pos="${if config.niols-motd.noSwap then "none" else "beside"}"
                 }
-
-                memory swap-pos="${if config.niols-motd.noSwap then "none" else "beside"}"
               '';
             };
           in
