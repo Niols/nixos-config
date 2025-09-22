@@ -57,6 +57,7 @@ in
         Whether this home environment is set up in a standalone way, that is not
         as part as a NixOS configuration.
       '';
+      default = false;
     };
   };
 
