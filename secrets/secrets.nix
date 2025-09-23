@@ -10,7 +10,11 @@ in
 
 concatMapAttrs
   (name: machines: {
-    "${name}.age".publicKeys = attrValues keys.niols ++ machines;
+    "${name}.age".publicKeys = [
+      keys.niols.default
+      keys.secrets-backup
+    ]
+    ++ machines;
   })
 
   (
