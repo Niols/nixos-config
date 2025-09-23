@@ -35,6 +35,7 @@ in
     ./face
     ./git.nix
     ./keepassxc.nix
+    ./xdg.nix
   ];
 
   options.x_niols = {
@@ -82,8 +83,6 @@ in
     ## TODO: Move this away.
 
     (mkIf (!config.x_niols.isHeadless) {
-      xdg = import ./xdg.nix { inherit config; };
-
       programs.rofi = {
         enable = true;
         plugins = [ pkgs.rofi-calc ];
