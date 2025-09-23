@@ -18,6 +18,22 @@ in
         enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
       };
+
+      ## We don't actually use GPG much, but we like the GPG Agent and it has
+      ## good integration with Emacs, so we use this as our SSH Agent.
+      programs.gpg.enable = true;
+      services.gpg-agent = {
+        enable = true;
+        enableBashIntegration = true;
+        enableSshSupport = true; # for SSH agent
+        enableExtraSocket = true; # for agent forwarding
+        ## Pinentry configuration
+        pinentryPackage = pkgs.pinentry-gtk2; # or pinentry-qt, or pinentry-curses which should work on headless systems too
+        extraConfig = ''
+          allow-emacs-pinentry
+          allow-loopback-pinentry
+        '';
+      };
     }
 
     ## Personal stuff
