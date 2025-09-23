@@ -13,7 +13,8 @@
 
     ## Require to sign by default, but give a useless key, forcing
     ## myself to setup the key correctly in the future.
-    signing.key = "YOU NEED TO EXPLICITLY SETUP THE KEY";
+    signing.format = "ssh";
+    signing.key = "/you/need/to/explicitly/setup/the/key.pub";
     signing.signByDefault = true;
 
     ## Change of personality depending on the location in the file tree. This
@@ -50,7 +51,7 @@
           contents.user = {
             name = "Niols";
             email = "niols@niols.fr";
-            signingKey = "2EFDA2F3E796FF05ECBB3D110B4EB01A5527EA54";
+            signingKey = "~/.ssh/id_niols_signing.pub";
           };
         }
         {
@@ -60,7 +61,7 @@
           contents.user = {
             name = "Nicolas Jeannerod";
             email = "nicolas.jeannerod@ahrefs.com";
-            signingKey = "887C5375CE689ADC9EAD8496F161F305A3223417";
+            signingKey = "~/.ssh/id_ahrefs_signing.pub";
           };
         }
       ];

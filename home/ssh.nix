@@ -33,21 +33,21 @@ in
           hostname = "helga.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         orianne = {
           host = "orianne";
           hostname = "orianne.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         siegfried = {
           host = "siegfried";
           hostname = "siegfried.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         hester = {
           host = "hester";
@@ -116,7 +116,7 @@ in
         matchBlocks = {
           nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
           ## Only the laptop has my personal identity files.
-          "github.com".identityFile = "~/.ssh/id_ed25519";
+          "github.com".identityFile = "~/.ssh/id_niols";
           "*" = {
             identitiesOnly = true;
             identityFile = "~/.ssh/id_ahrefs";
