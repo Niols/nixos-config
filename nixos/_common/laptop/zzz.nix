@@ -27,8 +27,6 @@
   ############################################################################
   ## GNOME Stuff
 
-  services.gnome.gnome-keyring.enable = true;
-
   ## When using Nautilus without GNOME, you may need to enable the
   ## GVfs service in order for Nautilus to work properly. If GVfs is
   ## not available, you may see errors such as "Sorry, could not
@@ -44,14 +42,6 @@
   services.printing.enable = true;
 
   services.acpid.enable = true;
-
-  ## Start GPG agent with SSH support (note: incompatible with
-  ## ssh.startAgent)
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-  # programs.ssh.startAgent = true;
 
   ############################################################################
   ## Virtualisation

@@ -18,6 +18,26 @@ in
         enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
       };
+
+      ## We don't actually use GPG much, but we like the GPG Agent and it has
+      ## good integration with Emacs, so we use this as our SSH Agent.
+      programs.gpg.enable = true;
+      services.gpg-agent = {
+        enable = true;
+        enableSshSupport = true;
+        enableBashIntegration = true;
+        # Pinentry selection based on environment
+        pinentryPackage = pkgs.pinentry-curses; # Works everywhere
+        # For GUI systems, you might prefer:
+        # pinentryPackage = pkgs.pinentry-gtk2; # or pinentry-qt
+        ## for GPG Agent forwarding
+        enableExtraSocket = true;
+        # ## Timeouts - adjust as needed
+        # defaultCacheTtl = 28800;     # 8 hours
+        # maxCacheTtl = 86400;         # 24 hours
+        # defaultCacheTtlSsh = 28800;  # 8 hours for SSH keys
+        # maxCacheTtlSsh = 86400;      # 24 hours for SSH keys
+      };
     }
 
     ## Personal stuff
