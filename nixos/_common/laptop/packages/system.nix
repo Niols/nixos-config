@@ -21,15 +21,11 @@ with pkgs;
   ## G
   ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
   gimp
-  gnupg
   guile # REVIEW: is it needed? maybe for LilyPond?
   guvcview # REVIEW: what is this for?
 
   ## I
   imagemagick
-
-  ## M
-  mosh
 
   ## N
   nautilus

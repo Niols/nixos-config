@@ -1,4 +1,4 @@
-{ self, ... }:
+{ ... }:
 
 {
   flake.nixosModules.helga =
@@ -26,7 +26,8 @@
       ];
 
       x_niols.thisDevicesName = "Helga";
-      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
+      x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
+      x_niols.enableNiolsUser = true;
 
       ## FIXME: This is an experiment to improve responsiveness of the system
       ## when Dancelor uses the Nix builds so intensely. It might however starve
@@ -34,11 +35,5 @@
       ## though, since it come from NixOps4, that is not a problem.
       nix.daemonCPUSchedPolicy = "idle";
       nix.daemonIOSchedClass = "idle";
-
-      users.users = {
-        niols.hashedPasswordFile =
-          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
-        root.openssh.authorizedKeys.keys = [ keys.github-actions ];
-      };
     };
 }

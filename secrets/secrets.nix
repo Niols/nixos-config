@@ -10,7 +10,11 @@ in
 
 concatMapAttrs
   (name: machines: {
-    "${name}.age".publicKeys = attrValues keys.niols ++ machines;
+    "${name}.age".publicKeys = [
+      keys.niols.default
+      keys.secrets-backup
+    ]
+    ++ machines;
   })
 
   (
@@ -23,13 +27,15 @@ concatMapAttrs
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
 
+      password-ahlaya-niols = [ ahlaya ];
+      password-ahlaya-root = [ ahlaya ];
+      password-ahlaya-work = [ ahlaya ];
+      password-gromit-niols = [ gromit ];
+      password-gromit-root = [ gromit ];
       password-helga-niols = [ helga ];
-      password-orianne-niols = [ orianne ];
-      password-siegfried-niols = [ siegfried ];
-
-      firefly-iii-app-key-file = [ siegfried ];
-      firefly-iii-data-importer-nordigen-id = [ siegfried ];
-      firefly-iii-data-importer-nordigen-key = [ siegfried ];
+      password-helga-root = [ helga ];
+      password-orianne-root = [ orianne ];
+      password-siegfried-root = [ siegfried ];
 
       syncthing-siegfried-passwd = [ siegfried ];
       syncthing-siegfried-cert = [ siegfried ];
@@ -52,8 +58,6 @@ concatMapAttrs
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];
       hester-syncthing-backup-identity = [ siegfried ];
-      hester-firefly-iii-backup-repokey = [ siegfried ];
-      hester-firefly-iii-backup-identity = [ siegfried ];
       hester-git-backup-repokey = [ siegfried ];
       hester-git-backup-identity = [ siegfried ];
       hester-jellyfin-backup-repokey = [ orianne ];

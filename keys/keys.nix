@@ -43,4 +43,5 @@ in
   machines = collectKeys ./machines;
   niols = collectKeys ./niols;
   github-actions = removeTrailingWhitespace (readFile ./github-actions.pub);
+  secrets-backup = removeTrailingWhitespace (readFile ./secrets-backup.pub);
 }
