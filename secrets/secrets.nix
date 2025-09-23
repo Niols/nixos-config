@@ -27,9 +27,17 @@ concatMapAttrs
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
 
+      password-ahlaya-niols = [ ahlaya ];
+      password-ahlaya-root = [ ahlaya ];
+      password-ahlaya-work = [ ahlaya ];
+      password-gromit-niols = [ gromit ];
+      password-gromit-root = [ gromit ];
       password-helga-niols = [ helga ];
+      password-helga-root = [ helga ];
       password-orianne-niols = [ orianne ];
+      password-orianne-root = [ orianne ];
       password-siegfried-niols = [ siegfried ];
+      password-siegfried-root = [ siegfried ];
 
       syncthing-siegfried-passwd = [ siegfried ];
       syncthing-siegfried-cert = [ siegfried ];
