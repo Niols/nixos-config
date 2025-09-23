@@ -27,9 +27,6 @@ with pkgs;
   ## I
   imagemagick
 
-  ## M
-  mosh
-
   ## N
   nautilus
   nautilus-open-any-terminal
