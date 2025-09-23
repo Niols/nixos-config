@@ -225,12 +225,35 @@ in
       };
     };
 
-    home.packages = with pkgs; [ rofimoji ];
-
     programs.rofi = {
       enable = true;
       plugins = [ pkgs.rofi-calc ];
+      ## NOTE: Do not add `ssh` in there. I never use it, but my SSH
+      ## configuration is quite big and it makes Rofi's startup very slow.
+      modes = [
+        "drun"
+        "calc"
+      ];
+      terminal = config.x_niols.terminalEmulatorCommand;
+      extraConfig = {
+        "show-icons" = true;
+        ## Some vi-like keybindings.
+        "kb-row-up" = "Up,Control+k";
+        "kb-row-down" = "Down,Control+j";
+        "kb-accept-entry" = "Return,KP_Enter";
+        "kb-remove-char-forward" = "Delete,Control+d";
+        "kb-remove-char-back" = "BackSpace";
+        "kb-remove-word-forward" = "Control+Delete,Alt+d";
+        "kb-remove-word-back" = "Control+BackSpace";
+        "kb-remove-to-eol" = ""; # Control+k by default
+        "kb-mode-complete" = ""; # Control+l by default
+      };
     };
+
+    ## Rofi has a plugin `rofi-emoji` but it does not contain the symbols that I
+    ## want. Rofimoji can work as a Rofi mode, but then it cannot enter text,
+    ## which is a severe limitation. So we run it standalone.
+    home.packages = [ pkgs.rofimoji ];
 
     ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
     ## so we erase them here. In case of annoying keyboard shortcuts, the best is
