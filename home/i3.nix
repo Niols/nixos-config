@@ -227,6 +227,11 @@ in
 
     home.packages = with pkgs; [ rofimoji ];
 
+    programs.rofi = {
+      enable = true;
+      plugins = [ pkgs.rofi-calc ];
+    };
+
     ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
     ## so we erase them here. In case of annoying keyboard shortcuts, the best is
     ## to run
