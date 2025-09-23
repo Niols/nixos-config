@@ -31,10 +31,6 @@ concatMapAttrs
       password-orianne-niols = [ orianne ];
       password-siegfried-niols = [ siegfried ];
 
-      firefly-iii-app-key-file = [ siegfried ];
-      firefly-iii-data-importer-nordigen-id = [ siegfried ];
-      firefly-iii-data-importer-nordigen-key = [ siegfried ];
-
       syncthing-siegfried-passwd = [ siegfried ];
       syncthing-siegfried-cert = [ siegfried ];
       syncthing-siegfried-key = [ siegfried ];
@@ -56,8 +52,6 @@ concatMapAttrs
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];
       hester-syncthing-backup-identity = [ siegfried ];
-      hester-firefly-iii-backup-repokey = [ siegfried ];
-      hester-firefly-iii-backup-identity = [ siegfried ];
       hester-git-backup-repokey = [ siegfried ];
       hester-git-backup-identity = [ siegfried ];
       hester-jellyfin-backup-repokey = [ orianne ];
