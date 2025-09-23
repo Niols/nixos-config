@@ -65,7 +65,6 @@ in
     ./helga
     ./orianne
     ./siegfried
-    ./wallace.nix
     ./gromit.nix
 
     ## NixOps4
@@ -78,7 +77,6 @@ in
     "helga"
     "orianne"
     "siegfried"
-    "wallace"
     "gromit"
   ];
 

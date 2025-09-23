@@ -38,8 +38,6 @@ concatMapAttrs
       syncthing-ahlaya-key = [ ahlaya ];
       syncthing-gromit-cert = [ gromit ];
       syncthing-gromit-key = [ gromit ];
-      syncthing-wallace-cert = [ wallace ];
-      syncthing-wallace-key = [ wallace ];
 
       hester-samba-credentials = [
         helga
@@ -47,7 +45,6 @@ concatMapAttrs
         siegfried
         ahlaya
         gromit
-        wallace
       ];
       hester-matrix-backup-repokey = [ helga ];
       hester-matrix-backup-identity = [ helga ];

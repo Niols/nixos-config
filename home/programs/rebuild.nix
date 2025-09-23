@@ -100,7 +100,7 @@
           generation=$(echo "$output" | jq -r .generation)
           date=$(echo "$output" | jq -r .date | cut -d ' ' -f 1)
           nixosVersion=$(echo "$output" | jq -r .nixosVersion)
-          tag=$hostname-$generation
+          tag=nixos-$hostname-gen-$generation
           if [ -n "$(git tag --list "$tag")" ]; then
             printf '\e[36mThe tag already exists. This means that you rebuilt something\n'
             printf 'that did not change the configuration at all. Tagging anyway...\n\e[0m'
@@ -111,7 +111,7 @@
             tag=$tag-$offset
           fi
           printf 'Tagging as: %s\n' "$tag"
-          git tag "$tag" -m "$hostname — Configuration $generation ($date - $nixosVersion)"
+          git tag "$tag" -m "NixOS configuration \`$hostname\` — generation $generation ($date - $nixosVersion)"
           printf 'done.\nPushing changes to remote...\n'
           git push --tags
           printf 'done.\n'

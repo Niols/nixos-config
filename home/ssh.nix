@@ -94,29 +94,29 @@ in
       };
     })
 
+    ## NOTE: A lot of things in the following configuration require the the
+    ## correct symbolic link has been set up from `~/.ssh` into the right place
+    ## on the Ahrefs monorepo.
+
     ## Work stuff
     (mkIf config.x_niols.isWork {
       programs.ssh = {
-        ## NOTE: With pkgs.openssh and Ahrefs's nspawn configuration, I get GSS API
-        ## errors. https://github.com/NixOS/nixops/issues/395 suggested to instead
-        ## use `pkgs.opensshWithKerberos`.
+        ## NOTE: With pkgs.openssh and Ahrefs's configuration, I get GSS API
+        ## errors. https://github.com/NixOS/nixops/issues/395 suggested to
+        ## instead use `pkgs.opensshWithKerberos`.
         package = pkgs.opensshWithKerberos;
+        includes = [ "~/.ssh/ahrefs/config" ];
+        matchBlocks.hop.user = "nicolas.jeannerod";
+      };
+    })
 
-        ## NOTE: A lot of things in the following configuration require the the
-        ## correct symbolic link has been set up from `~/.ssh` into the right place
-        ## on the Ahrefs monorepo.
-
-        includes = [
-          "~/.ssh/ahrefs/config"
-        ];
-
+    ## Work stuff, but only on laptop
+    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
+      programs.ssh = {
         matchBlocks = {
           nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
-          hop.user = "nicolas.jeannerod";
-
+          ## Only the laptop has my personal identity files.
           "github.com".identityFile = "~/.ssh/id_ed25519";
-
-          ## catch-all
           "*" = {
             identitiesOnly = true;
             identityFile = "~/.ssh/id_ahrefs";
