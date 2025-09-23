@@ -111,7 +111,7 @@
             tag=$tag-$offset
           fi
           printf 'Tagging as: %s\n' "$tag"
-          git tag "$tag" -m "$hostname — Configuration $generation ($date - $nixosVersion)"
+          git tag "$tag" -m "NixOS configuration \`$hostname\` — generation $generation ($date - $nixosVersion)"
           printf 'done.\nPushing changes to remote...\n'
           git push --tags
           printf 'done.\n'
