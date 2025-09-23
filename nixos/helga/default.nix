@@ -27,6 +27,7 @@
 
       x_niols.thisDevicesName = "Helga";
       x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
+      x_niols.enableNiolsUser = true;
 
       ## FIXME: This is an experiment to improve responsiveness of the system
       ## when Dancelor uses the Nix builds so intensely. It might however starve

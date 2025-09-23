@@ -47,6 +47,4 @@ in
       gid = "nextcloud";
     };
   };
-
-  users.groups.hester.members = [ "niols" ];
 }

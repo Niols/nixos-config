@@ -4,6 +4,7 @@ let
   inherit (lib) mkOption;
   inherit (lib.types) types;
   inherit (lib.attrsets) concatMapAttrs;
+  inherit (lib.lists) optionals;
 
   fileSystemOpt = {
     options = {
@@ -68,6 +69,6 @@ in
       "hester-${name}" = mkHesterFileSystem fs;
     }) config._common.hester.fileSystems;
 
-    users.groups.hester.members = [ "niols" ];
+    users.groups.hester.members = optionals config.x_niols.enableNiolsUser [ "niols" ];
   };
 }
