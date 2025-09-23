@@ -6,56 +6,79 @@
 }:
 
 let
-  inherit (builtins) attrValues;
   inherit (lib)
+    attrValues
     mkMerge
     mkIf
     mkOption
     types
     genAttrs
     ;
+  inherit (lib.lists)
+    optionals
+    ;
 
-  users = [ "niols" ] ++ (if config.x_niols.enableWorkUser then [ "work" ] else [ ]);
+  normalUsers =
+    optionals config.x_niols.enableNiolsUser [ "niols" ]
+    ++ optionals config.x_niols.enableWorkUser [ "work" ];
+  normalUsersAndRoot = normalUsers ++ [ "root" ];
 
 in
 {
-  options.x_niols.enableWorkUser = mkOption {
-    default = false;
-    type = types.bool;
+  options.x_niols = {
+    enableNiolsUser = mkOption {
+      description = ''
+        Whether a `niols` user should be created. This is true by default on
+        personal machine, and false by default on servers.
+      '';
+      default = !config.x_niols.isServer;
+      type = types.bool;
+    };
+
+    enableWorkUser = mkOption {
+      description = ''
+        Wether a `work` user should be created.
+      '';
+      default = false;
+      type = types.bool;
+    };
   };
 
-  ############################################################################
-  ## User account.
-
-  ## - `adbusers` are necessary for `adb` & `fastboot`.
-  ## - `docker` for Docker
-  ## - `networkmanager` for NetworkManager
-  ## - `plugdev` is a classic group for USB devices
-  ## - `wheel` for `sudo`
-
-  ## NOTE: groups in `users.*.extraGroups` are not created if they do not exist.
-  ## They must be created by other means.
-  ##
-  ## - `adbusers` is created when `programs.adb.enable = true` is set somewhere.
-  ##   (FIXME: Does this setting also create `plugdev`? Not sure.)
-  ##
-  ## - `plugdev` needs to be explicitly created in `users.groups`.
-
-  ## FIXME: Factorise better what can be factorised
-
-  ## REVIEW: Do we really want to have the `niols` user always on all servers?
-  ## Sounds to me like we should have a switch for that.
-
   config = mkMerge [
-    (mkIf (!config.x_niols.isServer) {
-      users.users = genAttrs users (_user: {
+    ## Create the normal users and given them root access.
+    {
+      users.users = genAttrs normalUsers (_: {
         isNormalUser = true;
+        extraGroups = [ "wheel" ]; # for `sudo`
+      });
+    }
+
+    ## Make each system activation forcefully replace the current status of
+    ## users, and have a hardcoded user password for each user (including
+    ## `root`) on each machine.
+    {
+      users.mutableUsers = false;
+      users.users = genAttrs normalUsersAndRoot (username: {
+        hashedPasswordFile =
+          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-${username}".path;
+      });
+    }
+
+    ## Laptops-specific configuration
+    (mkIf (!config.x_niols.isServer) {
+      users.users = genAttrs normalUsers (_: {
+        ## NOTE: groups in `users.*.extraGroups` are not created if they do not
+        ## exist. They must be created by other means.
+        ##
+        ## `adbusers` is created when `programs.adb.enable = true` is set
+        ## somewhere. (FIXME: Does this setting also create `plugdev`? Not
+        ## sure.)
+        ##
         extraGroups = [
-          "adbusers"
-          "docker"
-          "networkmanager"
-          #"plugdev"
-          "wheel"
+          "adbusers" # for `adb` and `fastboot`
+          "docker" # for Docker
+          "networkmanager" # for NetworkManager
+          #"plugdev" # see below
         ];
 
         ## NOTE: Not great, but necessary for the `.face`, and will allow `niols`
@@ -65,26 +88,17 @@ in
         homeMode = "755";
       });
 
-      users.groups.plugdev.members = users;
+      ## `plugdev` is a classic group for USB devices; it will be used in `udev`
+      ## rules. It needs to be explicitly created first.
+      users.groups.plugdev.members = normalUsers;
     })
 
+    ## On servers, normal users and `root` are accessible via SSH using Niols's
+    ## keys or the additional GHA deployment key.
     (mkIf config.x_niols.isServer {
-      ## Make each system activation forcefully replace the current status of users.
-      users.mutableUsers = false;
-
-      users.users.niols = {
-        isNormalUser = true;
-        extraGroups = [ "wheel" ];
-
-        openssh.authorizedKeys.keys = attrValues keys.niols;
-        hashedPasswordFile =
-          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
-      };
-
-      users.users.root.openssh.authorizedKeys.keys = attrValues keys.niols ++ [ keys.github-actions ];
-
-      ## It can be pratical for the users to have a cron service running.
-      services.cron.enable = true;
+      users.users = genAttrs normalUsersAndRoot (_: {
+        openssh.authorizedKeys.keys = attrValues keys.niols ++ [ keys.github-actions ];
+      });
     })
   ];
 }
