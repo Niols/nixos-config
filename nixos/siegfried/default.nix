@@ -1,4 +1,4 @@
-{ self, ... }:
+{ ... }:
 
 {
   flake.nixosModules.siegfried =
@@ -18,12 +18,6 @@
       ];
 
       x_niols.thisDevicesName = "Siegfried";
-      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
-
-      users.users = {
-        niols.hashedPasswordFile =
-          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
-        root.openssh.authorizedKeys.keys = [ keys.github-actions ];
-      };
+      x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
     };
 }

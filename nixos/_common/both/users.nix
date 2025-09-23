@@ -77,9 +77,11 @@ in
         extraGroups = [ "wheel" ];
 
         openssh.authorizedKeys.keys = attrValues keys.niols;
+        hashedPasswordFile =
+          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-niols".path;
       };
 
-      users.users.root.openssh.authorizedKeys.keys = attrValues keys.niols;
+      users.users.root.openssh.authorizedKeys.keys = attrValues keys.niols ++ [ keys.github-actions ];
 
       ## It can be pratical for the users to have a cron service running.
       services.cron.enable = true;
