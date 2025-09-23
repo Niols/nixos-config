@@ -28,7 +28,7 @@ in
         enableSshSupport = true; # for SSH agent
         enableExtraSocket = true; # for agent forwarding
         ## Pinentry configuration
-        pinentryPackage = pkgs.pinentry-gtk2; # or pinentry-qt, or pinentry-curses which should work on headless systems too
+        pinentry.package = pkgs.pinentry-qt; # or pinentry-gtk2, or pinentry-curses which should work on headless systems too
         extraConfig = ''
           allow-emacs-pinentry
           allow-loopback-pinentry
