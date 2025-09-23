@@ -61,6 +61,13 @@ in
         visitors
         yojson
       ]);
+
+      programs.bash.bashrcExtra = ''
+        ## Run the OPAM hook if it exists.
+        if [ -r ~/.opam/opam-init/init.sh ]; then
+          . ~/.opam/opam-init/init.sh >/dev/null 2>&1 || true
+        fi
+      '';
     })
 
     {

@@ -28,9 +28,6 @@ with pkgs;
   ## I
   imagemagick
 
-  ## K
-  keepassxc
-
   ## M
   mosh
 

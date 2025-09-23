@@ -18,6 +18,22 @@ in
         enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
       };
+
+      ## We don't actually use GPG much, but we like the GPG Agent and it has
+      ## good integration with Emacs, so we use this as our SSH Agent.
+      programs.gpg.enable = true;
+      services.gpg-agent = {
+        enable = true;
+        enableBashIntegration = true;
+        enableSshSupport = true; # for SSH agent
+        enableExtraSocket = true; # for agent forwarding
+        ## Pinentry configuration
+        pinentry.package = pkgs.pinentry-gtk2; # REVIEW: pinentry-curses for headless systems?
+        extraConfig = ''
+          allow-emacs-pinentry
+          allow-loopback-pinentry
+        '';
+      };
     }
 
     ## Personal stuff
@@ -33,21 +49,21 @@ in
           hostname = "helga.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         orianne = {
           host = "orianne";
           hostname = "orianne.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         siegfried = {
           host = "siegfried";
           hostname = "siegfried.niols.fr";
           user = "root";
           identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          identityFile = "~/.ssh/id_niols";
         };
         hester = {
           host = "hester";
@@ -116,7 +132,7 @@ in
         matchBlocks = {
           nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
           ## Only the laptop has my personal identity files.
-          "github.com".identityFile = "~/.ssh/id_ed25519";
+          "github.com".identityFile = "~/.ssh/id_niols";
           "*" = {
             identitiesOnly = true;
             identityFile = "~/.ssh/id_ahrefs";
