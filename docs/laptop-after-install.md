@@ -27,13 +27,8 @@
   everything.
 
 - Set up the password manager `keepassxc`, once the `Organiser` Syncthing folder
-  has been synced. In particular, in the settings, enable:
-  - General > Automatically launch KeePassXC at system startup.
-  - General > Minimise window at application startup.
-  - General > Minimise instead of app exit.
-  - General > Show a system tray icon. (Colourful)
-  - Browser Integration: enable, and check Firefox.
-  - [REVIEW] SSH Agent?
+  has been synced. Most of the settings should be installed with this configuration.
+  In Browser Integration, however, make sure that Firefox is checked.
 
 - Set up Firefox. This will automatically install the right add-ons and bring
   back the bookmarks. Nothing else to do.

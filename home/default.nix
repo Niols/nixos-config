@@ -34,6 +34,7 @@ in
     ./gtk.nix
     ./face
     ./git.nix
+    ./keepassxc.nix
   ];
 
   options.x_niols = {
