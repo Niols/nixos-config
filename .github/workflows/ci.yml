@@ -78,8 +78,8 @@ jobs:
       - nixosConfigurations
     if: ${{ !cancelled() }}
     steps:
-      - name: At least one CI job did not succeed
-        if: ${{ needs.checks.result != 'success' || needs.homeConfigurations.result != 'success' || needs.nixosConfigurations.result != 'success' }}
+      - name: At least one CI job failed or was cancelled
+        if: ${{ needs.checks.result == 'failure' || needs.checks.result == 'cancelled' || needs.homeConfigurations.result == 'failure' || needs.homeConfigurations.result == 'cancelled' || needs.nixosConfigurations.result == 'failure' || needs.nixosConfigurations.result == 'cancelled' }}
         run: false
       - name: All CI jobs succeeded
         run: true
