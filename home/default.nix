@@ -20,7 +20,6 @@ in
   imports = [
     ../_modules/niols-starship.nix
     programs/garbage-collect.nix
-    programs/rebuild.nix
     inputs.nix-index-database.homeModules.nix-index
     ./packages.nix
     ./direnv.nix
