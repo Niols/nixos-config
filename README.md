@@ -6,12 +6,13 @@ Setting up Home on another machine
 
 On a Nix-enabled machine, replace `<home>` in the following command and go:
 
-```
-$ git clone git@github.com:niols/nixos-config ~/.config/nixos
-$ nix --extra-experimental-features 'nix-command flakes' run ~/.config/nixos#home-manager -- --extra-experimental-features 'nix-command flakes' switch --impure --flake ~/.config/nixos#<home>
+```console
+$ nix --extra-experimental-features 'nix-command flakes' run github:niols/nixos-config#rebuild -- --home-profile <home>
 ```
 
-TODO: Make a `switch` command, similar to `rebuild`.
+This will clone the configuration in `~/.config/nixos`, build it and enable it
+with `home-manager`, add a tag to the repository. After that, `rebuild -u` is
+enough to pull updates — the script will remember which home profile to pick.
 
 Nix should preferrably be installed via the package manager, provided the
 packaged version is recent enough. Otherwise, one can follow [the instructions
