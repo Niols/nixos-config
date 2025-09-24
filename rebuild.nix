@@ -76,6 +76,13 @@ writeShellApplication {
       exit 2
     fi
 
+    if ! [ -e ~/.config/nixos ]; then
+      mkdir -p ~/.config
+      printf 'The repository could not be found, cloning...\n'
+      git clone git@github.com:niols/nixos-config.git ~/.config/nixos
+      printf 'done.\n'
+    fi
+
     cd ~/.config/nixos
 
     current_branch=$(git branch --show-current)
@@ -102,8 +109,7 @@ writeShellApplication {
     if [ -z "$home_profile" ]; then
       printf 'Rebuilding NixOS configuration...\n'
       if ! [ -e /etc/NIXOS ]; then
-        printf 'e\[36mThis does not look like a NixOS machine. Do you mean to run\n'
-        printf 'this script with --home-profile?\e[0m\n'
+        printf '\e[36mThis does not look like a NixOS machine. Do you mean to run this script with --home-profile?\e[0m\n'
       fi
       sudo true
       sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
