@@ -42,7 +42,7 @@ jobs:
             if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
               echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
               echo checks=[]
-              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-gen- ]]; then
+              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-on- ]]; then
                 echo homeConfigurations="[\"${BASH_REMATCH[1]}\"]"
                 echo nixosConfigurations=[]
               elif [[ "$GITHUB_REF" =~ ^refs/tags/nixos-(.+)-gen- ]]; then
