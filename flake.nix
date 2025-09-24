@@ -85,6 +85,7 @@
 
               ## FIXME: Move the following to `secrets/default.nix`
               inputs'.agenix.packages.default
+              pkgs.attic-client
               pkgs.borgbackup
               pkgs.apacheHttpd # provides the `htpasswd` utility
               pkgs.easyrsa # for OpenVPN's `easyrsa` command
