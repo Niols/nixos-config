@@ -105,8 +105,15 @@
           ## Expose Home Manager as one of the packages of the flake. This is
           ## useful when trying to use it on a random machine as it avoids
           ## having to first get Home Manager (and probably a nixpkgs), and then
-          ## also get this flake.
+          ## also get this flake. REVIEW: Still needed now that `rebuild` is
+          ## also exposed?
           packages.home-manager = inputs'.home-manager.packages.home-manager;
+
+          ## Expose the `rebuild` utility as an app from the flake.
+          apps.rebuild = {
+            type = "app";
+            program = "${pkgs.callPackage ./rebuild.nix { }}/bin/rebuild";
+          };
         };
 
       ## Improve the way `inputs'` are computed by also handling the case of

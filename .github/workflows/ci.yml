@@ -42,7 +42,7 @@ jobs:
             if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
               echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
               echo checks=[]
-              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-gen- ]]; then
+              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-on- ]]; then
                 echo homeConfigurations="[\"${BASH_REMATCH[1]}\"]"
                 echo nixosConfigurations=[]
               elif [[ "$GITHUB_REF" =~ ^refs/tags/nixos-(.+)-gen- ]]; then
@@ -78,8 +78,8 @@ jobs:
       - nixosConfigurations
     if: ${{ !cancelled() }}
     steps:
-      - name: At least one CI job failed
-        if: ${{ needs.checks.result == 'failure' || needs.homeConfigurations.result == 'failure' || needs.nixosConfigurations.result == 'failure' }}
+      - name: At least one CI job failed or was cancelled
+        if: ${{ needs.checks.result == 'failure' || needs.checks.result == 'cancelled' || needs.homeConfigurations.result == 'failure' || needs.homeConfigurations.result == 'cancelled' || needs.nixosConfigurations.result == 'failure' || needs.nixosConfigurations.result == 'cancelled' }}
         run: false
       - name: All CI jobs succeeded
         run: true

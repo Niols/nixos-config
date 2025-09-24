@@ -3,3 +3,4 @@
 .pre-commit-config.yaml
 *.qcow2
 result
+.home-profile
