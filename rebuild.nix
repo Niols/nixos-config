@@ -130,8 +130,8 @@ writeShellApplication {
 
     else
       printf 'Adding a Git tag for the current generation...\n'
+      hostname=$(hostname -s)
       if [ -z "$home_profile" ]; then
-        hostname=$(hostname -s)
         output=$(nixos-rebuild list-generations --json | jq '.[] | select(.current == true)')
         if [ -z "$output" ]; then
           printf '\e[31mError: no current generation found.\n\e[0m'
@@ -149,7 +149,7 @@ writeShellApplication {
           exit 2
         fi
         date=$(date +'%Y-%m-%d')
-        tag=home-$home_profile-gen-$generation
+        tag=home-$home_profile-on-$hostname-gen-$generation
         description="Home configuration \`$home_profile\` — generation $generation ($date)"
       fi
       if [ -n "$(git tag --list "$tag")" ]; then
