@@ -173,13 +173,5 @@
         fi
       '';
     })
-
-    (pkgs.writeShellApplication {
-      name = "update";
-      text = ''
-        printf 'Running: rebuild boot --update\n'
-        exec rebuild boot --update
-      '';
-    })
   ];
 }
