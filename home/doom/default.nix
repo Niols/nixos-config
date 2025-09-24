@@ -34,7 +34,7 @@
   home.file.".config/doom/packages.el".source = ./packages.el;
 
   home.activation.doom = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    set -xeuC
+    set -euC
 
     readonly emacsdir=$HOME/.config/emacs
     readonly emacslocaldir=$emacsdir/.local
