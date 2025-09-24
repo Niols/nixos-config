@@ -11,6 +11,10 @@ let
 in
 {
   config = mkMerge [
+    {
+      home.packages = [ (pkgs.callPackage ../../rebuild.nix { }) ];
+    }
+
     ## Packages that are only ever used on my personal laptops. They should not
     ## clutter work's environment, (and that eliminates the temptation to have
     ## Signal or Thunderbird running)!
