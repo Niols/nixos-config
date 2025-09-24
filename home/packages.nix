@@ -12,7 +12,7 @@ in
 {
   config = mkMerge [
     {
-      home.packages = [ (pkgs.callPackage ../../rebuild.nix { }) ];
+      home.packages = [ (pkgs.callPackage ../rebuild.nix { }) ];
     }
 
     ## Packages that are only ever used on my personal laptops. They should not
