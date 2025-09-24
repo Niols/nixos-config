@@ -80,11 +80,9 @@ in
   services.openssh.settings.DenyUsers = [ "kerl" ];
 
   ## Home on Hester for Kerl.
-  _common.hester.fileSystems = {
-    ftp-kerl = {
-      path = "/services/ftp/kerl";
-      uid = "kerl";
-      gid = "ftp";
-    };
+  _common.hester.fileSystems.services-ftp-kerl = {
+    path = "/services/ftp/kerl";
+    uid = "kerl";
+    gid = "ftp";
   };
 }
