@@ -19,5 +19,7 @@
 
       x_niols.thisDevicesName = "Siegfried";
       x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
+
+      x_niols.enableNixCache = true;
     };
 }
