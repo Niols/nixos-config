@@ -2,5 +2,5 @@ let
   allFilesFrom = import ../../_utils/allFilesFrom.nix;
 in
 {
-  imports = allFilesFrom ./both ++ allFilesFrom ./laptop;
+  imports = [ ../../common ] ++ allFilesFrom ./both ++ allFilesFrom ./laptop;
 }
