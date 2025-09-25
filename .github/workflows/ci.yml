@@ -92,6 +92,7 @@ jobs:
     if: contains(needs.discover.outputs.checks, '"')
     strategy:
       matrix:
+        system: [x86_64-linux, aarch64-linux]
         check: ${{ fromJson(needs.discover.outputs.checks) }}
       fail-fast: false
     steps:
@@ -109,8 +110,21 @@ jobs:
           endpoint: https://nix-cache.niols.fr/
           cache: nixos-config
           token: ${{ secrets.ATTIC_TOKEN }}
+      - name: Set up emulation layer if necessary
+        run: |
+          ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
+          ## machines, so we detect that, install the emulation binaries for
+          ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
+          system=${{ matrix.system }}
+          echo "system = $system" > nix-config
+          if [ $system != x86_64-linux ]; then
+            printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
+            sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+          fi
       - name: Run check “${{ matrix.check }}”
-        run: nix build .#checks.x86_64-linux.${{ matrix.check }} --print-build-logs
+        run: |
+          export NIX_CONFIG=$(cat nix-config)
+          nix build .#checks.${{ matrix.system }}.${{ matrix.check }} --print-build-logs
 
   homeConfigurations:
     name: Home
