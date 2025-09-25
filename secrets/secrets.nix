@@ -24,6 +24,8 @@ concatMapAttrs
       ############################################################################
       ## Files and their host keys
 
+      atticd-environment = [ siegfried ];
+
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
 
@@ -45,6 +47,8 @@ concatMapAttrs
       syncthing-gromit-cert = [ gromit ];
       syncthing-gromit-key = [ gromit ];
 
+      hester-atticd-backup-repokey = [ siegfried ];
+      hester-atticd-backup-identity = [ siegfried ];
       hester-samba-credentials = [
         helga
         orianne

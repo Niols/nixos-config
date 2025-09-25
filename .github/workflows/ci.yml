@@ -92,6 +92,7 @@ jobs:
     if: contains(needs.discover.outputs.checks, '"')
     strategy:
       matrix:
+        system: [x86_64-linux, aarch64-linux]
         check: ${{ fromJson(needs.discover.outputs.checks) }}
       fail-fast: false
     steps:
@@ -101,8 +102,29 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Get flake inputs and install Attic
+        run: nix profile install .#attic
+      - name: Set up Attic cache
+        uses: ryanccn/attic-action@v0.4
+        with:
+          endpoint: https://nix-cache.niols.fr/
+          cache: nixos-config
+          token: ${{ secrets.ATTIC_TOKEN }}
+      - name: Set up emulation layer if necessary
+        run: |
+          ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
+          ## machines, so we detect that, install the emulation binaries for
+          ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
+          system=${{ matrix.system }}
+          echo "system = $system" > nix-config
+          if [ $system != x86_64-linux ]; then
+            printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
+            sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+          fi
       - name: Run check “${{ matrix.check }}”
-        run: nix build .#checks.x86_64-linux.${{ matrix.check }} --print-build-logs
+        run: |
+          export NIX_CONFIG=$(cat nix-config)
+          nix build .#checks.${{ matrix.system }}.${{ matrix.check }} --print-build-logs
 
   homeConfigurations:
     name: Home
@@ -178,6 +200,20 @@ jobs:
         run: |
           echo 'Available storage:'
           sudo df -h
+        ## Ideally, we would use the Attic cache for all the CI everywhere.
+        ## However, it is not that performant network-wise and it is actually
+        ## faster to build the configurations. This is however not true when
+        ## deploying, because we need to build the NixOps4 providers, we takes
+        ## a lot of time, especially on emulated architectures.
+      - name: Install Attic
+        run: nix profile install .#attic
+      - name: Set up Attic cache if we are going to deploy
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: ryanccn/attic-action@v0.4
+        with:
+          endpoint: https://nix-cache.niols.fr/
+          cache: nixos-config
+          token: ${{ secrets.ATTIC_TOKEN }}
       - name: Deploy NixOps4 resource “${{ matrix.nixos }}” if it exists
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
