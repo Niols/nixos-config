@@ -85,6 +85,7 @@
 
               ## FIXME: Move the following to `secrets/default.nix`
               inputs'.agenix.packages.default
+              pkgs.attic-client
               pkgs.borgbackup
               pkgs.apacheHttpd # provides the `htpasswd` utility
               pkgs.easyrsa # for OpenVPN's `easyrsa` command
@@ -114,6 +115,10 @@
             type = "app";
             program = "${pkgs.callPackage ./rebuild.nix { }}/bin/rebuild";
           };
+
+          ## Expose the `attic` client. The CI uses it, and we would rather
+          ## install it from our flake, so as to avoid getting nixpkgs twice.
+          packages.attic = pkgs.attic-client;
         };
 
       ## Improve the way `inputs'` are computed by also handling the case of

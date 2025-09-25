@@ -37,6 +37,7 @@
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org"
+        "https://nix-cache.niols.fr/nixos-config"
       ];
 
       ## Not used by default but trusted. If a flake uses `extra-substituters`
@@ -53,6 +54,7 @@
         "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY="
         "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBo7Rc="
         "tweag-topiary.cachix.org-1:8TKqya43LAfj4qNHnljLpuBnxAY/YwEBfzo3kzXxNY0="
+        "nixos-config:14mZWfYYiWRRSKGgnUHZ63nHLD8JfkYoj+cNqsbneik="
       ];
     };
   };
