@@ -13,6 +13,7 @@ in
 
 {
   imports = [
+    ../common
     ../_modules/niols-starship.nix
     programs/garbage-collect.nix
     ./packages.nix

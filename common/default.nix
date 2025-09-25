@@ -5,6 +5,8 @@ let
 
 in
 {
+  imports = [ ./nix.nix ];
+
   options.x_niols = {
     isServer = mkOption {
       description = ''
