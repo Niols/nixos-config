@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ lib, config, ... }:
 
 let
   inherit (builtins) getEnv;
@@ -20,7 +15,6 @@ in
   imports = [
     ../_modules/niols-starship.nix
     programs/garbage-collect.nix
-    inputs.nix-index-database.homeModules.nix-index
     ./packages.nix
     ./direnv.nix
     ./i3.nix
@@ -33,6 +27,7 @@ in
     ./git.nix
     ./keepassxc.nix
     ./xdg.nix
+    ./nix.nix
   ];
 
   options.x_niols = {
@@ -111,9 +106,6 @@ in
         enable = true;
         hostcolour = "green";
       };
-
-      programs.nix-index.enable = true;
-      programs.nix-index.symlinkToCacheHome = true;
 
       programs.tmux = {
         enable = true;
