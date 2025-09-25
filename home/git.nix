@@ -9,6 +9,7 @@
       ".envrc"
       ".direnv"
       ".auctex-auto"
+      ".pre-commit-config.yaml"
     ];
 
     ## Require to sign by default, but give a useless key, forcing
