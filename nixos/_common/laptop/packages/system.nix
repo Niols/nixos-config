@@ -3,7 +3,6 @@ with pkgs;
 [
   ## A
   arandr # REVIEW: probably not needed now that we have autorandr
-  ardour
   asunder
 
   ## C
@@ -15,8 +14,6 @@ with pkgs;
   ## F
   ffmpeg-full
   file-roller # REVIEW: what is this for?
-  filezilla
-  firefox
 
   ## G
   ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
