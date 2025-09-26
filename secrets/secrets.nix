@@ -18,7 +18,8 @@ concatMapAttrs
   })
 
   (
-    with keys.machines;
+    with keys;
+    with machines;
 
     {
       ############################################################################
@@ -81,6 +82,8 @@ concatMapAttrs
 
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
+
+      nix-netrc = [ home-manager ];
 
       rutorrent-passwd = [ helga ];
 

@@ -32,7 +32,7 @@
   };
 
   outputs =
-    inputs:
+    inputs@{ self, ... }:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -43,7 +43,7 @@
         inputs.git-hooks.flakeModule
         ./nixos
         ./keys
-        ./secrets
+        ./secrets/flake-part.nix
       ];
 
       ## ==================== [ Home Configurations ] ==================== ##
@@ -52,6 +52,7 @@
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
+          self.homeModules.secrets
           ./home
           {
             x_niols.isStandalone = true;
