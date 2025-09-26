@@ -20,7 +20,7 @@ in
         if [ -r ~/.opam/opam-init/init.sh ]; then
           . ~/.opam/opam-init/init.sh >/dev/null 2>&1 || true
         fi
-        if command -v opam; then
+        if command -v opam >/dev/null; then
           eval $(opam env) || true
         fi
       '';
