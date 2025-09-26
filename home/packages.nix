@@ -13,6 +13,14 @@ in
   config = mkMerge [
     {
       home.packages = [ (pkgs.callPackage ../rebuild.nix { }) ];
+
+      ## Run the OPAM hook if it exists. This can be shared between all
+      ## sessions; we do not however enforce the existence of OPAM.
+      programs.bash.bashrcExtra = ''
+        if [ -r ~/.opam/opam-init/init.sh ]; then
+          . ~/.opam/opam-init/init.sh >/dev/null 2>&1 || true
+        fi
+      '';
     }
 
     ## Packages that are only ever used on my personal laptops. They should not
@@ -56,16 +64,6 @@ in
         visitors
         yojson
       ]);
-
-      programs.bash.bashrcExtra = ''
-        ## Run the OPAM hook if it exists.
-        if [ -r ~/.opam/opam-init/init.sh ]; then
-          . ~/.opam/opam-init/init.sh >/dev/null 2>&1 || true
-        fi
-        if [ command -v opam ]; then
-          eval $(opam env)
-        fi
-      '';
     })
 
     {
