@@ -31,8 +31,8 @@
     settings = {
       ## Substituters that are always used.
       substituters = [
-        "https://nix-community.cachix.org"
         "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
         "https://nix-cache.niols.fr/nixos-config"
       ];
 
@@ -46,11 +46,13 @@
 
       ## Public keys that we trust to put stuff in substituters.
       trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nixos-config:14mZWfYYiWRRSKGgnUHZ63nHLD8JfkYoj+cNqsbneik="
+
         "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY="
         "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBo7Rc="
         "tweag-topiary.cachix.org-1:8TKqya43LAfj4qNHnljLpuBnxAY/YwEBfzo3kzXxNY0="
-        "nixos-config:14mZWfYYiWRRSKGgnUHZ63nHLD8JfkYoj+cNqsbneik="
       ];
     };
   };
