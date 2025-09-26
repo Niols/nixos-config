@@ -31,8 +31,12 @@ in
     ## Signal or Thunderbird running)!
     (mkIf (!config.x_niols.isHeadless && !config.x_niols.isWork) {
       home.packages = with pkgs; [
+        ardour
         audacity
         element-desktop
+        filezilla
+        firefox
+        fluidsynth # for MIDI synthesizers for Ardour
         gnucash
         inkscape
         ledger-live-desktop
@@ -79,6 +83,7 @@ in
     ## Work desktop software
     (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
       home.packages = with pkgs; [
+        firefox
         slack
         zoom-us
       ];
