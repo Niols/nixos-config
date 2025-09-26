@@ -1,0 +1,92 @@
+{ lib, pkgs, ... }:
+
+let
+  inherit (lib) mkOption types;
+
+in
+{
+  options.x_niols.sharedPackages = mkOption {
+    description = ''
+      Packages that are shared between Home and NixOS configurations. They
+      should be imported with `home.packages` or `environment.systemPackages`
+      depending on the context.
+    '';
+    default = [ ];
+    type = with types; listOf package;
+  };
+
+  config = {
+    ## Allow a selected set of unfree packages for this list.
+    ##
+    ## FIXME: Home Manager does not like this because we are using
+    ## `useGlobalPkgs` in the NixOS configurations. Figure it out.
+    ##
+    nixpkgs.config.allowUnfreePredicate = (
+      pkg:
+      builtins.elem (pkgs.lib.getName pkg) [
+        "discord"
+        "slack"
+        "steam"
+        "steam-unwrapped"
+        "teamspeak-client"
+        "teamspeak-server"
+        "unrar"
+        "zoom"
+      ]
+    );
+
+    x_niols.sharedPackages = with pkgs; [
+      ## B
+      bat
+      bc
+      btop
+
+      ## C
+      calc
+
+      ## D
+      dig
+
+      ## E
+      entr
+
+      ## F
+      fd
+
+      ## G
+      git
+      git-lfs
+
+      ## H
+      htop
+      httpie
+
+      ## J
+      jq
+      jless
+
+      ## K
+      killall
+
+      ## N
+      nix-output-monitor
+
+      ## R
+      ripgrep
+
+      ## T
+      tmux
+
+      ## U
+      unrar
+      unzip
+
+      ## W
+      wget
+
+      ## Y
+      yamllint
+      yq
+    ];
+  };
+}
