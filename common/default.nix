@@ -5,7 +5,10 @@ let
 
 in
 {
-  imports = [ ./nix.nix ];
+  imports = [
+    ./nix.nix
+    ./packages.nix
+  ];
 
   options.x_niols = {
     isServer = mkOption {
