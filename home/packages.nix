@@ -15,13 +15,17 @@ in
       home.packages = [ (pkgs.callPackage ../rebuild.nix { }) ] ++ config.x_niols.sharedPackages;
 
       ## Run the OPAM hook if it exists. This can be shared between all
-      ## sessions; we do not however enforce the existence of OPAM.
+      ## sessions; we do not however enforce the existence of OPAM. NOTE: My
+      ## reflex would be to have an `|| true` after `eval $(opam env)`, but this
+      ## was somehow the cause of some very weird activation issues. I do not
+      ## fully understand what happened, but see for more details:
+      ## https://github.com/nix-community/home-manager/issues/7647
       programs.bash.bashrcExtra = ''
         if [ -r ~/.opam/opam-init/init.sh ]; then
           . ~/.opam/opam-init/init.sh >/dev/null 2>&1 || true
         fi
         if command -v opam >/dev/null; then
-          eval $(opam env) || true
+          eval $(opam env 2>/dev/null)
         fi
       '';
     }
