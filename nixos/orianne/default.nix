@@ -1,27 +1,22 @@
-{ ... }:
-
 {
-  flake.nixosModules.orianne =
-    { config, keys, ... }:
-    {
-      imports = [
-        ../_common/server.nix
+  flake.nixosModules.orianne = {
+    imports = [
+      ../_common/server.nix
 
-        ./cloud.nix
-        ./hardware-configuration.nix
-        ./medias.nix
-        ./motd.nix
-        ./nginx.nix
-        ./storage.nix
-      ];
+      ./cloud.nix
+      ./hardware-configuration.nix
+      ./medias.nix
+      ./motd.nix
+      ./nginx.nix
+      ./storage.nix
+    ];
 
-      x_niols.thisDevicesName = "Orianne";
-      x_niols.thisDevicesColour = "cyan";
-      x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
+    x_niols.thisDevicesName = "Orianne";
+    x_niols.thisDevicesColour = "cyan";
 
-      boot.loader = {
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
+    boot.loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
     };
+  };
 }

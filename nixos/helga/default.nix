@@ -1,10 +1,6 @@
-{ ... }:
-
 {
   flake.nixosModules.helga =
     {
-      config,
-      keys,
       inputs,
       ...
     }:
@@ -26,7 +22,6 @@
 
       x_niols.thisDevicesName = "Helga";
       x_niols.thisDevicesColour = "blue";
-      x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
       x_niols.enableNiolsUser = true;
 
       ## FIXME: This is an experiment to improve responsiveness of the system

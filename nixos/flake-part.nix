@@ -42,6 +42,8 @@ let
           ## default value in the future.
           useUserPackages = true;
 
+          sharedModules = [ self.homeModules.secrets ];
+
           extraSpecialArgs = specialArgs;
         };
 

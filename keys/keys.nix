@@ -1,17 +1,14 @@
 let
   inherit (builtins)
     attrNames
-    attrValues
     elemAt
     filter
-    foldl'
-    mapAttrs
     match
     readDir
     readFile
-    removeAttrs
     stringLength
     substring
+    listToAttrs
     ;
 
   hasSuffix =
@@ -23,25 +20,67 @@ let
     lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   removeSuffix = suffix: str: substring 0 (stringLength str - stringLength suffix) str;
-
-  filterAttrs = pred: set: removeAttrs set (filter (name: !pred name set.${name}) (attrNames set));
-
-  ## `mergeAttrs` and `concatMapAttrs` are in `lib.trivial` and `lib.attrsets`,
-  ## but we would rather avoid a dependency in nixpkgs for this file.
-  mergeAttrs = x: y: x // y;
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
   removeTrailingWhitespace = s: elemAt (match "(.*[^[:space:]])[[:space:]]*" s) 0;
 
+  ## Recursively collect all `.pub` files in the given directory, reproducing
+  ## the directory tree with records. For instance, if applied to:
+  ##
+  ##      .
+  ##     ├──  flake-part.nix
+  ##     ├── 󰌆 github-actions.pub
+  ##     ├──  keys.nix
+  ##     ├──  machines
+  ##     │   ├── 󰌆 ahlaya.pub
+  ##     │   ├── 󰌆 dagrun.pub
+  ##     ├──  niols
+  ##     │   ├── 󰌆 default.pub
+  ##     └── 󰌆 secrets-backup.pub
+  ##
+  ## it will return
+  ##
+  ##     {
+  ##       github-actions = "<content>";
+  ##       machines = {
+  ##         ahlaya = "<content>";
+  ##         dagrun = "<content>";
+  ##       };
+  ##       niols = {
+  ##         default = "<content>";
+  ##       };
+  ##       secrets-backup = "<content>";
+  ##     }
+  ##
+  ## It could be written in a simple way, but we only allow ourselves to use
+  ## built-in functions, such that this file can be imported in Agenix's secrets
+  ## file.
+  ##
   collectKeys =
     dir:
-    concatMapAttrs (name: _: {
-      "${removeSuffix ".pub" name}" = removeTrailingWhitespace (readFile (dir + "/${name}"));
-    }) (filterAttrs (name: _: hasSuffix ".pub" name) (readDir dir));
+    let
+      content = readDir dir;
+    in
+    listToAttrs (
+      filter (x: x != null) (
+        map (
+          file:
+          let
+            filePath = dir + "/${file}";
+          in
+          if content.${file} == "directory" then
+            {
+              name = file;
+              value = collectKeys filePath;
+            }
+          else if hasSuffix ".pub" file then
+            {
+              name = removeSuffix ".pub" file;
+              value = removeTrailingWhitespace (readFile filePath);
+            }
+          else
+            null
+        ) (attrNames content)
+      )
+    );
 in
 
-{
-  machines = collectKeys ./machines;
-  niols = collectKeys ./niols;
-  github-actions = removeTrailingWhitespace (readFile ./github-actions.pub);
-  secrets-backup = removeTrailingWhitespace (readFile ./secrets-backup.pub);
-}
+collectKeys ./.
