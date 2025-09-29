@@ -1,4 +1,8 @@
-{ lib, config, ... }:
+{
+  lib,
+  osConfig,
+  ...
+}:
 
 let
   inherit (builtins) getEnv;
@@ -47,14 +51,6 @@ in
       type = types.bool;
       default = false;
     };
-
-    isStandalone = mkOption {
-      description = ''
-        Whether this home environment is set up in a standalone way, that is not
-        as part as a NixOS configuration.
-      '';
-      default = false;
-    };
   };
 
   config = mkMerge [
@@ -69,7 +65,8 @@ in
       home.username = mkDefault (getEnv "USER");
       home.homeDirectory = mkDefault (getEnv "HOME");
 
-      targets.genericLinux.enable = config.x_niols.isStandalone;
+      ## Tweaks to make Home Manager work better on standalone installations.
+      targets.genericLinux.enable = (osConfig == null);
     }
 
     ############################################################################

@@ -54,7 +54,6 @@
         modules = [
           ./home
           {
-            x_niols.isStandalone = true;
             x_niols.isWork = true;
             x_niols.isHeadless = true;
           }
