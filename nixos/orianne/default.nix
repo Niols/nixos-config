@@ -12,11 +12,11 @@
         ./medias.nix
         ./motd.nix
         ./nginx.nix
-        ./starship.nix
         ./storage.nix
       ];
 
       x_niols.thisDevicesName = "Orianne";
+      x_niols.thisDevicesColour = "cyan";
       x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
 
       boot.loader = {

@@ -22,10 +22,10 @@
         ./hardware-configuration.nix
         ./motd.nix
         ./nginx.nix
-        ./starship.nix
       ];
 
       x_niols.thisDevicesName = "Helga";
+      x_niols.thisDevicesColour = "blue";
       x_niols.hostPublicKey = keys.machines.${config.x_niols.thisDevicesNameLower};
       x_niols.enableNiolsUser = true;
 
