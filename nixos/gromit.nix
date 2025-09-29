@@ -1,8 +1,6 @@
-{ self, ... }:
-
 {
   flake.nixosModules.gromit =
-    { config, inputs, ... }:
+    { inputs, ... }:
     {
       imports = [
         _common/laptop.nix
@@ -13,7 +11,6 @@
       ];
 
       x_niols.thisDevicesName = "Gromit";
-      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
       x_niols.thisLaptopsWifiInterface = "wlp0s20f3";
       disko.devices.disk.main.device = "/dev/nvme0n1";
       x_niols.unencryptedOptSize = "200G";

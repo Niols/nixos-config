@@ -1,5 +1,3 @@
-{ self, ... }:
-
 {
   flake.nixosModules.ahlaya =
     { config, inputs, ... }:
@@ -13,7 +11,6 @@
       ];
 
       x_niols.thisDevicesName = "Ahlaya";
-      x_niols.hostPublicKey = self.keys.machines.${config.x_niols.thisDevicesNameLower};
       x_niols.thisLaptopsWifiInterface = "wlp0s20f3";
       disko.devices.disk.main.device = "/dev/nvme0n1";
       nixpkgs.hostPlatform = "x86_64-linux";
