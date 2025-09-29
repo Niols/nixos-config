@@ -41,9 +41,9 @@
 
       imports = [
         inputs.git-hooks.flakeModule
-        ./nixos
-        ./keys
-        ./secrets
+        ./nixos/flake-part.nix
+        ./keys/flake-part.nix
+        ./secrets/flake-part.nix
       ];
 
       ## ==================== [ Home Configurations ] ==================== ##
