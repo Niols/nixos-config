@@ -18,7 +18,6 @@ in
 {
   imports = [
     ../common
-    ../_modules/niols-starship.nix
     programs/garbage-collect.nix
     ./packages.nix
     ./direnv.nix
@@ -97,12 +96,6 @@ in
             cat /var/run/motd.dynamic
           fi
         '';
-      };
-
-      # programs.starship = import ./programs/starship.nix;
-      niols-starship = {
-        enable = true;
-        hostcolour = "green";
       };
 
       programs.tmux = {

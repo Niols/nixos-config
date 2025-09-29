@@ -8,6 +8,7 @@ in
   imports = [
     ./nix.nix
     ./packages.nix
+    ./starship.nix
   ];
 
   options.x_niols = {
