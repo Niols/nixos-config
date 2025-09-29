@@ -1,5 +1,5 @@
 {
-  config,
+  osConfig,
   inputs,
   lib,
   pkgs,
@@ -14,7 +14,7 @@ in
   imports = [ inputs.nix-index-database.homeModules.nix-index ];
 
   config = mkMerge [
-    (mkIf config.x_niols.isStandalone {
+    (mkIf (osConfig == null) {
       ## This is the default in NixOS configurations. However, in Home
       ## configurations, this instructs HM to generate the configuration.
       nix.package = pkgs.nix;
