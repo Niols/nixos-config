@@ -32,7 +32,7 @@
   };
 
   outputs =
-    inputs:
+    inputs@{ self, ... }:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -52,10 +52,12 @@
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
+          self.homeModules.secrets
           ./home
           {
             x_niols.isWork = true;
             x_niols.isHeadless = true;
+            x_niols.agePublicKey = self.keys.homes.headless-work;
           }
         ];
       };
