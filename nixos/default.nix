@@ -4,7 +4,9 @@ let
   inherit (inputs.nixpkgs.lib)
     genAttrs
     mapAttrs
+    mapAttrs'
     mkOption
+    mkForce
     nixosSystem
     ;
 
@@ -12,13 +14,18 @@ let
   ## codebase and all the modules.
   specialArgs = { inherit inputs; };
 
-  nixosModuleFor = machine: {
-    imports = [
-      self.nixosModules.keys
-      self.nixosModules.secrets
-      self.nixosModules.${machine}
+  nixosModuleFor =
+    machine:
+    (
+      { config, ... }:
       {
-        imports = [ inputs.home-manager.nixosModules.home-manager ];
+        imports = [
+          self.nixosModules.keys
+          self.nixosModules.secrets
+          self.nixosModules.${machine}
+          inputs.home-manager.nixosModules.home-manager
+        ];
+
         home-manager = {
           ## By default, Home Manager uses a private pkgs instance that is
           ## configured via the `home-manager.users.<name>.nixpkgs` options.
@@ -37,9 +44,16 @@ let
 
           extraSpecialArgs = specialArgs;
         };
+
+        ## The default timeout for Home Manager services is 5 minutes. This is
+        ## extremely reasonable, except that we may compile all of Doom Emacs
+        ## in that time, so we need to bump it for all our HM users.
+        systemd.services = mapAttrs' (user: _: {
+          name = "home-manager-${user}";
+          value.serviceConfig.TimeoutStartSec = mkForce "20m";
+        }) config.home-manager.users;
       }
-    ];
-  };
+    );
 
   nixops4ResourceFor = machine: providers: {
     type = providers.local.exec;
