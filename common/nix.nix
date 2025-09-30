@@ -29,6 +29,11 @@
     registry.nixpkgs.flake = inputs.nixpkgs;
 
     settings = {
+      ## For authentication to private substituters, we provide two `netrc`
+      ## files, one with full credentials and one with more limited access (that
+      ## is therefore safer to install on more vulnerable machines).
+      netrc-file = (config.age.secrets.nix-netrc-full or config.age.secrets.nix-netrc-untrusted).path;
+
       ## Substituters that are always used.
       substituters = [
         "https://cache.nixos.org"

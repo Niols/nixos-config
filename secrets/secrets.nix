@@ -83,11 +83,21 @@ concatMapAttrs
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
 
-      nix-netrc = [
+      ## The configuration will pick up `nix-netrc-full` if it is available, or
+      ## fall back onto `nix-netrc-restricted`. Avoid giving access to
+      ## `nix-netrc-full` to environments that are not safe, such as standalone
+      ## Home configurations.
+      nix-netrc-full = [
+        ahlaya
         ahlaya-niols
         ahlaya-work
+        gromit
         gromit-niols
+        helga
+        orianne
+        siegfried
       ];
+      nix-netrc-restricted = [ headless-work ];
 
       rutorrent-passwd = [ helga ];
 
