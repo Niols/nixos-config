@@ -53,6 +53,14 @@ let
       )
 
       ${forConcatAttrs servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
+
+      @             IN  MX 5   mta-gw.infomaniak.ch.
+      @             IN  TXT    "v=spf1 include:spf.infomaniak.ch -all"
+      autoconfig    IN  CNAME  infomaniak.com.
+      autodiscover  IN  CNAME  infomaniak.com.
+      _domainkey    IN  NS     ns41.infomaniak.com.
+      _domainkey    IN  NS     ns42.infomaniak.com.
+
       ${content}
     '';
   };
@@ -72,9 +80,35 @@ in
           ${forConcatAttrs servers (
             name: meta: optionalString (meta ? ipv6) "${name}  IN  AAAA  ${meta.ipv6}"
           )}
+          hester       IN  CNAME  u363090.your-storagebox.de.
+
+          @            IN  A      ${servers.helga.ipv4}
+          www          IN  A      ${servers.helga.ipv4}
+          call         IN  CNAME  orianne
+          cloud        IN  CNAME  orianne
+          ftp          IN  CNAME  siegfried
+          mastodon     IN  CNAME  siegfried
+          matrix       IN  CNAME  helga
+          medias       IN  CNAME  orianne
+          nix-cache    IN  CNAME  siegfried
+          syncthing    IN  CNAME  siegfried
+          torrent      IN  CNAME  helga
+          ts           IN  CNAME  helga
+          scd          IN  CNAME  niols.github.io.
+          dev.scd      IN  CNAME  niols.github.io.
+
+          @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
+          _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:niols@niols.fr; ruf=mailto:niols@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
         '')
-        (makeZone "jeannerod.fr" "")
-        (makeZone "dancelor.org" "")
+        (makeZone "jeannerod.fr" ''
+          cloud        IN  CNAME  cloud.niols.fr.
+          nicolas      IN  CNAME  www.niols.fr.
+          www.nicolas  IN  CNAME  www.niols.fr.
+        '')
+        (makeZone "dancelor.org" ''
+          @            IN  A      ${servers.helga.ipv4}
+          www          IN  A      ${servers.helga.ipv4}
+        '')
       ];
 
       ## Only localhost can use BIND as a recursive resolver. For the rest of
