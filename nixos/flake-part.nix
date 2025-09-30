@@ -18,7 +18,7 @@ let
 
   ## The special arguments that we need to propagate throughout the whole
   ## codebase and all the modules.
-  specialArgs = { inherit inputs; };
+  specialArgs = { inherit inputs servers; };
 
   nixosModuleFor =
     machine:
