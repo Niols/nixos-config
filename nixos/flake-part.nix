@@ -5,10 +5,16 @@ let
     genAttrs
     mapAttrs
     mapAttrs'
-    mkOption
     mkForce
     nixosSystem
     ;
+
+  ## Some metadata for the servers of this configuration.
+  servers = {
+    helga.ipv4 = "188.245.212.11";
+    orianne.ipv4 = "89.168.38.231";
+    siegfried.ipv4 = "158.178.201.160";
+  };
 
   ## The special arguments that we need to propagate throughout the whole
   ## codebase and all the modules.
@@ -61,7 +67,7 @@ let
     type = providers.local.exec;
     imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
     ssh = {
-      host = self.nixops4Hosts.${machine};
+      host = servers.${machine}.ipv4;
       opts = "";
       hostPublicKey = self.keys.machines.${machine};
     };
@@ -85,7 +91,6 @@ in
 
     ## NixOps4
     inputs.nixops4.modules.flake.default
-    { options.flake.nixops4Hosts = mkOption { }; }
   ];
 
   flake.machines = [
@@ -95,12 +100,6 @@ in
     "siegfried"
     "gromit"
   ];
-
-  flake.nixops4Hosts = {
-    helga = "188.245.212.11";
-    orianne = "89.168.38.231";
-    siegfried = "158.178.201.160";
-  };
 
   flake.nixosConfigurations = genAttrs self.machines (
     machine:
@@ -118,13 +117,13 @@ in
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
         resources.${machine} = nixops4ResourceFor machine providers;
       }
-    ) self.nixops4Hosts
+    ) servers
     // {
       default =
         { providers, ... }:
         {
           providers.local = inputs.nixops4.modules.nixops4Provider.local;
-          resources = mapAttrs (machine: _: nixops4ResourceFor machine providers) self.nixops4Hosts;
+          resources = mapAttrs (machine: _: nixops4ResourceFor machine providers) servers;
         };
     };
 }
