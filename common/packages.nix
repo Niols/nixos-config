@@ -68,6 +68,9 @@ in
       ## K
       killall
 
+      ## L
+      lsd
+
       ## N
       nix-output-monitor
 
@@ -88,5 +91,19 @@ in
       yamllint
       yq
     ];
+
+    ## LSD aliases and some more. On HM, they can be obtained with
+    ## `programs.lsd.enable = true`, but that will not work on non-HM NixOS
+    ## machines. On NixOS, the `l` alias is defined by default, but this will
+    ## not work on HM-only machines. So we handle everything by hand here:
+    programs.bash.shellAliases = {
+      l = "${pkgs.lsd}/bin/lsd -lah";
+      ls = "${pkgs.lsd}/bin/lsd";
+      ll = "${pkgs.lsd}/bin/lsd -l";
+      la = "${pkgs.lsd}/bin/lsd -A";
+      lt = "${pkgs.lsd}/bin/lsd --tree";
+      lla = "${pkgs.lsd}/bin/lsd -lA";
+      llt = "${pkgs.lsd}/bin/lsd -l --tree";
+    };
   };
 }

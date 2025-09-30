@@ -61,12 +61,4 @@
 
   ## As of 26 October 2022, `android-tools` is broken, so we're disabling it.
   # programs.adb.enable = true;
-
-  ############################################################################
-  ## Shells
-
-  environment.shellAliases = {
-    cal = "cal --monday";
-    ls = "ls --quoting-style=literal --color=auto";
-  };
 }
