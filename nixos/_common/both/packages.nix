@@ -1,5 +1,5 @@
 { config, ... }:
 
 {
-  environment.systemPackages = config.x_niols.sharedPackages;
+  environment.systemPackages = config.x_niols.commonPackages;
 }
