@@ -12,6 +12,7 @@ let
   ## Some metadata for the servers of this configuration.
   servers = {
     helga.ipv4 = "188.245.212.11";
+    helga.ipv6 = "2a01:4f8:1c1c:42dc::1"; # in fact, we have the whole /64 subnet
     orianne.ipv4 = "89.168.38.231";
     siegfried.ipv4 = "158.178.201.160";
   };
