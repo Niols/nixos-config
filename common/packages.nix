@@ -5,7 +5,7 @@ let
 
 in
 {
-  options.x_niols.sharedPackages = mkOption {
+  options.x_niols.commonPackages = mkOption {
     description = ''
       Packages that are shared between Home and NixOS configurations. They
       should be imported with `home.packages` or `environment.systemPackages`
@@ -35,7 +35,7 @@ in
       ]
     );
 
-    x_niols.sharedPackages = with pkgs; [
+    x_niols.commonPackages = with pkgs; [
       ## B
       bat
       bc
