@@ -24,15 +24,7 @@ in
     networking = {
       useDHCP = false;
       interfaces.${config.x_niols.thisLaptopsWifiInterface}.useDHCP = true;
-
       networkmanager.enable = true;
-
-      nameservers = [
-        "1.1.1.1"
-        "1.0.0.1" # Cloudflare
-        "8.8.8.8"
-        "8.8.4.4" # Google
-      ];
     };
 
     ##############################################################################
