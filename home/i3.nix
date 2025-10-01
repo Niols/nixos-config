@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf filter;
   inherit (pkgs) writeShellScript;
 
   modifier = config.xsession.windowManager.i3.config.modifier;
@@ -133,7 +133,7 @@ in
 
         bars = [
           {
-            statusCommand = "py3status";
+            statusCommand = "i3status-rs ~/.config/i3status-rust/config-bottom.toml";
             workspaceButtons = true;
             extraConfig = ''
               separator_symbol " | "
@@ -143,85 +143,81 @@ in
       };
     };
 
-    programs.i3status = {
+    programs.i3status-rust = {
       enable = true;
-      enableDefault = false;
-      package = pkgs.python3Packages.py3status;
 
-      general = {
-        colors = true;
-        color_good = "#00FF00";
-        color_bad = "#FF0000";
-        color_degraded = "#FFFF00";
-        color_separator = "#FFFF00";
-        interval = 1;
-      };
+      ## FIXME: bring back colours
 
-      modules = {
-        "load" = {
-          position = 1;
-          settings = {
-            format = "CPU: %5min";
-            max_threshold = "4";
-            format_above_threshold = "CPU: %1min %5min %15min";
-          };
-        };
+      bars.bottom = {
+        theme = "native";
+        icons = "none"; # try `awesome6`?
 
-        "memory" = {
-          position = 2;
-          settings = {
-            format = "RAM: %free [%percentage_free] free";
-            threshold_degraded = "30%";
-            threshold_critical = "10%";
-          };
-        };
+        ## Filter out the elements that do not have a `block` key. This allows
+        ## easily enabling/disabling elements at the Nix level by returning {}
+        ## without having i3status-rust get very angry.
+        blocks = filter (e: e ? block) [
+          {
+            block = "load";
+            format = "CPU: $1m.eng(w:4)";
+          }
 
-        ## FIXME: bring back disk
-        # "disk /" = {
-        #   position = 3;
-        #   settings = {
-        #     prefix_type = "custom";
-        #     format = "ROM[root]: %free [%percentage_free] free";
-        #     low_threshold ="5";
-        #   };
-        # };
+          {
+            block = "memory";
+            format = "RAM: $mem_avail.eng(width:4, prefix:Mi) [$mem_avail_percents] avail";
+          }
 
-        "ethernet _first_" = {
-          position = 4;
-          settings = {
-            format_up = "Ethernet";
-            format_down = "";
-          };
-        };
+          {
+            block = "memory";
+            format = "SWAP: $swap_free.eng(width:4, prefix:Mi) [$swap_free_percents] free";
+          }
 
-        "wireless _first_" = {
-          position = 5;
-          settings = {
-            format_up = "WiFi: %essid [%quality]";
-            format_down = "";
-            format_quality = "%d%s";
-          };
-        };
+          {
+            block = "disk_space";
+            path = "/";
+            info_type = "available"; # specifies what $percentage will be
+            format = "DISK: $available.eng(width:3, prefix:Mi) [$percentage] avail";
+          }
 
-        "battery all" = {
-          position = 6;
-          settings = {
-            format = "%percentage [%remaining%status]";
-            format_down = "";
-            status_chr = " charging";
-            status_bat = " left";
-            status_full = "full";
-            low_threshold = 30;
-            threshold_type = "time";
-          };
-        };
+          ## FIXME: bring back Ethernet
 
-        "time" = {
-          position = 7;
-          settings = {
-            format = "%Hh%M [%A %d %B %Y]";
-          };
-        };
+          {
+            block = "net";
+            device = "wlp0s20f3";
+            format = "WiFi: $ssid [$signal_strength ↓$speed_down.eng(width:0) ↑$speed_up.eng(width:0)]";
+            inactive_format = "WiFi: down";
+          }
+
+          (
+            if config.x_niols.isWork then
+              {
+                block = "net";
+                device = "ahrefs";
+                format = "Ahrefs VPN: up";
+                inactive_format = "Ahrefs VPN: down";
+                missing_format = "Ahrefs VPN: down";
+                click = [
+                  {
+                    button = "left";
+                    # FIXME: start if stopped, stop if running
+                    # FIXME: also, the user should just be able to run this - figure it out
+                    cmd = "systemctl stop wireguard-ahrefs.service";
+                  }
+                ];
+              }
+            else
+              { }
+          )
+
+          {
+            block = "battery";
+            format = "BAT: $percentage [$time_remaining.duration(hms:true) left]";
+          }
+
+          {
+            block = "time";
+            format = "$timestamp.datetime(f:'%H:%M [%A %d %B %Y]')";
+          }
+        ];
       };
     };
 
