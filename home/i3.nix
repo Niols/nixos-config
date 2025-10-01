@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf filter;
   inherit (pkgs) writeShellScript;
 
   modifier = config.xsession.windowManager.i3.config.modifier;
@@ -133,7 +133,7 @@ in
 
         bars = [
           {
-            statusCommand = "py3status";
+            statusCommand = "i3status-rs ~/.config/i3status-rust/config-bottom.toml";
             workspaceButtons = true;
             extraConfig = ''
               separator_symbol " | "
@@ -143,85 +143,103 @@ in
       };
     };
 
-    programs.i3status = {
+    programs.i3status-rust = {
       enable = true;
-      enableDefault = false;
-      package = pkgs.python3Packages.py3status;
 
-      general = {
-        colors = true;
-        color_good = "#00FF00";
-        color_bad = "#FF0000";
-        color_degraded = "#FFFF00";
-        color_separator = "#FFFF00";
-        interval = 1;
-      };
-
-      modules = {
-        "load" = {
-          position = 1;
-          settings = {
-            format = "CPU: %5min";
-            max_threshold = "4";
-            format_above_threshold = "CPU: %1min %5min %15min";
+      bars.bottom = {
+        settings.theme = {
+          theme = "plain";
+          overrides = {
+            separator = "│";
+            end_separator = "│";
+            good_bg = "#00ff00";
+            good_fg = "#000000";
+            warning_bg = "#00ffff";
+            warning_fg = "#000000";
+            critical_bg = "#ff0000";
+            critical_fg = "#000000";
           };
         };
 
-        "memory" = {
-          position = 2;
-          settings = {
-            format = "RAM: %free [%percentage_free] free";
-            threshold_degraded = "30%";
-            threshold_critical = "10%";
-          };
-        };
+        ## Filter out the elements that do not have a `block` key. This allows
+        ## easily enabling/disabling elements at the Nix level by returning {}
+        ## without having i3status-rust get very angry.
+        blocks = filter (e: e ? block) [
+          {
+            block = "load";
+            format = " Load: $1m.eng(width:4) ";
+          }
 
-        ## FIXME: bring back disk
-        # "disk /" = {
-        #   position = 3;
-        #   settings = {
-        #     prefix_type = "custom";
-        #     format = "ROM[root]: %free [%percentage_free] free";
-        #     low_threshold ="5";
-        #   };
-        # };
+          {
+            block = "memory";
+            format = " RAM: $mem_avail.eng(width:4, prefix:Mi) [$mem_avail_percents] avail ";
+          }
 
-        "ethernet _first_" = {
-          position = 4;
-          settings = {
-            format_up = "Ethernet";
-            format_down = "";
-          };
-        };
+          ## FIXME: Hide swap, only show if things are getting bad
+          {
+            block = "memory";
+            format = " Swap: $swap_free.eng(width:4, prefix:Mi) [$swap_free_percents] free ";
+          }
 
-        "wireless _first_" = {
-          position = 5;
-          settings = {
-            format_up = "WiFi: %essid [%quality]";
-            format_down = "";
-            format_quality = "%d%s";
-          };
-        };
+          {
+            block = "disk_space";
+            path = "/";
+            info_type = "available"; # specifies what $percentage will be
+            format = " /: $available.eng(width:3, prefix:Mi) [$percentage] avail ";
+          }
 
-        "battery all" = {
-          position = 6;
-          settings = {
-            format = "%percentage [%remaining%status]";
-            format_down = "";
-            status_chr = " charging";
-            status_bat = " left";
-            status_full = "full";
-            low_threshold = 30;
-            threshold_type = "time";
-          };
-        };
+          {
+            block = "net";
+            device = "^enp";
+            format = " Eth: up ";
+            inactive_format = " Eth: down ";
+            missing_format = "";
+          }
 
-        "time" = {
-          position = 7;
-          settings = {
-            format = "%Hh%M [%A %d %B %Y]";
-          };
-        };
+          {
+            block = "net";
+            device = "^wlp";
+            format = " WiFi: $ssid [$signal_strength] ";
+            inactive_format = "WiFi: down";
+          }
+
+          (
+            if config.x_niols.isWork then
+              {
+                block = "net";
+                device = "^ahrefs$";
+                format = " Ahrefs VPN: up ";
+                inactive_format = " Ahrefs VPN: down ";
+                missing_format = " Ahrefs VPN: down ";
+                click = [
+                  {
+                    button = "left";
+                    # FIXME: start if stopped, stop if running
+                    # FIXME: also, the user should just be able to run this - figure it out
+                    cmd = "systemctl stop wireguard-ahrefs.service";
+                  }
+                ];
+              }
+            else
+              { }
+          )
+
+          {
+            block = "battery";
+            format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
+            charging_format = " Bat: $percentage [charging; $time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
+            full_format = " Bat: 100% ";
+            full_threshold = 99;
+            empty_format = " Bat: $percentage [$time_remaining.duration(hms:true) left] ";
+            not_charging_format = " Bat: FIXME not_charging_format ";
+            missing_format = " Bat: FIXME missing_format ";
+          }
+
+          {
+            block = "time";
+            format = " $timestamp.datetime(f:'%H:%M [%A %d %B %Y]') ";
+          }
+        ];
       };
     };
 
