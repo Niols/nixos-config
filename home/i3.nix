@@ -150,14 +150,19 @@ in
         settings.theme = {
           theme = "plain";
           overrides = {
+            start_separator = "";
             separator = "│";
             end_separator = "│";
-            good_bg = "#00ff00";
-            good_fg = "#000000";
-            warning_bg = "#00ffff";
-            warning_fg = "#000000";
-            critical_bg = "#ff0000";
-            critical_fg = "#000000";
+            idle_bg = "#00000000"; # transparent
+            idle_fg = "#ffffff"; # white
+            good_bg = "#00000000"; # black
+            good_fg = "#00ff00"; # green
+            info_bg = "#00000000"; # black
+            info_fg = "#ffff00"; # yellow
+            warning_bg = "#00000000"; # black
+            warning_fg = "#ff9900"; # orange
+            critical_bg = "#00000000"; # black
+            critical_fg = "#ff0000"; # red
           };
         };
 
@@ -179,6 +184,7 @@ in
           {
             block = "memory";
             format = " Swap: $swap_free.eng(width:4, prefix:Mi) [$swap_free_percents] free ";
+            # if_command = # maybe that's the way to hide things, but I think it only runs on startup
           }
 
           {
