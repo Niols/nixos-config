@@ -233,10 +233,10 @@ in
           {
             block = "battery";
             format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
+            empty_format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] "; # same as format
             charging_format = " Bat: $percentage [charging; $time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
             full_format = " Bat: 100% ";
             full_threshold = 99;
-            empty_format = " Bat: $percentage [$time_remaining.duration(hms:true) left] ";
             not_charging_format = " Bat: FIXME not_charging_format ";
             missing_format = " Bat: FIXME missing_format ";
           }
