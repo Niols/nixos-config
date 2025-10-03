@@ -84,5 +84,18 @@
       ## if needed by another configuration, would be 51820.
       networking.firewall.allowedTCPPorts = [ 4433 ];
       networking.firewall.allowedUDPPorts = [ 4433 ];
+
+      ## Skip asking for password when starting or stopping the Ahrefs VPN unit.
+      security.polkit.extraConfig = ''
+        polkit.addRule(function (action, subject) {
+          if (
+            action.id == "org.freedesktop.systemd1.manage-units" &&
+            action.lookup("unit") == "wireguard-ahrefs.service" &&
+            subject.isInGroup("users")
+          ) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
     };
 }
