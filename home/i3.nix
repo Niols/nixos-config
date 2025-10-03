@@ -220,9 +220,14 @@ in
                 click = [
                   {
                     button = "left";
-                    # FIXME: start if stopped, stop if running
-                    # FIXME: also, the user should just be able to run this - figure it out
-                    cmd = "systemctl stop wireguard-ahrefs.service";
+                    cmd = ''
+                      readonly service=wireguard-ahrefs.service
+                      if systemctl is-active --quiet "$service"; then
+                        systemctl stop wireguard-ahrefs.service
+                      else
+                        systemctl start wireguard-ahrefs.service
+                      fi
+                    '';
                   }
                 ];
               }
