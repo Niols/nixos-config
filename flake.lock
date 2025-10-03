@@ -80,11 +80,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1759483291,
-        "narHash": "sha256-C931H48tqb9LgdVxQViMa0UgTkbzlqYJ4+S1j/brn3k=",
+        "lastModified": 1759485644,
+        "narHash": "sha256-mpRcHHToSIXM+6jS4rfIbADCVoh588074Y9sXWvCJWw=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "d9db66c7ae4c5e978970672d3b1992759930cbc5",
+        "rev": "475854675fb59994ae23906ec382a80ea8040579",
         "type": "github"
       },
       "original": {
