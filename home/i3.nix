@@ -146,112 +146,145 @@ in
     programs.i3status-rust = {
       enable = true;
 
-      bars.bottom = {
-        settings.theme = {
-          theme = "plain";
-          overrides = {
-            start_separator = "";
-            separator = "│";
-            end_separator = "│";
-            idle_bg = "#00000000"; # transparent
-            idle_fg = "#ffffff"; # white
-            good_bg = "#00000000"; # black
-            good_fg = "#00ff00"; # green
-            info_bg = "#00000000"; # black
-            info_fg = "#ffff00"; # yellow
-            warning_bg = "#00000000"; # black
-            warning_fg = "#ff9900"; # orange
-            critical_bg = "#00000000"; # black
-            critical_fg = "#ff0000"; # red
+      bars.bottom =
+        let
+          colours = {
+            background = "#00000000"; # transparent
+            idle = "#ffffff"; # white
+            good = "#00ff00"; # green
+            info = "#ffff00"; # yellow
+            warning = "#ff9900"; # orange
+            critical = "#ff0000"; # red
           };
-        };
 
-        ## Filter out the elements that do not have a `block` key. This allows
-        ## easily enabling/disabling elements at the Nix level by returning {}
-        ## without having i3status-rust get very angry.
-        blocks = filter (e: e ? block) [
-          {
-            block = "load";
-            format = " Load: $1m.eng(width:4) ";
-          }
+          ## Similar to `mkIf` but only for records.
+          mkIf' = test: set: if test then set else { };
 
-          {
-            block = "memory";
-            format = " RAM: $mem_avail.eng(width:4, prefix:Mi) [$mem_avail_percents] avail ";
-          }
+          ## We want the `net` blocks to show as green when up and red when
+          ## down, but this isn't easily doable with i3status-rust, so we
+          ## instead create two similar-looking block, one for “up” and one for
+          ## “down”, with the proper theme override, that hide when needed.
+          makeNetBlock =
+            up: block:
+            block
+            // {
+              format = if up then block.format else "";
+              inactive_format = if up then "" else block.inactive_format;
+              missing_format = if up then "" else block.missing_format;
+              theme_overrides.idle_fg = if up then colours.good else colours.critical;
+            };
 
-          ## FIXME: Hide swap, only show if things are getting bad
-          {
-            block = "memory";
-            format = " Swap: $swap_free.eng(width:4, prefix:Mi) [$swap_free_percents] free ";
-            # if_command = # maybe that's the way to hide things, but I think it only runs on startup
-          }
-
-          {
-            block = "disk_space";
-            path = "/";
-            info_type = "available"; # specifies what $percentage will be
-            format = " /: $available.eng(width:3, prefix:Mi) [$percentage] avail ";
-          }
-
-          {
+          ethernetBlock = {
             block = "net";
             device = "^enp";
             format = " Eth: up ";
             inactive_format = " Eth: down ";
-            missing_format = "";
-          }
+            missing_format = ""; # hide block entirely if no ethernet
+          };
 
-          {
+          wifiBlock = {
             block = "net";
             device = "^wlp";
             format = " WiFi: $ssid [$signal_strength] ";
-            inactive_format = "WiFi: down";
-          }
+            inactive_format = " WiFi: down ";
+            missing_format = " WiFi: down "; # show block if no WiFi because that's weird
+          };
 
-          (
-            if config.x_niols.isWork then
+          ahrefsVpnBlock = {
+            block = "net";
+            device = "^ahrefs$";
+            format = " Ahrefs VPN: up ";
+            inactive_format = " Ahrefs VPN: down ";
+            missing_format = " Ahrefs VPN: down "; # show block if no VPN because that's weird
+            click = [
               {
-                block = "net";
-                device = "^ahrefs$";
-                format = " Ahrefs VPN: up ";
-                inactive_format = " Ahrefs VPN: down ";
-                missing_format = " Ahrefs VPN: down ";
-                click = [
-                  {
-                    button = "left";
-                    cmd = ''
-                      readonly service=wireguard-ahrefs.service
-                      if systemctl is-active --quiet "$service"; then
-                        systemctl stop wireguard-ahrefs.service
-                      else
-                        systemctl start wireguard-ahrefs.service
-                      fi
-                    '';
-                  }
-                ];
+                button = "left";
+                cmd = ''
+                  service=wireguard-ahrefs.service
+                  if systemctl is-active --quiet "$service"; then
+                    systemctl stop "$service"
+                  else
+                    systemctl start "$service"
+                  fi
+                '';
               }
-            else
-              { }
-          )
+            ];
+          };
+        in
+        {
+          settings.theme = {
+            theme = "plain";
+            overrides = {
+              start_separator = "";
+              separator = "│";
+              end_separator = "│";
+              ## Background colours - they never change
+              idle_bg = colours.background;
+              good_bg = colours.background;
+              info_bg = colours.background;
+              warning_bg = colours.background;
+              critical_bg = colours.background;
+              ## Foreground colours - they change per state and can be overriden
+              idle_fg = colours.idle;
+              good_fg = colours.good;
+              info_fg = colours.info;
+              warning_fg = colours.warning;
+              critical_fg = colours.critical;
+            };
+          };
 
-          {
-            block = "battery";
-            format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
-            empty_format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] "; # same as format
-            charging_format = " Bat: $percentage [charging; $time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
-            full_format = " Bat: 100% ";
-            full_threshold = 99;
-            not_charging_format = " Bat: FIXME not_charging_format ";
-            missing_format = " Bat: FIXME missing_format ";
-          }
+          ## Filter out the elements that do not have a `block` key. This allows
+          ## easily enabling/disabling elements at the Nix level by returning {}
+          ## without having i3status-rust get very angry.
+          blocks = filter (e: e ? block) [
+            {
+              block = "load";
+              format = " Load: $1m.eng(width:4) ";
+            }
 
-          {
-            block = "time";
-            format = " $timestamp.datetime(f:'%H:%M [%A %d %B %Y]') ";
-          }
-        ];
-      };
+            {
+              block = "memory";
+              format = " RAM: $mem_avail.eng(width:4, prefix:Mi) [$mem_avail_percents] avail ";
+            }
+
+            ## FIXME: Hide swap, only show if things are getting bad
+            {
+              block = "memory";
+              format = " Swap: $swap_free.eng(width:4, prefix:Mi) [$swap_free_percents] free ";
+              # if_command = # maybe that's the way to hide things, but I think it only runs on startup
+            }
+
+            {
+              block = "disk_space";
+              path = "/";
+              info_type = "available"; # specifies what $percentage will be
+              format = " /: $available.eng(width:3, prefix:Mi) [$percentage] avail ";
+            }
+
+            (makeNetBlock true ethernetBlock)
+            (makeNetBlock false ethernetBlock)
+            (makeNetBlock true wifiBlock)
+            (makeNetBlock false wifiBlock)
+            (mkIf' config.x_niols.isWork (makeNetBlock true ahrefsVpnBlock))
+            (mkIf' config.x_niols.isWork (makeNetBlock false ahrefsVpnBlock))
+
+            {
+              block = "battery";
+              format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
+              empty_format = " Bat: $percentage [$time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] "; # same as format
+              charging_format = " Bat: $percentage [charging; $time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
+              full_format = " Bat: 100% ";
+              full_threshold = 99;
+              not_charging_format = " Bat: FIXME not_charging_format ";
+              missing_format = " Bat: FIXME missing_format ";
+            }
+
+            {
+              block = "time";
+              format = " $timestamp.datetime(f:'%H:%M [%A %d %B %Y]') ";
+            }
+          ];
+        };
     };
 
     programs.rofi = {
