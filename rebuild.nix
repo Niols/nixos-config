@@ -63,7 +63,6 @@ writeShellApplication {
 
     readonly action
     readonly update
-    readonly proceed_if_dirty
 
     if [ -z "$home_profile" ] && [ -e ~/.config/nixos/.home-profile ]; then
       home_profile=$(cat ~/.config/nixos/.home-profile)
@@ -85,19 +84,45 @@ writeShellApplication {
 
     cd ~/.config/nixos
 
+    if [ -n "$(git status --porcelain)" ]; then is_dirty=true; else is_dirty=false; fi
+    readonly is_dirty
+    if $is_dirty; then
+      printf '\e[36mWarning: the working directory is dirty.\n\e[0m'
+      if ! $proceed_if_dirty; then
+        printf 'Do you want to [p]roceed anyway or [a]bort? '
+        read -r response
+        case $response in
+          p) proceed_if_dirty=true
+             printf 'You can also pass the --dirty argument to do this automatically.\n'
+             ;;
+          a) printf 'Aborting.\n'
+             exit 2
+        esac
+      fi
+      printf 'Proceeding. Some functionalities, such as tagging, will not be available.\n'
+    fi
+    readonly proceed_if_dirty
+
     current_branch=$(git branch --show-current)
     readonly current_branch
     if [ "$current_branch" != main ]; then
-      printf '\e[36mNote: the current branch is not `main` but `%s`\n' "$current_branch"
-      printf 'This script will only pull from and push to that branch.\n\e[0m'
-    fi
-
-    if [ -n "$(git status --porcelain)" ]; then is_dirty=true; else is_dirty=false; fi
-    readonly is_dirty
-    if $is_dirty && ! $proceed_if_dirty; then
-      printf '\e[31mError: working directory is dirty.\n\e[0m'
-      printf 'You may want to pass the --dirty argument.\n'
-      exit 2
+      printf '\e[36mWarning: the current branch is not `main` but `%s`.\n\e[0m' "$current_branch"
+      printf 'Do you want to [c]heckout `main`, [s]tay on `%s`, or [a]bort? ' "$current_branch"
+      read -r response
+      case $response in
+        c) if $is_dirty; then
+             printf '\e[31mError: Cannot checkout `main` when working directory is dirty.\n\e[0m'
+             exit 2
+           else
+             printf 'Checking out `main`...\n'
+             git checkout main
+           fi
+           ;;
+        s) printf 'This script will only pull from and push to `%s`.\n' "$current_branch"
+           ;;
+        a) printf 'Aborting.\n'
+           exit 2
+      esac
     fi
 
     if $update; then
@@ -109,7 +134,7 @@ writeShellApplication {
     if [ -z "$home_profile" ]; then
       printf 'Rebuilding NixOS configuration...\n'
       if ! [ -e /etc/NIXOS ]; then
-        printf '\e[36mThis does not look like a NixOS machine. Do you mean to run this script with --home-profile?\e[0m\n'
+        printf '\e[36mWarning: This does not look like a NixOS machine. Do you mean to run this script with --home-profile?\e[0m\n'
       fi
       sudo true
       sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
@@ -125,8 +150,7 @@ writeShellApplication {
     fi
 
     if $is_dirty; then
-      printf '\e[36mNot adding a Git tag for the current generation,\n'
-      printf 'because the working directory is dirty.\n\e[0m'
+      printf 'Not adding a Git tag for the current generation, because the working directory is dirty.\n'
 
     else
       printf 'Adding a Git tag for the current generation...\n'
@@ -153,8 +177,7 @@ writeShellApplication {
         description="Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
       fi
       if [ -n "$(git tag --list "$tag")" ]; then
-        printf '\e[36mThe tag already exists. This means that you rebuilt something\n'
-        printf 'that did not change the configuration at all. Tagging anyway...\n\e[0m'
+        printf 'The tag already exists. This means that you rebuilt something that did not change the configuration at all. Tagging anyway...\n'
         rebuild_number=2
         tag_with_rebuild=$tag-rebuild-$rebuild_number
         while [ -n "$(git tag --list "$tag_with_rebuild")" ]; do
