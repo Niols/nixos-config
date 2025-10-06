@@ -55,7 +55,7 @@ writeShellApplication {
       case $1 in
         boot) action=boot ;;
         switch) action=switch ;;
-        --dirty|-d) action_if_dirty=true ;;
+        --dirty|-d) action_if_dirty=proceed ;;
         --main|-m) action_if_not_main=checkout ;;
         --stay|-s) action_if_not_main=stay ;;
         --update|-u) update=true ;;
