@@ -97,15 +97,5 @@
           }
         });
       '';
-
-      ## Set up Ahlaya's fingerprint reader.
-      services.fprintd.enable = true;
-      security.pam.services = {
-        sudo.fprintAuth = true;
-        login.fprintAuth = true;
-        lightdm.fprintAuth = true;
-        xfce4-screensaver.fprintAuth = true;
-        gpg-agent.fprintAuth = true;
-      };
     };
 }
