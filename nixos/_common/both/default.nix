@@ -19,6 +19,7 @@ in
   imports = [
     ./autoreboot.nix
     ./boot.nix
+    ./call.nix
     ./constants.nix
     ./databases.nix
     ./dns-server.nix
@@ -74,6 +75,7 @@ in
   };
 
   config.x_niols.services = {
+    call.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
   };
 }

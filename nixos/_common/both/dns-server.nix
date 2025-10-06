@@ -74,7 +74,6 @@ in
 
           @            IN  A      ${servers.helga.ipv4}
           www          IN  A      ${servers.helga.ipv4}
-          call         IN  CNAME  orianne
           cloud        IN  CNAME  orianne
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
