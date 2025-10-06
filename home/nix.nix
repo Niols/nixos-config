@@ -1,5 +1,4 @@
 {
-  config,
   osConfig,
   inputs,
   lib,
@@ -21,11 +20,12 @@ in
       nix.package = pkgs.nix;
     })
 
-    ## For authentication to private substituters, see the `nix-netrc` secret.
-    ## We do not trust standalone installations with this, because they exist on
-    ## machines that we don't control.
+    ## Set up Attic for authentication to private substituters. This can contain
+    ## sensitive tokens, and we do not trust standalone installations with this,
+    ## because they exist on machines that we don't control.
     (mkIf (osConfig != null) {
-      nix.settings.netrc-file = config.age.secrets.nix-netrc.path;
+      ## FIXME: Get Agenix secrets working for this on HM.
+      # xdg.configFile."attic/config.toml".source = config.age.secrets.attic-client-config.path;
     })
 
     {

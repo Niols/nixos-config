@@ -26,6 +26,11 @@ concatMapAttrs
       ## Files and their host keys
 
       atticd-environment = [ siegfried ];
+      attic-client-config = [
+        ahlaya-niols
+        ahlaya-work
+        gromit-niols
+      ];
 
       dancelor-database-repository = [ helga ];
       dancelor-github-token = [ helga ];
@@ -83,10 +88,20 @@ concatMapAttrs
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
 
-      nix-netrc = [
+      ## Read-only authentication to substituters. This is distributed widely
+      ## and should not contain sensitive tokens. See `attic-client-config` for
+      ## write- or godlike- powers.
+      nix-client-netrc = [
+        ahlaya
+        gromit
+        helga
+        orianne
+        siegfried
+        # homes:
         ahlaya-niols
         ahlaya-work
         gromit-niols
+        headless-work
       ];
 
       rutorrent-passwd = [ helga ];
