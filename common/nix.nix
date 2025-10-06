@@ -29,6 +29,10 @@
     registry.nixpkgs.flake = inputs.nixpkgs;
 
     settings = {
+      ## Read-only authentication to private substituters. This secret does not
+      ## need to be particularly protected.
+      netrc-file = config.age.secrets.nix-client-netrc.path;
+
       ## Substituters that are always used.
       substituters = [
         "https://cache.nixos.org"
