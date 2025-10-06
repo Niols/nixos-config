@@ -177,7 +177,7 @@ writeShellApplication {
         exit 2
       fi
       info 'Updating the configuration repository...'
-      git pull origin "$current_branch" --ff-only
+      git pull --ff-only
       info 'done.'
     fi
 
