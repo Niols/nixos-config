@@ -36,10 +36,10 @@ writeShellApplication {
 
     [option] can be one of:
 
-        --dirty, -d           proceed even if the repository is dirty
-        --no-dirty            do not proceed if the repository is dirty (default)
-        --update, -u          pull the configuration before rebuilding
-        --no-update           do not pull the configuration before rebuilding (default)
+        --dirty, -d           proceed even if the repository is dirty (default: ask)
+        --main, -m            checkout main if on another branch (default: ask)
+        --stay, -s            stay on the branch if it is not main (default: ask)
+        --update, -u          pull the configuration before rebuilding (default: do not update)
         --home-profile <s>    run a Home Manager installation with this profile (default: autodetect)
         --help, -h            show this help and exit
     EOF
@@ -47,28 +47,24 @@ writeShellApplication {
 
     action=switch
     update=false
-    proceed_if_dirty=false
+    action_if_dirty=ask
+    action_if_not_main=ask
     home_profile=
 
     while [ $# -gt 0 ]; do
       case $1 in
         boot) action=boot ;;
         switch) action=switch ;;
+        --dirty|-d) action_if_dirty=true ;;
+        --main|-m) action_if_not_main=checkout ;;
+        --stay|-s) action_if_not_main=stay ;;
         --update|-u) update=true ;;
-        --no-update) update=false ;;
-        --dirty|-d) proceed_if_dirty=true ;;
-        --no-dirty) proceed_if_dirty=false ;;
         --home-profile) shift; home_profile=$1 ;;
         --help|-h) usage; exit 1 ;;
         *) error 'Unexpected argument: %s\n' "$1"; usage; exit 2 ;;
       esac
       shift
     done
-
-    if $update && $proceed_if_dirty; then
-      error 'Cannot use --update and --dirty.'
-      exit 2
-    fi
 
     readonly action
     readonly update
@@ -97,44 +93,89 @@ writeShellApplication {
     readonly is_dirty
     if $is_dirty; then
       warning 'The working directory is dirty.'
-      if ! $proceed_if_dirty; then
+      if [ $action_if_dirty = ask ]; then
         ask response 'Do you want to \e[1m[p]\e[22mroceed anyway or \e[1m[a]\e[22mbort?'
         # shellcheck disable=SC2154
         case $response in
-          p) proceed_if_dirty=true
-             info 'You can also pass the --dirty argument to do this automatically.'
-             ;;
-          a) info 'Aborting.'
-             exit 2
+          p)
+            info 'You can also pass the --dirty argument to do this automatically.'
+            action_if_dirty=proceed
+            ;;
+          a)
+            action_if_dirty=abort
+            ;;
+          *)
+            error 'Unexpected response: `%s`.' "$response"
+            exit 2
         esac
       fi
-      info 'Proceeding. Some functionalities, such as tagging, will not be available.'
+      case $action_if_dirty in
+        proceed)
+          info 'Proceeding. Some functionalities, such as tagging, will not be available.'
+          ;;
+        abort)
+          info 'Aborting.'
+          exit 2
+          ;;
+        *)
+          error 'Unexpected action if the repository is dirty: `%s`.' "$action_if_dirty"
+          exit 3
+      esac
     fi
-    readonly proceed_if_dirty
 
     current_branch=$(git branch --show-current)
     readonly current_branch
     if [ "$current_branch" != main ]; then
       warning 'The current branch is not `main` but `%s`.' "$current_branch"
-      ask response 'Do you want to checkout \e[1m[m]\e[22main, \e[1m[s]\e[22mtay on %s, or \e[1m[a]\e[22mbort?' "$current_branch"
-      # shellcheck disable=SC2154
-      case $response in
-        m) if $is_dirty; then
-             error 'Cannot checkout `main` when working directory is dirty.'
-             exit 2
-           else
-             info 'Checking out `main`...'
-             git checkout main
-           fi
-           ;;
-        s) info 'This script will only pull from and push to `%s`.' "$current_branch"
-           ;;
-        a) info 'Aborting.'
-           exit 2
+      if [ $action_if_not_main = ask ]; then
+        ask response 'Do you want to \e[1m[c]\e[22mheckout `main`, \e[1m[s]\e[22mtay on `%s`, or \e[1m[a]\e[22mbort?' "$current_branch"
+        # shellcheck disable=SC2154
+        case $response in
+          c)
+            info 'You can also pass the --main argument to do this automatically.'
+            action_if_not_main=checkout
+            ;;
+          s)
+            info 'You can also pass the --stay argument to do this automatically.'
+            action_if_not_main=stay
+            ;;
+          a)
+            action_if_not_main=abort
+            ;;
+          *)
+            error 'Unexpected response: `%s`.' "$response"
+            exit 2
+        esac
+      fi
+      case $action_if_not_main in
+        checkout)
+          if $is_dirty; then
+            error 'Cannot checkout `main` when working directory is dirty.'
+            exit 2
+          else
+            info 'Checking out `main`...'
+            git checkout main
+            info 'done.'
+          fi
+          ;;
+        stay)
+          info 'This script will only pull from and push to `%s`.' "$current_branch"
+          ;;
+        abort)
+          info 'Aborting.'
+          exit 2
+          ;;
+        *)
+          error 'Unexpected action if the branch is not main: `%s`.' "$action_if_not_main"
+          exit 3
       esac
     fi
 
     if $update; then
+      if $is_dirty; then
+        error 'Cannot update when working directory is dirty.'
+        exit 2
+      fi
       info 'Updating the configuration repository...'
       git pull origin "$current_branch" --ff-only
       info 'done.'
@@ -208,9 +249,9 @@ writeShellApplication {
       if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
         info 'Rebooting...'
         reboot
-      else
-        info 'done.'
       fi
     fi
+
+    info 'All done!'
   '';
 }
