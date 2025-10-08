@@ -1,11 +1,7 @@
 { config, lib, ... }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkMerge
-    mkIf
-    ;
+  inherit (lib) mkMerge mkIf;
 
   domain = "nix-cache.niols.fr";
   port = 7865;
@@ -16,22 +12,15 @@ let
 
 in
 {
-  options.x_niols.enableNixCache = mkEnableOption {
-    description = ''
-      Whether to have this machine serve the Nix cache on Hester using Atticd.
-
-      FIXME: We should ensure that only one machine does this.
-    '';
-  };
-
   config = mkMerge [
-    {
+    (mkIf config.x_niols.services.nix-cache.enabledOnAnyServer {
       services.bind.x_niols.zoneEntries."niols.fr" = ''
-        nix-cache  IN  CNAME  siegfried
+        nix-cache  IN  CNAME  ${config.x_niols.services.nix-cache.enabledOn}
       '';
-    }
+    })
 
-    (mkIf config.x_niols.enableNixCache {
+    ## The actual configuration.
+    (mkIf config.x_niols.services.nix-cache.enabledOnThisServer {
       services.atticd = {
         enable = true;
         mode = "monolithic";

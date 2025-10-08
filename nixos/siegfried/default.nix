@@ -14,7 +14,5 @@
 
     x_niols.thisDevicesName = "Siegfried";
     x_niols.thisDevicesColour = "yellow";
-
-    x_niols.enableNixCache = true;
   };
 }
