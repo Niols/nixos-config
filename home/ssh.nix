@@ -34,10 +34,7 @@ in
           allow-loopback-pinentry
         '';
       };
-    }
 
-    ## Personal stuff
-    (mkIf (!config.x_niols.isWork) {
       programs.ssh.matchBlocks = {
         ## My machines
         ##
@@ -108,7 +105,7 @@ in
           extraOptions.UserKnownHostsFile = "/dev/null";
         };
       };
-    })
+    }
 
     ## NOTE: A lot of things in the following configuration require the the
     ## correct symbolic link has been set up from `~/.ssh` into the right place
