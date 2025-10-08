@@ -14,6 +14,9 @@ let
     head
     attrNames
     optionalString
+    mkOption
+    types
+    genAttrs
     ;
   inherit (pkgs)
     writeText
@@ -34,46 +37,33 @@ let
       named-checkzone ${domain} ${unchecked} && cp ${unchecked} $out
     '';
 
-  ## All the zones contain some common definitions, in particular the SOA and
-  ## the `*.niols.fr` NS servers. NOTE: It is therefore normal to have hardcoded
-  ## `niols.fr` in this file instead of `${domain}`.
-  ##
-  makeZone = domain: content: {
-    name = domain;
-    master = true;
-    file = writeZoneFile domain ''
-      $TTL 3600
-
-      @  IN  SOA ${head (attrNames servers)}.niols.fr admin.niols.fr (
-        ${toString inputs.self.lastModified} ; serial number - need to increase with every change
-        3600    ; refresh - how often secondary name servers should check for zone updates
-        1800    ; retry - in case of failure to contact primary, how long to wait before retrying
-        604800  ; expire - in case of failure to contact primary, how long before giving up
-        86400   ; negative TTL - how long to cache negative responses for
-      )
-
-      ${forConcatAttrs servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
-
-      @             IN  MX 5   mta-gw.infomaniak.ch.
-      @             IN  TXT    "v=spf1 include:spf.infomaniak.ch -all"
-      autoconfig    IN  CNAME  infomaniak.com.
-      autodiscover  IN  CNAME  infomaniak.com.
-      _domainkey    IN  NS     ns41.infomaniak.com.
-      _domainkey    IN  NS     ns42.infomaniak.com.
-
-      ${content}
-    '';
-  };
+  domains = [
+    "niols.fr"
+    "jeannerod.fr"
+    "dancelor.org"
+  ];
 
 in
 {
+  options.services.bind.x_niols.zoneEntries = genAttrs domains (
+    domain:
+    mkOption {
+      description = "Zone entries for domain ${domain}.";
+      example = ''
+        call      IN  CNAME  helga
+        mastodon  IN  CNAME  siegfried
+      '';
+      type = types.lines;
+    }
+  );
+
   ## All our servers are also DNS servers for the whole zone.
   config = mkIf config.x_niols.isServer {
     services.bind = {
       enable = true;
 
-      zones = [
-        (makeZone "niols.fr" ''
+      x_niols.zoneEntries = {
+        "niols.fr" = ''
           ${forConcatAttrs servers (
             name: meta: optionalString (meta ? ipv4) "${name}  IN  A     ${meta.ipv4}"
           )}
@@ -90,7 +80,6 @@ in
           mastodon     IN  CNAME  siegfried
           matrix       IN  CNAME  helga
           medias       IN  CNAME  orianne
-          nix-cache    IN  CNAME  siegfried
           syncthing    IN  CNAME  siegfried
           torrent      IN  CNAME  helga
           ts           IN  CNAME  helga
@@ -99,17 +88,50 @@ in
 
           @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
           _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:niols@niols.fr; ruf=mailto:niols@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
-        '')
-        (makeZone "jeannerod.fr" ''
+        '';
+
+        "jeannerod.fr" = ''
           cloud        IN  CNAME  cloud.niols.fr.
           nicolas      IN  CNAME  www.niols.fr.
           www.nicolas  IN  CNAME  www.niols.fr.
-        '')
-        (makeZone "dancelor.org" ''
+        '';
+
+        "dancelor.org" = ''
           @            IN  A      ${servers.helga.ipv4}
           www          IN  A      ${servers.helga.ipv4}
-        '')
-      ];
+        '';
+      };
+
+      ## All the zones contain some common definitions, in particular the SOA and
+      ## the `*.niols.fr` NS servers. NOTE: It is therefore normal to have hardcoded
+      ## `niols.fr` in this part instead of `${domain}`.
+      ##
+      zones = map (domain: {
+        name = domain;
+        master = true;
+        file = writeZoneFile domain ''
+          $TTL 3600
+
+          @  IN  SOA ${head (attrNames servers)}.niols.fr admin.niols.fr (
+            ${toString inputs.self.lastModified} ; serial number - need to increase with every change
+            3600    ; refresh - how often secondary name servers should check for zone updates
+            1800    ; retry - in case of failure to contact primary, how long to wait before retrying
+            604800  ; expire - in case of failure to contact primary, how long before giving up
+            86400   ; negative TTL - how long to cache negative responses for
+          )
+
+          ${forConcatAttrs servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
+
+          @             IN  MX 5   mta-gw.infomaniak.ch.
+          @             IN  TXT    "v=spf1 include:spf.infomaniak.ch -all"
+          autoconfig    IN  CNAME  infomaniak.com.
+          autodiscover  IN  CNAME  infomaniak.com.
+          _domainkey    IN  NS     ns41.infomaniak.com.
+          _domainkey    IN  NS     ns42.infomaniak.com.
+
+          ${config.services.bind.x_niols.zoneEntries.${domain}}
+        '';
+      }) domains;
 
       ## Only localhost can use BIND as a recursive resolver. For the rest of
       ## the world, we are only an authoritative server.
