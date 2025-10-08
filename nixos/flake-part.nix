@@ -102,6 +102,10 @@ in
     "gromit"
   ];
 
+  ## FIXME: unify `flake.machines` and `flake.servers`
+  ## FIXME: stop passing arguments via `self` like this
+  flake.servers = servers;
+
   flake.nixosConfigurations = genAttrs self.machines (
     machine:
     nixosSystem {
