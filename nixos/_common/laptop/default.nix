@@ -1,9 +1,17 @@
-## FIXME: A file for everthing that does not have a good spot elsewhere. This
-## should probably just be a file `laptop.nix` that imports everything else.
-
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./autorandr.nix
+    ./hardware.nix
+    ./network.nix
+    ./packages
+    ./syncthing.nix
+    ./timezone.nix
+    ./udev.nix
+    ./xserver
+  ];
+
   niols-motd = {
     enable = true;
     hostname = config.x_niols.thisDevicesName;
