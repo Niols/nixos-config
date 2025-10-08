@@ -2,14 +2,25 @@
   config,
   lib,
   pkgs,
+  servers,
   ...
 }:
 
 let
-  inherit (lib) mkMerge mkIf;
+  inherit (builtins)
+    toFile
+    ;
+  inherit (lib)
+    mkMerge
+    mkIf
+    concatStringsSep
+    concatMapAttrs
+    concatMapStringsSep
+    optional
+    ;
+  keys = import ../keys/keys.nix;
 
 in
-
 {
   config = mkMerge [
     {
@@ -35,76 +46,80 @@ in
         '';
       };
 
-      programs.ssh.matchBlocks = {
-        ## My machines
-        ##
-        ## TODO: This part should be generated (except Hester), and we should
-        ## generate a `userKnownHostsFile` based on the keys in the `keys/`
-        ## directory.
-        helga = {
-          host = "helga";
-          hostname = "helga.niols.fr";
-          user = "root";
-          identitiesOnly = true;
-          identityFile = "~/.ssh/id_niols";
-        };
-        orianne = {
-          host = "orianne";
-          hostname = "orianne.niols.fr";
-          user = "root";
-          identitiesOnly = true;
-          identityFile = "~/.ssh/id_niols";
-        };
-        siegfried = {
-          host = "siegfried";
-          hostname = "siegfried.niols.fr";
-          user = "root";
-          identitiesOnly = true;
-          identityFile = "~/.ssh/id_niols";
-        };
-        hester = {
-          host = "hester";
-          user = "u363090";
-          hostname = "hester.niols.fr";
-          port = 23;
-        };
+      programs.ssh.matchBlocks =
+        (concatMapAttrs (
+          server: meta:
+          ## For each server, we generate two blocks, one for the hostnames and
+          ## one for the IPs. This ensures that we can connect to the IPs
+          ## directly and that will still pick up on our configuration.
+          let
+            hosts = [
+              server
+              "${server}.niols.fr"
+            ];
+            ips = optional (meta ? ipv4) meta.ipv4 ++ optional (meta ? ipv6) meta.ipv6;
+            makeMatchBlock = hosts: {
+              match = "Host ${concatStringsSep "," hosts}";
+              user = "root";
+              identitiesOnly = true;
+              identityFile = "~/.ssh/id_niols";
+              userKnownHostsFile = toFile "${server}-known_hosts" (
+                concatMapStringsSep "," (ip: "${ip} ${keys.machines.${server}}") ips
+              );
+            };
+          in
+          {
+            "${server}-hosts" = makeMatchBlock hosts // {
+              hostname = meta.ipv4 or meta.ipv6;
+            };
+            "${server}-ips" = makeMatchBlock ips;
+          }
+        ) servers)
 
-        ## Mions
-        nasgul = {
-          host = "nasgul";
-          hostname = "nasgul.jeannerod.me";
-          port = 40022;
-          user = "niols";
-        };
-        gimli = {
-          user = "root";
-          hostname = "192.168.1.11";
-          extraOptions.PubkeyAuthentication = "no";
-          extraOptions.PreferredAuthentications = "password";
-        };
+        // {
+          hester = {
+            host = "hester";
+            user = "u363090";
+            hostname = "hester.niols.fr";
+            port = 23;
+          };
 
-        ## Youth Branch VPS
-        vpsyb = {
-          host = "vpsyb";
-          user = "root";
-          hostname = "137.74.166.97";
-          extraOptions.PubkeyAuthentication = "no";
-          extraOptions.PreferredAuthentications = "password";
-        };
+          ## Mions
+          nasgul = {
+            host = "nasgul";
+            hostname = "nasgul.jeannerod.me";
+            port = 40022;
+            user = "niols";
+          };
+          gimli = {
+            user = "root";
+            hostname = "192.168.1.11";
+            extraOptions.PubkeyAuthentication = "no";
+            extraOptions.PreferredAuthentications = "password";
+          };
 
-        ## For things on localhost, we should not check the host's key, and we
-        ## should just not keep the keys at all.
-        localhost = {
-          host = "localhost";
-          extraOptions.StrictHostKeyChecking = "no";
-          extraOptions.UserKnownHostsFile = "/dev/null";
+          ## Youth Branch VPS
+          vpsyb = {
+            host = "vpsyb";
+            user = "root";
+            hostname = "137.74.166.97";
+            extraOptions.PubkeyAuthentication = "no";
+            extraOptions.PreferredAuthentications = "password";
+          };
+
+          ## For things on localhost, we should not check the host's key, and we
+          ## should just not keep the keys at all.
+          localhost = {
+            host = "localhost";
+            extraOptions.StrictHostKeyChecking = "no";
+            extraOptions.UserKnownHostsFile = "/dev/null";
+          };
+          localhost_star = {
+            host = "*.localhost";
+            extraOptions.StrictHostKeyChecking = "no";
+            extraOptions.UserKnownHostsFile = "/dev/null";
+          };
         };
-        localhost_star = {
-          host = "*.localhost";
-          extraOptions.StrictHostKeyChecking = "no";
-          extraOptions.UserKnownHostsFile = "/dev/null";
-        };
-      };
     }
 
     ## NOTE: A lot of things in the following configuration require the the
