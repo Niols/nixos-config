@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  servers,
+  machines,
   ...
 }:
 
@@ -51,7 +51,9 @@ in
         ## > is the one given in the option; this may be useful when running
         ## > behind NAT with port forwarding set up.
         ##
-        turnAddress = "${servers.${config.x_niols.services.call.enabledOn}.ipv4}:${toString turnPort}";
+        turnAddress = "${
+          machines.servers.${config.x_niols.services.call.enabledOn}.ipv4
+        }:${toString turnPort}";
 
         settings.data.config = {
           proxyUrl = "https://call.niols.fr/";
