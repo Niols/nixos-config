@@ -8,16 +8,33 @@ let
 
   fileSystemOpt = {
     options = {
-      path = mkOption { type = types.str; };
+      path = mkOption {
+        description = ''
+          Path of the folder to mount within Hester. Must not end in a slash.
+          For mounting everything (which is not recommended, except maybe on
+          laptops, use "").
+        '';
+        type = types.str;
+      };
       uid = mkOption {
+        description = ''
+          The user that should own the share.
+        '';
         type = types.str;
         default = "root";
       };
       gid = mkOption {
+        description = ''
+          The group that should own the share.
+        '';
         type = types.str;
         default = "hester";
       };
       worldReadable = mkOption {
+        description = ''
+          Whether to make the share readable to “other” users. It is always
+          readable and writable by the user and the group.
+        '';
         type = types.bool;
         default = false;
       };
@@ -69,6 +86,8 @@ in
       "hester-${name}" = mkHesterFileSystem fs;
     }) config._common.hester.fileSystems;
 
-    users.groups.hester.members = optionals config.x_niols.enableNiolsUser [ "niols" ];
+    users.groups.hester.members =
+      optionals config.x_niols.enableNiolsUser [ "niols" ]
+      ++ optionals config.x_niols.enableWorkUser [ "root" ];
   };
 }
