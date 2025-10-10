@@ -60,7 +60,7 @@ in
       users.mutableUsers = false;
       users.users = genAttrs normalUsersAndRoot (username: {
         hashedPasswordFile =
-          config.age.secrets."password-${config.x_niols.thisDevicesNameLower}-${username}".path;
+          config.age.secrets."password-${config.x_niols.thisMachinesName}-${username}".path;
       });
     }
 

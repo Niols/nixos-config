@@ -12,7 +12,7 @@
       ./syncthing.nix
     ];
 
-    x_niols.thisDevicesName = "Siegfried";
-    x_niols.thisDevicesColour = "yellow";
+    x_niols.thisMachinesName = "siegfried";
+    x_niols.thisMachinesColour = "yellow";
   };
 }

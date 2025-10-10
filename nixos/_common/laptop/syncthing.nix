@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   services.syncthing = {
@@ -6,12 +11,12 @@
     user = "niols";
     configDir = "/home/niols/.config/syncthing/";
 
-    key = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-key".path;
-    cert = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-cert".path;
+    key = config.age.secrets."syncthing-${config.x_niols.thisMachinesName}-key".path;
+    cert = config.age.secrets."syncthing-${config.x_niols.thisMachinesName}-cert".path;
 
     x_niols = {
       enableCommonFoldersAndDevices = true;
-      thisDevice = config.x_niols.thisDevicesName; # FIXME: duplicate options
+      thisDevice = lib.toSentenceCase config.x_niols.thisMachinesName; # FIXME: duplicate options
       defaultFolderPrefix = "~/.syncthing";
     };
   };

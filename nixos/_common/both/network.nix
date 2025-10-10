@@ -2,7 +2,7 @@
 
 {
   networking = {
-    hostName = config.x_niols.thisDevicesNameLower;
+    hostName = config.x_niols.thisMachinesName;
     domain = "niols.fr";
 
     nameservers = [

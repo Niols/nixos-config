@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -14,7 +19,7 @@
 
   niols-motd = {
     enable = true;
-    hostname = config.x_niols.thisDevicesName;
+    hostname = lib.toSentenceCase config.x_niols.thisMachinesName;
     hostcolour = "green";
   };
 

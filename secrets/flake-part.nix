@@ -35,10 +35,10 @@ let
         // (
           if !(config ? home) then
             ## NixOS configuration
-            { default = keys.machines.${config.x_niols.thisDevicesNameLower}; }
+            { default = keys.machines.${config.x_niols.thisMachinesName}; }
           else if osConfig != null then
             ## Home configuration where HM comes from NixOS module
-            { default = keys.homes."${osConfig.x_niols.thisDevicesNameLower}-${config.home.username}"; }
+            { default = keys.homes."${osConfig.x_niols.thisMachinesName}-${config.home.username}"; }
           else
             { }
         );
