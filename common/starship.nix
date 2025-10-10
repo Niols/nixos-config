@@ -27,7 +27,7 @@ let
 in
 {
   options.x_niols = with lib; {
-    thisDevicesColour = mkOption {
+    thisMachinesColour = mkOption {
       description = ''
         Colour of the machine.
       '';
@@ -63,7 +63,7 @@ in
 
       status.disabled = false;
       status.format = "$symbol";
-      status.success_symbol = "[✓ $status](bold fg:${config.x_niols.thisDevicesColour})";
+      status.success_symbol = "[✓ $status](bold fg:${config.x_niols.thisMachinesColour})";
       status.symbol = "[✗ $status](bold fg:red)";
 
       cmd_duration.min_time = 0;
@@ -73,11 +73,11 @@ in
       username.show_always = true;
       username.format = "[$user@]($style)";
       username.style_root = fgFor "red";
-      username.style_user = fgFor config.x_niols.thisDevicesColour;
+      username.style_user = fgFor config.x_niols.thisMachinesColour;
 
       hostname.ssh_only = false;
       ## FIXME: try `prev_fg` and `prev_bg` to replicate the colouring of the `username` section.
-      hostname.format = rbox "fg:${config.x_niols.thisDevicesColour}" "[$hostname$ssh_symbol](${fgFor config.x_niols.thisDevicesColour})";
+      hostname.format = rbox "fg:${config.x_niols.thisMachinesColour}" "[$hostname$ssh_symbol](${fgFor config.x_niols.thisMachinesColour})";
       hostname.ssh_symbol = "";
 
       directory = {

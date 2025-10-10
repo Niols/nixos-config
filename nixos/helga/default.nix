@@ -20,8 +20,8 @@
         ./nginx.nix
       ];
 
-      x_niols.thisDevicesName = "Helga";
-      x_niols.thisDevicesColour = "blue";
+      x_niols.thisMachinesName = "helga";
+      x_niols.thisMachinesColour = "blue";
       x_niols.enableNiolsUser = true;
 
       ## FIXME: This is an experiment to improve responsiveness of the system

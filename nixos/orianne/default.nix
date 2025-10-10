@@ -11,8 +11,8 @@
       ./storage.nix
     ];
 
-    x_niols.thisDevicesName = "Orianne";
-    x_niols.thisDevicesColour = "cyan";
+    x_niols.thisMachinesName = "orianne";
+    x_niols.thisMachinesColour = "cyan";
 
     boot.loader = {
       systemd-boot.enable = true;

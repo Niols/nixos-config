@@ -1,7 +1,12 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkForce mkOption types;
+  inherit (lib)
+    mkForce
+    mkOption
+    types
+    toSentenceCase
+    ;
 
 in
 {
@@ -38,7 +43,7 @@ in
       settings = {
         INTERNET_IFACE = config.x_niols.thisLaptopsWifiInterface;
         WIFI_IFACE = config.x_niols.thisLaptopsWifiInterface;
-        SSID = config.x_niols.thisDevicesName;
+        SSID = toSentenceCase config.x_niols.thisMachinesName;
         PASSPHRASE = "ReKuYm05"; # FIXME: secret?
         FREQ_BAND = "2.4";
       };

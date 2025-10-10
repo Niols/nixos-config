@@ -1,19 +1,19 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
   services.syncthing = {
     enable = true;
     user = "syncthing";
 
-    key = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-key".path;
-    cert = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-cert".path;
+    key = config.age.secrets."syncthing-${config.x_niols.thisMachinesName}-key".path;
+    cert = config.age.secrets."syncthing-${config.x_niols.thisMachinesName}-cert".path;
 
     guiAddress = "127.0.0.1:8384";
     settings.gui.insecureSkipHostcheck = true;
 
     x_niols = {
       enableCommonFoldersAndDevices = true;
-      thisDevice = config.x_niols.thisDevicesName;
+      thisDevice = lib.toSentenceCase config.x_niols.thisMachinesName;
       defaultFolderPrefix = "/hester/services/syncthing";
       extraDefaultFolderConfig.ignorePerms = true;
     };
@@ -50,11 +50,11 @@
 
     locations."/" = {
       proxyPass = "http://127.0.0.1:8384";
-      basicAuthFile = config.age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-passwd".path;
+      basicAuthFile = config.age.secrets."syncthing-${config.x_niols.thisMachinesName}-passwd".path;
     };
   };
 
-  age.secrets."syncthing-${config.x_niols.thisDevicesNameLower}-passwd" = {
+  age.secrets."syncthing-${config.x_niols.thisMachinesName}-passwd" = {
     mode = "600";
     owner = "nginx";
     group = "nginx";

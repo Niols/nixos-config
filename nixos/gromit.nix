@@ -10,7 +10,7 @@
         inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-9th-gen
       ];
 
-      x_niols.thisDevicesName = "Gromit";
+      x_niols.thisMachinesName = "gromit";
       x_niols.thisLaptopsWifiInterface = "wlp0s20f3";
       disko.devices.disk.main.device = "/dev/nvme0n1";
       x_niols.unencryptedOptSize = "200G";
