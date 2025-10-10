@@ -94,11 +94,6 @@ in
           nicolas      IN  CNAME  www.niols.fr.
           www.nicolas  IN  CNAME  www.niols.fr.
         '';
-
-        "dancelor.org" = ''
-          @            IN  A      ${machines.servers.helga.ipv4}
-          www          IN  A      ${machines.servers.helga.ipv4}
-        '';
       };
 
       ## All the zones contain some common definitions, in particular the SOA and
