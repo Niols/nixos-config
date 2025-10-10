@@ -21,6 +21,7 @@ in
     ./boot.nix
     ./call.nix
     ./databases.nix
+    ./dancelor.nix
     ./dns-server.nix
     ./hester.nix
     ./motd.nix
@@ -86,6 +87,7 @@ in
 
   config.x_niols.services = {
     call.enabledOn = "helga";
+    dancelor.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
   };
 }
