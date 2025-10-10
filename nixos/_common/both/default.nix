@@ -17,10 +17,7 @@ let
 in
 {
   imports = [
-    ./autoreboot.nix
     ./boot.nix
-    ./call.nix
-    ./databases.nix
     ./hester.nix
     ./motd.nix
     ./network.nix
