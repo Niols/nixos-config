@@ -9,7 +9,6 @@
 
 let
   inherit (lib)
-    mkIf
     concatMapStringsSep
     head
     attrNames
@@ -58,7 +57,7 @@ in
   );
 
   ## All our servers are also DNS servers for the whole zone.
-  config = mkIf config.x_niols.isServer {
+  config = {
     services.bind = {
       enable = true;
 

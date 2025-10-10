@@ -21,7 +21,6 @@ in
     ./boot.nix
     ./call.nix
     ./databases.nix
-    ./dns-server.nix
     ./hester.nix
     ./motd.nix
     ./network.nix

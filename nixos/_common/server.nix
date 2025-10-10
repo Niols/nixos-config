@@ -2,6 +2,6 @@
   imports = [
     ../../common
     ./both
+    ./server
   ];
-  x_niols.isServer = true;
 }
