@@ -6,7 +6,6 @@
       ./cloud.nix
       ./hardware-configuration.nix
       ./medias.nix
-      ./motd.nix
       ./nginx.nix
       ./storage.nix
     ];

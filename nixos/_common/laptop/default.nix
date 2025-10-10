@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -16,12 +11,6 @@
     ./udev.nix
     ./xserver
   ];
-
-  niols-motd = {
-    enable = true;
-    hostname = lib.toSentenceCase config.x_niols.thisMachinesName;
-    hostcolour = "green";
-  };
 
   programs.weylus = {
     enable = true;
