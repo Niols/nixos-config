@@ -16,7 +16,6 @@
         inputs.dancelor.nixosModules.dancelor
 
         ./hardware-configuration.nix
-        ./motd.nix
         ./nginx.nix
       ];
 

@@ -23,6 +23,7 @@ in
     ./databases.nix
     ./dns-server.nix
     ./hester.nix
+    ./motd.nix
     ./network.nix
     ./nix-cache.nix
     ./packages.nix
