@@ -28,6 +28,7 @@ in
         enable = true;
         enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
+        ## Do not enable forward agent here, but rather on a host-by-host basis.
       };
 
       ## We don't actually use GPG much, but we like the GPG Agent and it has
@@ -63,6 +64,7 @@ in
               user = "root";
               identitiesOnly = true;
               identityFile = "~/.ssh/id_niols";
+              forwardAgent = true; # those are our machines, we trust them
               userKnownHostsFile = toFile "${server}-known_hosts" (
                 concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") ips
               );
