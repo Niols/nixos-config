@@ -52,7 +52,7 @@
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs;
-          inherit (self) servers;
+          inherit (self) machines;
         };
         modules = [
           self.homeModules.secrets

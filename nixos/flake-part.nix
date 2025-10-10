@@ -2,34 +2,59 @@
 
 let
   inherit (inputs.nixpkgs.lib)
-    genAttrs
     mapAttrs
     mapAttrs'
     mkForce
     nixosSystem
+    filterAttrs
     ;
 
-  ## Some metadata for the servers of this configuration.
-  servers = {
-    helga.ipv4 = "188.245.212.11";
-    helga.ipv6 = "2a01:4f8:1c1c:42dc::1"; # in fact, we have the whole /64 subnet
-    orianne.ipv4 = "89.168.38.231";
-    siegfried.ipv4 = "158.178.201.160";
+  ## Some metadata for the machines of this configuration.
+  all = mapAttrs (name: meta: meta // { inherit name; }) {
+    ahlaya = {
+      kind = "laptop";
+    };
+    gromit = {
+      kind = "laptop";
+    };
+    helga = {
+      kind = "server";
+      ipv4 = "188.245.212.11";
+      ipv6 = "2a01:4f8:1c1c:42dc::1"; # in fact, we have the whole /64 subnet
+    };
+    orianne = {
+      kind = "server";
+      ipv4 = "89.168.38.231";
+    };
+    siegfried = {
+      kind = "server";
+      ipv4 = "158.178.201.160";
+    };
+  };
+  machines = {
+    inherit all;
+    laptops = filterAttrs (_: { kind, ... }: kind == "laptop") all;
+    servers = filterAttrs (_: { kind, ... }: kind == "server") all;
   };
 
   ## The special arguments that we need to propagate throughout the whole
-  ## codebase and all the modules.
-  specialArgs = { inherit inputs servers; };
+  ## codebase and all the modules, specialised for the given machine.
+  specialArgsFor = name: {
+    inherit inputs;
+    machines = machines // {
+      this = machines.all.${name};
+    };
+  };
 
   nixosModuleFor =
-    machine:
+    name:
     (
       { config, ... }:
       {
         imports = [
           self.nixosModules.keys
           self.nixosModules.secrets
-          self.nixosModules.${machine}
+          self.nixosModules.${name}
           inputs.home-manager.nixosModules.home-manager
         ];
 
@@ -51,7 +76,7 @@ let
 
           sharedModules = [ self.homeModules.secrets ];
 
-          extraSpecialArgs = specialArgs;
+          extraSpecialArgs = specialArgsFor name;
         };
 
         ## The default timeout for Home Manager services is 5 minutes. This is
@@ -64,18 +89,18 @@ let
       }
     );
 
-  nixops4ResourceFor = machine: providers: {
+  nixops4ResourceFor = name: providers: {
     type = providers.local.exec;
     imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
     ssh = {
-      host = servers.${machine}.ipv4;
+      host = machines.all.${name}.ipv4;
       opts = "";
-      hostPublicKey = self.keys.machines.${machine};
+      hostPublicKey = self.keys.machines.${name};
     };
     inherit (inputs) nixpkgs;
     nixos = {
-      module = nixosModuleFor machine;
-      inherit specialArgs;
+      module = nixosModuleFor name;
+      specialArgs = specialArgsFor name;
     };
   };
 
@@ -94,41 +119,33 @@ in
     inputs.nixops4.modules.flake.default
   ];
 
-  flake.machines = [
-    "ahlaya"
-    "helga"
-    "orianne"
-    "siegfried"
-    "gromit"
-  ];
-
-  ## FIXME: unify `flake.machines` and `flake.servers`
   ## FIXME: stop passing arguments via `self` like this
-  flake.servers = servers;
+  flake.machines = machines;
 
-  flake.nixosConfigurations = genAttrs self.machines (
-    machine:
+  flake.nixosConfigurations = mapAttrs (
+    name: _:
     nixosSystem {
-      inherit specialArgs;
-      modules = [ (nixosModuleFor machine) ];
+      modules = [ (nixosModuleFor name) ];
+      specialArgs = specialArgsFor name;
     }
-  );
+  ) machines.all;
 
+  ## Deployments for all servers
   nixops4Deployments =
     mapAttrs (
-      machine: _:
+      name: _:
       { providers, ... }:
       {
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources.${machine} = nixops4ResourceFor machine providers;
+        resources.${name} = nixops4ResourceFor name providers;
       }
-    ) servers
+    ) machines.servers
     // {
       default =
         { providers, ... }:
         {
           providers.local = inputs.nixops4.modules.nixops4Provider.local;
-          resources = mapAttrs (machine: _: nixops4ResourceFor machine providers) servers;
+          resources = mapAttrs (name: _: nixops4ResourceFor name providers) machines.servers;
         };
     };
 }

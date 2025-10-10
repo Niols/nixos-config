@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  servers,
+  machines,
   inputs,
   ...
 }:
@@ -64,16 +64,16 @@ in
 
       x_niols.zoneEntries = {
         "niols.fr" = ''
-          ${forConcatAttrs servers (
+          ${forConcatAttrs machines.servers (
             name: meta: optionalString (meta ? ipv4) "${name}  IN  A     ${meta.ipv4}"
           )}
-          ${forConcatAttrs servers (
+          ${forConcatAttrs machines.servers (
             name: meta: optionalString (meta ? ipv6) "${name}  IN  AAAA  ${meta.ipv6}"
           )}
           hester       IN  CNAME  u363090.your-storagebox.de.
 
-          @            IN  A      ${servers.helga.ipv4}
-          www          IN  A      ${servers.helga.ipv4}
+          @            IN  A      ${machines.servers.helga.ipv4}
+          www          IN  A      ${machines.servers.helga.ipv4}
           cloud        IN  CNAME  orianne
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
@@ -96,8 +96,8 @@ in
         '';
 
         "dancelor.org" = ''
-          @            IN  A      ${servers.helga.ipv4}
-          www          IN  A      ${servers.helga.ipv4}
+          @            IN  A      ${machines.servers.helga.ipv4}
+          www          IN  A      ${machines.servers.helga.ipv4}
         '';
       };
 
@@ -111,7 +111,7 @@ in
         file = writeZoneFile domain ''
           $TTL 3600
 
-          @  IN  SOA ${head (attrNames servers)}.niols.fr admin.niols.fr (
+          @  IN  SOA ${head (attrNames machines.servers)}.niols.fr admin.niols.fr (
             ${toString inputs.self.lastModified} ; serial number - need to increase with every change
             3600    ; refresh - how often secondary name servers should check for zone updates
             1800    ; retry - in case of failure to contact primary, how long to wait before retrying
@@ -119,7 +119,7 @@ in
             86400   ; negative TTL - how long to cache negative responses for
           )
 
-          ${forConcatAttrs servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
+          ${forConcatAttrs machines.servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
 
           @             IN  MX 5   mta-gw.infomaniak.ch.
           @             IN  TXT    "v=spf1 include:spf.infomaniak.ch -all"

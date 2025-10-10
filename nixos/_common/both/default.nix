@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  servers,
+  machines,
   ...
 }:
 
@@ -50,7 +50,7 @@ in
               description = ''
                 On which server this service should be running, or `null` if the service should be disabled.
               '';
-              type = types.nullOr (types.enum (attrNames servers));
+              type = types.nullOr (types.enum (attrNames machines.servers));
             };
             enabledOnAnyServer = mkOption {
               description = ''

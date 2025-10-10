@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  servers,
+  machines,
   ...
 }:
 
@@ -76,7 +76,7 @@ in
             };
             "${server}-ips" = makeMatchBlock ips;
           }
-        ) servers)
+        ) machines.servers)
 
         // {
           hester = {
