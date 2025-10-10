@@ -2,8 +2,6 @@
   flake.nixosModules.helga = {
     imports = [
       ../_common/server.nix
-      ../../_modules/teamspeak.nix
-
       ./hardware-configuration.nix
       ./nginx.nix
     ];

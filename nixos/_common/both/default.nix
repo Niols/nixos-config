@@ -32,6 +32,7 @@ in
     ./ssh.nix
     ./syncthing.nix
     ./systemStateVersion.nix
+    ./teamspeak.nix
     ./torrent.nix
     ./users.nix
     ./web.nix
@@ -93,6 +94,7 @@ in
     dancelor.enabledOn = "helga";
     matrix.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
+    teamspeak.enabledOn = "helga";
     torrent.enabledOn = "helga";
     web.enabledOn = "helga";
   };
