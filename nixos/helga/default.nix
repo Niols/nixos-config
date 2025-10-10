@@ -2,7 +2,6 @@
   flake.nixosModules.helga = {
     imports = [
       ../_common/server.nix
-      ../../_modules/matrix.nix
       ../../_modules/teamspeak.nix
       ../../_modules/torrent.nix
 

@@ -6,9 +6,6 @@
 }:
 
 let
-  inherit (builtins)
-    toJSON
-    ;
   inherit (lib)
     mkMerge
     mkIf
@@ -85,18 +82,6 @@ in
             add_header X-XSS-Protection "1; mode=block";
           '';
         }) config.x_niols.wellKnownFiles);
-      };
-
-      ## Well-known entries for Matrix. They are necessary because the domain is
-      ## `niols.fr` (eg. in `@niols:niols.fr`) but the server name is
-      ## `matrix.niols.fr`. It might even be on a different machine. `server` is
-      ## for federation and `client` is for Matrix clients.
-      ## FIXME: Move this closer to Matrix, but this is on another machine.
-      x_niols.wellKnownFiles."matrix/server" = toJSON { "m.server" = "matrix.niols.fr:443"; };
-      x_niols.wellKnownFiles."matrix/client" = toJSON {
-        "m.homeserver" = {
-          "base_url" = "https://matrix.niols.fr/";
-        };
       };
 
       ## FIXME: Maybe somewhere else?

@@ -75,7 +75,6 @@ in
           cloud        IN  CNAME  orianne
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
-          matrix       IN  CNAME  helga
           medias       IN  CNAME  orianne
           syncthing    IN  CNAME  siegfried
           torrent      IN  CNAME  helga

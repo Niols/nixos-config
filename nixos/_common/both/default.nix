@@ -24,6 +24,7 @@ in
     ./dancelor.nix
     ./dns-server.nix
     ./hester.nix
+    ./matrix.nix
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
@@ -89,6 +90,7 @@ in
   config.x_niols.services = {
     call.enabledOn = "helga";
     dancelor.enabledOn = "helga";
+    matrix.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
     web.enabledOn = "helga";
   };
