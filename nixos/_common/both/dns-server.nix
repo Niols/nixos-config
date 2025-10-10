@@ -72,16 +72,11 @@ in
           )}
           hester       IN  CNAME  u363090.your-storagebox.de.
 
-          @            IN  A      ${machines.servers.helga.ipv4}
-          www          IN  A      ${machines.servers.helga.ipv4}
           cloud        IN  CNAME  orianne
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
-          matrix       IN  CNAME  helga
           medias       IN  CNAME  orianne
           syncthing    IN  CNAME  siegfried
-          torrent      IN  CNAME  helga
-          ts           IN  CNAME  helga
           scd          IN  CNAME  niols.github.io.
           dev.scd      IN  CNAME  niols.github.io.
 
@@ -91,8 +86,6 @@ in
 
         "jeannerod.fr" = ''
           cloud        IN  CNAME  cloud.niols.fr.
-          nicolas      IN  CNAME  www.niols.fr.
-          www.nicolas  IN  CNAME  www.niols.fr.
         '';
       };
 

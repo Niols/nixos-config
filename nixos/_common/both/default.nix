@@ -24,6 +24,7 @@ in
     ./dancelor.nix
     ./dns-server.nix
     ./hester.nix
+    ./matrix.nix
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
@@ -31,7 +32,10 @@ in
     ./ssh.nix
     ./syncthing.nix
     ./systemStateVersion.nix
+    ./teamspeak.nix
+    ./torrent.nix
     ./users.nix
+    ./web.nix
   ];
 
   options.x_niols = {
@@ -88,6 +92,10 @@ in
   config.x_niols.services = {
     call.enabledOn = "helga";
     dancelor.enabledOn = "helga";
+    matrix.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
+    teamspeak.enabledOn = "helga";
+    torrent.enabledOn = "helga";
+    web.enabledOn = "helga";
   };
 }
