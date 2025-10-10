@@ -32,6 +32,7 @@ in
     ./syncthing.nix
     ./systemStateVersion.nix
     ./users.nix
+    ./web.nix
   ];
 
   options.x_niols = {
@@ -89,5 +90,6 @@ in
     call.enabledOn = "helga";
     dancelor.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
+    web.enabledOn = "helga";
   };
 }
