@@ -64,7 +64,7 @@ in
               identitiesOnly = true;
               identityFile = "~/.ssh/id_niols";
               userKnownHostsFile = toFile "${server}-known_hosts" (
-                concatMapStringsSep "," (ip: "${ip} ${keys.machines.${server}}") ips
+                concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") ips
               );
             };
           in
