@@ -3,7 +3,6 @@
     imports = [
       ../_common/server.nix
       ../../_modules/teamspeak.nix
-      ../../_modules/torrent.nix
 
       ./hardware-configuration.nix
       ./nginx.nix

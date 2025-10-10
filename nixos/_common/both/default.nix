@@ -32,6 +32,7 @@ in
     ./ssh.nix
     ./syncthing.nix
     ./systemStateVersion.nix
+    ./torrent.nix
     ./users.nix
     ./web.nix
   ];
@@ -92,6 +93,7 @@ in
     dancelor.enabledOn = "helga";
     matrix.enabledOn = "helga";
     nix-cache.enabledOn = "siegfried";
+    torrent.enabledOn = "helga";
     web.enabledOn = "helga";
   };
 }
