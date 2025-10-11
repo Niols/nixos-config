@@ -60,6 +60,7 @@
           {
             x_niols.isWork = true;
             x_niols.isHeadless = true;
+            x_niols.agePublicKey = self.keys.homes.headless-work;
           }
         ];
       };
