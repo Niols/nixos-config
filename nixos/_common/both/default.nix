@@ -28,6 +28,7 @@ in
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
+    ./nginx.nix
     ./packages.nix
     ./ssh.nix
     ./syncthing.nix
