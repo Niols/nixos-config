@@ -29,6 +29,7 @@ in
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
+    ./nginx.nix
     ./ssh.nix
     ./syncthing.nix
     ./systemStateVersion.nix

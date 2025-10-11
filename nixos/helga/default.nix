@@ -3,7 +3,6 @@
     imports = [
       ../_common/server.nix
       ./hardware-configuration.nix
-      ./nginx.nix
     ];
 
     x_niols.thisMachinesName = "helga";

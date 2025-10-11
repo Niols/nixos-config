@@ -5,7 +5,6 @@
 
       ./hardware-configuration.nix
       ./medias.nix
-      ./nginx.nix
       ./storage.nix
     ];
 
