@@ -38,9 +38,15 @@ in
         thunderbird
         vlc
       ];
-      services.nextcloud-client = {
+
+      ## Start Nextcloud automatically on startup. NOTE: There is also
+      ## `services.nextcloud.enable`, but it has been causing issues with
+      ## Nextcloud forgetting its configuration, so we prefer this.
+      xdg.autostart = {
         enable = true;
-        startInBackground = true;
+        entries = [
+          "${pkgs.nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
+        ];
       };
     })
 
