@@ -110,7 +110,7 @@ in
   imports = [
     ## NixOS configurations
     ./ahlaya.nix
-    ./helga
+    ./helga.nix
     ./orianne
     ./siegfried
     ./gromit.nix
