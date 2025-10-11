@@ -6,19 +6,50 @@
 
 let
   inherit (lib)
+    elem
+    mkOption
+    types
+    concatMapAttrs
+    optionalAttrs
     removeSuffix
-    mapAttrs'
     ;
 
   secrets = import ./secrets.nix;
+  keys = import ../keys/keys.nix;
 
-  ## Inject all secrets into the configuration. This does not mean that the
-  ## client machine will be able to decrypt them; this is rather defined in
-  ## secrets.nix.
-  commonModule.age.secrets = mapAttrs' (name: _: {
-    name = removeSuffix ".age" name;
-    value.file = ./. + "/${name}";
-  }) secrets;
+  commonModule =
+    { config, osConfig, ... }:
+    {
+      options.x_niols.agePublicKey =
+        mkOption ({
+          description = ''
+            The public key that will allow decrypting secrets. It will be used
+            to filter Age secrets and only keep the relevant ones. Defaults to
+            `keys.machines.<device name>` on NixOS configurations and
+            `keys.homes.<device name>-<user name>` on Home configurations where
+            Home Manager is handled by NixOS module. It is mandatory for standalone
+            Home configurations.
+          '';
+          type = types.str;
+        })
+        // (
+          if !(config ? home) then
+            ## NixOS configuration
+            { default = keys.machines.${config.x_niols.thisMachinesName}; }
+          else if osConfig != null then
+            ## Home configuration where HM comes from NixOS module
+            { default = keys.homes."${osConfig.x_niols.thisMachinesName}-${config.home.username}"; }
+          else
+            { }
+        );
+
+      config.age.secrets = concatMapAttrs (
+        name: secret:
+        optionalAttrs (elem config.x_niols.agePublicKey secret.publicKeys) ({
+          ${removeSuffix ".age" name}.file = ./. + "/${name}";
+        })
+      ) secrets;
+    };
 
 in
 {
