@@ -16,8 +16,8 @@ in
 
       ## Run the OPAM hook if it exists. This can be shared between all
       ## sessions; we do not however enforce the existence of OPAM.
-      programs.bash.bashrcExtra = ''
-        test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh >/dev/null 2>/dev/null || true
+      programs.bash.profileExtra = ''
+        if command -v opam >/dev/null; then eval $(opam env); fi
       '';
     }
 
