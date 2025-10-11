@@ -7,7 +7,6 @@
       ./git-server.nix
       ./hardware-configuration.nix
       ./mastodon.nix
-      ./nginx.nix
       ./syncthing.nix
     ];
 
