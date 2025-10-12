@@ -81,7 +81,7 @@ in
           dev.scd      IN  CNAME  niols.github.io.
 
           @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
-          _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:niols@niols.fr; ruf=mailto:niols@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
+          _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
         '';
 
         "jeannerod.fr" = ''
