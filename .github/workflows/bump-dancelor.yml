@@ -1,0 +1,35 @@
+name: Bump Dancelor
+
+on:
+  workflow_dispatch:  # manual triggering
+  repository_dispatch:
+    types: [bump-dancelor]  # when Dancelor changes
+
+jobs:
+  bump-dancelor:
+    name: Bump Dancelor
+
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'repository_dispatch'
+         && github.event.action == 'bump-dancelor' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Update flake.lock and create the pull request
+        id: update
+        uses: determinatesystems/update-flake-lock@v27
+        with:
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+          inputs: dancelor
+          pr-title: "Bump Dancelor"
+          branch: dancelor/bump-dancelor
+
+      - name: Set up auto-merge for the pull request
+        run: "gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
