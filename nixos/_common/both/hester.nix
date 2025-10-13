@@ -88,6 +88,6 @@ in
 
     users.groups.hester.members =
       optionals config.x_niols.enableNiolsUser [ "niols" ]
-      ++ optionals config.x_niols.enableWorkUser [ "root" ];
+      ++ optionals config.x_niols.enableWorkUser [ "work" ];
   };
 }
