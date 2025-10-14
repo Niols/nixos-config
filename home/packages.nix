@@ -34,6 +34,7 @@ in
         libreoffice
         lilypond
         picard
+        nextcloud-client # needs to be here AND in `xdg.autostart`
         signal-desktop
         thunderbird
         vlc
@@ -44,8 +45,8 @@ in
       ## Nextcloud forgetting its configuration, so we prefer this.
       xdg.autostart = {
         enable = true;
-        entries = [
-          "${pkgs.nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
+        entries = with pkgs; [
+          "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
         ];
       };
     })
