@@ -63,6 +63,7 @@ in
       ## but not anymore, now that it is in Dancelor directly.
       services.nginx.virtualHosts.dancelor = {
         serverName = "dancelor.org";
+        serverAliases = [ "www.dancelor.org" ];
         forceSSL = true;
         enableACME = true;
         locations."/" = {
