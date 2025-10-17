@@ -18,7 +18,6 @@ in
 {
   environment.systemPackages = [
     hlsWrapperCompatScript
-    (import ./rnix.nix { inherit pkgs; })
   ];
 
   programs.steam.enable = true;

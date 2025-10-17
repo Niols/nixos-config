@@ -58,6 +58,7 @@ in
       pdftk
       ripgrep
       ripgrep-all
+      (callPackage ./packages/rnix.nix { })
       tmux
       unrar
       unzip

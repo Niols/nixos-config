@@ -1,6 +1,10 @@
-{ pkgs }:
+{
+  nix,
+  nix-output-monitor,
+  stdenv,
+}:
 
-pkgs.stdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "rnix";
   src = ./.; # or anything; this is unused
 
@@ -12,7 +16,7 @@ pkgs.stdenv.mkDerivation {
 
     cat <<'EOF' > $out/bin/rnix
       #!/bin/sh
-      exec ${pkgs.nix}/bin/nix \
+      exec ${nix}/bin/nix \
         --builders '@/etc/nix/machines' \
         "$@"
     EOF
@@ -20,7 +24,7 @@ pkgs.stdenv.mkDerivation {
 
     cat <<'EOF' > $out/bin/rrnix
       #!/bin/sh
-      exec ${pkgs.nix}/bin/nix \
+      exec ${nix}/bin/nix \
         --builders '@/etc/nix/machines' --max-jobs 0 \
         "$@"
     EOF
@@ -28,7 +32,7 @@ pkgs.stdenv.mkDerivation {
 
     cat <<'EOF' > $out/bin/rnom
       #!/bin/sh
-      exec ${pkgs.nix-output-monitor}/bin/nom \
+      exec ${nix-output-monitor}/bin/nom \
         --builders '@/etc/nix/machines' \
         "$@"
     EOF
@@ -36,7 +40,7 @@ pkgs.stdenv.mkDerivation {
 
     cat <<'EOF' > $out/bin/rrnom
       #!/bin/sh
-      exec ${pkgs.nix-output-monitor}/bin/nom \
+      exec ${nix-output-monitor}/bin/nom \
         --builders '@/etc/nix/machines' --max-jobs 0 \
         "$@"
     EOF
