@@ -72,7 +72,6 @@ in
           )}
           hester       IN  CNAME  u363090.your-storagebox.de.
 
-          cloud        IN  CNAME  orianne
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
           medias       IN  CNAME  orianne
@@ -82,10 +81,6 @@ in
 
           @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
           _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
-        '';
-
-        "jeannerod.fr" = ''
-          cloud        IN  CNAME  cloud.niols.fr.
         '';
       };
 

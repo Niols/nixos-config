@@ -3,7 +3,6 @@
     imports = [
       ../_common/server.nix
 
-      ./cloud.nix
       ./hardware-configuration.nix
       ./medias.nix
       ./nginx.nix

@@ -40,6 +40,7 @@ in
   config = {
     x_niols.services = {
       call.enabledOn = "helga";
+      cloud.enabledOn = "orianne";
       dancelor.enabledOn = "helga";
       matrix.enabledOn = "helga";
       nix-cache.enabledOn = "siegfried";
