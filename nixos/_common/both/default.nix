@@ -20,6 +20,7 @@ in
     ./autoreboot.nix
     ./boot.nix
     ./call.nix
+    ./cloud.nix
     ./databases.nix
     ./dancelor.nix
     ./dns-server.nix
