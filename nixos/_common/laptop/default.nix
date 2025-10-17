@@ -5,7 +5,6 @@
     ./autorandr.nix
     ./hardware.nix
     ./network.nix
-    ./packages
     ./syncthing.nix
     ./timezone.nix
     ./udev.nix
@@ -57,4 +56,13 @@
 
   ## As of 26 October 2022, `android-tools` is broken, so we're disabling it.
   # programs.adb.enable = true;
+
+  ############################################################################
+  ## Steam
+  ##
+  ## We would rather put those options in HM, but they just don't exist, as
+  ## Steam needs to touch many things in the environment to function.
+
+  programs.steam.enable = true;
+  hardware.steam-hardware.enable = true; # support for controllers
 }

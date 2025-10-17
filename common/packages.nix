@@ -36,58 +36,33 @@ in
     );
 
     x_niols.commonPackages = with pkgs; [
-      ## B
       bat
       bc
       btop
-
-      ## C
       calc
-
-      ## D
       dig
-
-      ## E
       entr
-
-      ## F
       fd
-
-      ## G
       git
       git-lfs
-
-      ## H
+      ghostscript # for `gs`, which `imagemagick` uses for PDF manipulation
       htop
       httpie
-
-      ## J
+      imagemagick
       jq
       jless
-
-      ## K
       killall
-
-      ## L
       lsd
-
-      ## N
       nix-output-monitor
-
-      ## R
+      pdfgrep # superseeded by ripgrep-all?
+      pdftk
       ripgrep
-
-      ## T
+      ripgrep-all
+      (callPackage ./packages/rnix.nix { })
       tmux
-
-      ## U
       unrar
       unzip
-
-      ## W
       wget
-
-      ## Y
       yamllint
       yq
     ];

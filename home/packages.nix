@@ -21,13 +21,29 @@ in
       '';
     }
 
+    ## Packages common to laptops.
+    (mkIf (!config.x_niols.isHeadless) {
+      home.packages = with pkgs; [
+        evince
+        ffmpeg-full
+        file-roller # GNOME archive manager
+        filezilla
+        nautilus
+        nautilus-open-any-terminal
+      ];
+    })
+
     ## Packages that are only ever used on my personal laptops. They should not
     ## clutter work's environment, (and that eliminates the temptation to have
     ## Signal or Thunderbird running)!
     (mkIf (!config.x_niols.isHeadless && !config.x_niols.isWork) {
       home.packages = with pkgs; [
+        ardour
+        asunder
         audacity
         element-desktop
+        firefox
+        gimp
         gnucash
         inkscape
         ledger-live-desktop
@@ -36,8 +52,11 @@ in
         picard
         nextcloud-client # needs to be here AND in `xdg.autostart`
         signal-desktop
+        texlive.combined.scheme-full
         thunderbird
+        vdhcoapp # companion for Video DownloadHelper
         vlc
+        zoom-us # for SCD meetings
       ];
 
       ## Start Nextcloud automatically on startup. NOTE: There is also
@@ -81,6 +100,7 @@ in
     ## Work desktop software
     (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
       home.packages = with pkgs; [
+        firefox
         slack
         zoom-us
       ];

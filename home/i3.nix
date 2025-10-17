@@ -312,10 +312,14 @@ in
       };
     };
 
-    ## Rofi has a plugin `rofi-emoji` but it does not contain the symbols that I
-    ## want. Rofimoji can work as a Rofi mode, but then it cannot enter text,
-    ## which is a severe limitation. So we run it standalone.
-    home.packages = [ pkgs.rofimoji ];
+    home.packages = with pkgs; [
+      arandr
+
+      ## Rofi has a plugin `rofi-emoji` but it does not contain the symbols that
+      ## I want. Rofimoji can work as a Rofi mode, but then it cannot enter
+      ## text, which is a severe limitation. So we run it standalone.
+      rofimoji
+    ];
 
     ## Xfce comes with its own keyboard shortcuts that clash with our use of i3,
     ## so we erase them here. In case of annoying keyboard shortcuts, the best is
