@@ -16,7 +16,7 @@ let
 
 in
 {
-  environment.systemPackages = (import ./system.nix { inherit pkgs; }) ++ [
+  environment.systemPackages = [
     hlsWrapperCompatScript
     (import ./rnix.nix { inherit pkgs; })
   ];

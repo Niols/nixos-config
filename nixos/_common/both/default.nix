@@ -28,7 +28,6 @@ in
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
-    ./packages.nix
     ./ssh.nix
     ./syncthing.nix
     ./systemStateVersion.nix
@@ -37,6 +36,20 @@ in
     ./users.nix
     ./web.nix
   ];
+
+  config = {
+    x_niols.services = {
+      call.enabledOn = "helga";
+      dancelor.enabledOn = "helga";
+      matrix.enabledOn = "helga";
+      nix-cache.enabledOn = "siegfried";
+      teamspeak.enabledOn = "helga";
+      torrent.enabledOn = "helga";
+      web.enabledOn = "helga";
+    };
+
+    environment.systemPackages = config.x_niols.commonPackages;
+  };
 
   options.x_niols = {
     thisMachinesName = mkOption {
@@ -87,15 +100,5 @@ in
         )
       );
     };
-  };
-
-  config.x_niols.services = {
-    call.enabledOn = "helga";
-    dancelor.enabledOn = "helga";
-    matrix.enabledOn = "helga";
-    nix-cache.enabledOn = "siegfried";
-    teamspeak.enabledOn = "helga";
-    torrent.enabledOn = "helga";
-    web.enabledOn = "helga";
   };
 }
