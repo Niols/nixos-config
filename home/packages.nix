@@ -67,6 +67,7 @@ in
         entries = with pkgs; [
           "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
         ];
+        readOnly = true; # more reproducibility, and avoid apps like Nextcloud starting twice
       };
     })
 
