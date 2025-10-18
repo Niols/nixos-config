@@ -4,6 +4,7 @@
     autostart = true;
     settings = {
       Browser.Enabled = true;
+      FdoSecrets.Enabled = true; # freedesktop.org secrets service, eg. for NextCloud
       GUI = {
         AdvancedSettings = true;
         ApplicationTheme = "dark";
