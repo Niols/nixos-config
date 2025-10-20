@@ -72,7 +72,6 @@ in
           )}
           hester       IN  CNAME  u363090.your-storagebox.de.
 
-          ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
           syncthing    IN  CNAME  siegfried
           scd          IN  CNAME  niols.github.io.

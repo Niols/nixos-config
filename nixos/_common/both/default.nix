@@ -24,6 +24,7 @@ in
     ./databases.nix
     ./dancelor.nix
     ./dns-server.nix
+    ./ftp-server.nix
     ./hester.nix
     ./matrix.nix
     ./medias.nix
@@ -44,6 +45,7 @@ in
       call.enabledOn = "helga";
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "helga";
+      ftp.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
