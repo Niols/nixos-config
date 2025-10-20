@@ -32,6 +32,7 @@ in
     ./medias.nix
     ./motd.nix
     ./network.nix
+    ./nginx.nix
     ./nix-cache.nix
     ./ssh.nix
     ./syncthing.nix
