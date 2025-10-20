@@ -26,6 +26,7 @@ in
     ./dns-server.nix
     ./hester.nix
     ./matrix.nix
+    ./medias.nix
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
@@ -44,6 +45,7 @@ in
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "helga";
       matrix.enabledOn = "helga";
+      medias.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
       torrent.enabledOn = "helga";

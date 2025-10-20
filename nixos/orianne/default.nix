@@ -4,7 +4,6 @@
       ../_common/server.nix
 
       ./hardware-configuration.nix
-      ./medias.nix
       ./nginx.nix
       ./storage.nix
     ];

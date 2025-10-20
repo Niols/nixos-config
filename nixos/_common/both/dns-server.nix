@@ -74,7 +74,6 @@ in
 
           ftp          IN  CNAME  siegfried
           mastodon     IN  CNAME  siegfried
-          medias       IN  CNAME  orianne
           syncthing    IN  CNAME  siegfried
           scd          IN  CNAME  niols.github.io.
           dev.scd      IN  CNAME  niols.github.io.
