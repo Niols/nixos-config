@@ -18,19 +18,20 @@ in
 {
   imports = [
     ../common
-    ./packages
-    ./direnv.nix
-    ./i3.nix
-    ./ssh.nix
-    ./terminal-emulator.nix
+
     ./background
+    ./direnv.nix
     ./doom
-    ./gtk.nix
     ./face
     ./git.nix
+    ./gtk.nix
+    ./i3.nix
     ./keepassxc.nix
-    ./xdg.nix
     ./nix.nix
+    ./packages
+    ./ssh.nix
+    ./terminal-emulator.nix
+    ./xdg.nix
   ];
 
   options.x_niols = {
