@@ -27,6 +27,7 @@ in
     ./ftp-server.nix
     ./git-server.nix
     ./hester.nix
+    ./mastodon.nix
     ./matrix.nix
     ./medias.nix
     ./motd.nix
@@ -48,6 +49,7 @@ in
       dancelor.enabledOn = "helga";
       ftp.enabledOn = "siegfried";
       git.enabledOn = "siegfried";
+      mastodon.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
