@@ -10,9 +10,11 @@ let
 
 in
 {
+  imports = [ ./garbage-collect.nix ];
+
   config = mkMerge [
     {
-      home.packages = [ (pkgs.callPackage ../rebuild.nix { }) ] ++ config.x_niols.commonPackages;
+      home.packages = [ (pkgs.callPackage ../../rebuild.nix { }) ] ++ config.x_niols.commonPackages;
 
       ## Run the OPAM hook if it exists. This can be shared between all
       ## sessions; we do not however enforce the existence of OPAM.

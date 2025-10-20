@@ -18,8 +18,7 @@ in
 {
   imports = [
     ../common
-    programs/garbage-collect.nix
-    ./packages.nix
+    ./packages
     ./direnv.nix
     ./i3.nix
     ./ssh.nix
