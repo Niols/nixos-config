@@ -5,19 +5,33 @@ let
     optionalString
     mkOption
     mkIf
+    mkDefault
     types
     ;
 
 in
 {
-  options.services.nginx.x_niols.addHeaderXFrameOptionsDeny = mkOption {
-    description = ''
-      Whether to add `add_header X-Frame-Options DENY` to the common HTTP
-      config. This header disables embedding as a frame. In some cases,
-      for instance in Dancelor, we do not want this.
-    '';
-    type = types.bool;
-    default = true;
+  options.services.nginx.x_niols = {
+    addHeaderXFrameOptionsDeny = mkOption {
+      description = ''
+        Whether to add `add_header X-Frame-Options DENY` to the common HTTP
+        config. This header disables embedding as a frame. In some cases,
+        for instance in Dancelor, we do not want this.
+      '';
+      type = types.bool;
+      default = true;
+    };
+
+    addHeaderXXSSProtection = mkOption {
+      description = ''
+        Whether to add `add_header X-XSS-Protection "1; mode=block"` to the
+        common HTTP configuration. This header enables XSS protection of the
+        browser. It is safe to disable, as it is mostly superseeded by
+        `Content-Security-Policy`.
+      '';
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf config.x_niols.isServer {
@@ -31,7 +45,7 @@ in
 
       ## The default `client_max_body_size` is 1M, which might not be enough for
       ## everything. In particular, JellyFin requires more for the posters etc.
-      clientMaxBodySize = "20M";
+      clientMaxBodySize = mkDefault "20M";
 
       ## NOTE: Hardened setup as per https://nixos.wiki/wiki/Nginx
 
@@ -52,7 +66,7 @@ in
         add_header Strict-Transport-Security $hsts_header;
 
         ## Enable CSP for your services.
-        #add_header Content-Security-Policy "script-src 'self'; object-src 'none'; base-uri 'none';" always;
+        add_header Content-Security-Policy "script-src 'self'; object-src 'none'; base-uri 'none';" always;
 
         ## Minimize information leaked to other domains
         add_header 'Referrer-Policy' 'origin-when-cross-origin';
@@ -64,9 +78,9 @@ in
         ## Prevent injection of code in other mime types (XSS Attacks)
         add_header X-Content-Type-Options nosniff;
 
-        ## Enable XSS protection of the browser.
-        ## May be unnecessary when CSP is configured properly (see above)
-        add_header X-XSS-Protection "1; mode=block";
+        ${optionalString config.services.nginx.x_niols.addHeaderXXSSProtection ''
+          add_header X-XSS-Protection "1; mode=block";
+        ''}
 
         ## This might create errors
         proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
