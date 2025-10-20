@@ -25,6 +25,7 @@ in
     ./dancelor.nix
     ./dns-server.nix
     ./ftp-server.nix
+    ./git-server.nix
     ./hester.nix
     ./matrix.nix
     ./medias.nix
@@ -46,6 +47,7 @@ in
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "helga";
       ftp.enabledOn = "siegfried";
+      git.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
