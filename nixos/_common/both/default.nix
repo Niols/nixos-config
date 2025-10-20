@@ -35,6 +35,7 @@ in
     ./nix-cache.nix
     ./ssh.nix
     ./syncthing.nix
+    ./syncthing-server.nix # FIXME: merge?
     ./systemStateVersion.nix
     ./teamspeak.nix
     ./torrent.nix
@@ -53,6 +54,7 @@ in
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
+      syncthing.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
       torrent.enabledOn = "helga";
       web.enabledOn = "helga";

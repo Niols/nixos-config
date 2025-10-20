@@ -5,7 +5,6 @@
 
       ./hardware-configuration.nix
       ./nginx.nix
-      ./syncthing.nix
     ];
 
     x_niols.thisMachinesName = "siegfried";

@@ -71,11 +71,8 @@ in
             name: meta: optionalString (meta ? ipv6) "${name}  IN  AAAA  ${meta.ipv6}"
           )}
           hester       IN  CNAME  u363090.your-storagebox.de.
-
-          syncthing    IN  CNAME  siegfried
           scd          IN  CNAME  niols.github.io.
           dev.scd      IN  CNAME  niols.github.io.
-
           @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
           _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
         '';
