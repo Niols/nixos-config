@@ -42,6 +42,7 @@ in
         picard
         nextcloud-client # needs to be here AND in `xdg.autostart`
         signal-desktop
+        (callPackage ./soundfont-salamander-grand-piano.nix { })
         texlive.combined.scheme-full
         thunderbird
         vdhcoapp # companion for Video DownloadHelper
