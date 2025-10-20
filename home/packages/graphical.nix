@@ -11,16 +11,6 @@ let
 in
 {
   config = mkMerge [
-    {
-      home.packages = [ (pkgs.callPackage ../rebuild.nix { }) ] ++ config.x_niols.commonPackages;
-
-      ## Run the OPAM hook if it exists. This can be shared between all
-      ## sessions; we do not however enforce the existence of OPAM.
-      programs.bash.profileExtra = ''
-        if command -v opam >/dev/null; then eval $(opam env); fi
-      '';
-    }
-
     ## Packages common to laptops.
     (mkIf (!config.x_niols.isHeadless) {
       home.packages = with pkgs; [
@@ -69,42 +59,6 @@ in
         ];
         readOnly = true; # more reproducibility, and avoid apps like Nextcloud starting twice
       };
-    })
-
-    ## Personal OCaml-specific configuration.
-    (mkIf (!config.x_niols.isWork) {
-      home.packages = [
-        pkgs.opam
-      ]
-      ++ (with pkgs.ocamlPackages; [
-        dune_3
-        merlin
-        ocaml
-        ocaml-lsp
-        ocp-indent
-        odoc
-        ppx_deriving
-        ppx_deriving_yojson
-        utop
-        visitors
-        yojson
-      ]);
-    })
-
-    ## Work development tools considered available by default
-    (mkIf config.x_niols.isWork {
-      home.packages = with pkgs; [
-        gnumake
-      ];
-    })
-
-    ## Work desktop software
-    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
-      home.packages = with pkgs; [
-        firefox
-        slack
-        zoom-us
-      ];
     })
   ];
 }

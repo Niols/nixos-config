@@ -67,7 +67,10 @@
         }
       ];
 
-    extraConfig = {
+    ## Enable git LFS
+    lfs.enable = true;
+
+    settings = {
       init.defaultBranch = "main";
 
       ## FIXME: Maybe this should rather be in Siegfried's configuration?
@@ -78,20 +81,17 @@
 
       ## Set remote automatically for branches without a tracking upstream.
       push.autoSetupRemote = true;
-    };
 
-    ## Enable git LFS
-    lfs.enable = true;
-
-    ## Lesser Known Git Commands, by Tim Pettersen
-    ## https://dzone.com/articles/lesser-known-git-commands
-    aliases = {
-      it = "!git init && git commit -m root --allow-empty";
-      commend = "commit --amend --no-edit";
-      grog = ''
-        log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)
-        %h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold
-         yellow)%d%C(reset)%n %C(white)%s%C(reset)"'';
+      ## Lesser Known Git Commands, by Tim Pettersen
+      ## https://dzone.com/articles/lesser-known-git-commands
+      alias = {
+        it = "!git init && git commit -m root --allow-empty";
+        commend = "commit --amend --no-edit";
+        grog = ''
+          log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)
+          %h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold
+           yellow)%d%C(reset)%n %C(white)%s%C(reset)"'';
+      };
     };
   };
 }
