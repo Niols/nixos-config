@@ -99,7 +99,7 @@ in
           ${forConcatAttrs machines.servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
 
           @             IN  MX 5   mta-gw.infomaniak.ch.
-          @             IN  TXT    "v=spf1 include:spf.infomaniak.ch -all"
+          @             IN  TXT    "v=spf1 include:spf.infomaniak.ch include:mx.ovh.com -all"
           autoconfig    IN  CNAME  infomaniak.com.
           autodiscover  IN  CNAME  infomaniak.com.
           _domainkey    IN  NS     ns41.infomaniak.com.
