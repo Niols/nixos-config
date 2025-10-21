@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, ... }:
 
 {
   programs.git = {
@@ -15,62 +15,16 @@
     ## Require to sign by default, but give a useless key, forcing
     ## myself to setup the key correctly in the future.
     signing.format = "ssh";
-    signing.key = "/you/need/to/explicitly/setup/the/key.pub";
     signing.signByDefault = true;
-
-    ## Change of personality depending on the location in the file tree. This
-    ## only switches between personal and profesionnal. Because entries accept
-    ## only one condition, we first introduce a `processConditions` function
-    ## which will accept `conditions` and flatten them to several uses of
-    ## `condition`.
-    includes =
-      let
-        processConditions =
-          entries:
-          lib.lists.concatMap (
-            entry:
-            lib.lists.map (condition: {
-              condition = condition;
-              contents.user = entry.contents.user;
-            }) entry.conditions
-          ) entries;
-      in
-      processConditions [
-        {
-          conditions = [
-            "gitdir:~/git/perso/**"
-            "gitdir:~/git/paris-branch/**"
-            "gitdir:~/git/niols/**"
-            "gitdir:~/git/jana/**"
-            "gitdir:~/git/boloss/**"
-            "gitdir:~/git/colis/**"
-            "gitdir:~/git/rscds/**"
-            "gitdir:~/.opam/plugins/opam-publish/repos/**"
-            "gitdir:/etc/nixos/**"
-            "gitdir:~/.config/nixos/**"
-          ];
-          contents.user = {
-            name = "Niols";
-            email = "niols@niols.fr";
-            signingKey = "~/.ssh/id_niols_signing.pub";
-          };
-        }
-        {
-          conditions = [
-            "gitdir:~/git/ahrefs/**"
-          ];
-          contents.user = {
-            name = "Nicolas Jeannerod";
-            email = "nicolas.jeannerod@ahrefs.com";
-            signingKey = "~/.ssh/id_ahrefs_signing.pub";
-          };
-        }
-      ];
 
     ## Enable git LFS
     lfs.enable = true;
 
     settings = {
+      user.name = "Niols";
+      user.email = "niols@niols.fr";
+      user.signingKey = "~/.ssh/id_niols_signing.pub";
+
       init.defaultBranch = "main";
 
       ## FIXME: Maybe this should rather be in Siegfried's configuration?
@@ -93,5 +47,34 @@
            yellow)%d%C(reset)%n %C(white)%s%C(reset)"'';
       };
     };
+
+    includes = [
+      {
+        condition = "gitdir:~/git/ahrefs/**";
+        contents = {
+          user = {
+            name = "Nicolas Jeannerod";
+            email = "nicolas.jeannerod@ahrefs.com";
+            signingKey = "~/.ssh/id_ahrefs_signing.pub";
+          };
+          ## I have a personal and an Ahrefs GitHub accounts that do not share
+          ## the same SSH key. SSH does not know how to disambiguate and will
+          ## try all identities in an unspecified way, which might lead to
+          ## interacting with a repository with the wrong user. We specify the
+          ## key explicitly here, but one must make sure that there is no
+          ## catch-all block in the SSH config that adds the `id_niols`
+          ## identity; see `assertions` below.
+          core.sshCommand = "ssh -i ~/.ssh/id_ahrefs";
+        };
+      }
+    ];
   };
+
+  assertions = [
+    {
+      ## See comment to Ahrefs's `core.sshCommand` option above.
+      assertion = !(config.programs.ssh.matchBlocks ? "*") || config.programs.ssh.matchBlocks."*" == { };
+      message = "A catch-all block in SSH configuration will break the Git configuration that relies on `ssh -i <identity>`.";
+    }
+  ];
 }
