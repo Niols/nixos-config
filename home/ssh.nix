@@ -124,35 +124,26 @@ in
         };
     }
 
-    ## NOTE: A lot of things in the following configuration require the the
-    ## correct symbolic link has been set up from `~/.ssh` into the right place
-    ## on the Ahrefs monorepo.
-
-    ## Work stuff
+    ## Work-specific SSH config stuff
+    ##
     (mkIf config.x_niols.isWork {
       programs.ssh = {
         ## NOTE: With pkgs.openssh and Ahrefs's configuration, I get GSS API
         ## errors. https://github.com/NixOS/nixops/issues/395 suggested to
         ## instead use `pkgs.opensshWithKerberos`.
         package = pkgs.opensshWithKerberos;
+
+        ## The following configuration require that the correct symbolic link
+        ## has been set up from `~/.ssh` into the right place in the Ahrefs
+        ## monorepo.
         includes = [ "~/.ssh/ahrefs/config" ];
         matchBlocks.hop.user = "nicolas.jeannerod";
       };
     })
-
-    ## Work stuff, but only on laptop
     (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
-      programs.ssh = {
-        matchBlocks = {
-          nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
-          ## Only the laptop has my personal identity files.
-          "github.com".identityFile = "~/.ssh/id_niols";
-          "*" = {
-            identitiesOnly = true;
-            identityFile = "~/.ssh/id_ahrefs";
-          };
-        };
-      };
+      ## On the work *laptop*, we set up the link to `nspawn`.
+      programs.ssh.matchBlocks.nspawn.extraOptions.Include =
+        "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
     })
 
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
