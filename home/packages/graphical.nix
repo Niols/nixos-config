@@ -51,7 +51,9 @@ in
 
       ## Start Nextcloud automatically on startup. NOTE: There is also
       ## `services.nextcloud.enable`, but it has been causing issues with
-      ## Nextcloud forgetting its configuration, so we prefer this.
+      ## Nextcloud forgetting its configuration, so we prefer this. NOTE: Make
+      ## sure that a keyring is running for Nextcloud not to ask for the
+      ## password every time.
       xdg.autostart.enable = true;
       xdg.autostart.entries = with pkgs; [
         "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
