@@ -62,13 +62,10 @@ in
       ## Start Nextcloud automatically on startup. NOTE: There is also
       ## `services.nextcloud.enable`, but it has been causing issues with
       ## Nextcloud forgetting its configuration, so we prefer this.
-      xdg.autostart = {
-        enable = true;
-        entries = with pkgs; [
-          "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
-        ];
-        readOnly = true; # more reproducibility, and avoid apps like Nextcloud starting twice
-      };
+      xdg.autostart.enable = true;
+      xdg.autostart.entries = with pkgs; [
+        "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
+      ];
     })
 
     ## Personal OCaml-specific configuration.

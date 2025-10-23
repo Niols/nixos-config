@@ -20,5 +20,10 @@ in
 
       createDirectories = false;
     };
+
+    xdg.autostart = {
+      enable = true;
+      readOnly = true; # more reproducibility, and avoid apps like Nextcloud starting twice
+    };
   };
 }
