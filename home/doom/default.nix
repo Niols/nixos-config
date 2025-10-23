@@ -80,6 +80,10 @@
 
     if $must_install; then
       echo "(Re-)installing Doom Emacs..."
+      if pgrep -u "$USER" emacs >/dev/null; then
+        echo 'Some instances of Emacs are running; this script cannot proceed.'
+        exit 2
+      fi
       rm -Rf "$emacsdir"
       cp -R ${inputs.doomemacs} "$emacsdir"
       chmod -R u+w "$emacsdir"
