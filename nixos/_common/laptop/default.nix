@@ -31,6 +31,12 @@
   ##
   services.gvfs.enable = true;
 
+  ## Used by eg. Nextcloud to remember its tokens from one run to the next.
+  ## Ideally, this would be in Home. Home Manager has `services.gnome-keyring`,
+  ## but it doesn't work for me, complaining about access to its control file.
+  ##
+  services.gnome.gnome-keyring.enable = true;
+
   ############################################################################
   ## Enable CUPS to print documents.
 
