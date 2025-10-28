@@ -8,10 +8,7 @@ on:
 jobs:
   bump-dancelor:
     name: Bump Dancelor
-
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'repository_dispatch'
-         && github.event.action == 'bump-dancelor' }}
 
     steps:
       - name: Checkout repository
