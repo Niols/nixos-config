@@ -89,6 +89,15 @@
 
               ## FIXME: Move the following to `secrets/default.nix`
               inputs'.agenix.packages.default
+              (pkgs.writeScriptBin "agenix-rekey" ''
+                set -euC
+                cp "$1" /tmp/age-key
+                ssh-keygen -p -N "" -f /tmp/age-key
+                if [ -d secrets ]; then cd secrets; fi
+                ${inputs'.agenix.packages.agenix}/bin/agenix -i /tmp/age-key -r
+                rm -f /tmp/age-key
+              '')
+
               pkgs.attic-client
               pkgs.borgbackup
               pkgs.apacheHttpd # provides the `htpasswd` utility
