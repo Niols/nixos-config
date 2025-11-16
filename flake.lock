@@ -76,15 +76,14 @@
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",
         "nixpkgs": "nixpkgs",
-        "nixpkgs2211": "nixpkgs2211",
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1762956706,
-        "narHash": "sha256-V0rnVRghc+cP6+jKrMY9CxWTiSjt4Jk6/lDe8NEyWCE=",
+        "lastModified": 1763323496,
+        "narHash": "sha256-8/F9iDYRsmIHuP/z3quuLHalZiCWwflI2fhs2iGRHAE=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "c10143d3cfd851129e70fbdb052bd32a547e20fa",
+        "rev": "e2026c78bfc037ac6f82ef93351d54e7a0aa6869",
         "type": "github"
       },
       "original": {
@@ -849,22 +848,6 @@
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "215d4d0fd80ca5163643b03a33fde804a29cc1e2",
-        "type": "github"
-      }
-    },
-    "nixpkgs2211": {
-      "locked": {
-        "lastModified": 1688392541,
-        "narHash": "sha256-lHrKvEkCPTUO+7tPfjIcb7Trk6k31rz18vkyqmkeJfY=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-22.11",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
