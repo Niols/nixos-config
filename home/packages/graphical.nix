@@ -39,6 +39,7 @@ in
         ledger-live-desktop
         libreoffice
         lilypond
+        localsend # needs to be here AND in `xdg.autostart`
         picard
         nextcloud-client # needs to be here AND in `xdg.autostart`
         signal-desktop
@@ -49,15 +50,44 @@ in
         zoom-us # for SCD meetings
       ];
 
-      ## Start Nextcloud automatically on startup. NOTE: There is also
-      ## `services.nextcloud.enable`, but it has been causing issues with
-      ## Nextcloud forgetting its configuration, so we prefer this. NOTE: Make
-      ## sure that a keyring is running for Nextcloud not to ask for the
-      ## password every time.
+      ## Start Nextcloud automatically on startup.
+      ##
+      ## NOTE: There is also `services.nextcloud.enable`, but it has been
+      ## causing issues with Nextcloud forgetting its configuration, so we
+      ## prefer this.
+      ##
+      ## NOTE: Make sure that a keyring is running for Nextcloud not to ask for
+      ## the password every time.
+      ##
       xdg.autostart.enable = true;
       xdg.autostart.entries = with pkgs; [
         "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
       ];
+    })
+
+    ## Start LocalSend automatically on startup, for all graphical sessions.
+    ##
+    ## NOTE: There is a desktop file shipped with LocalSend, but we want to run
+    ## it with option `--hidden` so that it starts only as a tray.
+    ##
+    (mkIf (!config.x_niols.isHeadless) {
+      xdg.autostart.enable = true;
+      xdg.autostart.entries = [
+        (pkgs.writeText "localsend-autostart.desktop" ''
+          [Desktop Entry]
+          Categories=GTK;FileTransfer;Utility
+          Exec=${pkgs.localsend}/bin/localsend_app --hidden
+          GenericName=An open source cross-platform alternative to AirDrop
+          Icon=localsend
+          Keywords=Sharing;LAN;Files
+          Name=LocalSend
+          StartupNotify=true
+          StartupWMClass=localsend_app
+          Type=Application
+          Version=${pkgs.localsend.version}
+        '')
+      ];
+
     })
   ];
 }

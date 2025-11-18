@@ -30,6 +30,7 @@ in
       useDHCP = false;
       interfaces.${config.x_niols.thisLaptopsWifiInterface}.useDHCP = true;
       networkmanager.enable = true;
+      firewall.allowedTCPPorts = [ 53317 ]; # for LocalSend
     };
 
     ##############################################################################
