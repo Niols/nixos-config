@@ -140,6 +140,13 @@ in
             '';
           }
         ];
+
+        window.commands = [
+          {
+            criteria.class = "Localsend_app";
+            command = "floating enable";
+          }
+        ];
       };
     };
 
