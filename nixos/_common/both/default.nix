@@ -47,7 +47,7 @@ in
     x_niols.services = {
       call.enabledOn = "helga";
       cloud.enabledOn = "orianne";
-      dancelor.enabledOn = "helga";
+      dancelor.enabledOn = "orianne";
       ftp.enabledOn = "siegfried";
       git.enabledOn = "siegfried";
       mastodon.enabledOn = "siegfried";

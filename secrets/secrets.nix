@@ -32,8 +32,8 @@ concatMapAttrs
         gromit-niols
       ];
 
-      dancelor-database-repository = [ helga ];
-      dancelor-github-token = [ helga ];
+      dancelor-database-repository = [ orianne ];
+      dancelor-github-token = [ orianne ];
 
       password-ahlaya-niols = [ ahlaya ];
       password-ahlaya-root = [ ahlaya ];
