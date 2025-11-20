@@ -13,27 +13,24 @@ let
     optionalString
     ;
 
+  dancelorServer = machines.servers.${config.x_niols.services.dancelor.enabledOn};
+
 in
 {
   imports = [ inputs.dancelor.nixosModules.dancelor ];
 
   config = mkMerge [
-    (mkIf config.x_niols.services.dancelor.enabledOnAnyServer (
-      let
-        dancelorServer = machines.servers.${config.x_niols.services.dancelor.enabledOn};
-      in
-      {
-        services.bind.x_niols.zoneEntries."dancelor.org" =
-          optionalString (dancelorServer ? ipv4) ''
-            @    IN  A     ${dancelorServer.ipv4}
-            www  IN  A     ${dancelorServer.ipv4}
-          ''
-          + optionalString (dancelorServer ? ipv6) ''
-            @    IN  AAAA  ${dancelorServer.ipv6}
-            www  IN  AAAA  ${dancelorServer.ipv6}
-          '';
-      }
-    ))
+    (mkIf config.x_niols.services.dancelor.enabledOnAnyServer ({
+      services.bind.x_niols.zoneEntries."dancelor.org" =
+        optionalString (dancelorServer ? ipv4) ''
+          @    IN  A     ${dancelorServer.ipv4}
+          www  IN  A     ${dancelorServer.ipv4}
+        ''
+        + optionalString (dancelorServer ? ipv6) ''
+          @    IN  AAAA  ${dancelorServer.ipv6}
+          www  IN  AAAA  ${dancelorServer.ipv6}
+        '';
+    }))
 
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {
       services.dancelor = {
@@ -43,7 +40,15 @@ in
         githubTokenFile = config.age.secrets.dancelor-github-token.path;
         githubRepository = "github.com/paris-branch/dancelor";
         githubDatabaseRepository = "github.com/paris-branch/dancelor-database";
+        routineThreads = 2 * dancelorServer.cores;
       };
+
+      ## FIXME: This is an experiment to improve responsiveness of the system
+      ## when Dancelor uses the Nix builds so intensely. It might however starve
+      ## the Nix builds, and in particular the `nixos-rebuild`. Hopefully,
+      ## though, since it come from NixOps4, that is not a problem.
+      nix.daemonCPUSchedPolicy = "idle";
+      nix.daemonIOSchedClass = "idle";
 
       ## Use Dancelor's Cachix instance as a substituter. Since Dancelor's CI fill
       ## it with all the components, this should make things much faster.
