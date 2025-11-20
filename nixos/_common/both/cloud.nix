@@ -49,7 +49,7 @@ in
         ## Nextcloud to see whether it recommends further processing, such as
         ## database reindexing or conversion.
         ##
-        package = pkgs.nextcloud31;
+        package = pkgs.nextcloud32;
 
         inherit hostName;
         settings.trusted_domains = otherHostNames;
