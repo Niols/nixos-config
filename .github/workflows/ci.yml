@@ -166,6 +166,14 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Install Attic
+        run: nix profile install .#attic
+      - name: Set up Attic cache
+        uses: ryanccn/attic-action@v0.4
+        with:
+          endpoint: https://nix-cache.niols.fr/
+          cache: nixos-config
+          token: ${{ secrets.ATTIC_TOKEN }}
         ## FIXME: Freeing space takes about 3-4 minutes as of 15 September 2025,
         ## which is lost time on small configurations. It would be nicer if we
         ## could decide whether that is actually necessary.
@@ -205,15 +213,6 @@ jobs:
         ## faster to build the configurations. This is however not true when
         ## deploying, because we need to build the NixOps4 providers, we takes
         ## a lot of time, especially on emulated architectures.
-      - name: Install Attic
-        run: nix profile install .#attic
-      - name: Set up Attic cache if we are going to deploy
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: ryanccn/attic-action@v0.4
-        with:
-          endpoint: https://nix-cache.niols.fr/
-          cache: nixos-config
-          token: ${{ secrets.ATTIC_TOKEN }}
       - name: Deploy NixOps4 resource “${{ matrix.nixos }}” if it exists
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
