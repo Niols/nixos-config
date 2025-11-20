@@ -48,7 +48,6 @@ in
           "Barbara"
           "Camille"
           "Oxana"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -59,7 +58,6 @@ in
           "Barbara"
           "Camille"
           "Oxana"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -67,7 +65,6 @@ in
 
         Music.devices = [
           "Barbara"
-          "Philippe"
           "Phineas"
           "Siegfried"
         ];
@@ -76,7 +73,6 @@ in
           "Ahlaya"
           "Camille"
           "Oxana"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -86,55 +82,6 @@ in
           "Ahlaya"
           "Camille"
           "Oxana"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/DCIM/SD Card".devices = [
-          "Ahlaya"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/DCIM/Storage".devices = [
-          "Ahlaya"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/Movies/Storage".devices = [
-          "Ahlaya"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/Pictures/SD Card".devices = [
-          "Ahlaya"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/Pictures/Storage".devices = [
-          "Ahlaya"
-          "Philippe"
-          "Phineas"
-          "Siegfried"
-          "Gromit"
-        ];
-
-        "Philippe/Scans".devices = [
-          "Ahlaya"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -142,7 +89,6 @@ in
 
         "Phineas/DCIM".devices = [
           "Ahlaya"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -153,7 +99,6 @@ in
           "Barbara"
           "Camille"
           "Oxana"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -161,7 +106,6 @@ in
 
         "Phineas/Download".devices = [
           "Ahlaya"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -169,7 +113,6 @@ in
 
         "Phineas/Pictures".devices = [
           "Ahlaya"
-          "Philippe"
           "Phineas"
           "Siegfried"
           "Gromit"
@@ -180,7 +123,6 @@ in
       settings.devices = {
         Barbara.id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
         Camille.id = "IHKVBZ6-H5VAFJ2-KIQPURT-JQBGLHH-YLEKPBN-SB2WHUJ-5KZHNKP-6WPKOQR";
-        Philippe.id = "BJJ7KND-NXILKPP-WLFUWOR-E6SCV6N-WRUN7RE-TUCKN6S-HIHVEF6-EIDI5AS";
         Phineas.id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
         Ahlaya.id = "SGAFF5O-IMVLLWM-G5JG6R3-Y6HWZBH-I4R7NPO-5YK3HL3-CABWEYB-IB27KAB";
