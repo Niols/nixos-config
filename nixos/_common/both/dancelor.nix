@@ -57,6 +57,14 @@ in
         trusted-public-keys = [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
       };
 
+      ## A secret file containing the link to Dancelor's database Git
+      ## repository, with credentials if needed.
+      age.secrets.dancelor-database-repository = {
+        mode = "600";
+        owner = "dancelor";
+        group = "dancelor";
+      };
+
       ## A secret `passwd` file containing the users' identifiers.
       age.secrets.dancelor-github-token = {
         mode = "600";
