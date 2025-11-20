@@ -80,11 +80,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1763634803,
-        "narHash": "sha256-DdREnmtjJfO/dBN+Gg0JjuJ3npC85VW0mhTIIasJE+A=",
+        "lastModified": 1763653651,
+        "narHash": "sha256-a5KyuAsghXAD9JNn7TxkyXBlADzp5wv9+7n+1sZm77s=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "e258333806e90b9786363aeeb1401282e1bc8799",
+        "rev": "afaf62474adb71a2a1d18723e9f8e7f7eed4d252",
         "type": "github"
       },
       "original": {
@@ -575,6 +575,10 @@
     },
     "monadise": {
       "inputs": {
+        "flake-parts": [
+          "dancelor",
+          "flake-parts"
+        ],
         "git-hooks": [
           "dancelor",
           "git-hooks-nix"
@@ -589,11 +593,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763372626,
-        "narHash": "sha256-0MmrxCDI+WWVtKNr0lQo4xsEo+v3+cUEv4n+B9PhCs4=",
+        "lastModified": 1763650215,
+        "narHash": "sha256-xr8S14yGvAdf9vKBWhvjhfHjm4AQPvVTUzgFvtVjYSw=",
         "owner": "niols",
         "repo": "ocaml-monadise",
-        "rev": "7a558784221a03f2121ddda9ee6f1cb76a91def6",
+        "rev": "65a852b877cd52508db52c0553d7c8e2893916ba",
         "type": "github"
       },
       "original": {
