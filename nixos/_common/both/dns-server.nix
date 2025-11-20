@@ -20,7 +20,7 @@ let
     ;
   inherit (pkgs)
     writeText
-    runCommandNoCC
+    runCommand
     ;
 
   forConcatAttrs = set: f: concatMapStringsSep "\n" (name: f name set.${name}) (attrNames set);
@@ -33,7 +33,7 @@ let
     let
       unchecked = writeText "${domain}.zone-unchecked" content;
     in
-    runCommandNoCC "${domain}.zone" { buildInputs = [ pkgs.bind ]; } ''
+    runCommand "${domain}.zone" { buildInputs = [ pkgs.bind ]; } ''
       named-checkzone ${domain} ${unchecked} && cp ${unchecked} $out
     '';
 
