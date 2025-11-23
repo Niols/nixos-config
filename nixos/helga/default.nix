@@ -5,7 +5,6 @@
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
         ../_common/server.nix
-        ./nginx.nix
       ];
 
       x_niols.thisMachinesName = "helga";
