@@ -17,6 +17,7 @@ let
     concatMapAttrs
     concatMapStringsSep
     optional
+    genAttrs'
     ;
   keys = import ../keys/keys.nix;
 
@@ -142,8 +143,13 @@ in
     })
     (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
       ## On the work *laptop*, we set up the link to `nspawn`.
-      programs.ssh.matchBlocks.nspawn.extraOptions.Include =
-        "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
+      programs.ssh.matchBlocks = {
+        nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
+      }
+      // (genAttrs' [ "sg" "sgtrixie" "uk" "uktrixie" "us" "ustrixie" ] (key: {
+        name = "nspawn-${key}";
+        value.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${key}-nicolasjeannerod";
+      }));
     })
 
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
