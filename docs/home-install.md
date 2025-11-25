@@ -11,6 +11,8 @@ This will clone the configuration in `~/.config/nixos`, build it and enable it
 with `home-manager`, add a tag to the repository. After that, `rebuild -u` is
 enough to pull updates — the script will remember which home profile to pick.
 
+### Installing Nix
+
 Nix should preferrably be installed via the package manager, provided the
 packaged version is recent enough. Otherwise, one can follow [the instructions
 on nixos.org](https://nixos.org/download/), eg.:
@@ -28,3 +30,12 @@ variables are set, either log in again, or type
 
 in your shell.
 ```
+
+### Setting up SSH keys and Agenix
+
+If the home in question uses Agenix (which it probably does), you will need to
+copy the right identity onto the machine; without it, the rebuild will fail.
+
+Similarly, the correct SSH keys should be copied in the right way. For some of
+them, copying the public key and relying on agent forwarding should be enough.
+For others, they should be scp'd.
