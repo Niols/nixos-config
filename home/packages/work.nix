@@ -14,6 +14,7 @@ in
     ## Work development tools considered available by default
     (mkIf config.x_niols.isWork {
       home.packages = with pkgs; [
+        claude-code
         gnumake
       ];
     })
