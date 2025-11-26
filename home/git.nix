@@ -10,6 +10,7 @@
       ".direnv"
       ".auctex-auto"
       ".pre-commit-config.yaml"
+      ".claude"
     ];
 
     ## Require to sign by default, but give a useless key, forcing
