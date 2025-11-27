@@ -32,20 +32,9 @@ in
         ## Do not enable forward agent here, but rather on a host-by-host basis.
       };
 
-      ## We don't actually use GPG much, but we like the GPG Agent and it has
-      ## good integration with Emacs, so we use this as our SSH Agent.
-      programs.gpg.enable = true;
-      services.gpg-agent = {
+      services.ssh-agent = {
         enable = true;
         enableBashIntegration = true;
-        enableSshSupport = true; # for SSH agent
-        enableExtraSocket = true; # for agent forwarding
-        ## Pinentry configuration
-        pinentry.package = pkgs.pinentry-gtk2; # REVIEW: pinentry-curses for headless systems?
-        extraConfig = ''
-          allow-emacs-pinentry
-          allow-loopback-pinentry
-        '';
       };
 
       programs.ssh.matchBlocks =
