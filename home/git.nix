@@ -58,6 +58,7 @@
             email = "nicolas.jeannerod@ahrefs.com";
             signingKey = "~/.ssh/id_ahrefs_signing.pub";
           };
+          github.user = "nicolas-jeannerod_ahrefs"; # for forge via ghub
           ## I have a personal and an Ahrefs GitHub accounts that do not share
           ## the same SSH key. SSH does not know how to disambiguate and will
           ## try all identities in an unspecified way, which might lead to
