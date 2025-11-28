@@ -26,6 +26,14 @@
       user.email = "niols@niols.fr";
       user.signingKey = "~/.ssh/id_niols_signing.pub";
 
+      ## I have a personal and an Ahrefs GitHub accounts that do not share the
+      ## same SSH key. SSH does not know how to disambiguate and will try all
+      ## identities in an unspecified way, which might lead to interacting with
+      ## a repository with the wrong user. We specify the key explicitly here,
+      ## but one must make sure that there is no catch-all block in the SSH
+      ## config that adds the `id_niols` identity; see `assertions` below.
+      core.sshCommand = "ssh -i ~/.ssh/id_niols";
+
       init.defaultBranch = "main";
 
       ## FIXME: Maybe this should rather be in Siegfried's configuration?
@@ -59,13 +67,6 @@
             signingKey = "~/.ssh/id_ahrefs_signing.pub";
           };
           github.user = "nicolas-jeannerod_ahrefs"; # for forge via ghub
-          ## I have a personal and an Ahrefs GitHub accounts that do not share
-          ## the same SSH key. SSH does not know how to disambiguate and will
-          ## try all identities in an unspecified way, which might lead to
-          ## interacting with a repository with the wrong user. We specify the
-          ## key explicitly here, but one must make sure that there is no
-          ## catch-all block in the SSH config that adds the `id_niols`
-          ## identity; see `assertions` below.
           core.sshCommand = "ssh -i ~/.ssh/id_ahrefs";
         };
       }
