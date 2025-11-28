@@ -10,12 +10,15 @@ let
     mapAttrsToList
     mkMerge
     mkIf
+    optionalString
     ;
 
   metricsPort = 9000;
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
+
+  monitorServer = machines.servers.${config.x_niols.services.monitor.enabledOn};
 
 in
 {
@@ -27,7 +30,16 @@ in
         enable = true;
         port = metricsPort;
       };
-      networking.firewall.allowedTCPPorts = [ metricsPort ];
+
+      ## Only allow the monitoring server to scrape metrics.
+      networking.firewall.extraCommands = ''
+        ${optionalString (monitorServer ? ipv4) ''
+          iptables -A nixos-fw -p tcp --dport ${toString metricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
+        ''}
+        ${optionalString (monitorServer ? ipv6) ''
+          ip6tables -A nixos-fw -p tcp --dport ${toString metricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
+        ''}
+      '';
     })
 
     (mkIf config.x_niols.services.monitor.enabledOnAnyServer {
