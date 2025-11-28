@@ -30,6 +30,7 @@ in
     ./mastodon.nix
     ./matrix.nix
     ./medias.nix
+    ./monitoring.nix
     ./motd.nix
     ./network.nix
     ./nix-cache.nix
@@ -53,6 +54,7 @@ in
       mastodon.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
+      monitor.enabledOn = "orianne";
       nix-cache.enabledOn = "siegfried";
       syncthing.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
