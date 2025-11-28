@@ -35,7 +35,17 @@
   ## Ideally, this would be in Home. Home Manager has `services.gnome-keyring`,
   ## but it doesn't work for me, complaining about access to its control file.
   ##
+  ## GNOME Keyring used to provide an SSH agent, but that has since then been
+  ## extracted into its own utility, gcr-ssh-agent.
+  ##
+  ## https://github.com/NixOS/nixpkgs/pull/379731
+  ##
+  ## gcr-ssh-agent provides the agent, but does not set the SSH_AUTH_SOCK
+  ## environment variable, which must be set to `$XDG_RUNTIME_DIR/gcr/ssh` via
+  ## other means. See `initExtra` in `home/default.nix` (as of 28 Nov 2025).
+  ##
   services.gnome.gnome-keyring.enable = true;
+  services.gnome.gcr-ssh-agent.enable = true;
 
   ############################################################################
   ## Enable CUPS to print documents.
