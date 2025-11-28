@@ -38,7 +38,7 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
    ```
    Use as “passphrase” the repokey chosen above.
 
-6. Check that everything works fine:
+6. Check that everything works fine, by running, _on the server_:
    ``` console
    $ borg list ssh://u363090@hester.niols.fr:23/./backups/<service>
    Enter passphrase for key ssh://u363090@hester.niols.fr:23/./backups/<service>:
@@ -51,6 +51,9 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
    Enter passphrase for key ssh://u363090@hester.niols.fr:23/./backups/<service>:
    <machine>-<service>-2025-04-22T14:32:09  Tue, 2025-04-22 16:32:12 [aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
    ```
+   The first command, `borg list`, is not just here to be pretty, and will in
+   fact serve to establish the connection between the server and Hester, such
+   that they can check each other's keys in the future.
 
 ## Restore Borg backups
 

@@ -82,6 +82,34 @@ in
           recommendedProxySettings = true;
         };
       };
+
+      ############################################################################
+      ## Daily backup of Grafana
+      ##
+      ## There is no need backing up Prometheus or the node exporters; if things
+      ## crash and we lose our monitoring data, it isn't a big deal. Grafana,
+      ## however, will store the dashboards and everything, and that is fairly
+      ## important.
+
+      services.borgbackup.jobs.grafana = {
+        startAt = "daily";
+
+        paths = [
+          "/var/lib/grafana"
+        ];
+
+        repo = "ssh://u363090@hester.niols.fr:23/./backups/grafana";
+        encryption = {
+          mode = "repokey";
+          passCommand = "cat ${config.age.secrets.hester-grafana-backup-repokey.path}";
+        };
+        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-grafana-backup-identity.path}";
+      };
+
+      age.secrets = {
+        hester-grafana-backup-identity.mode = "600";
+        hester-grafana-backup-repokey.mode = "600";
+      };
     })
   ];
 }
