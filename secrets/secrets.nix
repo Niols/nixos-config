@@ -62,16 +62,18 @@ concatMapAttrs
         ahlaya
         gromit
       ];
+      hester-git-backup-repokey = [ siegfried ];
+      hester-git-backup-identity = [ siegfried ];
+      hester-grafana-backup-repokey = [ orianne ];
+      hester-grafana-backup-identity = [ orianne ];
+      hester-jellyfin-backup-repokey = [ orianne ];
+      hester-jellyfin-backup-identity = [ orianne ];
       hester-matrix-backup-repokey = [ helga ];
       hester-matrix-backup-identity = [ helga ];
       hester-niolscloud-backup-repokey = [ orianne ];
       hester-niolscloud-backup-identity = [ orianne ];
       hester-syncthing-backup-repokey = [ siegfried ];
       hester-syncthing-backup-identity = [ siegfried ];
-      hester-git-backup-repokey = [ siegfried ];
-      hester-git-backup-identity = [ siegfried ];
-      hester-jellyfin-backup-repokey = [ orianne ];
-      hester-jellyfin-backup-identity = [ orianne ];
       hester-teamspeak-backup-repokey = [ helga ];
       hester-teamspeak-backup-identity = [ helga ];
       hester-web-backup-repokey = [ helga ];
