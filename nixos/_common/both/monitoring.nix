@@ -60,6 +60,17 @@ in
               labels = { inherit server; };
             }) machines.servers;
           }
+          {
+            job_name = "dancelor";
+            scheme = "https";
+            static_configs = [
+              {
+                targets = [ "dancelor.org" ];
+              }
+            ];
+            scrape_interval = "1m";
+            metrics_path = "/api/metrics";
+          }
         ];
         port = prometheusPort;
       };
