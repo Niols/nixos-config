@@ -83,6 +83,8 @@ concatMapAttrs
 
       mastodon-noreply-password = [ siegfried ];
 
+      no-reply-smtp-password = [ orianne ];
+
       matrix-synapse-signing-key = [ helga ];
       matrix-synapse-macaroon-secret = [ helga ];
       matrix-synapse-registration-secret = [ helga ];
