@@ -89,6 +89,13 @@ in
 
         locations."/" = {
           proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
+          recommendedProxySettings = true;
+        };
+
+        ## Grafana Live WebSocket connections require special handling.
+        ## See: https://grafana.com/tutorials/run-grafana-behind-a-proxy/
+        locations."/api/live/" = {
+          proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
