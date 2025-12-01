@@ -39,6 +39,39 @@
         "type": "github"
       }
     },
+    "camelotte": {
+      "inputs": {
+        "flake-parts": [
+          "dancelor",
+          "flake-parts"
+        ],
+        "git-hooks": [
+          "dancelor",
+          "git-hooks-nix"
+        ],
+        "nixpkgs": [
+          "dancelor",
+          "nixpkgs"
+        ],
+        "topiary": [
+          "dancelor",
+          "topiary"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764262222,
+        "narHash": "sha256-267n50BxENt2hm9zDPjy9VweBqxF0vtor/oyzCBkiNk=",
+        "owner": "niols",
+        "repo": "camelotte",
+        "rev": "b93cd5a03eaa2c5ef0ec2d9178625a5f9d6d849a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niols",
+        "repo": "camelotte",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1762538466,
@@ -73,18 +106,18 @@
     },
     "dancelor": {
       "inputs": {
+        "camelotte": "camelotte",
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",
-        "monadise": "monadise",
         "nixpkgs": "nixpkgs",
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1764518350,
-        "narHash": "sha256-XdU4oEhN+ZvVU7fBlAzYHxfTk+FL84W+Xg2eqwf0MNI=",
+        "lastModified": 1764596047,
+        "narHash": "sha256-h+2w+rdipb8tQ8op2KW9OH0P7ZXOCLTy6lfxB5lD38o=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "9c9142759696da9939cca9f8c4df09187475722e",
+        "rev": "57efa225791dc5c3835215491baa90f36d9abcb3",
         "type": "github"
       },
       "original": {
@@ -573,39 +606,6 @@
         "type": "github"
       }
     },
-    "monadise": {
-      "inputs": {
-        "flake-parts": [
-          "dancelor",
-          "flake-parts"
-        ],
-        "git-hooks": [
-          "dancelor",
-          "git-hooks-nix"
-        ],
-        "nixpkgs": [
-          "dancelor",
-          "nixpkgs"
-        ],
-        "topiary": [
-          "dancelor",
-          "topiary"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763650215,
-        "narHash": "sha256-xr8S14yGvAdf9vKBWhvjhfHjm4AQPvVTUzgFvtVjYSw=",
-        "owner": "niols",
-        "repo": "ocaml-monadise",
-        "rev": "65a852b877cd52508db52c0553d7c8e2893916ba",
-        "type": "github"
-      },
-      "original": {
-        "owner": "niols",
-        "repo": "ocaml-monadise",
-        "type": "github"
-      }
-    },
     "nix": {
       "inputs": {
         "flake-compat": "flake-compat_4",
@@ -769,11 +769,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1763835633,
-        "narHash": "sha256-HzxeGVID5MChuCPESuC0dlQL1/scDKu+MmzoVBJxulM=",
+        "lastModified": 1764517877,
+        "narHash": "sha256-pp3uT4hHijIC8JUK5MEqeAWmParJrgBVzHLNfJDZxg4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "050e09e091117c3d7328c7b2b7b577492c43c134",
+        "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
         "type": "github"
       },
       "original": {
@@ -1154,11 +1154,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1764003497,
-        "narHash": "sha256-9hLAXZZMakTZowG0m4h+Uo3WUhg6vjnYBcoM5XdeGFg=",
+        "lastModified": 1764337750,
+        "narHash": "sha256-wKxYvYjtc4+3nOUKFOT6n5+GkKUc5rehVilDT+aFLXg=",
         "owner": "tweag",
         "repo": "topiary",
-        "rev": "e24aa23867ea71db5c06c83b5b62e4feb2379fc9",
+        "rev": "ee4920e23bcff6d484e1338bf8e97bda26746f41",
         "type": "github"
       },
       "original": {
