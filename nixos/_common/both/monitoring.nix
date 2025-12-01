@@ -68,7 +68,7 @@ in
                 targets = [ "dancelor.org" ];
               }
             ];
-            scrape_interval = "1m";
+            scrape_interval = "15s";
             metrics_path = "/api/metrics";
           }
         ];
@@ -80,6 +80,18 @@ in
         settings = {
           server.domain = "monitor.niols.fr";
           server.root_url = "https://${config.services.grafana.settings.server.domain}/";
+
+          smtp = {
+            enabled = true;
+            host = "mail.infomaniak.com:465";
+            user = "no-reply@niols.fr";
+            ## Grafana supports variable expansion with $__file{path} syntax to read
+            ## secrets from files instead of storing them in the config.
+            ## See: https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
+            password = "$__file{${config.age.secrets.no-reply-smtp-password.path}}";
+            from_address = "no-reply@niols.fr";
+            from_name = "Grafana";
+          };
         };
       };
 
@@ -88,6 +100,13 @@ in
         enableACME = true;
 
         locations."/" = {
+          proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
+          recommendedProxySettings = true;
+        };
+
+        ## Grafana Live WebSocket connections require special handling.
+        ## See: https://grafana.com/tutorials/run-grafana-behind-a-proxy/
+        locations."/api/live/" = {
           proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
@@ -118,6 +137,11 @@ in
       };
 
       age.secrets = {
+        no-reply-smtp-password = {
+          mode = "400";
+          owner = "grafana";
+          group = "grafana";
+        };
         hester-grafana-backup-identity.mode = "600";
         hester-grafana-backup-repokey.mode = "600";
       };
