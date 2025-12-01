@@ -19,7 +19,7 @@ jobs:
 
       - name: Update flake.lock and create the pull request
         id: update
-        uses: determinatesystems/update-flake-lock@v27
+        uses: determinatesystems/update-flake-lock@v28
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           inputs: dancelor
