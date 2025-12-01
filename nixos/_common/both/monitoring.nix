@@ -68,7 +68,7 @@ in
                 targets = [ "dancelor.org" ];
               }
             ];
-            scrape_interval = "1m";
+            scrape_interval = "15s";
             metrics_path = "/api/metrics";
           }
         ];
