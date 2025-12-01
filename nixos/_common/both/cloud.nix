@@ -115,7 +115,7 @@ in
           mail_smtphost = "mail.infomaniak.com";
           mail_smtpsecure = "ssl";
           mail_smtpport = 465;
-          mail_smtpauth = 1;
+          mail_smtpauth = true;
           mail_smtpname = "no-reply@niols.fr";
         };
 
