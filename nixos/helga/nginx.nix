@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   networking.firewall.allowedTCPPorts = [
     80
@@ -9,7 +11,7 @@
 
     ## The default `client_max_body_size` is 1M, which might not be enough for
     ## everything. In particular, JellyFin requires more for the posters etc.
-    clientMaxBodySize = "20M";
+    clientMaxBodySize = lib.mkDefault "20M";
 
     ## NOTE: Hardened setup as per https://nixos.wiki/wiki/Nginx
 

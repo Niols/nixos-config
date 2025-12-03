@@ -55,7 +55,7 @@ in
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       monitor.enabledOn = "orianne";
-      nix-cache.enabledOn = "siegfried";
+      nix-cache.enabledOn = "helga";
       syncthing.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
       torrent.enabledOn = "helga";
