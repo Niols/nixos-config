@@ -171,14 +171,14 @@ jobs:
         ## then, we start having to actually build things, and then the cache is
         ## beneficial. It provides a reasonable average case. It is always very
         ## beneficial when deploying.
-      - name: Install Attic
-        run: nix profile add .#attic
-      - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.4
-        with:
-          endpoint: https://nix-cache.niols.fr/
-          cache: nixos-config
-          token: ${{ secrets.ATTIC_TOKEN }}
+      # - name: Install Attic
+      #   run: nix profile add .#attic
+      # - name: Set up Attic cache
+      #   uses: ryanccn/attic-action@v0.4
+      #   with:
+      #     endpoint: https://nix-cache.niols.fr/
+      #     cache: nixos-config
+      #     token: ${{ secrets.ATTIC_TOKEN }}
         ## FIXME: Freeing space takes about 3-4 minutes as of 15 September 2025,
         ## which is lost time on small configurations. It would be nicer if we
         ## could decide whether that is actually necessary.
