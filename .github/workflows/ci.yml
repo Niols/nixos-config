@@ -102,14 +102,14 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Get flake inputs and install Attic
-        run: nix profile add .#attic
-      - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.4
-        with:
-          endpoint: https://nix-cache.niols.fr/
-          cache: nixos-config
-          token: ${{ secrets.ATTIC_TOKEN }}
+      # - name: Get flake inputs and install Attic
+      #   run: nix profile add .#attic
+      # - name: Set up Attic cache
+      #   uses: ryanccn/attic-action@v0.4
+      #   with:
+      #     endpoint: https://nix-cache.niols.fr/
+      #     cache: nixos-config
+      #     token: ${{ secrets.ATTIC_TOKEN }}
       - name: Set up emulation layer if necessary
         run: |
           ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
@@ -223,6 +223,6 @@ jobs:
             nix develop --command ssh-agent bash -c '
               ssh-add deploy-key
               export NIX_CONFIG=$(cat nix-config)
-              nixops4 apply ${{ matrix.nixos }}
+              nixops4 --verbose apply ${{ matrix.nixos }}
             '
           fi
