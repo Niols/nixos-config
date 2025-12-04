@@ -109,12 +109,13 @@ in
           "${modifier}+period" = "exec rofi -show calc";
           "${modifier}+comma" = "exec rofimoji --files math";
           "XF86Display" = "exec arandr";
-          "${modifier}+p" = "exec arandr";
           "Print" = "exec xfce4-screenshooter --region"; # REVIEW: was `--release` in previous text configuration - what does that change?
           "Shift+Print" = "exec xfce4-screenshooter --fullscreen"; # REVIEW: was `--release` in previous text configuration - what does that change?
+          "${modifier}+p" = "exec xfce4-screenshooter --region"; # REVIEW: was `--release` in previous text configuration - what does that change?
+          "${modifier}+Shift+p" = "exec xfce4-screenshooter --fullscreen"; # REVIEW: was `--release` in previous text configuration - what does that change?
           "${modifier}+Shift+r" = "restart";
           "${modifier}+Shift+e" = "exec xfce4-session-logout";
-          "${modifier}+Shift+p" = "exec xflock4";
+          "${modifier}+Shift+d" = "exec xflock4";
         };
 
         ## Resizing
