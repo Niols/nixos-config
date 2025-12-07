@@ -25,6 +25,10 @@ jobs:
           inputs: dancelor
           pr-title: "Bump Dancelor"
           branch: dancelor/bump-dancelor
+          git-author-name: Dancelor
+          git-author-email: dancelor@dancelor.org
+          git-committer-name: Dancelor
+          git-committer-email: dancelor@dancelor.org
 
       - name: Set up auto-merge for the pull request
         run: "gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number }}"
