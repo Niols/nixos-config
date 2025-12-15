@@ -24,6 +24,18 @@ let
 in
 {
   config = mkMerge [
+    (mkIf (config.home.x_niols.xdgRuntimeDir != null) {
+      ## Pick up on gcr-ssh-agent statically. It would be cleaner to add this to
+      ## something at runtime (eg. .bashrc) but then graphical programs (eg.
+      ## Emacs) would not pick it up. gcr-ssh-agent is started on login by the
+      ## NixOS configuration. See `nixos/_common/laptop/default.nix` (as of 28
+      ## Nov 2025).
+      ##
+      ## https://joshtronic.com/2024/03/10/gnome-keyring-disables-ssh-agent/
+      ##
+      home.sessionVariables.SSH_AUTH_SOCK = "${config.home.x_niols.xdgRuntimeDir}/gcr/ssh";
+    })
+
     {
       programs.ssh = {
         enable = true;
