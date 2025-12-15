@@ -45,13 +45,18 @@ in
   };
 
   config = mkMerge [
-    ## Create the normal users and given them root access.
+    ## Create the normal users and give them root access.
     {
       users.users = genAttrs normalUsers (_: {
         isNormalUser = true;
         extraGroups = [ "wheel" ]; # for `sudo`
       });
     }
+
+    ## Fixed uids for users, for more reproducibility, and for predictability of
+    ## some properties, eg. XDG_RUNTIME_DIR.
+    (mkIf config.x_niols.enableNiolsUser { users.users.niols.uid = 1000; })
+    (mkIf config.x_niols.enableWorkUser { users.users.work.uid = 1001; })
 
     ## Make each system activation forcefully replace the current status of
     ## users, and have a hardcoded user password for each user (including
