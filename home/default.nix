@@ -95,16 +95,6 @@ in
           if [ -f /var/run/motd.dynamic ] && ! [ -n "$IN_NIX_SHELL" ]; then
             cat /var/run/motd.dynamic
           fi
-
-          ## Pick up on gcr-ssh-agent if it is running. It is started on login
-          ## by the NixOS configuration. See `nixos/_common/laptop/default.nix` (as
-          ## of 28 Nov 2025).
-          ##
-          ## https://joshtronic.com/2024/03/10/gnome-keyring-disables-ssh-agent/
-          ##
-          if [ -e $XDG_RUNTIME_DIR/gcr/ssh ] && [ -z "''${SSH_AUTH_SOCK+x}" ]; then
-            export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh
-          fi
         '';
       };
 
