@@ -62,7 +62,7 @@ Borg CLI excerpts:
 ``` console
 $ borg list <repo>
 $ borg list <repo>::<archive>
-$ borg export-tar <repo>::<archive> output.tar
+$ borg export-tar <repo>::<archive> output.tar <path>
 $ borg extract <repo>::<archive> <path>
 ```
 
