@@ -85,6 +85,7 @@
           devShells.default = pkgs.mkShell {
             packages = [
               pkgs.nil
+              inputs'.disko.packages.disko
               inputs'.nixops4.packages.default
 
               ## FIXME: Move the following to `secrets/default.nix`

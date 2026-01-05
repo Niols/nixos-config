@@ -12,6 +12,7 @@ Documentation
 -------------
 
 - [Backups](./docs/backups.md)
+- [Disko](./docs/disko.md)
 - [Steam](./docs/steam.md)
 - [Syncthing](./docs/syncthing.md)
 - [Xfce](./docs/xfce.md)
