@@ -114,11 +114,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1767715186,
-        "narHash": "sha256-+EzME18dRCAHvnxAZzqDoC/jfy7RQ4ODUX1nnOQYxxA=",
+        "lastModified": 1767784237,
+        "narHash": "sha256-lCbHg43DtStuQC9IDIqe0hhOcVgqiwA3PkK2cifLE20=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "fac039cad22e77f0e96c7fc33731c51ecc510e43",
+        "rev": "931c6c37622e46684da22821de839bd52f8947bf",
         "type": "github"
       },
       "original": {
@@ -770,11 +770,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1767379071,
-        "narHash": "sha256-EgE0pxsrW9jp9YFMkHL9JMXxcqi/OoumPJYwf+Okucw=",
+        "lastModified": 1767779340,
+        "narHash": "sha256-vTEyyXPGMFKPwCRSF4mVxiYvsuyOc+ZwhBTiRlaKnYs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "fb7944c166a3b630f177938e478f0378e64ce108",
+        "rev": "4d24037a1f9b0919480b7975c019a5f91ef94b95",
         "type": "github"
       },
       "original": {
