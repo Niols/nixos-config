@@ -186,5 +186,39 @@ in
         environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
       };
     })
+
+    ## Monitoring for Nextcloud. We use the nextcloud-exporter on the monitoring
+    ## machine; it will query the Nextcloud API (which does not have to be on
+    ## the same machine) and provide the metrics only locally.
+    ##
+    (mkIf config.x_niols.services.monitor.enabledOnThisServer {
+      services.prometheus.exporters.nextcloud = {
+        enable = true;
+        ## NOTE: this token needs to be given to Nextcloud with `occ
+        ## config:app:set serverinfo token --value <token>`.
+        tokenFile = config.age.secrets.niolscloud-exporter-token.path;
+        url = "https://${hostName}/";
+      };
+
+      services.prometheus.scrapeConfigs = [
+        {
+          job_name = "nextcloud";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ];
+            }
+          ];
+          scrape_interval = "15s";
+        }
+      ];
+
+      age.secrets = {
+        niolscloud-exporter-token = {
+          mode = "600";
+          owner = config.services.prometheus.exporters.nextcloud.user;
+          group = config.services.prometheus.exporters.nextcloud.group;
+        };
+      };
+    })
   ];
 }

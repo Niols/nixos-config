@@ -91,6 +91,7 @@ concatMapAttrs
 
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
+      niolscloud-exporter-token = [ orianne ];
 
       ## Read-only authentication to substituters. This is distributed widely
       ## and should not contain sensitive tokens. See `attic-client-config` for
