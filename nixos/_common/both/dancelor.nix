@@ -94,5 +94,24 @@ in
         };
       };
     })
+
+    ## Monitoring for Dancelor. We just query https://dancelor.org/api/metrics
+    ## from the monitoring machine. FIXME: secure this endpoint.
+    ##
+    (mkIf config.x_niols.services.monitor.enabledOnThisServer {
+      services.prometheus.scrapeConfigs = [
+        {
+          job_name = "dancelor";
+          scheme = "https";
+          static_configs = [
+            {
+              targets = [ "dancelor.org" ];
+            }
+          ];
+          scrape_interval = "15s";
+          metrics_path = "/api/metrics";
+        }
+      ];
+    })
   ];
 }
