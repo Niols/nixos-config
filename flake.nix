@@ -75,10 +75,10 @@
           ...
         }:
         {
-          formatter = pkgs.nixfmt-rfc-style;
+          formatter = pkgs.nixfmt;
 
           pre-commit.settings.hooks = {
-            nixfmt-rfc-style.enable = true;
+            nixfmt.enable = true;
             deadnix.enable = true;
           };
 
