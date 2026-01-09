@@ -187,9 +187,9 @@ in
       };
     })
 
-    ## Monitoring for Nextcloud. We use the nextcloud-exporter on the monitoring
-    ## machine; it will query the Nextcloud API (which does not have to be on
-    ## the same machine) and provide the metrics only locally.
+    ## Monitoring for Nextcloud. We use `nextcloud-exporter` on the monitoring
+    ## machine (not the cloud machine, although they can be the same); it will
+    ## query the Nextcloud API and provide the metrics locally.
     ##
     (mkIf config.x_niols.services.monitor.enabledOnThisServer {
       services.prometheus.exporters.nextcloud = {
