@@ -231,14 +231,62 @@ in
         philips-usbc-laptop-open-dp-2-8 = make-only-laptop-open "DP-2-8" philipsUsbC "2560x1440";
         philips-usbc-laptop-open-dp-3-8 = make-only-laptop-open "DP-3-8" philipsUsbC "2560x1440";
 
-        ## Single LG screen, with laptop open and closed and USB-C hub
-        ## plugged on first or second port.
+        ## Single LG screen, with laptop closed and USB-C hub plugged on first
+        ## or second port.
         lg-usbc-laptop-closed-dp-1 = make-only-laptop-closed "DP-1" lgUsbC "3440x1440";
         lg-usbc-laptop-closed-dp-2 = make-only-laptop-closed "DP-2" lgUsbC "3440x1440";
         lg-usbc-laptop-closed-dp-3 = make-only-laptop-closed "DP-3" lgUsbC "3440x1440";
-        lg-usbc-laptop-open-dp-1 = make-only-laptop-open "DP-1" lgUsbC "3440x1440";
-        lg-usbc-laptop-open-dp-2 = make-only-laptop-open "DP-2" lgUsbC "3440x1440";
-        lg-usbc-laptop-open-dp-3 = make-only-laptop-open "DP-3" lgUsbC "3440x1440";
+
+        ## Single LG screen, with laptop open and USB-C hub plugged on first or
+        ## second port.
+        lg-usbc-laptop-open-dp-1 = {
+          fingerprint = {
+            "eDP-1" = laptop;
+            "DP-1" = lgUsbC;
+          };
+          config = {
+            "DP-1" = {
+              primary = true;
+              mode = "3440x1440";
+            };
+            "eDP-1" = {
+              mode = "1680x1050";
+              position = "880x1440";
+            };
+          };
+        };
+        lg-usbc-laptop-open-dp-2 = {
+          fingerprint = {
+            "eDP-1" = laptop;
+            "DP-2" = lgUsbC;
+          };
+          config = {
+            "DP-2" = {
+              primary = true;
+              mode = "3440x1440";
+            };
+            "eDP-1" = {
+              mode = "1680x1050";
+              position = "880x1440";
+            };
+          };
+        };
+        lg-usbc-laptop-open-dp-3 = {
+          fingerprint = {
+            "eDP-1" = laptop;
+            "DP-3" = lgUsbC;
+          };
+          config = {
+            "DP-3" = {
+              primary = true;
+              mode = "3440x1440";
+            };
+            "eDP-1" = {
+              mode = "1680x1050";
+              position = "880x1440";
+            };
+          };
+        };
 
         ## Double screen at Tweag's office, with laptop open and closed and USB-C
         ## hub plugged on first or second port.
