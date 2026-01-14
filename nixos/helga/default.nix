@@ -1,6 +1,6 @@
 {
   flake.nixosModules.helga =
-    { modulesPath, pkgs, ... }:
+    { modulesPath, ... }:
     {
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
@@ -31,15 +31,5 @@
         device = "/dev/sda1";
         fsType = "ext4";
       };
-
-      systemd.services.wg-socat-server = {
-        description = "Socat WireGuard TCP to UDP forwarder";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.socat}/bin/socat -d -d TCP4-LISTEN:4433,reuseaddr,fork UDP4:backend-vpn.ahrefs.net:4433";
-          Restart = "always";
-        };
-      };
-      networking.firewall.allowedTCPPorts = [ 4433 ];
     };
 }

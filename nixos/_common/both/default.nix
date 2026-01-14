@@ -17,6 +17,7 @@ let
 in
 {
   imports = [
+    ./ahrefs-vpn.nix
     ./autoreboot.nix
     ./boot.nix
     ./call.nix
