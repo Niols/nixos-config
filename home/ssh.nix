@@ -151,14 +151,19 @@ in
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
     ## (ssh+tmux).
     {
-      home.packages = [
-        pkgs.mosh
-        (
-          let
-            sshPackage =
-              if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
-          in
-          pkgs.stdenv.mkDerivation {
+      home.packages =
+        let
+          sshPackage =
+            if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
+        in
+        [
+          (pkgs.writeShellApplication {
+            name = "mosh";
+            text = ''
+              exec ${pkgs.mosh}/bin/mosh --ssh ${sshPackage}/bin/ssh "$@"
+            '';
+          })
+          (pkgs.stdenv.mkDerivation {
             name = "tmosh";
             src = ./.; # or anything; this is unused
             installPhase = ''
@@ -167,7 +172,7 @@ in
               mkdir -p $out/bin
               cat <<'EOF' > $out/bin/tmosh
                 #!/bin/sh
-                exec ${pkgs.mosh}/bin/mosh "$@" -- \
+                exec ${pkgs.mosh}/bin/mosh --ssh ${sshPackage}/bin/ssh "$@" -- \
                   tmux new -s tmosh_$(date +'%Y-%m-%d_%H-%M-%S')_$RANDOM
               EOF
               chmod +x $out/bin/tmosh
@@ -191,9 +196,8 @@ in
               EOF
               chmod +x $out/share/bash-completion/completions/tmosh
             '';
-          }
-        )
-      ];
+          })
+        ];
     }
   ];
 }
