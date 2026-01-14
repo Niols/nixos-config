@@ -1,6 +1,11 @@
 {
   flake.nixosModules.ahlaya =
-    { config, inputs, ... }:
+    {
+      config,
+      inputs,
+      pkgs,
+      ...
+    }:
     {
       imports = [
         _common/laptop.nix
@@ -31,6 +36,7 @@
         enable = true;
         interfaces = {
           ahrefs = {
+            mtu = 1280; # Important: reduced MTU for TCP overhead
             ips = [
               "192.168.45.6/32"
               "fd86:0:45::6/128"
@@ -75,7 +81,8 @@
                   "18.193.164.59"
                   "44.210.147.40"
                 ];
-                endpoint = "backend-vpn.ahrefs.net:4433";
+                # endpoint = "backend-vpn.ahrefs.net:4433";
+                endpoint = "127.0.0.1:51820"; # Points to local socat
               }
             ];
           };
@@ -98,5 +105,14 @@
           }
         });
       '';
+
+      systemd.services.wg-socat-client = {
+        description = "Socat WireGuard UDP to TCP forwarder";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.socat}/bin/socat -d -d -t600 -T600 UDP4-LISTEN:51820,reuseaddr,fork TCP4:helga.niols.fr:4433";
+          Restart = "always";
+        };
+      };
     };
 }
