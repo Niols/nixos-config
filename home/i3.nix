@@ -283,7 +283,7 @@ in
               charging_format = " Bat: $percentage [charging; $time_remaining.duration(hms:true, max_unit:h, min_unit:m) left] ";
               full_format = " Bat: 100% ";
               full_threshold = 99;
-              not_charging_format = " Bat: FIXME not_charging_format ";
+              not_charging_format = " Bat: 100% ";
               missing_format = " Bat: FIXME missing_format ";
             }
 
