@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   lib,
@@ -10,13 +11,11 @@
   programs.emacs.enable = false;
 
   home.packages = (
-    with pkgs;
-    [
+    (with pkgs; [
       emacs
       cmake # necessary for Emacs's `vterm`
       libtool # necessary for Emacs's `vterm`
       nerd-fonts.symbols-only
-      nodejs # necessary for Emacs's `copilot`
       python3 # needed by TreeMacs
       (aspellWithDicts (
         dicts: with dicts; [
@@ -25,7 +24,13 @@
         ]
       ))
       vim # useful when Emacs is broken/not set-up yet
-    ]
+    ])
+    ++ (
+      ## NodeJS is necessary for Emacs's `copilot`, but it is already provided
+      ## on Ahrefs's devbox. Bringing our own breaks some tests because of
+      ## version discrepencies.
+      if !(config.x_niols.isWork && config.x_niols.isHeadless) then [ pkgs.nodejs ] else [ ]
+    )
   );
 
   home.file.".config/doom/config.el".source = ./config.el;
