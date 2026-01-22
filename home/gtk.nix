@@ -17,6 +17,7 @@ in
       theme.package = pkgs.gnome-themes-extra;
       theme.name = "Adwaita-dark";
       iconTheme.name = "Adwaita";
+      cursorTheme.name = "Adwaita";
       # iconTheme.package = pkgs.adwaita-icon-theme;
 
       gtk2.extraConfig = ''
