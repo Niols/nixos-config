@@ -71,7 +71,13 @@ in
           inputs.agenix.homeManagerModules.default
           commonModule
         ];
+
         age.identityPaths = [ "${config.home.homeDirectory}/.ssh/id_hm_age" ];
+
+        ## By default, `age.secretsDir` is `$XDG_RUNTIME_DIR/agenix`, with the
+        ## variable actually in the string. This works in some places, but not
+        ## everywhere; we prefer this hardcoded absolute path.
+        age.secretsDir = "${config.home.x_niols.xdgRuntimeDir}/agenix";
       };
   };
 }
