@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
@@ -64,9 +63,9 @@ let
       inherit mtu;
     };
 
-  socatProxy = "helga";
-  socatPort = 4433;
-  socatLocalPort = 51820;
+  # socatProxy = "helga";
+  # socatPort = 4433;
+  # socatLocalPort = 51820;
 
   ahrefsEndpoint = "backend-vpn.ahrefs.net:4433";
 
@@ -98,44 +97,46 @@ in
       '';
     })
 
-    ## Ahrefs's VPN, tunnelled via TCP through one of my servers, to circumvent
-    ## VPN protection from my mobile ISP. It gets slow, but at least it works.
+    ## FIXME: Bring back Ahrefs's VPN, tunnelled.
 
-    (mkIf (config.x_niols.thisMachinesName == "ahlaya") {
-      networking.wireguard.interfaces.ahrefs-tunnelled = makeInterface {
-        mtu = 1280; # reduced MTU for TCP overhead
-        endpoint = "localhost:${toString socatLocalPort}";
-      };
+    # ## Ahrefs's VPN, tunnelled via TCP through one of my servers, to circumvent
+    # ## VPN protection from my mobile ISP. It gets slow, but at least it works.
 
-      systemd.services.wireguard-ahrefs-tunnelled = {
-        wantedBy = [ ]; # disabled by default (otherwise would be "multi-user.target")
-        requires = [ "wireguard-ahrefs-tunnel-client.service" ]; # must have socat
-        after = [ "wireguard-ahrefs-tunnel-client.service" ]; # start after socat
-        bindsTo = [ "wireguard-ahrefs-tunnel-client.service" ]; # stop if socat stops
-        conflicts = [ "wireguard-ahrefs.service" ];
-      };
-      systemd.services.wireguard-ahrefs.conflicts = [ "wireguard-ahrefs-tunnelled.service" ];
+    # (mkIf (config.x_niols.thisMachinesName == "ahlaya") {
+    #   networking.wireguard.interfaces.ahrefs-tunnelled = makeInterface {
+    #     mtu = 1280; # reduced MTU for TCP overhead
+    #     endpoint = "localhost:${toString socatLocalPort}";
+    #   };
 
-      systemd.services.wireguard-ahrefs-tunnel-client = {
-        description = "Socat WireGuard UDP to TCP forwarder";
-        wantedBy = [ ]; # disabled by default (otherwise would be "multi-user.target")
-        serviceConfig = {
-          ExecStart = "${pkgs.socat}/bin/socat -d -d -t600 -T600 UDP4-LISTEN:${toString socatLocalPort},reuseaddr,fork TCP4:${socatProxy}.niols.fr:${toString socatPort}";
-          Restart = "always";
-        };
-      };
-    })
+    #   systemd.services.wireguard-ahrefs-tunnelled = {
+    #     wantedBy = [ ]; # disabled by default (otherwise would be "multi-user.target")
+    #     requires = [ "wireguard-ahrefs-tunnel-client.service" ]; # must have socat
+    #     after = [ "wireguard-ahrefs-tunnel-client.service" ]; # start after socat
+    #     bindsTo = [ "wireguard-ahrefs-tunnel-client.service" ]; # stop if socat stops
+    #     conflicts = [ "wireguard-ahrefs.service" ];
+    #   };
+    #   systemd.services.wireguard-ahrefs.conflicts = [ "wireguard-ahrefs-tunnelled.service" ];
 
-    (mkIf (config.x_niols.thisMachinesName == socatProxy) {
-      systemd.services.wireguard-ahrefs-tunnel-server = {
-        description = "Socat WireGuard TCP to UDP forwarder";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.socat}/bin/socat -d -d TCP4-LISTEN:${toString socatPort},reuseaddr,fork UDP4:${ahrefsEndpoint}";
-          Restart = "always";
-        };
-      };
-      networking.firewall.allowedTCPPorts = [ socatPort ];
-    })
+    #   systemd.services.wireguard-ahrefs-tunnel-client = {
+    #     description = "Socat WireGuard UDP to TCP forwarder";
+    #     wantedBy = [ ]; # disabled by default (otherwise would be "multi-user.target")
+    #     serviceConfig = {
+    #       ExecStart = "${pkgs.socat}/bin/socat -d -d -t600 -T600 UDP4-LISTEN:${toString socatLocalPort},reuseaddr,fork TCP4:${socatProxy}.niols.fr:${toString socatPort}";
+    #       Restart = "always";
+    #     };
+    #   };
+    # })
+
+    # (mkIf (config.x_niols.thisMachinesName == socatProxy) {
+    #   systemd.services.wireguard-ahrefs-tunnel-server = {
+    #     description = "Socat WireGuard TCP to UDP forwarder";
+    #     wantedBy = [ "multi-user.target" ];
+    #     serviceConfig = {
+    #       ExecStart = "${pkgs.socat}/bin/socat -d -d TCP4-LISTEN:${toString socatPort},reuseaddr,fork UDP4:${ahrefsEndpoint}";
+    #       Restart = "always";
+    #     };
+    #   };
+    #   networking.firewall.allowedTCPPorts = [ socatPort ];
+    # })
   ];
 }
