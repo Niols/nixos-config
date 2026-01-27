@@ -61,7 +61,7 @@ in
               user = "root";
               identitiesOnly = true;
               identityFile = "~/.ssh/id_niols";
-              # forwardAgent = true; # those are our machines, we trust them, but for now we don't have a use case for this
+              forwardAgent = true; # those are our machines, we trust them
               userKnownHostsFile = toFile "${server}-known_hosts" (
                 concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") ips
               );

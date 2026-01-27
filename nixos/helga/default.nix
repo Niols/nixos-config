@@ -1,5 +1,3 @@
-{ self, ... }:
-
 {
   flake.nixosModules.helga =
     { modulesPath, ... }:
@@ -32,13 +30,6 @@
       fileSystems."/" = {
         device = "/dev/sda1";
         fsType = "ext4";
-      };
-
-      home-manager.users.niols = {
-        imports = [ ../../home ];
-        x_niols.isWork = true;
-        x_niols.isHeadless = true;
-        x_niols.agePublicKey = self.keys.homes.headless-work;
       };
     };
 }
