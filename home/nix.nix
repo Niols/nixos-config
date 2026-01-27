@@ -1,5 +1,6 @@
 {
   osConfig,
+  config,
   inputs,
   lib,
   pkgs,
@@ -24,8 +25,9 @@ in
     ## sensitive tokens, and we do not trust standalone installations with this,
     ## because they exist on machines that we don't control.
     (mkIf (osConfig != null) {
-      ## FIXME: Get Agenix secrets working for this on HM.
-      # xdg.configFile."attic/config.toml".source = config.age.secrets.attic-client-config.path;
+      xdg.configFile."attic/config.toml".source = pkgs.runCommand "config.toml" { } ''
+        ln -s ${config.age.secrets.attic-client-config.path} $out
+      '';
     })
 
     {
