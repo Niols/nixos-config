@@ -7,6 +7,10 @@
 }:
 
 let
+  inherit (builtins)
+    trace
+    ;
+
   inherit (lib)
     mkIf
     mkOption
@@ -25,12 +29,19 @@ in
     '';
     type = with types; nullOr str;
     default =
+      ## NOTE: We should be able to just use `config.home.uid or null`,
+      ## but https://github.com/nix-community/home-manager/issues/8351
       let
-        ## NOTE: We should be able to use config.home.uid but
-        ## https://github.com/nix-community/home-manager/issues/8351
-        uid = osConfig.users.users.${config.home.username}.uid or null;
+        uid =
+          let
+            uid = config.home.uid or null;
+          in
+          if uid != null then uid else osConfig.users.users.${config.home.username}.uid or null;
       in
-      if uid != null then "/run/user/${toString uid}" else null;
+      if uid != null then
+        "/run/user/${toString uid}"
+      else
+        trace "`home.x_niols.xdgRuntimeDir` is null, because `home.uid` was not set" null;
     readOnly = true;
   };
 
