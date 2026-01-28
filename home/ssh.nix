@@ -24,7 +24,7 @@ let
 in
 {
   config = mkMerge [
-    (mkIf (config.home.x_niols.xdgRuntimeDir != null) {
+    (mkIf (config.home.x_niols.xdgRuntimeDir != null && !config.x_niols.isHeadless) {
       ## Pick up on gcr-ssh-agent statically. It would be cleaner to add this to
       ## something at runtime (eg. .bashrc) but then graphical programs (eg.
       ## Emacs) would not pick it up. gcr-ssh-agent is started on login by the
