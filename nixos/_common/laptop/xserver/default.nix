@@ -65,4 +65,21 @@
     ## https://github.com/NixOS/nixpkgs/issues/19022
     libinput.enable = true;
   };
+
+  ## NOTE: XDG Desktop Portal (XDP) is how modern applications query system
+  ## settings and access resources. By default, the portal automatically selects
+  ## from all available backend implementations. For the Settings interface
+  ## (org.freedesktop.impl.portal.Settings), at least both xapp and gtk backends
+  ## are available. However, xapp does not properly read GTK settings or dconf,
+  ## causing applications like Firefox and Nautilus to receive incorrect dark
+  ## mode preferences. We explicitly configure the gtk backend here to ensure
+  ## consistent behavior.
+  xdg.portal = {
+    enable = true; # already the case
+    config = {
+      xfce = {
+        "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      };
+    };
+  };
 }
