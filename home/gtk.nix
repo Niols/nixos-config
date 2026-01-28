@@ -11,36 +11,38 @@ let
 in
 {
   config = mkIf (!config.x_niols.isHeadless) {
-    ## GTK themes are very messy. We use the simple Adwaita in dark mode, but
-    ## different applications grab this setting from different places:
+    ## NOTE: GTK theme configuration is a mess due to multiple detection methods:
     ##
-    ## - the `gtk.theme.name` setting
-    ## - the `gtk-application-prefer-dark-theme` setting
-    ## - GNOME configuration: `dconf read /org/gnome/desktop/interface/color-scheme`
-    ## - the XDG Desktop Portal — see nixos/_common/laptop/xserver/default.nix
+    ## 1. GTK2/3 applications refer directly to GTK settings (gtk-theme-name,
+    ##    gtk-application-prefer-dark-theme).
+    ##
+    ## 2. Modern GNOME/libadwaita applications rely on gsettings/dconf
+    ##    (/org/gnome/desktop/interface/{gtk-theme,color-scheme})
+    ##
+    ## 3. Even more modern applications (Firefox, Nautilus) query the XDG
+    ##    Desktop Portal (org.freedesktop.appearance::color-scheme), whose
+    ##    backends translate from system settings (GTK/dconf/etc).
+    ##    See `nixos/_common/laptop/xserver/default.nix`
+    ##
+    ## Home Manager provides a unified interface with `gtk.theme.name` and
+    ## `gtk.colorScheme`, for instance, which should propage to all the right
+    ## options everywhere.
 
     gtk = {
       enable = true;
 
       theme.package = pkgs.gnome-themes-extra;
       theme.name = "Adwaita-dark";
+      colorScheme = "dark"; # will set `gtk-application-prefer-dark-theme` and dconf's `org/gnome/desktop/interface/color-scheme`
       iconTheme.name = "Adwaita";
       cursorTheme.name = "Adwaita";
 
       gtk2.extraConfig = ''
         gtk-key-theme-name = "Emacs"
       '';
-
-      gtk3.extraConfig = {
-        gtk-key-theme-name = "Emacs";
-        gtk-application-prefer-dark-theme = true;
-      };
-
-      ## NOTE: gtk-application-prefer-dark-theme is not supported by libadwaita
-      ## applications. They grab the color scheme from dconf/xfconf instead.
+      gtk3.extraConfig.gtk-key-theme-name = "Emacs";
+      gtk4.extraConfig.gtk-key-theme-name = "Emacs";
     };
-
-    dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
     ## Fix "error: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name ca.desrt.dconf was not provided by any .service files"
     ## see https://github.com/nix-community/home-manager/issues/3113
