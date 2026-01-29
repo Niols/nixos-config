@@ -50,6 +50,12 @@ in
         zoom-us # for SCD meetings
       ];
 
+      home.file.".local/share/sounds/sf2/SalamanderGrandPiano.sf2".source =
+        let
+          salamanderPackage = pkgs.callPackage ./soundfont-salamander-grand-piano.nix { };
+        in
+        "${salamanderPackage}/share/sounds/sf2/SalamanderGrandPiano.sf2";
+
       ## Start Nextcloud automatically on startup.
       ##
       ## NOTE: There is also `services.nextcloud.enable`, but it has been
