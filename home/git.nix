@@ -1,6 +1,18 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
+  ## NOTE: The .netrc file could contain more than Git identities, but for now
+  ## it doesn't so that will do.
+  home.file.".netrc".source =
+    let
+      netrcPath =
+        if config.x_niols.isWork && config.x_niols.isHeadless then
+          config.age.secrets.netrc-work.path
+        else
+          config.age.secrets.netrc-niols.path;
+    in
+    pkgs.runCommand "netrc" { } "ln -s ${netrcPath} $out";
+
   programs.git = {
     enable = true;
     ignores = [

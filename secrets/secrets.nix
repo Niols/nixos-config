@@ -89,6 +89,15 @@ concatMapAttrs
       matrix-synapse-macaroon-secret = [ helga ];
       matrix-synapse-registration-secret = [ helga ];
 
+      netrc-niols = [
+        ahlaya-niols
+        ahlaya-work
+        gromit-niols
+      ];
+      netrc-work = [
+        headless-work
+      ];
+
       niolscloud-admin-password = [ orianne ];
       niolscloud-secrets = [ orianne ];
       niolscloud-exporter-token = [ orianne ];

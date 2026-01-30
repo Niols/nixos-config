@@ -50,7 +50,7 @@ in
         zoom-us # for SCD meetings
       ];
 
-      home.file.".local/share/sounds/sf2/SalamanderGrandPiano.sf2".source =
+      xdg.dataFile."sounds/sf2/SalamanderGrandPiano.sf2".source =
         let
           salamanderPackage = pkgs.callPackage ./soundfont-salamander-grand-piano.nix { };
         in
