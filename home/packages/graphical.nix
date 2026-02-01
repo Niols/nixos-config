@@ -45,6 +45,7 @@ in
         signal-desktop
         texlive.combined.scheme-full
         thunderbird
+        tor-browser
         vdhcoapp # companion for Video DownloadHelper
         vlc
         zoom-us # for SCD meetings
