@@ -16,6 +16,6 @@
             inherit inputs;
           }
         else
-          pkgs.hello;
+          builtins.trace "checks.*.nixops4-deployment is trivial on non-x86_64-linux systems" pkgs.hello;
     };
 }
