@@ -8,8 +8,6 @@
   sourceFileset = lib.fileset.unions [
     ./constants.nix
     ./deployment.nix
-    ../cli/constants.nix
-    ../cli/deployments.nix
   ];
 
   nodes.deployer =
