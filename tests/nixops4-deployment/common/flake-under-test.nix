@@ -34,23 +34,20 @@
   };
 
   outputs =
-    inputs@{ self, ... }:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
-      { lib, ... }:
-      {
-        systems = [
-          "x86_64-linux"
-          "aarch64-linux"
-        ];
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
-        imports = [
-          inputs.nixops4.modules.flake.default
-        ];
+      imports = [
+        inputs.nixops4.modules.flake.default
+      ];
 
-        nixops4Deployments.check-deployment = {
-          imports = [ ./tests/nixops4-deployment/basic/deployment.nix ];
-          _module.args = { inherit inputs; };
-        };
-      }
-    );
+      nixops4Deployments.check-deployment = {
+        imports = [ ./tests/nixops4-deployment/basic/deployment.nix ];
+        _module.args = { inherit inputs; };
+      };
+    };
 }
