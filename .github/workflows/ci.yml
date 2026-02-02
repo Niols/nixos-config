@@ -38,6 +38,7 @@ jobs:
       - name: Gather outputs from the flake
         id: json
         run: |
+          set -o pipefail # important for the `exit 7` below
           {
             if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
               echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
