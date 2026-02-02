@@ -18,8 +18,6 @@ in
 {
   _class = "nixos";
 
-  imports = [ ./sharedOptions.nix ];
-
   options.system.extraDependenciesFromModule = mkOption {
     type = types.deferredModule;
     description = ''
@@ -74,8 +72,6 @@ in
             {
               nixpkgs.hostPlatform = "x86_64-linux";
               _module.args = { inherit inputs; };
-              enableAcme = config.enableAcme;
-              acmeNodeIP = config.acmeNodeIP;
             }
           ]).config;
 

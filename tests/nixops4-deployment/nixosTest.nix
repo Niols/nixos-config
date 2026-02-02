@@ -38,20 +38,19 @@ let
     ./flake-under-test.nix
     ../../flake.lock
 
-    ./constants.nix
     ./deployment.nix
-    ./sharedOptions.nix
     ./targetNode.nix
     ./targetResource.nix
+  ];
+
+  targetMachines = [
+    "hello"
+    "cowsay"
   ];
 
 in
 {
   _class = "nixosTest";
-
-  imports = [
-    ./sharedOptions.nix
-  ];
 
   config = {
     name = "nixops4-deployment";
@@ -82,7 +81,7 @@ in
         };
     }
 
-    // genAttrs config.targetMachines (_: {
+    // genAttrs targetMachines (_: {
       imports = [ ./targetNode.nix ];
       _module.args = { inherit inputs; };
     });
@@ -102,13 +101,13 @@ in
       with subtest("Unpacking"):
         deployer.succeed("cp -r --no-preserve=mode ${
           fileset.toSource {
-            root = ../../..;
+            root = ../..;
             fileset = sourceFileset;
           }
         }/* .")
 
       with subtest("Configure the network"):
-        ${forConcat config.targetMachines (
+        ${forConcat targetMachines (
           tm:
           let
             targetNetworkJSON = writeText "target-network.json" (
@@ -116,21 +115,21 @@ in
             );
           in
           ''
-            deployer.copy_from_host("${targetNetworkJSON}", "${config.pathFromRoot}/${tm}-network.json")
+            deployer.copy_from_host("${targetNetworkJSON}", "tests/nixops4-deployment/${tm}-network.json")
           ''
         )}
 
       with subtest("Configure the deployer key"):
         deployer.succeed("""mkdir -p ~/.ssh && ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa""")
         deployer_key = deployer.succeed("cat ~/.ssh/id_rsa.pub").strip()
-        ${forConcat config.targetMachines (tm: ''
+        ${forConcat targetMachines (tm: ''
           ${tm}.succeed(f"mkdir -p /root/.ssh && echo '{deployer_key}' >> /root/.ssh/authorized_keys")
         '')}
 
       with subtest("Configure the target host key"):
-        ${forConcat config.targetMachines (tm: ''
+        ${forConcat targetMachines (tm: ''
           host_key = ${tm}.succeed("ssh-keyscan ${tm} | grep -v '^#' | cut -f 2- -d ' ' | head -n 1")
-          deployer.succeed(f"echo '{host_key}' > ${config.pathFromRoot}/${tm}_host_key.pub")
+          deployer.succeed(f"echo '{host_key}' > tests/nixops4-deployment/${tm}_host_key.pub")
         '')}
 
       ## NOTE: This is super slow. It could probably be optimised in Nix, for
@@ -141,7 +140,7 @@ in
       ## lock file to use locally available inputs, as we cannot download them.
       ##
       with subtest("Override the flake and its lock"):
-        deployer.succeed("cp tests/nixops4-deployment/common/flake-under-test.nix flake.nix")
+        deployer.succeed("cp tests/nixops4-deployment/flake-under-test.nix flake.nix")
         deployer.succeed("""
           nix flake lock --extra-experimental-features 'flakes nix-command' \
             --offline -v \

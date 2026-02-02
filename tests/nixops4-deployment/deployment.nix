@@ -5,26 +5,22 @@
   ...
 }:
 
-let
-  inherit (import ./constants.nix) targetMachines pathToRoot pathFromRoot;
-in
-
 {
   providers = {
     inherit (inputs.nixops4.modules.nixops4Provider) local;
   };
 
-  resources = lib.genAttrs targetMachines (nodeName: {
+  resources = lib.genAttrs [ "hello" "cowsay" ] (nodeName: {
     type = providers.local.exec;
 
     imports = [
       inputs.nixops4-nixos.modules.nixops4Resource.nixos
-      ../common/targetResource.nix
+      ./targetResource.nix
     ];
 
     _module.args = { inherit inputs; };
 
-    inherit nodeName pathToRoot pathFromRoot;
+    inherit nodeName;
 
     nixos.module =
       { pkgs, ... }:

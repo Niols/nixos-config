@@ -14,22 +14,18 @@ in
 {
   _class = "nixops4Resource";
 
-  imports = [ ./sharedOptions.nix ];
-
-  options = {
-    nodeName = mkOption {
-      type = types.str;
-      description = ''
-        The name of the node in the NixOS test;
-        needed for recovering the node configuration to prepare its deployment.
-      '';
-    };
+  options.nodeName = mkOption {
+    type = types.str;
+    description = ''
+      The name of the node in the NixOS test; needed for recovering the node
+      configuration to prepare its deployment.
+    '';
   };
 
   config = {
     ssh = {
       host = config.nodeName;
-      hostPublicKey = readFile (config.pathToCwd + "/${config.nodeName}_host_key.pub");
+      hostPublicKey = readFile (./. + "/${config.nodeName}_host_key.pub");
     };
 
     nixpkgs = inputs.nixpkgs;
@@ -37,12 +33,10 @@ in
     nixos.module = {
       imports = [
         ./targetNode.nix
-        (lib.modules.importJSON (config.pathToCwd + "/${config.nodeName}-network.json"))
+        (lib.modules.importJSON (./. + "/${config.nodeName}-network.json"))
       ];
 
       _module.args = { inherit inputs; };
-      enableAcme = config.enableAcme;
-      acmeNodeIP = trim (readFile (config.pathToCwd + "/acme_server_ip"));
 
       nixpkgs.hostPlatform = "x86_64-linux";
     };
