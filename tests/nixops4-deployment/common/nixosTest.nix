@@ -33,6 +33,18 @@ let
     echo "{ outputs = { self }: {}; }" > $out/flake.nix
   '';
 
+  sourceFileset = fileset.unions [
+    ## NOTE: our custom flake-under-test but with the official lock
+    ./flake-under-test.nix
+    ../../../flake.lock
+
+    ./sharedOptions.nix
+    ./targetNode.nix
+    ./targetResource.nix
+    ../basic/constants.nix
+    ../basic/deployment.nix
+  ];
+
 in
 {
   _class = "nixosTest";
@@ -41,77 +53,39 @@ in
     ./sharedOptions.nix
   ];
 
-  options = {
-    ## FIXME: I wish I could just use `testScript` but with something like
-    ## `mkOrder` to put this module's string before something else.
-    extraTestScript = mkOption { };
-
-    sourceFileset = mkOption {
-      ## FIXME: grab `lib.types.fileset` from NixOS, once upstreaming PR
-      ## https://github.com/NixOS/nixpkgs/pull/428293 lands.
-      type = types.mkOptionType {
-        name = "fileset";
-        description = "fileset";
-        descriptionClass = "noun";
-        check = (x: (builtins.tryEval (fileset.unions [ x ])).success);
-        merge = (_: defs: fileset.unions (map (x: x.value) defs));
-      };
-      description = ''
-        A fileset that will be copied to the deployer node in the current
-        working directory. This should contain all the files that are
-        necessary to run that particular test, such as the NixOS
-        modules necessary to evaluate a deployment.
-      '';
-    };
-  };
-
   config = {
-    sourceFileset = fileset.unions [
-      ## NOTE: our custom flake-under-test but with the official lock
-      ./flake-under-test.nix
-      ../../../flake.lock
-
-      ./sharedOptions.nix
-      ./targetNode.nix
-      ./targetResource.nix
-    ];
-
-    acmeNodeIP = config.nodes.acme.networking.primaryIPAddress;
+    name = "nixops4-deployment";
 
     nodes = {
-      deployer = {
-        imports = [ ./deployerNode.nix ];
-        _module.args = { inherit inputs; };
-        enableAcme = config.enableAcme;
-        acmeNodeIP = config.nodes.acme.networking.primaryIPAddress;
-      };
+      deployer =
+        { pkgs, ... }:
+        {
+          imports = [ ./deployerNode.nix ];
+          _module.args = { inherit inputs; };
+
+          environment.systemPackages = [
+            inputs.nixops4.packages.${pkgs.stdenv.hostPlatform.system}.default
+          ];
+          # FIXME: sad times
+          system.extraDependencies = with pkgs; [
+            jq
+            jq.inputDerivation
+          ];
+          system.extraDependenciesFromModule =
+            { pkgs, ... }:
+            {
+              environment.systemPackages = with pkgs; [
+                hello
+                cowsay
+              ];
+            };
+        };
     }
 
-    //
-
-      (
-        if config.enableAcme then
-          {
-            acme = {
-              ## FIXME: This makes `nodes.acme` into a local resolver. Maybe this will
-              ## break things once we play with DNS?
-              imports = [ "${inputs.nixpkgs}/nixos/tests/common/acme/server" ];
-              ## We aren't testing ACME - we just want certificates.
-              systemd.services.pebble.environment.PEBBLE_VA_ALWAYS_VALID = "1";
-            };
-          }
-        else
-          { }
-      )
-
-    //
-
-      genAttrs config.targetMachines (_: {
-        imports = [ ./targetNode.nix ];
-        _module.args = { inherit inputs; };
-        enableAcme = config.enableAcme;
-        acmeNodeIP = if config.enableAcme then config.nodes.acme.networking.primaryIPAddress else null;
-      });
+    // genAttrs config.targetMachines (_: {
+      imports = [ ./targetNode.nix ];
+      _module.args = { inherit inputs; };
+    });
 
     testScript = ''
       ${forConcat (attrNames config.nodes) (n: ''
@@ -129,7 +103,7 @@ in
         deployer.succeed("cp -r --no-preserve=mode ${
           fileset.toSource {
             root = ../../..;
-            fileset = config.sourceFileset;
+            fileset = sourceFileset;
           }
         }/* .")
 
@@ -191,12 +165,16 @@ in
             ;
         """)
 
-      ${optionalString config.enableAcme ''
-        with subtest("Set up handmade DNS"):
-          deployer.succeed("echo '${config.nodes.acme.networking.primaryIPAddress}' > ${config.pathFromRoot}/acme_server_ip")
-      ''}
+      with subtest("Check the status before deployment"):
+        hello.fail("hello 1>&2")
+        cowsay.fail("cowsay 1>&2")
 
-      ${config.extraTestScript}
+      with subtest("Run the deployment"):
+        deployer.succeed("nixops4 apply check-deployment --show-trace --no-interactive 1>&2")
+
+      with subtest("Check the deployment"):
+        hello.succeed("hello 1>&2")
+        cowsay.succeed("cowsay hi 1>&2")
     '';
   };
 }
