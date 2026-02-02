@@ -3,7 +3,6 @@
   lib,
   pkgs,
   config,
-  sources,
   ...
 }:
 
@@ -56,10 +55,8 @@ in
       inputs.nixops4
       inputs.nixops4-nixos
       inputs.nixpkgs
-
-      sources.flake-parts
-      sources.flake-inputs
-      sources.git-hooks
+      inputs.flake-parts
+      inputs.git-hooks
 
       pkgs.stdenv
       pkgs.stdenvNoCC
@@ -76,7 +73,7 @@ in
             config.system.extraDependenciesFromModule
             {
               nixpkgs.hostPlatform = "x86_64-linux";
-              _module.args = { inherit inputs sources; };
+              _module.args = { inherit inputs; };
               enableAcme = config.enableAcme;
               acmeNodeIP = config.acmeNodeIP;
             }

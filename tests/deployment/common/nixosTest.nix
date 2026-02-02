@@ -3,7 +3,6 @@
   lib,
   config,
   hostPkgs,
-  sources,
   ...
 }:
 
@@ -68,16 +67,13 @@ in
 
   config = {
     sourceFileset = fileset.unions [
-      # NOTE: not the flake itself; it will be overridden.
-      ../../../mkFlake.nix
+      ## NOTE: our custom flake-under-test but with the official lock
+      ./flake-under-test.nix
       ../../../flake.lock
-      ../../../npins
 
       ./sharedOptions.nix
       ./targetNode.nix
       ./targetResource.nix
-
-      (config.pathToCwd + "/flake-under-test.nix")
     ];
 
     acmeNodeIP = config.nodes.acme.networking.primaryIPAddress;
@@ -85,7 +81,7 @@ in
     nodes = {
       deployer = {
         imports = [ ./deployerNode.nix ];
-        _module.args = { inherit inputs sources; };
+        _module.args = { inherit inputs; };
         enableAcme = config.enableAcme;
         acmeNodeIP = config.nodes.acme.networking.primaryIPAddress;
       };
@@ -112,7 +108,7 @@ in
 
       genAttrs config.targetMachines (_: {
         imports = [ ./targetNode.nix ];
-        _module.args = { inherit inputs sources; };
+        _module.args = { inherit inputs; };
         enableAcme = config.enableAcme;
         acmeNodeIP = if config.enableAcme then config.nodes.acme.networking.primaryIPAddress else null;
       });

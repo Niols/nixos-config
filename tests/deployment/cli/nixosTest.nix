@@ -19,16 +19,6 @@ in
   sourceFileset = lib.fileset.unions [
     ./constants.nix
     ./deployments.nix
-
-    # REVIEW: I would like to be able to grab all of `/deployment` minus
-    # `/deployment/check`, but I can't because there is a bunch of other files
-    # in `/deployment`. Maybe we can think of a reorg making things more robust
-    # here? (comment also in panel test)
-    ../../default.nix
-    ../../options.nix
-    ../../configuration.sample.json
-
-    ../../../services/fediversity
   ];
 
   nodes.deployer =
