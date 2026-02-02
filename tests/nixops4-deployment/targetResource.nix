@@ -7,7 +7,7 @@
 
 let
   inherit (builtins) readFile;
-  inherit (lib) trim mkOption types;
+  inherit (lib) mkOption types;
 
 in
 
