@@ -60,7 +60,7 @@ jobs:
                   with builtins;
                   let flake = getFlake (toString ./.); in
                   toJSON (attrNames flake.$2)
-                "
+                " || exit 7
                 echo
               }
               read_and_output checks checks.x86_64-linux
