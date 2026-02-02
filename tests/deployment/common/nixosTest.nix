@@ -20,7 +20,7 @@ let
     optionalString
     ;
   inherit (hostPkgs)
-    runCommandNoCC
+    runCommand
     writeText
     system
     ;
@@ -28,7 +28,7 @@ let
   forConcat = xs: f: concatStringsSep "\n" (map f xs);
 
   ## We will need to override some inputs by the empty flake, so we make one.
-  emptyFlake = runCommandNoCC "empty-flake" { } ''
+  emptyFlake = runCommand "empty-flake" { } ''
     mkdir $out
     echo "{ outputs = { self }: {}; }" > $out/flake.nix
   '';
