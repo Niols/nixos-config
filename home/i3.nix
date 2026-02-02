@@ -147,6 +147,11 @@ in
             criteria.class = "Localsend_app";
             command = "floating enable";
           }
+          {
+            criteria.title = "^zoom$";
+            criteria.class = "[zoom]*";
+            command = "floating enable";
+          }
         ];
       };
     };
