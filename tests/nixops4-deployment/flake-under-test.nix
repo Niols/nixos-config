@@ -48,7 +48,7 @@
         ];
 
         nixops4Deployments.check-deployment = {
-          imports = [ ./tests/nixops4-deployment/basic/deployment.nix ];
+          imports = [ ./tests/nixops4-deployment/deployment.nix ];
           _module.args = { inherit inputs; };
         };
       }

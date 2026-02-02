@@ -36,13 +36,13 @@ let
   sourceFileset = fileset.unions [
     ## NOTE: our custom flake-under-test but with the official lock
     ./flake-under-test.nix
-    ../../../flake.lock
+    ../../flake.lock
 
+    ./constants.nix
+    ./deployment.nix
     ./sharedOptions.nix
     ./targetNode.nix
     ./targetResource.nix
-    ../basic/constants.nix
-    ../basic/deployment.nix
   ];
 
 in
