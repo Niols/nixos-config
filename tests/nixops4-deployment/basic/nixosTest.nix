@@ -41,7 +41,7 @@
       cowsay.fail("cowsay 1>&2")
 
     with subtest("Run the deployment"):
-      deployer.succeed("nixops4 apply check-deployment-basic --show-trace --no-interactive 1>&2")
+      deployer.succeed("nixops4 apply check-deployment --show-trace --no-interactive 1>&2")
 
     with subtest("Check the deployment"):
       hello.succeed("hello 1>&2")

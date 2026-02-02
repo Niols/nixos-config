@@ -167,7 +167,7 @@ in
       ## lock file to use locally available inputs, as we cannot download them.
       ##
       with subtest("Override the flake and its lock"):
-        deployer.succeed("cp tests/deployment/common/flake-under-test.nix flake.nix")
+        deployer.succeed("cp tests/nixops4-deployment/common/flake-under-test.nix flake.nix")
         deployer.succeed("""
           nix flake lock --extra-experimental-features 'flakes nix-command' \
             --offline -v \

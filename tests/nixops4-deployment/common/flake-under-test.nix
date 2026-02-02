@@ -47,16 +47,10 @@
           inputs.nixops4.modules.flake.default
         ];
 
-        nixops4Deployments =
-          (import ./tests/deployment/cli/deployments.nix {
-            inherit inputs lib;
-          })
-          // {
-            check-deployment-basic = {
-              imports = [ ./tests/deployment/basic/deployment.nix ];
-              _module.args = { inherit inputs; };
-            };
-          };
+        nixops4Deployments.check-deployment = {
+          imports = [ ./tests/nixops4-deployment/basic/deployment.nix ];
+          _module.args = { inherit inputs; };
+        };
       }
     );
 }
