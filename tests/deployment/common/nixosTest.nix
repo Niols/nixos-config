@@ -167,21 +167,27 @@ in
       ## lock file to use locally available inputs, as we cannot download them.
       ##
       with subtest("Override the flake and its lock"):
-        deployer.succeed("cp ${config.pathFromRoot}/flake-under-test.nix flake.nix")
+        deployer.succeed("cp tests/deployment/common/flake-under-test.nix flake.nix")
         deployer.succeed("""
           nix flake lock --extra-experimental-features 'flakes nix-command' \
             --offline -v \
-            --override-input nixops4 ${inputs.nixops4.packages.${system}.flake-in-a-bottle} \
+            --override-input nixpkgs ${inputs.nixpkgs} \
             \
+            --override-input nixops4 ${inputs.nixops4.packages.${system}.flake-in-a-bottle} \
             --override-input nixops4-nixos ${inputs.nixops4-nixos} \
             --override-input nixops4-nixos/flake-parts ${inputs.nixops4-nixos.inputs.flake-parts} \
             --override-input nixops4-nixos/flake-parts/nixpkgs-lib ${inputs.nixops4-nixos.inputs.flake-parts.inputs.nixpkgs-lib} \
             --override-input nixops4-nixos/nixops4-nixos ${emptyFlake} \
-            --override-input nixops4-nixos/nixpkgs ${inputs.nixops4-nixos.inputs.nixpkgs} \
-            --override-input nixops4-nixos/nixops4 ${
-              inputs.nixops4-nixos.inputs.nixops4.packages.${system}.flake-in-a-bottle
-            } \
             --override-input nixops4-nixos/git-hooks-nix ${emptyFlake} \
+            \
+            --override-input home-manager ${inputs.home-manager} \
+            --override-input nixos-hardware ${inputs.nixos-hardware} \
+            --override-input flake-parts ${inputs.flake-parts} \
+            --override-input git-hooks ${inputs.git-hooks} \
+            --override-input nix-index-database ${inputs.nix-index-database} \
+            --override-input agenix ${inputs.agenix} \
+            --override-input dancelor ${inputs.dancelor} \
+            --override-input doomemacs ${inputs.doomemacs} \
             ;
         """)
 

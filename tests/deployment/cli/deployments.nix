@@ -1,6 +1,5 @@
 {
   inputs,
-  sources,
   lib,
 }:
 
@@ -15,7 +14,7 @@ let
 
   makeTargetResource = nodeName: {
     imports = [ ../common/targetResource.nix ];
-    _module.args = { inherit inputs sources; };
+    _module.args = { inherit inputs; };
     inherit
       nodeName
       pathToRoot

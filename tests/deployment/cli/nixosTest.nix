@@ -19,6 +19,8 @@ in
   sourceFileset = lib.fileset.unions [
     ./constants.nix
     ./deployments.nix
+    ../basic/constants.nix
+    ../basic/deployment.nix
   ];
 
   nodes.deployer =

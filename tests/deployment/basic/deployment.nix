@@ -1,6 +1,5 @@
 {
   inputs,
-  sources,
   lib,
   providers,
   ...
@@ -23,7 +22,7 @@ in
       ../common/targetResource.nix
     ];
 
-    _module.args = { inherit inputs sources; };
+    _module.args = { inherit inputs; };
 
     inherit nodeName pathToRoot pathFromRoot;
 

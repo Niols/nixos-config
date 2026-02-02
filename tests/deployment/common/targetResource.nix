@@ -2,7 +2,6 @@
   inputs,
   lib,
   config,
-  sources,
   ...
 }:
 
@@ -41,7 +40,7 @@ in
         (lib.modules.importJSON (config.pathToCwd + "/${config.nodeName}-network.json"))
       ];
 
-      _module.args = { inherit inputs sources; };
+      _module.args = { inherit inputs; };
       enableAcme = config.enableAcme;
       acmeNodeIP = trim (readFile (config.pathToCwd + "/acme_server_ip"));
 
