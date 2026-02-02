@@ -46,6 +46,7 @@
         ./nixos/flake-part.nix
         ./keys/flake-part.nix
         ./secrets/flake-part.nix
+        ./tests/flake-part.nix
       ];
 
       ## ==================== [ Home Configurations ] ==================== ##
