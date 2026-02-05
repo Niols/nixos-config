@@ -18,6 +18,7 @@ in
         ffmpeg-full
         file-roller # GNOME archive manager
         filezilla
+        localsend
         nautilus
         nautilus-open-any-terminal
       ];
@@ -70,31 +71,6 @@ in
       xdg.autostart.entries = with pkgs; [
         "${nextcloud-client}/share/applications/com.nextcloud.desktopclient.nextcloud.desktop"
       ];
-    })
-
-    ## Start LocalSend automatically on startup, for all graphical sessions.
-    ##
-    ## NOTE: There is a desktop file shipped with LocalSend, but we want to run
-    ## it with option `--hidden` so that it starts only as a tray.
-    ##
-    (mkIf (!config.x_niols.isHeadless) {
-      xdg.autostart.enable = true;
-      xdg.autostart.entries = [
-        (pkgs.writeText "localsend-autostart.desktop" ''
-          [Desktop Entry]
-          Categories=GTK;FileTransfer;Utility
-          Exec=${pkgs.localsend}/bin/localsend_app --hidden
-          GenericName=An open source cross-platform alternative to AirDrop
-          Icon=localsend
-          Keywords=Sharing;LAN;Files
-          Name=LocalSend
-          StartupNotify=true
-          StartupWMClass=localsend_app
-          Type=Application
-          Version=${pkgs.localsend.version}
-        '')
-      ];
-
     })
   ];
 }
