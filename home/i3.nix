@@ -142,6 +142,33 @@ in
           }
         ];
 
+        ## Commands to run when starting up, and which workplace to put them.
+        ##
+        startup =
+          if config.x_niols.isWork then
+            [
+              { command = "firefox"; }
+              { command = "slack"; }
+            ]
+          else
+            [
+              { command = "firefox"; }
+              { command = "signal-desktop"; }
+              { command = "thunderbird"; }
+            ];
+        assigns =
+          if config.x_niols.isWork then
+            {
+              "0" = [ { class = "^firefox$"; } ];
+              "12" = [ { class = "^slack$"; } ];
+            }
+          else
+            {
+              "0" = [ { class = "^firefox$"; } ];
+              "11" = [ { class = "^signal$"; } ];
+              "12" = [ { class = "^thunderbird$"; } ];
+            };
+
         ## To grab info on windows, do one of the following:
         ##
         ## 1. running `xprop` and clicking on the window in question. Look for
