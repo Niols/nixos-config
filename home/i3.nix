@@ -142,12 +142,38 @@ in
           }
         ];
 
+        ## To grab info on windows, do one of the following:
+        ##
+        ## 1. running `xprop` and clicking on the window in question. Look for
+        ##    eg. `WM_CLASS` or `_NET_WM_WINDOW_TYPE`. This is the easiest but
+        ##    does not work with some windows, if they don't allow running
+        ##    another command or if they come and go too quickly.
+        ##
+        ## 2. running `i3-msg -t subscribe -m '["window"]'` and monitoring the
+        ##    output. Look for eg. `.container.window_type` or
+        ##    `.container.window_properties.class`. It might be useful to pipe
+        ##    the previous command into `jq '.container |
+        ##    {window_type:.window_type, class:.window_properties.class}'`
+        ##
+        ## NOTE: The order of commnds matter, later commands taking precedence.
+        ##
         window.commands = [
           {
-            criteria.class = "Localsend_app";
+            ## By default, have normal windows have a border (even Firefox or
+            ## Nautilus) and be non-floating.
+            criteria.window_type = "normal";
+            command = "border normal, floating disable";
+          }
+          {
+            ## Little apps that have a `normal` window type but really behave
+            ## more like utilities. They get to float.
+            criteria.class = "^(localsend_app|.blueman-manager-wrapped|Gcr-prompter)$";
             command = "floating enable";
           }
           {
+            ## FIXME: This also captures the main Zoom window, which is clearly
+            ## not what we want. Grab more details with `xprop` and find
+            ## something that differentiates “notifications” and main window.
             criteria.title = "^zoom$";
             criteria.class = "[zoom]*";
             command = "floating enable";
