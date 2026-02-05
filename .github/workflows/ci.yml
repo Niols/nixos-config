@@ -42,7 +42,7 @@ jobs:
           {
             if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
               echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
-              echo checks=[]
+              echo checks_matrix={}
               if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-on- ]]; then
                 echo homeConfigurations="[\"${BASH_REMATCH[1]}\"]"
                 echo nixosConfigurations=[]
@@ -60,13 +60,13 @@ jobs:
                 nix eval --impure --raw --expr "
                   with builtins;
                   let flake = getFlake (toString ./.); in
-                  toJSON (attrNames flake.$2)
+                  toJSON ($2)
                 " || exit 7
                 echo
               }
-              read_and_output checks checks.x86_64-linux
-              read_and_output homeConfigurations homeConfigurations
-              read_and_output nixosConfigurations nixosConfigurations
+              read_and_output homeConfigurations 'attrNames flake.homeConfigurations'
+              read_and_output nixosConfigurations 'attrNames flake.nixosConfigurations'
+              read_and_output checks_matrix '{include = concatMap (system: map (check: { inherit system check; }) (attrNames flake.checks.${{ '${system}' }})) (attrNames flake.checks);}'
             fi
           } | tee $GITHUB_OUTPUT
 
@@ -92,9 +92,7 @@ jobs:
     ## Only run if checks != [], which we test indirectly.
     if: contains(needs.discover.outputs.checks, '"')
     strategy:
-      matrix:
-        system: [x86_64-linux, aarch64-linux]
-        check: ${{ fromJson(needs.discover.outputs.checks) }}
+      matrix: ${{ fromJson(needs.discover.outputs.checks_matrix) }}
       fail-fast: false
     steps:
       - name: Check out repository code.
