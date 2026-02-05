@@ -30,6 +30,9 @@ in
       config = {
         modifier = "Mod4";
 
+        ## Don't show borders at the edge of the screen.
+        window.hideEdgeBorders = "both";
+
         fonts = {
           names = [ "pango" ];
           style = "monospace";
@@ -142,12 +145,41 @@ in
           }
         ];
 
+        ## Commands to run when starting up, and which workplace to put them.
+        defaultWorkspace = "workspace 0";
+        startup =
+          if config.x_niols.isWork then
+            [
+              { command = "firefox"; }
+              { command = "slack"; }
+            ]
+          else
+            [
+              { command = "firefox"; }
+              { command = "signal-desktop"; }
+              { command = "thunderbird"; }
+            ];
+        assigns =
+          if config.x_niols.isWork then
+            {
+              "0" = [ { class = "^firefox$"; } ];
+              "12" = [ { class = "^Slack$"; } ];
+            }
+          else
+            {
+              "0" = [ { class = "^firefox$"; } ];
+              "11" = [ { class = "^Signal$"; } ];
+              "12" = [ { class = "^thunderbird$"; } ];
+            };
+
         ## To grab info on windows, do one of the following:
         ##
         ## 1. running `xprop` and clicking on the window in question. Look for
         ##    eg. `WM_CLASS` or `_NET_WM_WINDOW_TYPE`. This is the easiest but
         ##    does not work with some windows, if they don't allow running
-        ##    another command or if they come and go too quickly.
+        ##    another command or if they come and go too quickly. NOTE: In the
+        ##    case of `WM_CLASS`, only the second part matters (the first part
+        ##    is the instance).
         ##
         ## 2. running `i3-msg -t subscribe -m '["window"]'` and monitoring the
         ##    output. Look for eg. `.container.window_type` or
