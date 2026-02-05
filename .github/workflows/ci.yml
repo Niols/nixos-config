@@ -67,7 +67,7 @@ jobs:
               read_and_output homeConfigurations homeConfigurations
               read_and_output nixosConfigurations nixosConfigurations
             fi
-            printf 'checks={"foo":"bar", "baz":"qux"}\n'
+            printf 'checks={"system":["x86_64-linux","aarch64-linux"], "check":["pre-commit","nixops4-deployment"]}\n'
           } | tee $GITHUB_OUTPUT
 
   summarise:
@@ -92,9 +92,7 @@ jobs:
     ## Only run if checks != [], which we test indirectly.
     if: contains(needs.discover.outputs.checks, '"')
     strategy:
-      matrix:
-        system: [x86_64-linux, aarch64-linux]
-        check: ${{ fromJson(needs.discover.outputs.checks) }}
+      matrix: ${{ fromJson(needs.discover.outputs.checks) }}
       fail-fast: false
     steps:
       - name: Check out repository code.
