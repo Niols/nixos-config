@@ -66,8 +66,23 @@ jobs:
               }
               read_and_output homeConfigurations homeConfigurations
               read_and_output nixosConfigurations nixosConfigurations
+              printf 'checks_matrix='
+              nix eval --impure --raw --expr "
+                with builtins;
+                let flake = getFlake (toString ./.); in
+                toJSON({
+                  include =
+                    concatMap
+                      (system:
+                        map
+                          (check: { inherit system check; })
+                          (attrNames flake.checks.${system}))
+                      (attrNames flake.checks);
+                  }
+                )
+              " || exit 7
+              echo
             fi
-            printf 'checks={"system":["x86_64-linux","aarch64-linux"], "check":["pre-commit","nixops4-deployment"]}\n'
           } | tee $GITHUB_OUTPUT
 
   summarise:
