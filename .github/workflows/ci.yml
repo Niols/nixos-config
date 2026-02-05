@@ -64,10 +64,10 @@ jobs:
                 " || exit 7
                 echo
               }
-              read_and_output checks checks.x86_64-linux
               read_and_output homeConfigurations homeConfigurations
               read_and_output nixosConfigurations nixosConfigurations
             fi
+            printf 'checks={"foo":"bar", "baz":"qux"}\n'
           } | tee $GITHUB_OUTPUT
 
   summarise:
