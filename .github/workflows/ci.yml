@@ -93,7 +93,7 @@ jobs:
     if: contains(needs.discover.outputs.checks, '"')
     strategy:
       matrix:
-        a: ${{ fromJson("{}") }}
+        a: ${{ fromJson("{\"system\" = [\"x86_64-linux\", \"aarch64-linux\"];\n\"check\" = [\"nixops4-deployment\", \"pre-commit\"];\n}") }}
       fail-fast: false
     steps:
       - name: Check out repository code.
