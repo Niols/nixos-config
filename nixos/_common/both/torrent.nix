@@ -35,6 +35,17 @@ in
           method.insert = d.get_data_full_path, simple, "branch=((d.is_multi_file)),((cat,(d.directory))),((cat,(d.directory),/,(d.name)))"
           method.insert = d.move_to_complete, simple, "d.directory.set=$argument.1=; execute=mkdir,-p,$argument.1=; execute=mv,-u,$argument.0=,$argument.1=; d.save_full_session="
           method.set_key = event.download.finished,move_complete,"d.move_to_complete=$d.get_data_full_path=,$d.get_finished_dir="
+
+          ## Enable peer discovery beyond HTTP trackers
+          ##
+          ## - support for UDP-based trackers; they are ignored by torrents marked private anyway
+          ## - Distributed Hash Table (DHT) allows finding more peers; we only enable it
+          ##   when a torrent can use it, otherwise it keeps growing and using more bandwidth
+          ## - Peer EXchange (PEX) allows getting peers from other peers
+          ##
+          trackers.use_udp.set = yes
+          dht.mode.set = auto
+          protocol.pex.set = yes
         '';
       };
 
