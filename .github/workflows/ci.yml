@@ -74,16 +74,24 @@ jobs:
     name: Summarise
     runs-on: ubuntu-latest
     needs:
+      - discover
       - checks
       - homeConfigurations
       - nixosConfigurations
-    if: ${{ !cancelled() }}
+    ## Skip this job, rather than fail, so as to avoid adding to the failure
+    ## count, if the whole workflow was cancelled, or if any job failed or was
+    ## cancelled. The exception is the `discover` job, which must succeed.
+    if: >-
+      ${{
+        !cancelled()
+        && needs.discover.result == 'success'
+        && (needs.checks.result == 'success' || needs.checks.result == 'skipped')
+        && (needs.homeConfigurations.result == 'success' || needs.homeConfigurations.result == 'skipped')
+        && (needs.nixosConfigurations.result == 'success' || needs.nixosConfigurations.result == 'skipped')
+      }}
     steps:
-      - name: At least one CI job failed or was cancelled
-        if: ${{ needs.checks.result == 'failure' || needs.checks.result == 'cancelled' || needs.homeConfigurations.result == 'failure' || needs.homeConfigurations.result == 'cancelled' || needs.nixosConfigurations.result == 'failure' || needs.nixosConfigurations.result == 'cancelled' }}
-        run: false
-      - name: All CI jobs succeeded
-        run: true
+      - name: All required jobs succeeded or were skipped appropriately
+        run: echo "Pipeline passed!"
 
   checks:
     name: Check
