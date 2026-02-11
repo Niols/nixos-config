@@ -118,6 +118,19 @@ concatMapAttrs
         headless-work
       ];
 
+      rclone-gdrive-client-id = [
+        ahlaya-niols
+        gromit-niols
+      ];
+      rclone-gdrive-client-secret = [
+        ahlaya-niols
+        gromit-niols
+      ];
+      rclone-gdrive-token = [
+        ahlaya-niols
+        gromit-niols
+      ];
+
       rutorrent-passwd = [ helga ];
 
       wireguard-ahlaya-ahrefs-key = [ ahlaya ];
