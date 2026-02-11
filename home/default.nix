@@ -29,6 +29,7 @@ in
     ./keepassxc.nix
     ./nix.nix
     ./packages
+    ./rclone.nix
     ./ssh.nix
     ./terminal-emulator.nix
     ./xdg.nix
