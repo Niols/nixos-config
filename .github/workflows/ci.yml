@@ -83,7 +83,9 @@ jobs:
       - uses: re-actors/alls-green@v1
         with:
           jobs: ${{ toJSON(needs) }}
-          allowed-skips: [homeConfigurations, nixosConfigurations]
+          allowed-skips:
+            - homeConfigurations
+            - nixosConfigurations
 
   checks:
     name: Check
