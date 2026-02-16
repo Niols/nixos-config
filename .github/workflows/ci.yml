@@ -78,20 +78,12 @@ jobs:
       - checks
       - homeConfigurations
       - nixosConfigurations
-    ## Skip this job, rather than fail, so as to avoid adding to the failure
-    ## count, if the whole workflow was cancelled, or if any job failed or was
-    ## cancelled. The exception is the `discover` job, which must succeed.
-    if: >-
-      ${{
-        !cancelled()
-        && needs.discover.result == 'success'
-        && (needs.checks.result == 'success' || needs.checks.result == 'skipped')
-        && (needs.homeConfigurations.result == 'success' || needs.homeConfigurations.result == 'skipped')
-        && (needs.nixosConfigurations.result == 'success' || needs.nixosConfigurations.result == 'skipped')
-      }}
+    if: always()
     steps:
-      - name: All required jobs succeeded or were skipped appropriately
-        run: echo "Pipeline passed!"
+      - uses: re-actors/alls-green@v1
+        with:
+          jobs: ${{ toJSON(needs) }}
+          allowed-skips: [homeConfigurations, nixosConfigurations]
 
   checks:
     name: Check
