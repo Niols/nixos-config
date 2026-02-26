@@ -139,6 +139,9 @@ in
           --override-input nixpkgs ${inputs.nixpkgs} \
           \
           --override-input nixops4 ${inputs.nixops4.packages.${system}.flake-in-a-bottle} \
+          --override-input nixops4/flake-parts ${inputs.nixops4.inputs.flake-parts} \
+          --override-input nixops4/flake-parts/nixpkgs-lib ${inputs.nixops4.inputs.flake-parts.inputs.nixpkgs-lib} \
+          \
           --override-input nixops4-nixos ${inputs.nixops4-nixos} \
           --override-input nixops4-nixos/flake-parts ${inputs.nixops4-nixos.inputs.flake-parts} \
           --override-input nixops4-nixos/flake-parts/nixpkgs-lib ${inputs.nixops4-nixos.inputs.flake-parts.inputs.nixpkgs-lib} \
