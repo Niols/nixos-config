@@ -45,7 +45,7 @@
         inputs.nixops4.modules.flake.default
       ];
 
-      nixops4Deployments.check-deployment = {
+      nixops4.members.check-deployment = {
         imports = [ ./tests/nixops4-deployment/deployment.nix ];
         _module.args = { inherit inputs; };
       };

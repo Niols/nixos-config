@@ -39,7 +39,7 @@ let
 
       ./deployment.nix
       ./targetNode.nix
-      ./targetResource.nix
+      ./targetComponent.nix
     ];
   };
 

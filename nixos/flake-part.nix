@@ -92,9 +92,9 @@ let
       }
     );
 
-  nixops4ResourceFor = name: providers: {
+  nixops4ComponentFor = name: providers: {
     type = providers.local.exec;
-    imports = [ inputs.nixops4-nixos.modules.nixops4Resource.nixos ];
+    imports = [ inputs.nixops4-nixos.modules.nixops4Component.nixos ];
     ssh = {
       host = machines.all.${name}.ipv4;
       opts = "";
@@ -134,13 +134,13 @@ in
   ) machines.all;
 
   ## Deployments for all servers
-  nixops4Deployments =
+  nixops4.members =
     mapAttrs (
       name: _:
       { providers, ... }:
       {
         providers.local = inputs.nixops4.modules.nixops4Provider.local;
-        resources.${name} = nixops4ResourceFor name providers;
+        members.${name} = nixops4ComponentFor name providers;
       }
     ) machines.servers
     // {
@@ -148,7 +148,7 @@ in
         { providers, ... }:
         {
           providers.local = inputs.nixops4.modules.nixops4Provider.local;
-          resources = mapAttrs (name: _: nixops4ResourceFor name providers) machines.servers;
+          members = mapAttrs (name: _: nixops4ComponentFor name providers) machines.servers;
         };
     };
 }
