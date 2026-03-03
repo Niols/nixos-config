@@ -117,6 +117,12 @@ in
           mail_smtpport = 465;
           mail_smtpauth = true;
           mail_smtpname = "no-reply@niols.fr";
+
+          ## Max pixels of Nextcloud previews - otherwise, we generate previews
+          ## of up to 4000x4000, which can be above 1MB in size and it adds up
+          ## like crazy.
+          preview_max_x = 1024;
+          preview_max_y = 1024;
         };
 
         ## Options for the PHP worker. Extension `smbclient` is necessary for CIFS
