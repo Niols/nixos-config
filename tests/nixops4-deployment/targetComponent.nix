@@ -12,7 +12,7 @@ let
 in
 
 {
-  _class = "nixops4Resource";
+  _class = "nixops4Component";
 
   options.nodeName = mkOption {
     type = types.str;
