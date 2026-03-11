@@ -31,7 +31,7 @@ in
     ./packages
     ./rclone.nix
     ./ssh.nix
-    ./terminal-emulator.nix
+    ./terminal.nix
     ./xdg.nix
   ];
 
