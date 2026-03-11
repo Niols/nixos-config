@@ -40,5 +40,52 @@ in
       ## works for them.
       home.sessionVariables.COLORTERM = "truecolor";
     }
+
+    {
+      programs.tmux = {
+        enable = true;
+        escapeTime = 0;
+        historyLimit = 1000000;
+        keyMode = "vi";
+        mouse = true;
+
+        ## Hide the status bar, but trigger hooks on window creation/deletion to
+        ## show the status bar if there are more than 1 windows.
+        extraConfig = ''
+          set -g status off
+          set-hook -g window-linked   'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
+          set-hook -g window-unlinked 'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
+        '';
+      };
+    }
+
+    {
+      programs.bash = {
+        enable = true;
+
+        bashrcExtra = ''
+          ## Keep the prompt when entering `nix shell`.
+          ##
+          ## NOTE: We put this here instead of in
+          ## `home.sessionVariables` because the latter only works for
+          ## login Shells.
+          ##
+          ## cf https://discourse.nixos.org/t/*/8488/23
+          ##
+          NIX_SHELL_PRESERVE_PROMPT=yes
+        '';
+
+        initExtra = ''
+          ## If there is a MOTD and we are not entering a Nix shell, then we print the
+          ## MOTD in question.
+          ##
+          if [ -f /var/run/motd.dynamic ] && ! [ -n "$IN_NIX_SHELL" ]; then
+            cat /var/run/motd.dynamic
+          fi
+        '';
+      };
+
+      programs.fzf.enable = true;
+    }
   ];
 }
