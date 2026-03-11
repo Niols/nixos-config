@@ -88,8 +88,14 @@
   assertions = [
     {
       ## See comment to Ahrefs's `core.sshCommand` option above.
-      assertion = !(config.programs.ssh.matchBlocks ? "*") || config.programs.ssh.matchBlocks."*" == { };
-      message = "A catch-all block in SSH configuration will break the Git configuration that relies on `ssh -i <identity>`.";
+      assertion =
+        let
+          catchAll = config.programs.ssh.matchBlocks."*" or { };
+          catchAllSetsIdentityFile =
+            (catchAll ? identityFile) || ((catchAll.extraOptions or { }) ? "IdentityFile");
+        in
+        !catchAllSetsIdentityFile;
+      message = "Cannot set `IdentityFile` in an SSH catch-all block, as that would break the Git configuration that relies on `ssh -i <identity>`.";
     }
   ];
 }

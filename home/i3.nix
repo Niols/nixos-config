@@ -23,7 +23,7 @@ let
 
 in
 {
-  config = mkIf (!config.x_niols.isHeadless) {
+  config = mkIf config.x_niols.isGraphical {
     xsession.windowManager.i3 = {
       enable = true;
 

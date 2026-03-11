@@ -1,6 +1,7 @@
 {
   lib,
   osConfig,
+  config,
   ...
 }:
 
@@ -27,11 +28,12 @@ in
     ./gtk.nix
     ./i3.nix
     ./keepassxc.nix
+    ./monorepo.nix
     ./nix.nix
     ./packages
     ./rclone.nix
     ./ssh.nix
-    ./terminal-emulator.nix
+    ./terminal.nix
     ./xdg.nix
   ];
 
@@ -43,6 +45,12 @@ in
       type = types.bool;
       default = false;
     };
+    isPerso = mkOption {
+      description = "Negation of isWork, for readability.";
+      type = types.bool;
+      default = !config.x_niols.isWork;
+      readOnly = true;
+    };
 
     isHeadless = mkOption {
       description = ''
@@ -50,6 +58,12 @@ in
       '';
       type = types.bool;
       default = false;
+    };
+    isGraphical = mkOption {
+      description = "Negation of isHeadless, for readability.";
+      type = lib.types.bool;
+      default = !config.x_niols.isHeadless;
+      readOnly = true;
     };
   };
 
@@ -67,45 +81,6 @@ in
 
       ## Tweaks to make Home Manager work better on standalone installations.
       targets.genericLinux.enable = (osConfig == null);
-    }
-
-    ############################################################################
-    ## TODO: Move this away.
-
-    {
-      programs.fzf.enable = true;
-
-      programs.bash = {
-        # enable = true;
-        bashrcExtra = ''
-          ## Keep the prompt when entering `nix shell`.
-          ##
-          ## NOTE: We put this here instead of in
-          ## `home.sessionVariables` because the latter only works for
-          ## login Shells.
-          ##
-          ## cf https://discourse.nixos.org/t/*/8488/23
-          ##
-          NIX_SHELL_PRESERVE_PROMPT=yes
-        '';
-
-        initExtra = ''
-          ## If there is a MOTD and we are not entering a Nix shell, then we print the
-          ## MOTD in question.
-          ##
-          if [ -f /var/run/motd.dynamic ] && ! [ -n "$IN_NIX_SHELL" ]; then
-            cat /var/run/motd.dynamic
-          fi
-        '';
-      };
-
-      programs.tmux = {
-        enable = true;
-        escapeTime = 0;
-        historyLimit = 1000000;
-        keyMode = "vi";
-        mouse = true;
-      };
     }
   ];
 }

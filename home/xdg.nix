@@ -78,7 +78,7 @@ in
       };
     })
 
-    (mkIf (!config.x_niols.isHeadless) {
+    (mkIf config.x_niols.isGraphical {
       xdg.userDirs = {
         enable = true;
         desktop = "${config.home.homeDirectory}";
@@ -91,7 +91,7 @@ in
       };
     })
 
-    (mkIf (!config.x_niols.isHeadless && !config.x_niols.isWork) {
+    (mkIf (config.x_niols.isPerso && config.x_niols.isGraphical) {
       xdg.userDirs = {
         documents = "${config.home.homeDirectory}/NiolsCloud/Documents";
         music = "${config.home.homeDirectory}/NiolsCloud/Médias/Music";

@@ -10,7 +10,7 @@ let
 
 in
 {
-  config = mkIf (!config.x_niols.isWork && !config.x_niols.isHeadless) {
+  config = mkIf (config.x_niols.isPerso && config.x_niols.isGraphical) {
     programs.rclone = {
       enable = true;
 

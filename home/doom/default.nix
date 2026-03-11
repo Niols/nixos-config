@@ -29,7 +29,7 @@
       ## NodeJS is necessary for Emacs's `copilot`, but it is already provided
       ## on Ahrefs's devbox. Bringing our own breaks some tests because of
       ## version discrepencies.
-      if !(config.x_niols.isWork && config.x_niols.isHeadless) then [ pkgs.nodejs ] else [ ]
+      if config.x_niols.isPerso || config.x_niols.isGraphical then [ pkgs.nodejs ] else [ ]
     )
   );
 
@@ -103,10 +103,4 @@
     echo "Syncing Doom Emacs's configuration..."
     doom sync --force
   '';
-
-  ## Enable true color/24-bit color support. This makes Emacs pretty in the
-  ## terminal (otherwise it is okay-ish but not really usable). However, this
-  ## might break some terminals that do not have support for it.
-  ## FIXME: Does not work.
-  home.sessionVariables.TERM = "xterm-direct";
 }

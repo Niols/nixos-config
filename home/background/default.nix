@@ -28,7 +28,7 @@ in
     default = "${if config.x_niols.isWork then ./work.jpg else ./niols.jpg}";
   };
 
-  config = mkIf (!config.x_niols.isHeadless) {
+  config = mkIf config.x_niols.isGraphical {
     ## Set background when (re)starting i3.
     xsession.windowManager.i3.config.startup = [
       {

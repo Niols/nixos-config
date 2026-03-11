@@ -24,7 +24,7 @@ let
 in
 {
   config = mkMerge [
-    (mkIf (config.home.x_niols.xdgRuntimeDir != null && !config.x_niols.isHeadless) {
+    (mkIf (config.home.x_niols.xdgRuntimeDir != null && config.x_niols.isGraphical) {
       ## Pick up on gcr-ssh-agent statically. It would be cleaner to add this to
       ## something at runtime (eg. .bashrc) but then graphical programs (eg.
       ## Emacs) would not pick it up. gcr-ssh-agent is started on login by the
@@ -39,7 +39,6 @@ in
     {
       programs.ssh = {
         enable = true;
-        enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
         ## Do not enable forward agent here, but rather on a host-by-host basis.
       };
@@ -135,18 +134,48 @@ in
         ## monorepo.
         includes = [ "~/.ssh/ahrefs/config" ];
         matchBlocks.hop.user = "nicolas.jeannerod";
+
+        ## Ahrefs's machines qualify as “weak” crypto from my modern SSH's POV, so
+        ## we disable the warning for now. TODO: re-enable once Ahrefs moves on.
+        extraConfig = "WarnWeakCrypto no";
       };
     })
-    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
-      ## On the work *laptop*, we set up the link to `nspawn`.
-      programs.ssh.matchBlocks = {
-        nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
+
+    (mkIf (config.x_niols.isWork && config.x_niols.isGraphical) (
+      let
+        nspawnVariants = [
+          "sg"
+          "sgtrixie"
+          "uk"
+          "uktrixie"
+          "us"
+          "ustrixie"
+        ];
+        nspawnDefault = "uk";
+        includeFor = variant: {
+          extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
+        };
+        aliasFor = variant: "mosh --port 29700:29799 nspawn-${variant} -- tmux new-session";
+      in
+      {
+        ## Set up the link to `nspawn-*` and a shorthand to start Mosh directly on
+        ## the nspawn in question.
+        programs.ssh.matchBlocks = {
+          nspawn = includeFor nspawnDefault;
+        }
+        // (genAttrs' nspawnVariants (variant: {
+          name = "nspawn-${variant}";
+          value = includeFor variant;
+        }));
+        programs.bash.shellAliases = {
+          mosh-nspawn = aliasFor nspawnDefault;
+        }
+        // (genAttrs' nspawnVariants (variant: {
+          name = "mosh-nspawn-${variant}";
+          value = aliasFor variant;
+        }));
       }
-      // (genAttrs' [ "sg" "sgtrixie" "uk" "uktrixie" "us" "ustrixie" ] (key: {
-        name = "nspawn-${key}";
-        value.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${key}-nicolasjeannerod";
-      }));
-    })
+    ))
 
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
     ## (ssh+tmux).
