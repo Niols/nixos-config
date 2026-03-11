@@ -39,7 +39,6 @@ in
     {
       programs.ssh = {
         enable = true;
-        enableDefaultConfig = false;
         extraOptionOverrides.AddKeysToAgent = "yes";
         ## Do not enable forward agent here, but rather on a host-by-host basis.
       };
