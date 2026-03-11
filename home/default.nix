@@ -28,6 +28,7 @@ in
     ./gtk.nix
     ./i3.nix
     ./keepassxc.nix
+    ./monorepo.nix
     ./nix.nix
     ./packages
     ./rclone.nix
