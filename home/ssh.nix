@@ -137,16 +137,41 @@ in
         matchBlocks.hop.user = "nicolas.jeannerod";
       };
     })
-    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
-      ## On the work *laptop*, we set up the link to `nspawn`.
-      programs.ssh.matchBlocks = {
-        nspawn.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-uk-nicolasjeannerod";
+    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) (
+      let
+        nspawnVariants = [
+          "sg"
+          "sgtrixie"
+          "uk"
+          "uktrixie"
+          "us"
+          "ustrixie"
+        ];
+        nspawnDefault = "uk";
+        includeFor = variant: {
+          extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
+        };
+        aliasFor = variant: "mosh --port 29700:29799 nspawn-${variant} -- tmux new-session";
+      in
+      {
+        ## Set up the link to `nspawn-*` and a shorthand to start Mosh directly on
+        ## the nspawn in question.
+        programs.ssh.matchBlocks = {
+          nspawn = includeFor nspawnDefault;
+        }
+        // (genAttrs' nspawnVariants (variant: {
+          name = "nspawn-${variant}";
+          value = includeFor variant;
+        }));
+        programs.bash.shellAliases = {
+          mosh-nspawn = aliasFor nspawnDefault;
+        }
+        // (genAttrs' nspawnVariants (variant: {
+          name = "mosh-nspawn-${variant}";
+          value = aliasFor variant;
+        }));
       }
-      // (genAttrs' [ "sg" "sgtrixie" "uk" "uktrixie" "us" "ustrixie" ] (key: {
-        name = "nspawn-${key}";
-        value.extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${key}-nicolasjeannerod";
-      }));
-    })
+    ))
 
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
     ## (ssh+tmux).
