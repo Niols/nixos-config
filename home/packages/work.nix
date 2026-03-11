@@ -20,7 +20,7 @@ in
     })
 
     ## Work desktop software
-    (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) {
+    (mkIf (config.x_niols.isWork && config.x_niols.isGraphical) {
       home.packages = with pkgs; [
         firefox
         slack

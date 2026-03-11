@@ -22,7 +22,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf (!config.x_niols.isHeadless) {
+    (mkIf config.x_niols.isGraphical {
       xfconf.settings.xfce4-terminal = {
         background-mode = "TERMINAL_BACKGROUND_IMAGE";
         background-image-file = config.x_niols.backgroundImageFile;

@@ -14,7 +14,7 @@ in
   ## it available on our headless work environment where OCaml and OPAM come
   ## from somewhere else, and we want to avoid version issues with OPAM.
   ##
-  config = mkIf (!config.x_niols.isWork || (config.x_niols.isWork && !config.x_niols.isHeadless)) {
+  config = mkIf (config.x_niols.isPerso || config.x_niols.isGraphical) {
     home.packages = [
       pkgs.opam
     ]

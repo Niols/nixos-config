@@ -12,7 +12,7 @@ in
 {
   config = mkMerge [
     ## Packages common to laptops.
-    (mkIf (!config.x_niols.isHeadless) {
+    (mkIf config.x_niols.isGraphical {
       home.packages = with pkgs; [
         evince
         ffmpeg-full
@@ -27,7 +27,7 @@ in
     ## Packages that are only ever used on my personal laptops. They should not
     ## clutter work's environment, (and that eliminates the temptation to have
     ## Signal or Thunderbird running)!
-    (mkIf (!config.x_niols.isHeadless && !config.x_niols.isWork) {
+    (mkIf (config.x_niols.isPerso && config.x_niols.isGraphical) {
       home.packages = with pkgs; [
         ardour
         asunder

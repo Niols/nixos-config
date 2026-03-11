@@ -10,7 +10,7 @@ let
 
 in
 {
-  config = mkIf (!config.x_niols.isHeadless) {
+  config = mkIf config.x_niols.isGraphical {
     ## NOTE: GTK theme configuration is a mess due to multiple detection methods:
     ##
     ## 1. GTK2/3 applications refer directly to GTK settings (gtk-theme-name,

@@ -29,7 +29,7 @@
       ## NodeJS is necessary for Emacs's `copilot`, but it is already provided
       ## on Ahrefs's devbox. Bringing our own breaks some tests because of
       ## version discrepencies.
-      if !(config.x_niols.isWork && config.x_niols.isHeadless) then [ pkgs.nodejs ] else [ ]
+      if config.x_niols.isPerso || config.x_niols.isGraphical then [ pkgs.nodejs ] else [ ]
     )
   );
 

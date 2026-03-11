@@ -1,6 +1,7 @@
 {
   lib,
   osConfig,
+  config,
   ...
 }:
 
@@ -43,6 +44,12 @@ in
       type = types.bool;
       default = false;
     };
+    isPerso = mkOption {
+      description = "Negation of isWork, for readability.";
+      type = types.bool;
+      default = !config.x_niols.isWork;
+      readOnly = true;
+    };
 
     isHeadless = mkOption {
       description = ''
@@ -50,6 +57,12 @@ in
       '';
       type = types.bool;
       default = false;
+    };
+    isGraphical = mkOption {
+      description = "Negation of isHeadless, for readability.";
+      type = lib.types.bool;
+      default = !config.x_niols.isHeadless;
+      readOnly = true;
     };
   };
 
