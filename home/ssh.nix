@@ -134,8 +134,13 @@ in
         ## monorepo.
         includes = [ "~/.ssh/ahrefs/config" ];
         matchBlocks.hop.user = "nicolas.jeannerod";
+
+        ## Ahrefs's machines qualify as “weak” crypto from my modern SSH's POV, so
+        ## we disable the warning for now. TODO: re-enable once Ahrefs moves on.
+        extraConfig = "WarnWeakCrypto no";
       };
     })
+
     (mkIf (config.x_niols.isWork && !config.x_niols.isHeadless) (
       let
         nspawnVariants = [
