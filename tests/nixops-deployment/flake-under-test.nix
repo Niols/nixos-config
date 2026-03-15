@@ -51,7 +51,7 @@
       ];
 
       nixops4.members.check-deployment = {
-        imports = [ ./tests/nixops4-deployment/deployment.nix ];
+        imports = [ ./tests/nixops-deployment/deployment.nix ];
         _module.args = { inherit inputs; };
       };
     };
