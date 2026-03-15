@@ -217,8 +217,7 @@ jobs:
       - name: Deploy NixOps4 component “${{ matrix.nixos }}” if it exists
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          has_deployment=$(nix eval --impure --raw --expr 'with builtins; if (getFlake (toString ./.)).nixops4Deployments ? ${{ matrix.nixos }} then "true" else "false"')
-          if $has_deployment; then
+          if nix develop --command nixops4 members list 2>/dev/null | grep '^${{ matrix.nixos }}$'; then
             echo "${{ secrets.DEPLOY_KEY }}" > deploy-key
             chmod 600 deploy-key
             nix develop --command ssh-agent bash -c '
