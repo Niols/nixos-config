@@ -39,7 +39,7 @@ let
 
       ./deployment.nix
       ./targetNode.nix
-      ./targetResource.nix
+      ./targetComponent.nix
     ];
   };
 
@@ -52,7 +52,7 @@ in
 {
   _class = "nixosTest";
 
-  name = "nixops4-deployment";
+  name = "nixops-deployment";
 
   nodes = {
     deployer =
@@ -107,7 +107,7 @@ in
           );
         in
         ''
-          deployer.copy_from_host("${targetNetworkJSON}", "tests/nixops4-deployment/${tm}-network.json")
+          deployer.copy_from_host("${targetNetworkJSON}", "tests/nixops-deployment/${tm}-network.json")
         ''
       )}
 
@@ -121,7 +121,7 @@ in
     with subtest("Configure the target host key"):
       ${forConcat targetMachines (tm: ''
         host_key = ${tm}.succeed("ssh-keyscan ${tm} | grep -v '^#' | cut -f 2- -d ' ' | head -n 1")
-        deployer.succeed(f"echo '{host_key}' > tests/nixops4-deployment/${tm}_host_key.pub")
+        deployer.succeed(f"echo '{host_key}' > tests/nixops-deployment/${tm}_host_key.pub")
       '')}
 
     ## NOTE: This is super slow. It could probably be optimised in Nix, for
@@ -132,13 +132,16 @@ in
     ## lock file to use locally available inputs, as we cannot download them.
     ##
     with subtest("Override the flake and its lock"):
-      deployer.succeed("cp tests/nixops4-deployment/flake-under-test.nix flake.nix")
+      deployer.succeed("cp tests/nixops-deployment/flake-under-test.nix flake.nix")
       deployer.succeed("""
         nix flake lock --extra-experimental-features 'flakes nix-command' \
           --offline -v \
           --override-input nixpkgs ${inputs.nixpkgs} \
           \
           --override-input nixops4 ${inputs.nixops4.packages.${system}.flake-in-a-bottle} \
+          --override-input nixops4/flake-parts ${inputs.nixops4.inputs.flake-parts} \
+          --override-input nixops4/flake-parts/nixpkgs-lib ${inputs.nixops4.inputs.flake-parts.inputs.nixpkgs-lib} \
+          \
           --override-input nixops4-nixos ${inputs.nixops4-nixos} \
           --override-input nixops4-nixos/flake-parts ${inputs.nixops4-nixos.inputs.flake-parts} \
           --override-input nixops4-nixos/flake-parts/nixpkgs-lib ${inputs.nixops4-nixos.inputs.flake-parts.inputs.nixpkgs-lib} \

@@ -214,7 +214,7 @@ jobs:
         run: |
           echo 'Available storage:'
           sudo df -h
-      - name: Deploy NixOps4 resource “${{ matrix.nixos }}” if it exists
+      - name: Deploy NixOps4 component “${{ matrix.nixos }}” if it exists
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           has_deployment=$(nix eval --impure --raw --expr 'with builtins; if (getFlake (toString ./.)).nixops4Deployments ? ${{ matrix.nixos }} then "true" else "false"')

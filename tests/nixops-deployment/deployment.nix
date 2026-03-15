@@ -10,12 +10,12 @@
     inherit (inputs.nixops4.modules.nixops4Provider) local;
   };
 
-  resources = lib.genAttrs [ "hello" "cowsay" ] (nodeName: {
+  members = lib.genAttrs [ "hello" "cowsay" ] (nodeName: {
     type = providers.local.exec;
 
     imports = [
-      inputs.nixops4-nixos.modules.nixops4Resource.nixos
-      ./targetResource.nix
+      inputs.nixops4-nixos.modules.nixops4Component.nixos
+      ./targetComponent.nix
     ];
 
     _module.args = { inherit inputs; };
