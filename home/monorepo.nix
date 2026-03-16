@@ -13,6 +13,11 @@ in
 
       ## https://ahrefs.slack.com/archives/C01NT4U32JD/p1763978422745349?thread_ts=1763441475.049519&cid=C01NT4U32JD
       export AHREFS_PRE_COMMIT_CHECK_RULAH=true
+
+      ## Max parallelism of the `admin` command. My SSH agent does not seem to
+      ## support 1200. Maybe there is a nice middleground that can be found, but
+      ## I'd rather be safe than sorry.
+      export AHREFS_ADMIN_MAX_P=200
     '';
 
     home.sessionPath = [
