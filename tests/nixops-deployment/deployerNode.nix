@@ -10,7 +10,6 @@ let
   inherit (lib)
     mkOption
     mkForce
-    concatLists
     types
     ;
 
@@ -49,22 +48,12 @@ in
       extra-experimental-features = "flakes";
     };
 
-    system.extraDependencies = [
-      inputs.nixops4
-      inputs.nixops4-nixos
-      inputs.nixpkgs
-      inputs.flake-parts
-      inputs.git-hooks
-
-      pkgs.stdenv
-      pkgs.stdenvNoCC
-    ]
-    ++ (
+    ## We build a whole NixOS system that contains the module
+    ## `system.extraDependenciesFromModule`, only to grab its
+    ## configuration and the store paths needed to build it and
+    ## dump them in `system.extraDependencies`.
+    system.extraDependencies =
       let
-        ## We build a whole NixOS system that contains the module
-        ## `system.extraDependenciesFromModule`, only to grab its
-        ## configuration and the store paths needed to build it and
-        ## dump them in `system.extraDependencies`.
         machine =
           (pkgs.nixos [
             ./targetNode.nix
@@ -74,25 +63,7 @@ in
               _module.args = { inherit inputs; };
             }
           ]).config;
-
       in
-      [
-        machine.system.build.toplevel.inputDerivation
-        machine.system.build.etc.inputDerivation
-        machine.system.build.etcBasedir.inputDerivation
-        machine.system.build.etcMetadataImage.inputDerivation
-        machine.system.build.extraUtils.inputDerivation
-        machine.system.path.inputDerivation
-        machine.system.build.setEnvironment.inputDerivation
-        machine.system.build.vm.inputDerivation
-        machine.system.build.bootStage1.inputDerivation
-        machine.system.build.bootStage2.inputDerivation
-      ]
-      ++ concatLists (
-        lib.mapAttrsToList (
-          _k: v: if v ? source.inputDerivation then [ v.source.inputDerivation ] else [ ]
-        ) machine.environment.etc
-      )
-    );
+      [ (pkgs.closureInfo { rootPaths = [ machine.system.build.toplevel.drvPath ]; }) ];
   };
 }

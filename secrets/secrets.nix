@@ -35,6 +35,8 @@ concatMapAttrs
       dancelor-database-repository = [ orianne ];
       dancelor-github-token = [ orianne ];
 
+      grafana-secret-key = [ orianne ];
+
       password-ahlaya-niols = [ ahlaya ];
       password-ahlaya-root = [ ahlaya ];
       password-ahlaya-work = [ ahlaya ];

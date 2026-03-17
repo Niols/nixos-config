@@ -64,20 +64,21 @@ in
         port = prometheusPort;
       };
 
+      ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
+      ## read secrets from files instead of storing them in the config. See:
+      ## https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
       services.grafana = {
         enable = true;
         settings = {
           server.domain = "monitor.niols.fr";
           server.root_url = "https://${config.services.grafana.settings.server.domain}/";
+          security.secret_key = "$__file{${config.age.secrets.grafana-secret-key.path}}"; # see NOTE above
 
           smtp = {
             enabled = true;
             host = "mail.infomaniak.com:465";
             user = "no-reply@niols.fr";
-            ## Grafana supports variable expansion with $__file{path} syntax to read
-            ## secrets from files instead of storing them in the config.
-            ## See: https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
-            password = "$__file{${config.age.secrets.no-reply-smtp-password.path}}";
+            password = "$__file{${config.age.secrets.no-reply-smtp-password.path}}"; # see NOTE above
             from_address = "no-reply@niols.fr";
             from_name = "Grafana";
           };
