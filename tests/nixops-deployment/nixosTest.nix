@@ -55,27 +55,20 @@ in
   name = "nixops-deployment";
 
   nodes = {
-    deployer =
-      { pkgs, ... }:
-      {
-        imports = [ ./deployerNode.nix ];
-        _module.args = { inherit inputs; };
+    deployer = {
+      imports = [ ./deployerNode.nix ];
+      _module.args = { inherit inputs; };
 
-        environment.systemPackages = [ inputs.nixops4.packages.${system}.default ];
-        system.extraDependencies = with pkgs; [
-          ## FIXME: sad times
-          jq
-          jq.inputDerivation
-        ];
-        system.extraDependenciesFromModule =
-          { pkgs, ... }:
-          {
-            environment.systemPackages = with pkgs; [
-              hello
-              cowsay
-            ];
-          };
-      };
+      environment.systemPackages = [ inputs.nixops4.packages.${system}.default ];
+      system.extraDependenciesFromModule =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = with pkgs; [
+            hello
+            cowsay
+          ];
+        };
+    };
   }
 
   // genAttrs targetMachines (_: {
