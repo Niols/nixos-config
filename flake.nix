@@ -7,7 +7,7 @@
     ## nixpkgs (which itself means duplicating nixpkgs) from nixops4-nixos's
     ## development flake. See https://github.com/nixops4/nixops4-nixos/issues/17
     nixpkgs-for-nixops4.url = "github:NixOS/nixpkgs/e6eae2ee2110f3d31110d5c222cd395303343b08";
-    nixops4.url = "github:nixops4/nixops4/75ebb067893d1ff071b481a7696563c99917421b";
+    nixops4.url = "github:nixops4/nixops4/6c432bdd405a5adf8c06ad093ea4c5e005ca553d";
     nixops4.inputs.nixpkgs.follows = "nixpkgs-for-nixops4";
     nixops4-nixos.url = "github:nixops4/nixops4-nixos";
     nixops4-nixos.inputs.nixpkgs.follows = "nixpkgs";
