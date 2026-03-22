@@ -92,20 +92,13 @@ in
       ##   job when we need to have Hester mounted anyways, but this avoids making
       ##   an exception of tihs Borgbackup job. They should all look alike.
 
-      services.borgbackup.jobs.syncthing = {
+      _common.hester.backupJobs.syncthing = {
         startAt = "*-*-* 06:00:00";
-
         paths = [ "/hester/services/syncthing" ];
-
-        repo = "ssh://u363090@hester.niols.fr:23/./backups/syncthing";
-        encryption = {
-          mode = "repokey";
-          passCommand = "cat ${config.age.secrets.hester-syncthing-backup-repokey.path}";
-        };
-        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-syncthing-backup-identity.path}";
+        repokeyFile = config.age.secrets.hester-syncthing-backup-repokey.path;
+        identityFile = config.age.secrets.hester-syncthing-backup-identity.path;
       };
-
-      systemd.services.borgbackup-job-syncthing.unitConfig.RequiresMountsFor = "/hester";
+      systemd.services.borgbackup-job-hester-syncthing.unitConfig.RequiresMountsFor = "/hester";
     })
   ];
 }

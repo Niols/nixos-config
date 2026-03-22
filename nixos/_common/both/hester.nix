@@ -70,12 +70,47 @@ let
       ];
     };
 
+  backupJob = {
+    options = {
+      startAt = mkOption {
+        type = types.str;
+        default = "daily";
+      };
+      paths = mkOption { };
+      repokeyFile = mkOption { type = types.path; };
+      identityFile = mkOption { type = types.path; };
+    };
+  };
+
+  mkHesterBackupJob =
+    name:
+    {
+      startAt,
+      paths,
+      repokeyFile,
+      identityFile,
+    }:
+    {
+      inherit startAt paths;
+      repo = "ssh://u363090@hester.niols.fr:23/./backups/${name}";
+      encryption = {
+        mode = "repokey";
+        passCommand = "cat ${repokeyFile}";
+      };
+      environment.BORG_RSH = "ssh -i ${identityFile}";
+    };
+
 in
 {
   options = {
     _common.hester = {
       fileSystems = mkOption {
         type = types.attrsOf (types.submodule fileSystemOpt);
+        default = { };
+      };
+
+      backupJobs = mkOption {
+        type = types.attrsOf (types.submodule backupJob);
         default = { };
       };
     };
@@ -89,5 +124,9 @@ in
     users.groups.hester.members =
       optionals config.x_niols.enableNiolsUser [ "niols" ]
       ++ optionals config.x_niols.enableWorkUser [ "work" ];
+
+    services.borgbackup.jobs = concatMapAttrs (name: job: {
+      "hester-${name}" = mkHesterBackupJob name job;
+    }) config._common.hester.backupJobs;
   };
 }

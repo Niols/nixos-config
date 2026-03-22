@@ -88,19 +88,13 @@ in
 
       services.postgresqlBackup.databases = [ "atticd" ];
 
-      services.borgbackup.jobs.atticd = {
+      _common.hester.backupJobs.atticd = {
         startAt = "*-*-* 04:30:00";
-
         paths = [
           "/var/backup/postgresql/atticd.sql.gz"
         ];
-
-        repo = "ssh://u363090@hester.niols.fr:23/./backups/atticd";
-        encryption = {
-          mode = "repokey";
-          passCommand = "cat ${config.age.secrets.hester-atticd-backup-repokey.path}";
-        };
-        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-atticd-backup-identity.path}";
+        repokeyFile = config.age.secrets.hester-atticd-backup-repokey.path;
+        identityFile = config.age.secrets.hester-atticd-backup-identity.path;
       };
     })
   ];
