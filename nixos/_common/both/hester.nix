@@ -70,12 +70,51 @@ let
       ];
     };
 
+  backupJob = {
+    options = {
+      startAt = mkOption {
+        type = types.str;
+        default = "daily";
+      };
+      paths = mkOption { };
+      repokeyFile = mkOption { type = types.path; };
+      identityFile = mkOption { type = types.path; };
+    };
+  };
+
+  mkHesterBackupJob =
+    name:
+    {
+      startAt,
+      paths,
+      repokeyFile,
+      identityFile,
+    }:
+    {
+      inherit startAt paths;
+      repo = "ssh://u363090@hester.niols.fr:23/./backups/${name}";
+      encryption = {
+        mode = "repokey";
+        passCommand = "cat ${repokeyFile}";
+      };
+      ## NOTE: We have to disable StrictHostKeyChecking and UserKnownHostsFile
+      ## because Hester sometimes gets moved, which causes SSH to ask us whether
+      ## we want to add it to the known hosts or not, which in turn causes the
+      ## Borgbackup job to fail from that day onwards.
+      environment.BORG_RSH = "ssh -i ${identityFile} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
+    };
+
 in
 {
   options = {
     _common.hester = {
       fileSystems = mkOption {
         type = types.attrsOf (types.submodule fileSystemOpt);
+        default = { };
+      };
+
+      backupJobs = mkOption {
+        type = types.attrsOf (types.submodule backupJob);
         default = { };
       };
     };
@@ -89,5 +128,9 @@ in
     users.groups.hester.members =
       optionals config.x_niols.enableNiolsUser [ "niols" ]
       ++ optionals config.x_niols.enableWorkUser [ "work" ];
+
+    services.borgbackup.jobs = concatMapAttrs (name: job: {
+      "hester-${name}" = mkHesterBackupJob name job;
+    }) config._common.hester.backupJobs;
   };
 }

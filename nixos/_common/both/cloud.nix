@@ -176,20 +176,14 @@ in
 
       services.postgresqlBackup.databases = [ "nextcloud" ];
 
-      services.borgbackup.jobs.nextcloud = {
+      _common.hester.backupJobs.nextcloud = {
         startAt = "*-*-* 04:15:00";
-
         paths = [
           "/var/lib/nextcloud"
           "/var/backup/postgresql/nextcloud.sql.gz"
         ];
-
-        repo = "ssh://u363090@hester.niols.fr:23/./backups/nextcloud";
-        encryption = {
-          mode = "repokey";
-          passCommand = "cat ${config.age.secrets.hester-niolscloud-backup-repokey.path}";
-        };
-        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-niolscloud-backup-identity.path}";
+        repokeyFile = config.age.secrets.hester-niolscloud-backup-repokey.path;
+        identityFile = config.age.secrets.hester-niolscloud-backup-identity.path;
       };
     })
 

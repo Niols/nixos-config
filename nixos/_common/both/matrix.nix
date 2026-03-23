@@ -110,20 +110,14 @@ in
 
       services.postgresqlBackup.databases = [ "matrix-synapse" ];
 
-      services.borgbackup.jobs.matrix = {
+      _common.hester.backupJobs.matrix = {
         startAt = "*-*-* 04:15:00";
-
         paths = [
           "/var/lib/matrix-synapse"
           "/var/backup/postgresql/matrix-synapse.sql.gz"
         ];
-
-        repo = "ssh://u363090@hester.niols.fr:23/./backups/matrix";
-        encryption = {
-          mode = "repokey";
-          passCommand = "cat ${config.age.secrets.hester-matrix-backup-repokey.path}";
-        };
-        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-matrix-backup-identity.path}";
+        repokeyFile = config.age.secrets.hester-matrix-backup-repokey.path;
+        identityFile = config.age.secrets.hester-matrix-backup-identity.path;
       };
     })
   ];

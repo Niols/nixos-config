@@ -124,19 +124,12 @@ in
       ############################################################################
       ## Daily backup
 
-      services.borgbackup.jobs.web = {
+      _common.hester.backupJobs.web = {
         startAt = "*-*-* 05:00:00";
-
         paths = [ "/hester/services/web" ];
-
-        repo = "ssh://u363090@hester.niols.fr:23/./backups/web";
-        encryption = {
-          mode = "repokey";
-          passCommand = "cat ${config.age.secrets.hester-web-backup-repokey.path}";
-        };
-        environment.BORG_RSH = "ssh -i ${config.age.secrets.hester-web-backup-identity.path}";
+        repokeyFile = config.age.secrets.hester-web-backup-repokey.path;
+        identityFile = config.age.secrets.hester-web-backup-identity.path;
       };
-
       systemd.services.borgbackup-job-web.unitConfig.RequiresMountsFor = "/hester";
     })
   ];

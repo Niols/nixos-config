@@ -32,7 +32,9 @@ in
       (pkgs.writeShellApplication {
         name = "sync-tarcisius";
         text = ''
-          rclone sync 'gdrive:Tarcisius/Bladmuziek harmonie orkest' ~/.syncthing/MobileSheets/Tarcisius
+          rclone sync \
+            'gdrive:Tarcisius/Bladmuziek harmonie orkest' \
+            ~/.syncthing/MobileSheets/Tarcisius/'Google Drive (unstable)'
         '';
       })
     ];

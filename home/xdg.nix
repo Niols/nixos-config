@@ -83,6 +83,7 @@ in
         enable = true;
         desktop = "${config.home.homeDirectory}";
         createDirectories = false;
+        setSessionVariables = true;
       };
 
       xdg.autostart = {

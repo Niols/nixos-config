@@ -81,6 +81,10 @@ in
 
       ## Tweaks to make Home Manager work better on standalone installations.
       targets.genericLinux.enable = (osConfig == null);
+
+      ## NOTE: I don't actually use or care about Swaylock, but from March 2026
+      ## onwards, leaving `enable` unspecified yields an evaluation warning.
+      programs.swaylock.enable = false;
     }
   ];
 }
