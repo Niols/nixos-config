@@ -39,10 +39,17 @@ in
     {
       programs.ssh = {
         enable = true;
+        ## NOTE: Do not enable forward agent here, but rather on a host-by-host basis.
         extraOptionOverrides.AddKeysToAgent = "yes";
-        ## Do not enable forward agent here, but rather on a host-by-host basis.
+        ## NOTE: We don't need the default configuration, which is deprecated
+        ## anyway, but we need the catch-all match block to be defined for
+        ## `programs.ssh.extraConfig` to work, so we create it manually.
+        enableDefaultConfig = false;
+        matchBlocks."*" = { };
       };
+    }
 
+    {
       programs.ssh.matchBlocks =
         (concatMapAttrs (
           server: meta:
