@@ -97,7 +97,11 @@ let
         mode = "repokey";
         passCommand = "cat ${repokeyFile}";
       };
-      environment.BORG_RSH = "ssh -i ${identityFile}";
+      ## NOTE: We have to disable StrictHostKeyChecking and UserKnownHostsFile
+      ## because Hester sometimes gets moved, which causes SSH to ask us whether
+      ## we want to add it to the known hosts or not, which in turn causes the
+      ## Borgbackup job to fail from that day onwards.
+      environment.BORG_RSH = "ssh -i ${identityFile} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
     };
 
 in
