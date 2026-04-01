@@ -152,9 +152,18 @@ in
           exec systemctl start ahrefs-vpn-switch-tunnel.service
         '')
         (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
+          case ''${1-} in
+            ""|--i3block) ;;
+            *)
+              echo "Usage: ahrefs-vpn-status [--i3block]" >&2
+              exit 1
+              ;;
+          esac
+
           wg_active=false
           wstunnel_active=false
           wg_uses_tunnel=false
+          endpoint="(none)"
 
           systemctl is-active --quiet wireguard-ahrefs.service && wg_active=true
           systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service && wstunnel_active=true
@@ -167,7 +176,27 @@ in
             esac
           fi
 
-          echo "wireguard=$wg_active wstunnel=$wstunnel_active endpoint_is_tunnel=$wg_uses_tunnel"
+          case $wg_active,$wstunnel_active,$wg_uses_tunnel in
+            false,*,*)        mode=down ;;
+            true,true,true)   mode=tunnel ;;
+            true,false,false) mode=direct ;;
+            *)                mode=unknown ;;
+          esac
+
+          case ''${1-} in
+            --i3block)
+              case $mode in
+                down|unknown) state=Critical ;;
+                *)            state=Good ;;
+              esac
+              echo "{\"text\":\" Ahrefs VPN: $mode \",\"state\":\"$state\"}"
+              ;;
+            *)
+              echo "wireguard is $($wg_active && echo active || echo inactive)"
+              echo "wstunnel is $($wstunnel_active && echo active || echo inactive)"
+              echo "wireguard endpoint is $endpoint"
+              ;;
+          esac
         '')
         (pkgs.writeShellScriptBin "ahrefs-vpn-cycle" ''
           if ! systemctl is-active --quiet wireguard-ahrefs.service; then

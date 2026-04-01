@@ -262,22 +262,14 @@ in
           };
 
           ahrefsVpnBlock = {
-            block = "net";
-            device = "^ahrefs$";
-            format = " Ahrefs VPN: up ";
-            inactive_format = " Ahrefs VPN: down ";
-            missing_format = " Ahrefs VPN: down "; # show block if no VPN because that's weird
+            block = "custom";
+            command = "ahrefs-vpn-status --i3block";
+            json = true;
+            interval = 5;
             click = [
               {
                 button = "left";
-                cmd = ''
-                  service=wireguard-ahrefs.service
-                  if systemctl is-active --quiet "$service"; then
-                    systemctl stop "$service"
-                  else
-                    systemctl start "$service"
-                  fi
-                '';
+                cmd = "ahrefs-vpn-cycle";
               }
             ];
           };
@@ -336,8 +328,7 @@ in
             (makeNetBlock false ethernetBlock)
             (makeNetBlock true wifiBlock)
             (makeNetBlock false wifiBlock)
-            (mkIf' config.x_niols.isWork (makeNetBlock true ahrefsVpnBlock))
-            (mkIf' config.x_niols.isWork (makeNetBlock false ahrefsVpnBlock))
+            (mkIf' config.x_niols.isWork ahrefsVpnBlock)
 
             {
               block = "battery";
