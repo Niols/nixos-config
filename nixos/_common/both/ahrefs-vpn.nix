@@ -104,36 +104,93 @@ in
         wants = [ "wstunnel-client-ahrefs-vpn.service" ];
       };
 
-      ## Helper scripts to switch between direct and tunnelled VPN modes. Usage:
-      ##
-      ##   sudo ahrefs-vpn-direct      # use direct connection
-      ##   sudo ahrefs-vpn-tunnelled   # use wstunnel via tunnel server
-      ##
+      ## Systemd oneshot services for switching between VPN modes. These run as
+      ## root (for `wg set`) and are managed via polkit, so no sudo is needed.
+      systemd.services.ahrefs-vpn-switch-direct = {
+        description = "Switch Ahrefs VPN to direct mode";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-direct" ''
+            systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
+            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpoint}
+          '';
+        };
+      };
+
+      systemd.services.ahrefs-vpn-switch-tunnel = {
+        description = "Switch Ahrefs VPN to tunnelled mode";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-tunnel" ''
+            systemctl start wstunnel-client-ahrefs-vpn.service
+            sleep 1
+            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint 127.0.0.1:${toString tunnelLocalPort}
+          '';
+        };
+      };
+
+      ## Allow `wg show ahrefs` without password so the status script can check
+      ## the actual WireGuard endpoint.
+      security.sudo.extraRules = [
+        {
+          groups = [ "users" ];
+          commands = [
+            {
+              command = "${pkgs.wireguard-tools}/bin/wg show ahrefs";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+        }
+      ];
+
+      ## Helper scripts for switching modes and checking status.
       environment.systemPackages = [
         (pkgs.writeShellScriptBin "ahrefs-vpn-direct" ''
-          set -euo pipefail
-          systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
-          ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpoint}
-          echo "Switched Ahrefs VPN to direct mode."
+          exec systemctl start ahrefs-vpn-switch-direct.service
         '')
         (pkgs.writeShellScriptBin "ahrefs-vpn-tunnelled" ''
-          set -euo pipefail
-          systemctl start wstunnel-client-ahrefs-vpn.service
-          sleep 1
-          ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint 127.0.0.1:${toString tunnelLocalPort}
-          echo "Switched Ahrefs VPN to tunnelled mode."
+          exec systemctl start ahrefs-vpn-switch-tunnel.service
+        '')
+        (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
+          wg_active=false
+          wstunnel_active=false
+          wg_uses_tunnel=false
+
+          systemctl is-active --quiet wireguard-ahrefs.service && wg_active=true
+          systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service && wstunnel_active=true
+
+          if [ "$wg_active" = true ]; then
+            endpoint=$(sudo ${pkgs.wireguard-tools}/bin/wg show ahrefs endpoints 2>/dev/null \
+              | ${pkgs.gawk}/bin/awk '{print $2}')
+            case "$endpoint" in
+              127.0.0.1:${toString tunnelLocalPort}) wg_uses_tunnel=true ;;
+            esac
+          fi
+
+          echo "wireguard=$wg_active wstunnel=$wstunnel_active endpoint_is_tunnel=$wg_uses_tunnel"
+        '')
+        (pkgs.writeShellScriptBin "ahrefs-vpn-cycle" ''
+          if ! systemctl is-active --quiet wireguard-ahrefs.service; then
+            systemctl start wireguard-ahrefs.service
+          elif systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service; then
+            systemctl start ahrefs-vpn-switch-direct.service
+          else
+            systemctl stop wireguard-ahrefs.service
+          fi
         '')
       ];
 
-      ## Skip asking for password when managing the Ahrefs VPN and tunnel units.
+      ## Skip asking for password when managing Ahrefs VPN-related units.
       security.polkit.extraConfig = ''
         polkit.addRule(function (action, subject) {
           if (
             action.id == "org.freedesktop.systemd1.manage-units" &&
-            (
-              action.lookup("unit") == "wireguard-ahrefs.service" ||
-              action.lookup("unit") == "wstunnel-client-ahrefs-vpn.service"
-            ) &&
+            [
+              "wireguard-ahrefs.service",
+              "wstunnel-client-ahrefs-vpn.service",
+              "ahrefs-vpn-switch-direct.service",
+              "ahrefs-vpn-switch-tunnel.service"
+            ].indexOf(action.lookup("unit")) >= 0 &&
             subject.isInGroup("users")
           ) {
             return polkit.Result.YES;
