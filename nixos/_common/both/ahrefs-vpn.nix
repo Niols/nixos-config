@@ -136,7 +136,7 @@ in
           groups = [ "users" ];
           commands = [
             {
-              command = "${pkgs.wireguard-tools}/bin/wg show ahrefs";
+              command = "${pkgs.wireguard-tools}/bin/wg show ahrefs endpoints";
               options = [ "NOPASSWD" ];
             }
           ];
@@ -168,7 +168,7 @@ in
           systemctl is-active --quiet wireguard-ahrefs.service && wg_active=true
           systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service && wstunnel_active=true
 
-          if [ "$wg_active" = true ]; then
+          if $wg_active; then
             endpoint=$(sudo ${pkgs.wireguard-tools}/bin/wg show ahrefs endpoints 2>/dev/null \
               | ${pkgs.gawk}/bin/awk '{print $2}')
             case "$endpoint" in
@@ -189,12 +189,13 @@ in
                 down|unknown) state=Critical ;;
                 *)            state=Good ;;
               esac
-              echo "{\"text\":\" Ahrefs VPN: $mode \",\"state\":\"$state\"}"
+              echo "{\"text\":\"Ahrefs VPN: $mode\",\"state\":\"$state\"}"
               ;;
             *)
-              echo "wireguard is $($wg_active && echo active || echo inactive)"
-              echo "wstunnel is $($wstunnel_active && echo active || echo inactive)"
-              echo "wireguard endpoint is $endpoint"
+              echo "wireguard is: $($wg_active && echo active || echo inactive)"
+              echo "wstunnel is: $($wstunnel_active && echo active || echo inactive)"
+              echo "wireguard endpoint is: $endpoint"
+              echo "detected mode is: $mode"
               ;;
           esac
         '')

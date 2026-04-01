@@ -265,7 +265,7 @@ in
             block = "custom";
             command = "ahrefs-vpn-status --i3block";
             json = true;
-            interval = 5;
+            interval = 1;
             click = [
               {
                 button = "left";
