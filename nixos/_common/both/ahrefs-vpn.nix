@@ -206,22 +206,12 @@ in
       ];
 
       ## Skip asking for password when managing Ahrefs VPN-related units.
-      security.polkit.extraConfig = ''
-        polkit.addRule(function (action, subject) {
-          if (
-            action.id == "org.freedesktop.systemd1.manage-units" &&
-            [
-              "wireguard-ahrefs.service",
-              "wstunnel-client-ahrefs-vpn.service",
-              "ahrefs-vpn-switch-direct.service",
-              "ahrefs-vpn-switch-tunnel.service"
-            ].indexOf(action.lookup("unit")) >= 0 &&
-            subject.isInGroup("users")
-          ) {
-            return polkit.Result.YES;
-          }
-        });
-      '';
+      x_niols.polkitPasswordlessServices = [
+        "wireguard-ahrefs.service"
+        "wstunnel-client-ahrefs-vpn.service"
+        "ahrefs-vpn-switch-direct.service"
+        "ahrefs-vpn-switch-tunnel.service"
+      ];
     })
 
     ## DNS entry for the wstunnel tunnel domain.
