@@ -75,7 +75,7 @@ in
               ];
               ## Default to tunnelled mode via wstunnel; use `ahrefs-vpn-cycle`
               ## or the i3block to switch.
-              endpoint = "localhost:${toString tunnelLocalPort}";
+              endpoint = "127.0.0.1:${toString tunnelLocalPort}";
             }
           ];
         };
@@ -91,7 +91,7 @@ in
           connectTo = "wss://${serviceName}.niols.fr:443";
           settings = {
             local-to-remote = [
-              "udp://localhost:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${toString ahrefsEndpointPort}"
+              "udp://127.0.0.1:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${toString ahrefsEndpointPort}"
             ];
           };
         };
@@ -239,7 +239,7 @@ in
         servers.ahrefs-vpn = {
           enable = true;
           listen = {
-            host = "localhost";
+            host = "127.0.0.1";
             port = wstunnelInternalPort;
             enableHTTPS = false;
           };
@@ -257,7 +257,7 @@ in
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:${toString wstunnelInternalPort}";
+          proxyPass = "http://127.0.0.1:${toString wstunnelInternalPort}";
           proxyWebsockets = true;
           ## Prevent nginx from closing idle WebSocket connections too early.
           extraConfig = ''
