@@ -106,6 +106,18 @@ in
 
       ## Systemd oneshot services for switching between VPN modes. These run as
       ## root (for `wg set`) and are managed via polkit, so no sudo is needed.
+      systemd.services.ahrefs-vpn-switch-tunnel = {
+        description = "Switch Ahrefs VPN to tunnelled mode";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-tunnel" ''
+            systemctl start wstunnel-client-ahrefs-vpn.service
+            until systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service; do sleep 1; done
+            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint 127.0.0.1:${toString tunnelLocalPort}
+          '';
+        };
+      };
+
       systemd.services.ahrefs-vpn-switch-direct = {
         description = "Switch Ahrefs VPN to direct mode";
         serviceConfig = {
@@ -113,18 +125,6 @@ in
           ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-direct" ''
             systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
             ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpointHost}:${toString ahrefsEndpointPort}
-          '';
-        };
-      };
-
-      systemd.services.ahrefs-vpn-switch-tunnel = {
-        description = "Switch Ahrefs VPN to tunnelled mode";
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-tunnel" ''
-            systemctl start wstunnel-client-ahrefs-vpn.service
-            sleep 1
-            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint 127.0.0.1:${toString tunnelLocalPort}
           '';
         };
       };
@@ -145,6 +145,14 @@ in
 
       ## Helper scripts for switching modes and checking status.
       environment.systemPackages = [
+        (pkgs.writeShellScriptBin "ahrefs-vpn-switch-tunnel" ''
+          exec systemctl start ahrefs-vpn-switch-tunnel.service
+        '')
+
+        (pkgs.writeShellScriptBin "ahrefs-vpn-switch-direct" ''
+          exec systemctl start ahrefs-vpn-switch-direct.service
+        '')
+
         (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
           case ''${1-} in
             ""|--i3block) ;;
