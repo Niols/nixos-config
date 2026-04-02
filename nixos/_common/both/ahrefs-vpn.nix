@@ -145,14 +145,6 @@ in
 
       ## Helper scripts for switching modes and checking status.
       environment.systemPackages = [
-        (pkgs.writeShellScriptBin "ahrefs-vpn-switch-tunnel" ''
-          exec systemctl start ahrefs-vpn-switch-tunnel.service
-        '')
-
-        (pkgs.writeShellScriptBin "ahrefs-vpn-switch-direct" ''
-          exec systemctl start ahrefs-vpn-switch-direct.service
-        '')
-
         (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
           case ''${1-} in
             ""|--i3block) ;;
