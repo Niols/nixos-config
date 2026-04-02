@@ -47,6 +47,7 @@ in
 
   config = {
     x_niols.services = {
+      ahrefs-vpn-tunnel.enabledOn = "helga";
       call.enabledOn = "helga";
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "orianne";
