@@ -91,7 +91,7 @@ in
           connectTo = "wss://${serviceName}.niols.fr:443";
           settings = {
             local-to-remote = [
-              "udp://localhost:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${ahrefsEndpointPort}"
+              "udp://localhost:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${toString ahrefsEndpointPort}"
             ];
           };
         };
@@ -112,7 +112,7 @@ in
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-direct" ''
             systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
-            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpointHost}:${ahrefsEndpointPort}
+            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpointHost}:${toString ahrefsEndpointPort}
           '';
         };
       };
