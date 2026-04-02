@@ -8,15 +8,15 @@
 let
   inherit (lib) mkIf mkMerge;
 
+  serviceName = "ahrefs-vpn-tunnel";
+
   wgPublicKey = "J4JjnCIuqMIEKcS98w1OyZnTiSlVQzUTrz8BhV7N3F8=";
-  ahrefsEndpoint = "backend-vpn.ahrefs.net:4433";
+  ahrefsEndpointHost = "backend-vpn.ahrefs.net";
+  ahrefsEndpointPort = 4433;
 
   ## wstunnel tunnel settings
-  tunnelDomain = "ahrefs-vpn-tunnel.niols.fr";
+  wstunnelInternalPort = 9213;
   tunnelLocalPort = 51820;
-  wstunnelInternalPort = 8443;
-
-  inherit (config.x_niols.services) ahrefs-vpn-tunnel;
 
 in
 {
@@ -73,9 +73,9 @@ in
                 "18.193.164.59"
                 "44.210.147.40"
               ];
-              ## Default to tunnelled mode via wstunnel. Use `sudo
-              ## ahrefs-vpn-direct` to switch to a direct connection.
-              endpoint = "127.0.0.1:${toString tunnelLocalPort}";
+              ## Default to tunnelled mode via wstunnel; use `ahrefs-vpn-cycle`
+              ## or the i3block to switch.
+              endpoint = "localhost:${toString tunnelLocalPort}";
             }
           ];
         };
@@ -88,10 +88,10 @@ in
         clients.ahrefs-vpn = {
           enable = true;
           autoStart = true;
-          connectTo = "wss://${tunnelDomain}:443";
+          connectTo = "wss://${serviceName}.niols.fr:443";
           settings = {
             local-to-remote = [
-              "udp://127.0.0.1:${toString tunnelLocalPort}:${ahrefsEndpoint}"
+              "udp://localhost:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${ahrefsEndpointPort}"
             ];
           };
         };
@@ -112,7 +112,7 @@ in
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-direct" ''
             systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
-            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpoint}
+            ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpointHost}:${ahrefsEndpointPort}
           '';
         };
       };
@@ -145,12 +145,6 @@ in
 
       ## Helper scripts for switching modes and checking status.
       environment.systemPackages = [
-        (pkgs.writeShellScriptBin "ahrefs-vpn-direct" ''
-          exec systemctl start ahrefs-vpn-switch-direct.service
-        '')
-        (pkgs.writeShellScriptBin "ahrefs-vpn-tunnelled" ''
-          exec systemctl start ahrefs-vpn-switch-tunnel.service
-        '')
         (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
           case ''${1-} in
             ""|--i3block) ;;
@@ -199,6 +193,7 @@ in
               ;;
           esac
         '')
+
         (pkgs.writeShellScriptBin "ahrefs-vpn-cycle" ''
           if ! systemctl is-active --quiet wireguard-ahrefs.service; then
             systemctl start wireguard-ahrefs.service
@@ -230,38 +225,39 @@ in
     })
 
     ## DNS entry for the wstunnel tunnel domain.
-    (mkIf ahrefs-vpn-tunnel.enabledOnAnyServer {
+    (mkIf config.x_niols.services.${serviceName}.enabledOnAnyServer {
       services.bind.x_niols.zoneEntries."niols.fr" = ''
-        ahrefs-vpn-tunnel  IN  CNAME  ${ahrefs-vpn-tunnel.enabledOn}
+        ${serviceName}  IN  CNAME  ${config.x_niols.services.${serviceName}.enabledOn}
       '';
     })
 
     ## wstunnel server, behind nginx. Relays WebSocket traffic to the Ahrefs
     ## WireGuard endpoint over UDP.
-    (mkIf ahrefs-vpn-tunnel.enabledOnThisServer {
+    (mkIf config.x_niols.services.${serviceName}.enabledOnThisServer {
       services.wstunnel = {
         enable = true;
         servers.ahrefs-vpn = {
           enable = true;
           listen = {
-            host = "127.0.0.1";
+            host = "localhost";
             port = wstunnelInternalPort;
             enableHTTPS = false;
           };
           settings.restrict-to = [
             {
-              host = "backend-vpn.ahrefs.net";
-              port = 4433;
+              host = ahrefsEndpointHost;
+              port = ahrefsEndpointPort;
             }
           ];
         };
       };
 
-      services.nginx.virtualHosts.${tunnelDomain} = {
+      services.nginx.virtualHosts.${serviceName} = {
+        serverName = "${serviceName}.niols.fr";
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString wstunnelInternalPort}";
+          proxyPass = "http://localhost:${toString wstunnelInternalPort}";
           proxyWebsockets = true;
           ## Prevent nginx from closing idle WebSocket connections too early.
           extraConfig = ''
