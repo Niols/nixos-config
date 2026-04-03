@@ -83,7 +83,7 @@ in
         ## with the secondary NVMe for the 1TB important pool, and the 3 x 2TBs
         ## get RAIDZed together for the 4TB unimportant pool.
 
-        mapAttrs make100PercentZfsDisk {
+        mapAttrs (_: make100PercentZfsDisk) {
           sata1 = {
             device = "/dev/disk/by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3332695";
             pool = "unimportant";
