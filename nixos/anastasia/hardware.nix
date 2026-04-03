@@ -112,11 +112,11 @@ in
       mode = "mirror";
       datasets = {
         "pictures" = {
-          type = "zfs";
+          type = "zfs_fs";
           options.mountpoint = "/data/pictures";
         };
         "services" = {
-          type = "zfs";
+          type = "zfs_fs";
           options.mountpoint = "/data/services";
         };
       };
@@ -124,10 +124,10 @@ in
 
     zpool.unimportant = {
       type = "zpool";
-      mode = ""; # empty = stripe, which is RAID0
+      mode = "";
       datasets = {
         "medias" = {
-          type = "zfs";
+          type = "zfs_fs";
           options.mountpoint = "/data/medias";
         };
       };
