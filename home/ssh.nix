@@ -36,6 +36,27 @@ in
       home.sessionVariables.SSH_AUTH_SOCK = "${config.home.x_niols.xdgRuntimeDir}/gcr/ssh";
     })
 
+    (mkIf config.x_niols.isHeadless {
+      ## On headless environments (servers), pick up the SSH agent from a
+      ## deterministic location. This is meant to be used in conjunction with
+      ## `keep-agent-alive` on the client side, which maintains a persistent SSH
+      ## connection with agent forwarding and symlinks the agent socket here.
+      home.sessionVariables.SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/auth.sock";
+
+      ## Every SSH session with agent forwarding symlinks its agent socket to the
+      ## deterministic path above. This way, `keep-agent-alive` keeps it fresh,
+      ## but a regular `ssh -A` also updates it.
+      home.file.".ssh/rc" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          if [ -n "$SSH_AUTH_SOCK" ]; then
+            ln -sf "$SSH_AUTH_SOCK" ~/.ssh/auth.sock
+          fi
+        '';
+      };
+    })
+
     {
       programs.ssh = {
         enable = true;
@@ -159,10 +180,16 @@ in
           "ustrixie"
         ];
         nspawnDefault = "uk";
+        sshPackage =
+          if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
         includeFor = variant: {
           extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
         };
-        aliasFor = variant: "mosh --port 29700:29799 nspawn-${variant} -- tmux new-session";
+        ## Mosh aliases disable agent forwarding; use `keep-agent-alive` for a
+        ## persistent agent on the server instead.
+        aliasFor =
+          variant:
+          "${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' --port 29700:29799 nspawn-${variant} -- tmux new-session";
       in
       {
         ## Set up the link to `nspawn-*` and a shorthand to start Mosh directly on
@@ -183,6 +210,42 @@ in
         }));
       }
     ))
+
+    ## Add `keep-agent-alive`, a utility to maintain a persistent SSH connection
+    ## with agent forwarding to a server. On the server side, the agent socket is
+    ## symlinked to `~/.ssh/auth.sock` so that other sessions (eg. Mosh) can pick
+    ## it up via `home.sessionVariables`.
+    (mkIf config.x_niols.isWork {
+      home.packages =
+        let
+          sshPackage =
+            if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
+        in
+        [
+          (pkgs.writeShellApplication {
+            name = "keep-agent-alive";
+            runtimeInputs = [
+              pkgs.autossh
+              sshPackage
+            ];
+            text = ''
+              if [ $# -ne 1 ]; then
+                echo "Usage: keep-agent-alive <server>" >&2
+                exit 1
+              fi
+              server="$1"
+              echo "Keeping SSH agent alive on $server..."
+              exec autossh \
+                -M 0 \
+                -o "ServerAliveInterval 30" \
+                -o "ServerAliveCountMax 3" \
+                -o "ExitOnForwardFailure yes" \
+                -A "$server" -- \
+                sleep infinity
+            '';
+          })
+        ];
+    })
 
     ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
     ## (ssh+tmux).
