@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  config,
   ...
 }:
 
@@ -32,16 +31,7 @@ in
   imports = [ inputs.disko.nixosModules.disko ];
 
   boot = {
-    loader.grub.device = config.disko.devices.disk.primary.device;
-    initrd = {
-      availableKernelModules = [
-        "ata_piix"
-        "uhci_hcd"
-        "xen_blkfront"
-        "vmw_pvscsi"
-      ];
-      kernelModules = [ "nvme" ];
-    };
+    loader.grub.device = "nodev";
   };
 
   disko.devices = {
