@@ -118,6 +118,7 @@ in
   imports = [
     ## NixOS configurations
     ./ahlaya.nix
+    ./anastasia
     ./helga
     ./orianne
     ./siegfried
