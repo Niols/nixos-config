@@ -128,7 +128,7 @@ in
 
     zpool.unimportant = {
       type = "zpool";
-      mode = "";
+      mode = "raidz1";
       datasets = {
         "medias" = {
           type = "zfs_fs";
