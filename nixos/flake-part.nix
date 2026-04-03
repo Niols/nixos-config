@@ -14,6 +14,11 @@ let
     ahlaya = {
       kind = "laptop";
     };
+    anastasia = {
+      kind = "server";
+      # ipv4 = "192.168.1.*"; # ???
+      cores = 2;
+    };
     gromit = {
       kind = "laptop";
     };
