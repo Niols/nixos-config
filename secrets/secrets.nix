@@ -37,6 +37,8 @@ concatMapAttrs
 
       grafana-secret-key = [ orianne ];
 
+      ## NOTE: The following passwords need to be hashed in an encrypted form,
+      ## which can be done with the `mkpasswd` command.
       password-ahlaya-niols = [ ahlaya ];
       password-ahlaya-root = [ ahlaya ];
       password-anastasia-niols = [ anastasia ];
