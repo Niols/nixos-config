@@ -16,7 +16,7 @@ let
     };
     anastasia = {
       kind = "server";
-      # ipv4 = "192.168.1.*"; # ???
+      ipv4 = "123.123.123.123"; # FIXME
       cores = 2;
     };
     gromit = {
