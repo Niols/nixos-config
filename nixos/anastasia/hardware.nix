@@ -93,7 +93,7 @@ in
             pool = "unimportant";
           };
           sata3 = {
-            device = "/dev/disk.by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3541730";
+            device = "/dev/disk/by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3541730";
             pool = "unimportant";
           };
           sata6 = {
