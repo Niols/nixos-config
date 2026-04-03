@@ -30,9 +30,7 @@ in
 {
   imports = [ inputs.disko.nixosModules.disko ];
 
-  boot = {
-    loader.grub.device = "nodev";
-  };
+  boot.loader.systemd-boot.enable = true;
 
   disko.devices = {
 
