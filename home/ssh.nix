@@ -239,13 +239,15 @@ in
               fi
               server="$1"
               echo "Keeping SSH agent alive on $server..."
+              export AUTOSSH_PATH="${sshPackage}/bin/ssh"
+              # shellcheck disable=SC2016
               exec autossh \
                 -M 0 \
                 -o "ServerAliveInterval 30" \
                 -o "ServerAliveCountMax 3" \
                 -o "ExitOnForwardFailure yes" \
                 -A "$server" -- \
-                sleep infinity
+                'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
             '';
           })
         ];
@@ -263,7 +265,7 @@ in
           (pkgs.writeShellApplication {
             name = "mosh";
             text = ''
-              exec ${pkgs.mosh}/bin/mosh --ssh ${sshPackage}/bin/ssh "$@"
+              exec ${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' "$@"
             '';
           })
           (pkgs.stdenv.mkDerivation {
@@ -275,7 +277,7 @@ in
               mkdir -p $out/bin
               cat <<'EOF' > $out/bin/tmosh
                 #!/bin/sh
-                exec ${pkgs.mosh}/bin/mosh --ssh ${sshPackage}/bin/ssh "$@" -- \
+                exec ${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' "$@" -- \
                   tmux new -s tmosh_$(date +'%Y-%m-%d_%H-%M-%S')_$RANDOM
               EOF
               chmod +x $out/bin/tmosh
