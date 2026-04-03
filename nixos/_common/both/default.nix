@@ -6,6 +6,10 @@
 }:
 
 let
+  inherit (builtins)
+    toJSON
+    ;
+
   inherit (lib)
     mkOption
     types
@@ -65,6 +69,18 @@ in
     };
 
     environment.systemPackages = config.x_niols.commonPackages;
+
+    security.polkit.extraConfig = lib.mkIf (config.x_niols.polkitPasswordlessServices != [ ]) ''
+      polkit.addRule(function (action, subject) {
+        if (
+          action.id == "org.freedesktop.systemd1.manage-units" &&
+          (${toJSON config.x_niols.polkitPasswordlessServices}).indexOf(action.lookup("unit")) >= 0 &&
+          subject.isInGroup("users")
+        ) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 
   options.x_niols = {
@@ -74,6 +90,15 @@ in
         should only contain ASCII characters.
       '';
       type = types.enum (attrNames machines.all);
+    };
+
+    polkitPasswordlessServices = mkOption {
+      description = ''
+        List of systemd unit names that users in the "users" group
+        should be allowed to manage without a password (via polkit).
+      '';
+      type = types.listOf types.str;
+      default = [ ];
     };
 
     services = mkOption {
