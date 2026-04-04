@@ -32,6 +32,11 @@ in
 
   boot.loader.systemd-boot.enable = true;
 
+  ## Limit the RAM usage of the ZFS ARC cache to 4GB. Otherwise, it easily eats
+  ## 1GB of RAM per TB of disk, which will quickly be too much for the 8GB of
+  ## RAM in this machine.
+  boot.extraModprobeConfig = "options zfs zfs_arc_max=4294967296";
+
   disko.devices = {
 
     disk =
