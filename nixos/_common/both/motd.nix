@@ -111,6 +111,7 @@ in
 
   systemd.timers.update-motd = {
     wantedBy = [ "timers.target" ];
+    timerConfig.OnBootSec = "0";
     timerConfig.OnCalendar = "*:0/5";
   };
 
