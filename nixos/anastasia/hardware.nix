@@ -142,11 +142,11 @@ in
       datasets = {
         "pictures" = {
           type = "zfs_fs";
-          mountpoint = "/data/pictures_test";
+          options.mountpoint = "/data/pictures_test";
         };
         "services" = {
           type = "zfs_fs";
-          mountpoint = "/data/services_test";
+          options.mountpoint = "/data/services_test";
         };
       };
     };
@@ -158,7 +158,7 @@ in
       datasets = {
         "medias" = {
           type = "zfs_fs";
-          mountpoint = "/data/medias_test";
+          options.mountpoint = "/data/medias_test";
         };
       };
     };
