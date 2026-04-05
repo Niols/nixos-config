@@ -64,38 +64,38 @@ in
 
   disko.devices = {
     disk = {
-      ## Primary NVMe: small disk (256GB) for boot, swap, and OS.
-      primary = {
-        type = "disk";
-        device = "/dev/disk/by-id/nvme-WDC_PC_SN730_SDBQNTY-256G-1001_21456E803680";
-        content = {
-          type = "gpt";
-          partitions = {
-            ESP = {
-              size = "1G";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = [ "umask=0077" ];
-              };
-            };
-            swap = {
-              size = "2G"; # no need for much; safety net against OOM
-              content.type = "swap";
-            };
-            root = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
-              };
-            };
-          };
-        };
-      };
+      # ## Primary NVMe: small disk (256GB) for boot, swap, and OS.
+      # primary = {
+      #   type = "disk";
+      #   device = "/dev/disk/by-id/nvme-WDC_PC_SN730_SDBQNTY-256G-1001_21456E803680";
+      #   content = {
+      #     type = "gpt";
+      #     partitions = {
+      #       ESP = {
+      #         size = "1G";
+      #         type = "EF00";
+      #         content = {
+      #           type = "filesystem";
+      #           format = "vfat";
+      #           mountpoint = "/boot";
+      #           mountOptions = [ "umask=0077" ];
+      #         };
+      #       };
+      #       swap = {
+      #         size = "2G"; # no need for much; safety net against OOM
+      #         content.type = "swap";
+      #       };
+      #       root = {
+      #         size = "100%";
+      #         content = {
+      #           type = "filesystem";
+      #           format = "ext4";
+      #           mountpoint = "/";
+      #         };
+      #       };
+      #     };
+      #   };
+      # };
 
       ## Secondary NVMe: 1TB, for now part of the `important` pool; but later
       ## should serve as cache for the ZFS pools.
