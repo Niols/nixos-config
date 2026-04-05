@@ -131,7 +131,15 @@ in
       ## `rate-limit`: self-explanatory; but we do not rate-limit localhost,
       ## since such services will rely on BIND for DNS resolution.
       ##
-      ## include a private key for dynamic DNS updates of Anastasia. This must
+      extraOptions = ''
+        notify no;
+        rate-limit {
+          responses-per-second 10;
+          exempt-clients { 127.0.0.0/8; ::1/128; };
+        };
+      '';
+
+      ## Include a private key for dynamic DNS updates of Anastasia. This must
       ## be of the format
       ##
       ##     key "anastasia-ddns" {
@@ -139,13 +147,7 @@ in
       ##       secret "base64encodedSecret==";
       ##     };
       ##
-      extraOptions = ''
-        notify no;
-        rate-limit {
-          responses-per-second 10;
-          exempt-clients { 127.0.0.0/8; ::1/128; };
-        };
-
+      extraConfig = ''
         include "${config.age.secrets.bind-key-anastasia-ddns.path}";
       '';
     };
