@@ -85,6 +85,7 @@ in
       zones = map (domain: {
         name = domain;
         master = true;
+
         file = writeZoneFile domain ''
           $TTL 3600
 
@@ -110,7 +111,9 @@ in
 
         ## Whoever has the key `anastasia-ddns` can update the zone dynamically
         ## with NSUPDATE, which we use to set A for anastasia.niols.fr.
-        allowDynamicUpdates = [ "key anastasia-ddns" ];
+        extraConfig = ''
+          allow-update { key anastasia-ddns; };
+        '';
       }) domains;
 
       ## Only localhost can use BIND as a recursive resolver. For the rest of
