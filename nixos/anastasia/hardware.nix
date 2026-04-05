@@ -37,6 +37,13 @@ in
   ## too much for the 8GB of RAM in this machine.
   boot.extraModprobeConfig = "options zfs zfs_arc_max=4294967296";
 
+  boot.supportedFilesystems = [ "zfs" ];
+
+  boot.zfs = {
+    devNodes = "/dev/disk/by-id";
+    # forceImportAll = true;
+  };
+
   ## Unique among my machines. The primary use case is to ensure when using ZFS
   ## that a pool isn't imported accidentally on a wrong machine.
   networking.hostId = "f96b4cab";
