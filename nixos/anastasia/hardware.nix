@@ -41,7 +41,6 @@ in
 
   boot.zfs = {
     devNodes = "/dev/disk/by-id";
-    # forceImportAll = true;
     extraPools = [
       "important"
       "unimportant"
@@ -49,8 +48,10 @@ in
   };
 
   ## Unique among my machines. The primary use case is to ensure when using ZFS
-  ## that a pool isn't imported accidentally on a wrong machine.
+  ## that a pool isn't imported accidentally on a wrong machine. We also prevent
+  ## ZFS from force-importing pools; we will have to `zpool import -f` manually.
   networking.hostId = "f96b4cab";
+  boot.zfs.forceImportAll = false;
 
   services.zfs = {
     autoScrub.enable = true;
