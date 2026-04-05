@@ -32,6 +32,13 @@ concatMapAttrs
         gromit-niols
       ];
 
+      bind-key-anastasia-ddns = [
+        anastasia
+        helga
+        orianne
+        siegfried
+      ];
+
       dancelor-database-repository = [ orianne ];
       dancelor-github-token = [ orianne ];
 
