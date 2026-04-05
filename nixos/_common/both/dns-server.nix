@@ -107,6 +107,10 @@ in
 
           ${config.services.bind.x_niols.zoneEntries.${domain}}
         '';
+
+        ## Whoever has the key `anastasia-ddns` can update the zone dynamically
+        ## with NSUPDATE, which we use to set A for anastasia.niols.fr.
+        allowDynamicUpdates = [ "key anastasia-ddns" ];
       }) domains;
 
       ## Only localhost can use BIND as a recursive resolver. For the rest of
