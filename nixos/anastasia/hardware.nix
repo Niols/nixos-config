@@ -139,7 +139,7 @@ in
       type = "zpool";
       mode = "mirror";
       mountpoint = null; # use the default, so that `option.mountpoint` works
-      options.mountpoint = "none"; # do not mount the root of the pool
+      rootFsOptions.mountpoint = "none"; # do not mount the root of the pool
       datasets = {
         "pictures" = {
           type = "zfs_fs";
@@ -156,7 +156,7 @@ in
       type = "zpool";
       mode = "raidz1";
       mountpoint = null; # use the default, so that `option.mountpoint` works
-      options.mountpoint = "none"; # do not mount the root of the pool
+      rootFsOptions.mountpoint = "none"; # do not mount the root of the pool
       datasets = {
         "medias" = {
           type = "zfs_fs";
