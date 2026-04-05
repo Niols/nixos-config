@@ -138,6 +138,7 @@ in
     zpool.important = {
       type = "zpool";
       mode = "mirror";
+      options.mountpoint = "none"; # see dataset mountpoints
       datasets = {
         "pictures" = {
           type = "zfs_fs";
@@ -153,6 +154,7 @@ in
     zpool.unimportant = {
       type = "zpool";
       mode = "raidz1";
+      options.mountpoint = "none"; # see dataset mountpoints
       datasets = {
         "medias" = {
           type = "zfs_fs";
