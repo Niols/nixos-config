@@ -48,6 +48,11 @@ in
   ## that a pool isn't imported accidentally on a wrong machine.
   networking.hostId = "f96b4cab";
 
+  services.zfs = {
+    autoScrub.enable = true;
+    trim.enable = true;
+  };
+
   disko.devices = {
     disk =
       ## Primary NVMe: small disk (256GB) for boot, swap, and OS.
