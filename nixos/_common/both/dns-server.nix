@@ -170,9 +170,9 @@ in
       preStart = lib.mkAfter ''
         mkdir -p /etc/bind
         ${forConcat domains (domain: ''
+          rm -f /etc/bind/${domain}.zone /etc/bind/${domain}.zone.jnl
           cp ${zoneFileTemplate domain} /etc/bind/${domain}.zone
         '')}
-        chown named:named /etc/bind/*.zone
       '';
     };
 
