@@ -42,6 +42,10 @@ in
   boot.zfs = {
     devNodes = "/dev/disk/by-id";
     # forceImportAll = true;
+    extraPools = [
+      "important"
+      "unimportant"
+    ];
   };
 
   ## Unique among my machines. The primary use case is to ensure when using ZFS
