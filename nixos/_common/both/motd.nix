@@ -11,6 +11,12 @@ let
     toSentenceCase
     ;
 
+  thisMachinesColour =
+    let
+      c = config.x_niols.thisMachinesColour;
+    in
+    if c == "purple" then "magenta" else c;
+
 in
 {
   ## NOTE: This file is very heavily inspired by the NixOS module
@@ -56,7 +62,7 @@ in
               }
 
               components {
-                command color="${config.x_niols.thisMachinesColour}" "
+                command color="${thisMachinesColour}" "
                   printf -- '\\033[1m%s\\033[0m' \"$(echo ${toSentenceCase config.x_niols.thisMachinesName} | figlet -f standard)\"
                 "
 
@@ -105,6 +111,7 @@ in
 
   systemd.timers.update-motd = {
     wantedBy = [ "timers.target" ];
+    timerConfig.OnBootSec = "0";
     timerConfig.OnCalendar = "*:0/5";
   };
 

@@ -14,6 +14,11 @@ let
     ahlaya = {
       kind = "laptop";
     };
+    anastasia = {
+      kind = "server";
+      ipv4 = "192.168.1.11"; # FIXME: internal vs external IP
+      cores = 2;
+    };
     gromit = {
       kind = "laptop";
     };
@@ -113,6 +118,7 @@ in
   imports = [
     ## NixOS configurations
     ./ahlaya.nix
+    ./anastasia
     ./helga
     ./orianne
     ./siegfried
