@@ -32,6 +32,10 @@ in
 
   boot.loader.systemd-boot.enable = true;
 
+  ## Otherwise we can't find the i915 driver for the Intel integrated GPU and we
+  ## get: *ERROR* GT0: GuC firmware i915/tgl_guc_70.bin: fetch failed -ENOENT
+  hardware.enableRedistributableFirmware = true;
+
   ## Limit the RAM usage of ARC (the Adaptive Replacement Cache) to 4GB.
   ## Otherwise, it easily eats 1GB of RAM per TB of disk, which will quickly be
   ## too much for the 8GB of RAM in this machine.
