@@ -138,15 +138,15 @@ in
     zpool.important = {
       type = "zpool";
       mode = "mirror";
-      options.mountpoint = "none"; # see dataset mountpoints
+      mountpoint = "none"; # see dataset mountpoints
       datasets = {
         "pictures" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/pictures_test";
+          mountpoint = "/data/pictures_test";
         };
         "services" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/services_test";
+          mountpoint = "/data/services_test";
         };
       };
     };
@@ -154,11 +154,11 @@ in
     zpool.unimportant = {
       type = "zpool";
       mode = "raidz1";
-      options.mountpoint = "none"; # see dataset mountpoints
+      mountpoint = "none"; # see dataset mountpoints
       datasets = {
         "medias" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/medias_test";
+          mountpoint = "/data/medias_test";
         };
       };
     };
