@@ -41,12 +41,7 @@ in
   ## that a pool isn't imported accidentally on a wrong machine.
   networking.hostId = "f96b4cab";
 
-  boot.supportedFilesystems = [ "zfs" ];
-
-  boot.zfs = {
-    devNodes = "/dev/disk/by-id";
-    forceImportAll = true;
-  };
+  boot.zfs.devNodes = "/dev/disk/by-id";
 
   disko.devices = {
     disk =
