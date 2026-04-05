@@ -41,6 +41,8 @@ in
   ## that a pool isn't imported accidentally on a wrong machine.
   networking.hostId = "f96b4cab";
 
+  boot.zfs.devNodes = "/dev/disk/by-id";
+
   disko.devices = {
     disk =
       ## Primary NVMe: small disk (256GB) for boot, swap, and OS.
@@ -123,11 +125,11 @@ in
       datasets = {
         "pictures" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/pictures";
+          mountpoint = "/data/pictures";
         };
         "services" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/services";
+          mountpoint = "/data/services";
         };
       };
     };
@@ -138,7 +140,7 @@ in
       datasets = {
         "medias" = {
           type = "zfs_fs";
-          options.mountpoint = "/data/medias";
+          mountpoint = "/data/medias";
         };
       };
     };
