@@ -168,6 +168,7 @@ in
     ##
     systemd.services.bind = {
       preStart = lib.mkAfter ''
+        mkdir -p /var/lib/bind
         ${forConcat domains (domain: ''
           cp ${zoneFileTemplate domain} /var/lib/bind/${domain}.zone
         '')}
