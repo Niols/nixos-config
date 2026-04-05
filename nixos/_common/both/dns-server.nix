@@ -112,7 +112,7 @@ in
       zones = map (domain: {
         name = domain;
         master = true;
-        file = "/var/lib/bind/${domain}.zone";
+        file = "/etc/bind/${domain}.zone";
         ## Whoever has the key `anastasia-ddns` can update the zone dynamically
         ## with NSUPDATE, which we use to set A for anastasia.niols.fr.
         extraConfig = ''
@@ -168,11 +168,11 @@ in
     ##
     systemd.services.bind = {
       preStart = lib.mkAfter ''
-        mkdir -p /var/lib/bind
+        mkdir -p /etc/bind
         ${forConcat domains (domain: ''
-          cp ${zoneFileTemplate domain} /var/lib/bind/${domain}.zone
+          cp ${zoneFileTemplate domain} /etc/bind/${domain}.zone
         '')}
-        chown named:named /var/lib/bind/*.zone
+        chown named:named /etc/bind/*.zone
       '';
     };
 
