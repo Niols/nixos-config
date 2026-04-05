@@ -10,6 +10,7 @@
 let
   inherit (lib)
     mkIf
+    concatStringsSep
     concatMapStringsSep
     head
     attrNames
@@ -23,6 +24,7 @@ let
     runCommand
     ;
 
+  forConcat = xs: f: concatStringsSep "\n" (map f xs);
   forConcatAttrs = set: f: concatMapStringsSep "\n" (name: f name set.${name}) (attrNames set);
 
   ## Write a DNS zone file to the store and return its path. We check the file
@@ -35,6 +37,35 @@ let
     in
     runCommand "${domain}.zone" { buildInputs = [ pkgs.bind ]; } ''
       named-checkzone ${domain} ${unchecked} && cp ${unchecked} $out
+    '';
+
+  ## All the zones contain some common definitions, in particular the SOA and
+  ## the `*.niols.fr` NS servers. NOTE: It is therefore normal to have hardcoded
+  ## `niols.fr` in this part instead of `${domain}`.
+  ##
+  zoneFileTemplate =
+    domain:
+    writeZoneFile domain ''
+      $TTL 3600
+
+      @  IN  SOA ${head (attrNames machines.servers)}.niols.fr admin.niols.fr (
+        ${toString inputs.self.lastModified} ; serial number - need to increase with every change
+        3600    ; refresh - how often secondary name servers should check for zone updates
+        1800    ; retry - in case of failure to contact primary, how long to wait before retrying
+        604800  ; expire - in case of failure to contact primary, how long before giving up
+        86400   ; negative TTL - how long to cache negative responses for
+      )
+
+      ${forConcatAttrs machines.servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
+
+      @             IN  MX 5   mta-gw.infomaniak.ch.
+      @             IN  TXT    "v=spf1 include:spf.infomaniak.ch include:mx.ovh.com -all"
+      autoconfig    IN  CNAME  infomaniak.com.
+      autodiscover  IN  CNAME  infomaniak.com.
+      _domainkey    IN  NS     ns41.infomaniak.com.
+      _domainkey    IN  NS     ns42.infomaniak.com.
+
+      ${config.services.bind.x_niols.zoneEntries.${domain}}
     '';
 
   domains = [
@@ -78,37 +109,10 @@ in
         '';
       };
 
-      ## All the zones contain some common definitions, in particular the SOA and
-      ## the `*.niols.fr` NS servers. NOTE: It is therefore normal to have hardcoded
-      ## `niols.fr` in this part instead of `${domain}`.
-      ##
       zones = map (domain: {
         name = domain;
         master = true;
-
-        file = writeZoneFile domain ''
-          $TTL 3600
-
-          @  IN  SOA ${head (attrNames machines.servers)}.niols.fr admin.niols.fr (
-            ${toString inputs.self.lastModified} ; serial number - need to increase with every change
-            3600    ; refresh - how often secondary name servers should check for zone updates
-            1800    ; retry - in case of failure to contact primary, how long to wait before retrying
-            604800  ; expire - in case of failure to contact primary, how long before giving up
-            86400   ; negative TTL - how long to cache negative responses for
-          )
-
-          ${forConcatAttrs machines.servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
-
-          @             IN  MX 5   mta-gw.infomaniak.ch.
-          @             IN  TXT    "v=spf1 include:spf.infomaniak.ch include:mx.ovh.com -all"
-          autoconfig    IN  CNAME  infomaniak.com.
-          autodiscover  IN  CNAME  infomaniak.com.
-          _domainkey    IN  NS     ns41.infomaniak.com.
-          _domainkey    IN  NS     ns42.infomaniak.com.
-
-          ${config.services.bind.x_niols.zoneEntries.${domain}}
-        '';
-
+        file = "/var/lib/bind/${domain}.zone";
         ## Whoever has the key `anastasia-ddns` can update the zone dynamically
         ## with NSUPDATE, which we use to set A for anastasia.niols.fr.
         extraConfig = ''
@@ -156,6 +160,18 @@ in
       ##
       extraConfig = ''
         include "${config.age.secrets.bind-key-anastasia-ddns.path}";
+      '';
+    };
+
+    ## On start, copy the zone files that we generated to the location where
+    ## BIND can modify them. This is because we want to support NSUPDATEs.
+    ##
+    systemd.services.bind = {
+      preStart = lib.mkAfter ''
+        ${forConcat domains (domain: ''
+          cp ${zoneFileTemplate domain} /var/lib/bind/${domain}.zone
+        '')}
+        chown named:named /var/lib/bind/*.zone
       '';
     };
 
