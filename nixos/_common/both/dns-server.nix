@@ -57,7 +57,9 @@ let
         86400   ; negative TTL - how long to cache negative responses for
       )
 
-      ${forConcatAttrs machines.servers (name: _: "@  IN  NS  ${name}.niols.fr.")}
+      ${forConcatAttrs machines.servers (
+        name: meta: optionalString (meta ? ipv4 || meta ? ipv6) "@  IN  NS  ${name}.niols.fr."
+      )}
 
       @             IN  MX 5   mta-gw.infomaniak.ch.
       @             IN  TXT    "v=spf1 include:spf.infomaniak.ch include:mx.ovh.com -all"
@@ -89,9 +91,10 @@ in
     }
   );
 
-  ## All our servers are also DNS servers for the whole zone.
+  ## All our servers that have a public stable IP are DNS servers for the whole zone.
+  ##
   config = mkMerge [
-    (mkIf config.x_niols.isServer {
+    (mkIf (config.x_niols.isServer && (machines.this ? ipv4 || machines.this ? ipv6)) {
       services.bind = {
         enable = true;
 

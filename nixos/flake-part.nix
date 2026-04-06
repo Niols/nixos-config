@@ -16,7 +16,7 @@ let
     };
     anastasia = {
       kind = "server";
-      ipv4 = "192.168.1.11"; # FIXME: internal vs external IP
+      internalIpv4 = "192.168.1.11";
       cores = 2;
     };
     gromit = {
@@ -101,7 +101,7 @@ let
     type = providers.local.exec;
     imports = [ inputs.nixops4-nixos.modules.nixops4Component.nixos ];
     ssh = {
-      host = machines.all.${name}.ipv4;
+      host = machines.all.${name}.ipv4 or "${name}.niols.fr";
       opts = "";
       hostPublicKey = self.keys.machines.${name};
     };

@@ -82,7 +82,11 @@ in
               server
               "${server}.niols.fr"
             ];
-            ips = optional (meta ? ipv4) meta.ipv4 ++ optional (meta ? ipv6) meta.ipv6;
+            ips =
+              optional (meta ? ipv4) meta.ipv4
+              ++ optional (meta ? ipv6) meta.ipv6
+              ++ optional (meta ? internalIpv4) meta.internalIpv4
+              ++ optional (meta ? internalIpv6) meta.internalIpv6;
             makeMatchBlock = hosts: {
               match = "Host ${concatStringsSep "," hosts}";
               user = "root";
@@ -96,7 +100,7 @@ in
           in
           {
             "${server}-hosts" = makeMatchBlock hosts // {
-              hostname = meta.ipv4 or meta.ipv6;
+              hostname = meta.ipv4 or meta.ipv6 or meta.internalIpv4 or meta.internalIpv6;
             };
             "${server}-ips" = makeMatchBlock ips;
           }
