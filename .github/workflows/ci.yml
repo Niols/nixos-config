@@ -106,7 +106,7 @@ jobs:
       - name: Get flake inputs and install Attic
         run: nix profile add .#attic
       - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.4
+        uses: ryanccn/attic-action@v0.5
         with:
           endpoint: https://nix-cache.niols.fr/
           cache: nixos-config
@@ -175,7 +175,7 @@ jobs:
       - name: Install Attic
         run: nix profile add .#attic
       - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.4
+        uses: ryanccn/attic-action@v0.5
         with:
           endpoint: https://nix-cache.niols.fr/
           cache: nixos-config
