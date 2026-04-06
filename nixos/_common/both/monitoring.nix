@@ -55,8 +55,8 @@ in
         scrapeConfigs = [
           {
             job_name = "node";
-            static_configs = mapAttrsToList (server: meta: {
-              targets = [ "${meta.ipv4 or meta.ipv6}:${toString metricsPort}" ];
+            static_configs = mapAttrsToList (server: _: {
+              targets = [ "${server}.niols.fr:${toString metricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
           }

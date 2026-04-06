@@ -111,6 +111,7 @@
               '')
 
               pkgs.attic-client
+              pkgs.bind # provides the `tsig-keygen` utility
               pkgs.borgbackup
               pkgs.apacheHttpd # provides the `htpasswd` utility
               pkgs.easyrsa # for OpenVPN's `easyrsa` command
