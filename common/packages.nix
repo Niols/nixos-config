@@ -36,6 +36,13 @@ in
       ]
     );
 
+    ## We want Vim available everywhere as a good default editor. For proper
+    ## IDE, we still use Emacs with Evil.
+    programs.vim = {
+      enable = true;
+      defaultEditor = true;
+    };
+
     x_niols.commonPackages = with pkgs; [
       bat
       bc

@@ -23,7 +23,6 @@
           uk
         ]
       ))
-      vim # useful when Emacs is broken/not set-up yet
     ])
     ++ (
       ## NodeJS is necessary for Emacs's `copilot`, but it is already provided
