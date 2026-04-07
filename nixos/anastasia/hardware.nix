@@ -144,10 +144,12 @@ in
         "pictures" = {
           type = "zfs_fs";
           mountpoint = "/data/pictures";
+          options.mountpoint = "legacy";
         };
         "services" = {
           type = "zfs_fs";
           mountpoint = "/data/services";
+          options.mountpoint = "legacy";
         };
       };
     };
@@ -161,6 +163,7 @@ in
         "medias" = {
           type = "zfs_fs";
           mountpoint = "/data/medias";
+          options.mountpoint = "legacy";
         };
       };
     };
