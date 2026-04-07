@@ -135,6 +135,13 @@ in
     ## we don't want a long interruption for the important data, and we don't
     ## mind as much for medias.
 
+    ## NOTE: We use legacy mountpoints so that ZFS does not automount these
+    ## datasets itself. Instead, systemd handles mounting via the usual mount
+    ## units, which avoids a conflict between the two at boot.
+    ##
+    ## In disko, this is `datasets.<dataset>.options.mountpoint = "legacy"`, and
+    ## in ZFS, this is `zfs set mountpoint=legacy <dataset>`.
+
     zpool.important = {
       type = "zpool";
       mode = "mirror";
@@ -144,10 +151,12 @@ in
         "pictures" = {
           type = "zfs_fs";
           mountpoint = "/data/pictures";
+          options.mountpoint = "legacy";
         };
         "services" = {
           type = "zfs_fs";
           mountpoint = "/data/services";
+          options.mountpoint = "legacy";
         };
       };
     };
@@ -161,6 +170,7 @@ in
         "medias" = {
           type = "zfs_fs";
           mountpoint = "/data/medias";
+          options.mountpoint = "legacy";
         };
       };
     };
