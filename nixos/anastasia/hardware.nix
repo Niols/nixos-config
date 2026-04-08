@@ -43,13 +43,7 @@ in
 
   boot.supportedFilesystems = [ "zfs" ];
 
-  boot.zfs = {
-    devNodes = "/dev/disk/by-id";
-    extraPools = [
-      "important"
-      "unimportant"
-    ];
-  };
+  boot.zfs.devNodes = "/dev/disk/by-id";
 
   ## Unique among my machines. The primary use case is to ensure when using ZFS
   ## that a pool isn't imported accidentally on a wrong machine. We also prevent
@@ -144,10 +138,22 @@ in
         "pictures" = {
           type = "zfs_fs";
           mountpoint = "/data/pictures";
+          options.mountpoint = "legacy";
+          mountOptions = [
+            "nofail"
+            "noauto"
+            "x-systemd.automount"
+          ];
         };
         "services" = {
           type = "zfs_fs";
           mountpoint = "/data/services";
+          options.mountpoint = "legacy";
+          mountOptions = [
+            "nofail"
+            "noauto"
+            "x-systemd.automount"
+          ];
         };
       };
     };
@@ -161,6 +167,12 @@ in
         "medias" = {
           type = "zfs_fs";
           mountpoint = "/data/medias";
+          options.mountpoint = "legacy";
+          mountOptions = [
+            "nofail"
+            "noauto"
+            "x-systemd.automount"
+          ];
         };
       };
     };
