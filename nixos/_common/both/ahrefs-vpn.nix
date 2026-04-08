@@ -97,13 +97,6 @@ in
         };
       };
 
-      ## Ensure WireGuard starts after wstunnel so the local UDP endpoint is
-      ## ready when WireGuard tries to send its first handshake.
-      systemd.services.wireguard-ahrefs = {
-        after = [ "wstunnel-client-ahrefs-vpn.service" ];
-        wants = [ "wstunnel-client-ahrefs-vpn.service" ];
-      };
-
       ## Systemd oneshot services for switching between VPN modes. These run as
       ## root (for `wg set`) and are managed via polkit, so no sudo is needed.
       systemd.services.ahrefs-vpn-switch-tunnel = {
