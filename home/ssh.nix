@@ -184,16 +184,12 @@ in
           "ustrixie"
         ];
         nspawnDefault = "uk";
-        sshPackage =
-          if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
         includeFor = variant: {
           extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
         };
-        ## Mosh aliases disable agent forwarding; use `keep-agent-alive` for a
-        ## persistent agent on the server instead.
-        aliasFor =
-          variant:
-          "${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' --port 29700:29799 nspawn-${variant} -- tmux new-session";
+        ## Mosh aliases go through the `mosh` wrapper which disables agent
+        ## forwarding and starts `keep-agent-alive` as a systemd service.
+        aliasFor = variant: "mosh --port 29700:29799 nspawn-${variant} -- tmux new-session";
       in
       {
         ## Set up the link to `nspawn-*` and a shorthand to start Mosh directly on
@@ -215,46 +211,51 @@ in
       }
     ))
 
-    ## Add `keep-agent-alive`, a utility to maintain a persistent SSH connection
-    ## with agent forwarding to a server. On the server side, the agent socket is
-    ## symlinked to `~/.ssh/auth.sock` so that other sessions (eg. Mosh) can pick
-    ## it up via `home.sessionVariables`.
-    (mkIf config.x_niols.isWork {
-      home.packages =
-        let
-          sshPackage =
-            if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
-        in
-        [
-          (pkgs.writeShellApplication {
-            name = "keep-agent-alive";
-            runtimeInputs = [
-              pkgs.autossh
-              sshPackage
-            ];
-            text = ''
-              if [ $# -ne 1 ]; then
-                echo "Usage: keep-agent-alive <server>" >&2
-                exit 1
-              fi
-              server="$1"
-              echo "Keeping SSH agent alive on $server..."
-              export AUTOSSH_PATH="${sshPackage}/bin/ssh"
-              # shellcheck disable=SC2016
-              exec autossh \
-                -M 0 \
-                -o "ServerAliveInterval 30" \
-                -o "ServerAliveCountMax 3" \
-                -o "ExitOnForwardFailure yes" \
-                -A "$server" -- \
-                'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
-            '';
-          })
-        ];
-    })
+    ## Add `keep-agent-alive`, a utility and systemd user service to maintain a
+    ## persistent SSH connection with agent forwarding to a server. On the server
+    ## side, the agent socket is symlinked to `~/.ssh/auth.sock` so that other
+    ## sessions (eg. Mosh) can pick it up via `home.sessionVariables`. The service
+    ## is a template unit: `systemctl --user start keep-agent-alive@<server>`.
+    (mkIf config.x_niols.isWork (
+      let
+        sshPackage =
+          if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
+        keep-agent-alive = pkgs.writeShellApplication {
+          name = "keep-agent-alive";
+          runtimeInputs = [
+            pkgs.autossh
+            sshPackage
+          ];
+          text = ''
+            if [ $# -ne 1 ]; then
+              echo "Usage: keep-agent-alive <server>" >&2
+              exit 1
+            fi
+            server="$1"
+            echo "Keeping SSH agent alive on $server..."
+            export AUTOSSH_PATH="${sshPackage}/bin/ssh"
+            # shellcheck disable=SC2016
+            exec autossh \
+              -M 0 \
+              -o "ServerAliveInterval 30" \
+              -o "ServerAliveCountMax 3" \
+              -o "ExitOnForwardFailure yes" \
+              -A "$server" -- \
+              'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
+          '';
+        };
+      in
+      {
+        home.packages = [ keep-agent-alive ];
+        systemd.user.services."keep-agent-alive@" = {
+          Unit.Description = "Keep SSH agent alive on %i";
+          Service.ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
+        };
+      }
+    ))
 
-    ## Add mosh to the packages, as well as `tmosh` (mosh+tmux) and `tssh`
-    ## (ssh+tmux).
+    ## Add `mosh` wrapper that disables agent forwarding and starts the
+    ## `keep-agent-alive` systemd service in the background before connecting.
     {
       home.packages =
         let
@@ -265,41 +266,32 @@ in
           (pkgs.writeShellApplication {
             name = "mosh";
             text = ''
+              ## Extract server name from arguments to start keep-agent-alive service.
+              server=""
+              skip_next=false
+              for arg in "$@"; do
+                if [ "$skip_next" = true ]; then
+                  skip_next=false
+                  continue
+                fi
+                case "$arg" in
+                  --ssh|--predict|--port|--bind-server|--server|--family|--experimental-remote-ip)
+                    skip_next=true ;;
+                  --ssh=*|--predict=*|--port=*|--bind-server=*|--server=*|--family=*|--experimental-remote-ip=*)
+                    ;;
+                  --)
+                    break ;;
+                  -*)
+                    ;;
+                  *)
+                    server="$arg"
+                    break ;;
+                esac
+              done
+              if [ -n "$server" ]; then
+                systemctl --user start "keep-agent-alive@$server" 2>/dev/null &
+              fi
               exec ${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' "$@"
-            '';
-          })
-          (pkgs.stdenv.mkDerivation {
-            name = "tmosh";
-            src = ./.; # or anything; this is unused
-            installPhase = ''
-              ############################################################################
-              ## Binaries
-              mkdir -p $out/bin
-              cat <<'EOF' > $out/bin/tmosh
-                #!/bin/sh
-                exec ${pkgs.mosh}/bin/mosh --ssh '${sshPackage}/bin/ssh -o ForwardAgent=no' "$@" -- \
-                  tmux new -s tmosh_$(date +'%Y-%m-%d_%H-%M-%S')_$RANDOM
-              EOF
-              chmod +x $out/bin/tmosh
-              cat <<'EOF' > $out/bin/tssh
-                #!/bin/sh
-                exec ${sshPackage}/bin/ssh "$@" -- \
-                  tmux new -s tmosh_$(date +'%Y-%m-%d_%H-%M-%S')_$RANDOM
-              EOF
-              chmod +x $out/bin/tssh
-              ############################################################################
-              ## Bash completions
-              mkdir -p $out/share/bash-completion/completions
-              cat <<-EOF > $out/share/bash-completion/completions/tmosh
-                __load_completion mosh
-                complete -o nospace -F _mosh tmosh
-              EOF
-              chmod +x $out/share/bash-completion/completions/tmosh
-              cat <<-EOF > $out/share/bash-completion/completions/tssh
-                __load_completion mosh
-                complete -o nospace -F _mosh tssh
-              EOF
-              chmod +x $out/share/bash-completion/completions/tmosh
             '';
           })
         ];
