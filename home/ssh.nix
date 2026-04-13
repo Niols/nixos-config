@@ -249,7 +249,10 @@ in
         home.packages = [ keep-agent-alive ];
         systemd.user.services."keep-agent-alive@" = {
           Unit.Description = "Keep SSH agent alive on %i";
-          Service.ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
+          Service = {
+            ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
+            Environment = "SSH_AUTH_SOCK=${config.home.sessionVariables.SSH_AUTH_SOCK}";
+          };
         };
       }
     ))
