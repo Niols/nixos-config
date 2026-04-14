@@ -143,7 +143,10 @@ in
           \
           --override-input home-manager ${inputs.home-manager} \
           --override-input nixos-hardware ${inputs.nixos-hardware} \
+          \
           --override-input flake-parts ${inputs.flake-parts} \
+          --override-input flake-parts/nixpkgs-lib ${inputs.flake-parts.inputs.nixpkgs-lib} \
+          \
           --override-input git-hooks ${inputs.git-hooks} \
           --override-input nix-index-database ${inputs.nix-index-database} \
           --override-input agenix ${inputs.agenix} \
