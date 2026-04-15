@@ -61,6 +61,12 @@ in
             {
               nixpkgs.hostPlatform = "x86_64-linux";
               _module.args = { inherit inputs; };
+              ## NOTE: This system is only evaluated for its store paths, never
+              ## actually booted, but NixOS requires a root filesystems entry.
+              fileSystems."/" = {
+                device = "/dev/dummy";
+                fsType = "dummy";
+              };
             }
           ]).config;
       in

@@ -10,6 +10,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     (modulesPath + "/../lib/testing/nixos-test-base.nix")
+    (modulesPath + "/virtualisation/qemu-vm.nix")
   ];
 
   ## Test framework disables switching by default. That might be OK by itself,
