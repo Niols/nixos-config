@@ -125,6 +125,11 @@ in
           '';
         }) domains;
 
+        ## FIXME: I had to disable the config check because I would otherwise get:
+        ## /nix/store/<hash>-named.conf:26: parsing failed: file not found
+        ## See https://github.com/NixOS/nixpkgs/pull/501959 and, ideally, bring back.
+        checkConfig = false;
+
         ## Only localhost can use BIND as a recursive resolver. For the rest of
         ## the world, we are only an authoritative server.
         ##
