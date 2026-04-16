@@ -1,12 +1,24 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
 
-  extends: ["config:recommended", ":disableDependencyDashboard"],
+  extends: [
+    "config:recommended",
+    ":disableDependencyDashboard",
+    ":automergeAll",
+    ":maintainLockFilesWeekly",
+    "schedule:weekly",
+  ],
 
+  // Nix is experimental and needs manual enabling.
   nix: { enabled: true },
 
-  lockFileMaintenance: {
-      enabled: true,
-      automerge: true,
-  },
+  packageRules: [
+    {
+      // Some flake inputs are pinned to specific commits, and we do not
+      // want Renovate to constantly try to update them; see comment in flake.nix.
+      matchManagers: ["nix"],
+      matchDepNames: ["nixops4", "nixpkgs-for-nixops4"],
+      enabled: false,
+    },
+  ],
 }
