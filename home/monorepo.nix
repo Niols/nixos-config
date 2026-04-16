@@ -13,11 +13,17 @@ in
 
       ## https://ahrefs.slack.com/archives/C01NT4U32JD/p1763978422745349?thread_ts=1763441475.049519&cid=C01NT4U32JD
       export AHREFS_PRE_COMMIT_CHECK_RULAH=true
+      ## Have both pre-commit and pre-push hooks. This is the default for now,
+      ## but pre-commit might stop being enabled by default in the future.
+      export AHREFS_PRECOMMIT_CHECKS=TRUE
+      export AHREFS_PREPUSH_CHECKS=TRUE
     '';
 
+    ## ~/.local/bin for python-based utilities, eg. semgrep.
     home.sessionPath = [
       "$HOME/${monorepo}/_build/install/default/bin"
       "$HOME/${monorepo}/bin"
+      "$HOME/.local/bin"
     ];
 
     home.sessionVariables = {
