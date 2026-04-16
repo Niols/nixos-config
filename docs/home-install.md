@@ -1,5 +1,4 @@
-Standalone Home installation
-----------------------------
+## Standalone Home installation
 
 On a Nix-enabled machine, replace `<home>` in the following command and go:
 
@@ -16,6 +15,7 @@ enough to pull updates — the script will remember which home profile to pick.
 Nix should preferrably be installed via the package manager, provided the
 packaged version is recent enough. Otherwise, one can follow [the instructions
 on nixos.org](https://nixos.org/download/), eg.:
+
 ```console
 $ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
 % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current

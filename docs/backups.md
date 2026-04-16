@@ -9,18 +9,21 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
 ## Create a new Borg backup repository
 
 1. Create a repokey, eg a 64-character-long random string:
-   ``` console
+
+   ```console
    $ tr -dc A-Za-z0-9 </dev/urandom | head -c 64; echo
    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
    ```
 
 2. Create an SSH key pair:
-   ``` console
+
+   ```console
    $ ssh-keygen -t ed25519 -C '' -N '' -f hester-<service>-backup-identity
    ```
 
 3. Add the repokey and the private key as secrets in Agenix:
-   ``` console
+
+   ```console
    $ cd secrets
    $ emacs -nw secrets.nix
    $ agenix -e hester-<service>-backup-repokey.age
@@ -28,18 +31,21 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
    ```
 
 4. Make Hester aware of the public key:
-   ``` console
+
+   ```console
    ssh-copy-id -sfi hester-<service>-backup-identity.pub hester
    ```
 
 5. Initialise the backup repository:
-   ``` console
+
+   ```console
    $ borg init --encryption repokey ssh://u363090@hester.niols.fr:23/./backups/<service>
    ```
+
    Use as “passphrase” the repokey chosen above.
 
 6. Check that everything works fine, by running, _on the server_:
-   ``` console
+   ```console
    $ borg list ssh://u363090@hester.niols.fr:23/./backups/<service>
    Enter passphrase for key ssh://u363090@hester.niols.fr:23/./backups/<service>:
    $ systemctl start borgbackup-job-<service>.service
@@ -59,7 +65,7 @@ Some services (eg. Matrix) rely on a `.well-known` file at the root of the
 
 Borg CLI excerpts:
 
-``` console
+```console
 $ borg list <repo>
 $ borg list <repo>::<archive>
 $ borg export-tar <repo>::<archive> output.tar <path>
@@ -68,7 +74,7 @@ $ borg extract <repo>::<archive> <path>
 
 Example restore workflow:
 
-``` console
+```console
 $ borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing
 $ borg list ssh://u363090@hester.niols.fr:23/./backups/syncthing::siegfried-syncthing-2025-01-23T06:00:00
 $ mkdir where-to-restore
@@ -82,7 +88,7 @@ $ ls
 Typically, the backup lives in `/var/backup/postgres`. It is probably
 compressed:
 
-``` console
+```console
 $ gunzip the-backup.sql.gz
 ```
 

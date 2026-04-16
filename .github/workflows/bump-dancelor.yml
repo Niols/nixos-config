@@ -1,9 +1,9 @@
 name: Bump Dancelor
 
 on:
-  workflow_dispatch:  # manual triggering
+  workflow_dispatch: # manual triggering
   repository_dispatch:
-    types: [bump-dancelor]  # when Dancelor changes
+    types: [bump-dancelor] # when Dancelor changes
 
 jobs:
   bump-dancelor:

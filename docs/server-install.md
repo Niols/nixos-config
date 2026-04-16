@@ -1,5 +1,4 @@
-Installing NixOS on a server
-============================
+# Installing NixOS on a server
 
 ### On an OVH's “Bare Metal Cloud” dedicated instance
 
