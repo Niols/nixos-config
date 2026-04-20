@@ -6,6 +6,7 @@ Gen 13 in September 2025.
 1. Boot into the USB stick.
 
 2. (Optional) Set up WiFi:
+
    ```console
    $ sudo systemctl start wpa_supplicant.service
    $ wpa_cli
@@ -34,6 +35,7 @@ Gen 13 in September 2025.
 
 3. Clone this repository, go in it, check out the machine-specific branch if
    there is one, and spin the installation-specific Shell environment.
+
    ```console
    $ git clone https://github.com/niols/nixos-config
    $ cd nixos-config
@@ -43,8 +45,8 @@ Gen 13 in September 2025.
    ```
 
 4. If this is a new target machine:
-
    1. Generate a new SSH host key pair, add the public key to the repository:
+
       ```console
       $ ssh-keygen -t ed25519 -f ssh_host_ed25519_key -N ''
       Generating public/private ed25519 key pair.
@@ -54,6 +56,7 @@ Gen 13 in September 2025.
 
    2. Figure out the interface names and set `x_niols.thisLaptopsWifiInterface`
       accordingly.
+
       ```console
       $ ip link
       [...]
@@ -63,6 +66,7 @@ Gen 13 in September 2025.
       ```
 
    3. Commit and push those changes. Beware NOT to push the private key.
+
       ```console
       $ git config user.name <name>
       $ git config user.email <email>
@@ -72,9 +76,11 @@ Gen 13 in September 2025.
       $ git commit --message='Add <machine> WiFi interface'
       $ git push
       ```
+
       If the repository is hosted on GitHub, pushing with credentials will not
       be possible. A solution is to log in with `gh` and
       [a personal token](https://github.com/settings/tokens):
+
       ```console
       $ gh auth login
       ? Where do you use GitHub? GitHub.com
@@ -85,6 +91,7 @@ Gen 13 in September 2025.
       The minimum required scopes are 'repo', 'read:org", 'workflow'.
       ? Paste your authentication token: ***************
       ```
+
       A classic personal token is easier to create and shorter to copy. Make
       sure it has the required scopes above.
 
@@ -106,9 +113,11 @@ Gen 13 in September 2025.
       ```
 
 5. Run `disko` to format the disk.
+
    ```console
    $ sudo disko --mode destroy,format,mount --flake .#<configuration>
    ```
+
    Be careful: `disko` will target the disk labels (eg. `/dev/sdX`) mentioned in
    that configuration. However, the configuration's labels are from the target's
    perspective, and that might not be how they are seen from the installation
@@ -116,12 +125,14 @@ Gen 13 in September 2025.
    USB stick at `/dev/sda` while the target disk is an SSD at `/dev/nvme0n1`.
 
 6. Run `nixos-install` to install the full system.
+
    ```console
    $ sudo nixos-install --flake .#<configuration>
    ```
 
 7. If this is a new target machine, do not forget to add the private host key in
    the right place:
+
    ```console
    $ sudo chmod 600 ssh_host_ed25519_key
    $ sudo chmod 644 ssh_host_ed25519_key.pub
@@ -135,7 +146,7 @@ Gen 13 in September 2025.
 
 Can be ran with:
 
-``` console
+```console
 $ disko-install --mode format --flake .#<configuration> --disk main /dev/<device>
 ```
 

@@ -1,17 +1,20 @@
 # Laptop installation — what to do afterwards
 
 - Check that all the services are running correctly:
+
   ```console
   $ systemctl status
   ```
 
 - Set up this Git repository. Because we do not yet have the GPG and SSH keys,
   this will have to be as read-only for now:
+
   ```console
   $ git clone https://github.com/niols/nixos-config.git ~/.config/nixos
   $ cd ~/.config/nixos
   $ git checkout <machine>
   ```
+
   It should now be possible to run `rebuild --update` whenever another machine
   adds things to the configuration. It will fail when trying to add a tag to
   the repository, but that is of little impact.
@@ -40,11 +43,14 @@
   `services.autorandr.x_niols.thisLaptopsFingerprint`.
 
 - (REVIEW: obsolete?) Transfer GPG keys. On a machine that has the keys:
+
   ```console
   $ gpg --list-secret-keys
   $ gpg --export-secret-keys --armor <key-id>
   ```
+
   Then move the keys in a safe way between machines, and on the new machine:
+
   ```console
   $ gpg --import <key-file>
   ```
@@ -52,6 +58,7 @@
 - Transfer SSH keys. You just need to copy the key files — typically in `~/.ssh`
   — to the new machine. They are already in a text-compatible format. Make sure
   that the private key has restrictive permissions:
+
   ```console
   $ chmod 600 ~/.ssh/id_niols
   ```
@@ -59,6 +66,7 @@
 - Set up Git repositories. With the SSH and GPG key, everything should work fine
   immediately: cloning, committing, etc. Do not forget to update the URL of the
   NixOS configuration repository to now use SSH:
+
   ```console
   $ cd ~/.config/nixos
   $ git remote set-url origin git@github.com:niols/nixos-config.git

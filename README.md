@@ -1,15 +1,12 @@
-Niols's NixOS Configuration/s
-=============================
+# Niols's NixOS Configuration/s
 
-Installing
-----------
+## Installing
 
 - [Laptop installation](./docs/laptop-install.md) and [what do to afterwards](./docs/laptop-after-install.md)
 - [Server installation](./docs/server-install.md)
 - [Standalone Home installation](./docs/home-install.md)
 
-Documentation
--------------
+## Documentation
 
 - [Backups](./docs/backups.md)
 - [Disko](./docs/disko.md)
@@ -17,8 +14,7 @@ Documentation
 - [Syncthing](./docs/syncthing.md)
 - [Xfce](./docs/xfce.md)
 
-Organisation
-------------
+## Organisation
 
 - [`flake.nix`](./flake.nix) is the entry point of these configurations. The
   flake defines outputs for the NixOS and Home configurations, NixOps4
