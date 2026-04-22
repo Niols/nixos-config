@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf;
@@ -6,6 +11,11 @@ let
 in
 {
   config = mkIf config.x_niols.isServer {
+    services.mysql = {
+      enable = true;
+      package = lib.mkDefault pkgs.mariadb; # FIXME: this should not be the default; Dancelor should not define this option, or only as default
+    };
+
     services.postgresql.enable = true;
 
     ############################################################################
@@ -14,6 +24,15 @@ in
     ## It is up to the other services to add their database to the list and save
     ## the corresponding file in the right place. They are encouraged to do their
     ## own backup some time after 04:00 and to include their file.
+    ##
+    ## FIXME: for safety, we should just backup /var/backup/mysql and
+    ## /var/backup/postgres ourselves anyway; otherwise if another service has a
+    ## typo or something... that would be a shame.
+
+    services.mysqlBackup = {
+      enable = true;
+      calendar = "03:45:00";
+    };
 
     services.postgresqlBackup = {
       enable = true;

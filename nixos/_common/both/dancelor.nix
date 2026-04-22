@@ -35,7 +35,6 @@ in
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {
       services.dancelor = {
         enable = true;
-        databaseRepositoryFile = config.age.secrets.dancelor-database-repository.path;
         listeningPort = 6872;
         githubTokenFile = config.age.secrets.dancelor-github-token.path;
         githubRepository = "github.com/paris-branch/dancelor";
@@ -55,14 +54,6 @@ in
       nix.settings = {
         substituters = [ "https://dancelor.cachix.org" ];
         trusted-public-keys = [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
-      };
-
-      ## A secret file containing the link to Dancelor's database Git
-      ## repository, with credentials if needed.
-      age.secrets.dancelor-database-repository = {
-        mode = "600";
-        owner = "dancelor";
-        group = "dancelor";
       };
 
       ## A secret `passwd` file containing the users' identifiers.
@@ -92,6 +83,23 @@ in
             add_header X-XSS-Protection "1; mode=block";
           '';
         };
+      };
+
+      ############################################################################
+      ## Daily backup
+      ##
+      ## They have to happen some time after 04:00 so as to include the dump of the
+      ## database. See ./databases.nix.
+
+      services.mysqlBackup.databases = [ "dancelor" ];
+
+      _common.hester.backupJobs.dancelor = {
+        startAt = "*-*-* 04:15:00";
+        paths = [
+          "/var/backup/mysql/dancelor.gz"
+        ];
+        repokeyFile = config.age.secrets.hester-dancelor-backup-repokey.path;
+        identityFile = config.age.secrets.hester-dancelor-backup-identity.path;
       };
     })
 
