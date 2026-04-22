@@ -67,6 +67,8 @@ concatMapAttrs
 
       hester-atticd-backup-repokey = [ helga ];
       hester-atticd-backup-identity = [ helga ];
+      hester-dancelor-backup-repokey = [ orianne ];
+      hester-dancelor-backup-identity = [ orianne ];
       hester-samba-credentials = [
         helga
         orianne
