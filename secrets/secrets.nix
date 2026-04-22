@@ -39,7 +39,6 @@ concatMapAttrs
         siegfried
       ];
 
-      dancelor-database-repository = [ orianne ];
       dancelor-github-token = [ orianne ];
 
       grafana-secret-key = [ orianne ];

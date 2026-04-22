@@ -35,7 +35,6 @@ in
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {
       services.dancelor = {
         enable = true;
-        databaseRepositoryFile = config.age.secrets.dancelor-database-repository.path;
         listeningPort = 6872;
         githubTokenFile = config.age.secrets.dancelor-github-token.path;
         githubRepository = "github.com/paris-branch/dancelor";
@@ -55,14 +54,6 @@ in
       nix.settings = {
         substituters = [ "https://dancelor.cachix.org" ];
         trusted-public-keys = [ "dancelor.cachix.org-1:Q2pAI0MA6jIccQQeT8JEsY+Wfwb/751zmoUHddZmDyY=" ];
-      };
-
-      ## A secret file containing the link to Dancelor's database Git
-      ## repository, with credentials if needed.
-      age.secrets.dancelor-database-repository = {
-        mode = "600";
-        owner = "dancelor";
-        group = "dancelor";
       };
 
       ## A secret `passwd` file containing the users' identifiers.
