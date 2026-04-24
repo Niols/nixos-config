@@ -30,6 +30,7 @@ in
       services.prometheus.exporters.node = {
         enable = true;
         port = nodeMetricsPort;
+        enabledCollectors = [ "systemd" ];
       };
 
       services.prometheus.exporters.process = {
