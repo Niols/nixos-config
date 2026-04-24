@@ -15,7 +15,6 @@ let
 
   nodeMetricsPort = 9000;
   processMetricsPort = 9256;
-  systemdMetricsPort = 9558;
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -31,11 +30,7 @@ in
       services.prometheus.exporters.node = {
         enable = true;
         port = nodeMetricsPort;
-      };
-
-      services.prometheus.exporters.systemd = {
-        enable = true;
-        port = systemdMetricsPort;
+        enabledCollectors = [ "systemd" ];
       };
 
       services.prometheus.exporters.process = {
@@ -60,12 +55,10 @@ in
         ${optionalString (monitorServer ? ipv4) ''
           iptables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
           iptables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
-          iptables -A nixos-fw -p tcp --dport ${toString systemdMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
         ''}
         ${optionalString (monitorServer ? ipv6) ''
           ip6tables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
           ip6tables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
-          ip6tables -A nixos-fw -p tcp --dport ${toString systemdMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
         ''}
       '';
     })
@@ -92,13 +85,6 @@ in
             job_name = "process";
             static_configs = mapAttrsToList (server: _: {
               targets = [ "${server}.niols.fr:${toString processMetricsPort}" ];
-              labels = { inherit server; };
-            }) machines.servers;
-          }
-          {
-            job_name = "systemd";
-            static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString systemdMetricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
           }
