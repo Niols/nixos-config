@@ -46,7 +46,7 @@ in
       ## this to kill our server by putting a hard limit on RAM at 16GB for
       ## Dancelor, a soft limit at 12GB, and no SWAP allowed.
       systemd.services.dancelor.serviceConfig = {
-        MemoryMax = "16GB";
+        MemoryMax = "16G";
         MemoryHigh = "12G";
         MemorySwapMax = "0";
       };
