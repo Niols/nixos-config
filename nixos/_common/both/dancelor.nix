@@ -42,6 +42,15 @@ in
         routineThreads = 2 * dancelorServer.cores;
       };
 
+      ## Lately (April 2026), Dancelor has some memory leaks. We don't allow
+      ## this to kill our server by putting a hard limit on RAM at 16GB for
+      ## Dancelor, a soft limit at 12GB, and no SWAP allowed.
+      systemd.services.dancelor.serviceConfig = {
+        MemoryMax = "16GB";
+        MemoryHigh = "12G";
+        MemorySwapMax = "0";
+      };
+
       ## FIXME: This is an experiment to improve responsiveness of the system
       ## when Dancelor uses the Nix builds so intensely. It might however starve
       ## the Nix builds, and in particular the `nixos-rebuild`. Hopefully,
