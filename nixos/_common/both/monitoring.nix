@@ -13,7 +13,8 @@ let
     optionalString
     ;
 
-  metricsPort = 9000;
+  nodeMetricsPort = 9000;
+  processMetricsPort = 9256;
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -28,16 +29,36 @@ in
     (mkIf config.x_niols.isServer {
       services.prometheus.exporters.node = {
         enable = true;
-        port = metricsPort;
+        port = nodeMetricsPort;
+        enabledCollectors = [ "systemd" ];
+      };
+
+      services.prometheus.exporters.process = {
+        enable = true;
+        port = processMetricsPort;
+        settings.process_names = [
+          ## Remove nix store path from process name.
+          {
+            name = "{{.Matches.Wrapped}} {{.Matches.Args}}";
+            cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ];
+          }
+          ## Fall back to the binary name for non-nix processes.
+          {
+            name = "{{.Comm}}";
+            cmdline = [ ".+" ];
+          }
+        ];
       };
 
       ## Only allow the monitoring server to scrape metrics.
       networking.firewall.extraCommands = ''
         ${optionalString (monitorServer ? ipv4) ''
-          iptables -A nixos-fw -p tcp --dport ${toString metricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
+          iptables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
+          iptables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
         ''}
         ${optionalString (monitorServer ? ipv6) ''
-          ip6tables -A nixos-fw -p tcp --dport ${toString metricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
+          ip6tables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
+          ip6tables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
         ''}
       '';
     })
@@ -56,7 +77,14 @@ in
           {
             job_name = "node";
             static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString metricsPort}" ];
+              targets = [ "${server}.niols.fr:${toString nodeMetricsPort}" ];
+              labels = { inherit server; };
+            }) machines.servers;
+          }
+          {
+            job_name = "process";
+            static_configs = mapAttrsToList (server: _: {
+              targets = [ "${server}.niols.fr:${toString processMetricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
           }
