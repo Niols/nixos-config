@@ -37,12 +37,6 @@ in
         enable = true;
         port = processMetricsPort;
         settings.process_names = [
-          ## Remove nix store path from process name.
-          {
-            name = "{{.Matches.Wrapped}} {{.Matches.Args}}";
-            cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ];
-          }
-          ## Fall back to the binary name for non-nix processes.
           {
             name = "{{.Comm}}";
             cmdline = [ ".+" ];
