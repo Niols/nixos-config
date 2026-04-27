@@ -100,12 +100,12 @@ in
       ## They have to happen some time after 04:00 so as to include the dump of the
       ## database. See ./databases.nix.
 
-      services.mysqlBackup.databases = [ "dancelor" ];
+      services.postgresqlBackup.databases = [ "dancelor" ];
 
       _common.hester.backupJobs.dancelor = {
         startAt = "*-*-* 04:15:00";
         paths = [
-          "/var/backup/mysql/dancelor.gz"
+          "/var/backup/postgresql/dancelor.sql.gz"
         ];
         repokeyFile = config.age.secrets.hester-dancelor-backup-repokey.path;
         identityFile = config.age.secrets.hester-dancelor-backup-identity.path;

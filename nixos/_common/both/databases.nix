@@ -13,7 +13,7 @@ in
   config = mkIf config.x_niols.isServer {
     services.mysql = {
       enable = true;
-      package = lib.mkDefault pkgs.mariadb; # FIXME: this should not be the default; Dancelor should not define this option, or only as default
+      package = pkgs.mariadb;
     };
 
     services.postgresql.enable = true;
