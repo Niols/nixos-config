@@ -66,7 +66,8 @@ in
     (mkIf config.x_niols.services.monitor.enabledOnThisServer {
       services.prometheus = {
         enable = true;
-        globalConfig.scrape_interval = "1m";
+        globalConfig.scrape_interval = "15s";
+        retentionTime = "60d";
         scrapeConfigs = [
           {
             job_name = "node";
