@@ -147,6 +147,12 @@ in
     ## In disko, this is `datasets.<dataset>.options.mountpoint = "legacy"`, and
     ## in ZFS, this is `zfs set mountpoint=legacy <dataset>`.
 
+    ## NOTE: In the event that a disk dies, we want the system to boot anyway,
+    ## which is possible since the system itself is not on ZFS. To achieve this,
+    ## we set `nofail` on the mount options of the datasets, which means that
+    ## the system will boot even if the datasets fail to mount, and we add a
+    ## `TimeoutStartSec` to the ZFS import services.
+
     zpool.important = {
       type = "zpool";
       mode = "mirror";
@@ -157,11 +163,13 @@ in
           type = "zfs_fs";
           mountpoint = "/data/pictures";
           options.mountpoint = "legacy";
+          mountOptions = [ "nofail" ];
         };
         "services" = {
           type = "zfs_fs";
           mountpoint = "/data/services";
           options.mountpoint = "legacy";
+          mountOptions = [ "nofail" ];
         };
       };
     };
@@ -176,8 +184,13 @@ in
           type = "zfs_fs";
           mountpoint = "/data/medias";
           options.mountpoint = "legacy";
+          mountOptions = [ "nofail" ];
         };
       };
     };
+
   };
+
+  systemd.services."zfs-import-important".serviceConfig.TimeoutStartSec = 60;
+  systemd.services."zfs-import-unimportant".serviceConfig.TimeoutStartSec = 60;
 }
