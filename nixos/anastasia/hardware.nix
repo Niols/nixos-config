@@ -135,6 +135,11 @@ in
     ## we don't want a long interruption for the important data, and we don't
     ## mind as much for medias.
 
+    ## NOTE: A lot of ZFS-related Disko options only ever have an impact during
+    ## initial installation, and changing them will have no effect. We still set
+    ## them here for documentation purposes, but this might not actually be
+    ## entirely correct, and one needs to also apply the change manually to ZFS.
+
     ## NOTE: We use legacy mountpoints so that ZFS does not automount these
     ## datasets itself. Instead, systemd handles mounting via the usual mount
     ## units, which avoids a conflict between the two at boot.
