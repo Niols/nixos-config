@@ -246,14 +246,14 @@ in
           )}
         '';
         serviceConfig.Type = "oneshot";
+        requires = [ "network-online.target" ]; # fails if network isn't online
+        after = [ "network-online.target" ]; # only runs after network is online
+        wantedBy = [ "network-online.target" ]; # runs when network comes online
       };
 
       systemd.timers.update-dns-with-public-ip = {
         wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*:0/1";
-          OnBootSec = "0";
-        };
+        timerConfig.OnCalendar = "*:0/1"; # every minute
       };
     })
   ];
