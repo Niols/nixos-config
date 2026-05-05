@@ -103,14 +103,18 @@ in
         };
       };
 
-      ## Systemd oneshot services for switching between VPN modes. These run as
-      ## root (for `wg set`) and are managed via polkit, so no sudo is needed.
+      ## Systemd oneshot services for switching between VPN modes. Each service
+      ## is self-contained and idempotent: it brings up what it needs and tears
+      ## down what it doesn't, regardless of the current state. They run as root
+      ## (for `wg set`) and are managed via polkit, so no sudo is needed.
       systemd.services.ahrefs-vpn-switch-tunnel = {
         description = "Switch Ahrefs VPN to tunnelled mode";
         serviceConfig = {
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-tunnel" ''
+            systemctl start wireguard-ahrefs.service
             systemctl start wstunnel-client-ahrefs-vpn.service
+            until systemctl is-active --quiet wireguard-ahrefs.service; do sleep 1; done
             until systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service; do sleep 1; done
             ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint 127.0.0.1:${toString tunnelLocalPort}
           '';
@@ -122,8 +126,21 @@ in
         serviceConfig = {
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-direct" ''
+            systemctl start wireguard-ahrefs.service
             systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
+            until systemctl is-active --quiet wireguard-ahrefs.service; do sleep 1; done
             ${pkgs.wireguard-tools}/bin/wg set ahrefs peer ${wgPublicKey} endpoint ${ahrefsEndpointHost}:${toString ahrefsEndpointPort}
+          '';
+        };
+      };
+
+      systemd.services.ahrefs-vpn-switch-down = {
+        description = "Shut down Ahrefs VPN completely";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "ahrefs-vpn-switch-down" ''
+            systemctl stop wireguard-ahrefs.service 2>/dev/null || true
+            systemctl stop wstunnel-client-ahrefs-vpn.service 2>/dev/null || true
           '';
         };
       };
@@ -146,9 +163,9 @@ in
       environment.systemPackages = [
         (pkgs.writeShellScriptBin "ahrefs-vpn-status" ''
           case ''${1-} in
-            ""|--i3block) ;;
+            ""|--i3block|--mode) ;;
             *)
-              echo "Usage: ahrefs-vpn-status [--i3block]" >&2
+              echo "Usage: ahrefs-vpn-status [--i3block|--mode]" >&2
               exit 1
               ;;
           esac
@@ -177,6 +194,9 @@ in
           esac
 
           case ''${1-} in
+            --mode)
+              echo "$mode"
+              ;;
             --i3block)
               case $mode in
                 down|unknown) state=Critical ;;
@@ -194,13 +214,12 @@ in
         '')
 
         (pkgs.writeShellScriptBin "ahrefs-vpn-cycle" ''
-          if ! systemctl is-active --quiet wireguard-ahrefs.service; then
-            systemctl start wireguard-ahrefs.service
-          elif systemctl is-active --quiet wstunnel-client-ahrefs-vpn.service; then
-            systemctl start ahrefs-vpn-switch-direct.service
-          else
-            systemctl stop wireguard-ahrefs.service
-          fi
+          case $(ahrefs-vpn-status --mode) in
+            down)    echo "down → tunnel";    systemctl start ahrefs-vpn-switch-tunnel.service ;;
+            tunnel)  echo "tunnel → direct";  systemctl start ahrefs-vpn-switch-direct.service ;;
+            direct)  echo "direct → down";    systemctl start ahrefs-vpn-switch-down.service ;;
+            *)       echo "unknown → down";   systemctl start ahrefs-vpn-switch-down.service ;;
+          esac
         '')
       ];
 
@@ -208,6 +227,7 @@ in
       x_niols.polkitPasswordlessServices = [
         "wireguard-ahrefs.service"
         "wstunnel-client-ahrefs-vpn.service"
+        "ahrefs-vpn-switch-down.service"
         "ahrefs-vpn-switch-direct.service"
         "ahrefs-vpn-switch-tunnel.service"
       ];
