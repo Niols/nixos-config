@@ -93,6 +93,12 @@ in
             local-to-remote = [
               "udp://127.0.0.1:${toString tunnelLocalPort}:${ahrefsEndpointHost}:${toString ahrefsEndpointPort}"
             ];
+            ## Detect dead connections faster (default: 30s).
+            websocket-ping-frequency = "5s";
+            ## Retry quickly after disconnection instead of backing off to the
+            ## default 5 minutes. wstunnel retries with exponential backoff
+            ## capped at this value, indefinitely.
+            connection-retry-max-backoff = "10s";
           };
         };
       };
