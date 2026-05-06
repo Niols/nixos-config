@@ -6,6 +6,7 @@
         (modulesPath + "/profiles/qemu-guest.nix")
         ../_common/server.nix
         ./hardware.nix
+        ./nfs-server.nix
       ];
 
       x_niols.thisMachinesName = "anastasia";
