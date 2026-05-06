@@ -39,6 +39,7 @@ in
     ./monitoring.nix
     ./motd.nix
     ./network.nix
+    ./nfs.nix
     ./nix-cache.nix
     ./ssh.nix
     ./syncthing.nix
@@ -62,6 +63,7 @@ in
       matrix.enabledOn = "helga";
       medias.enabledOn = "orianne";
       monitor.enabledOn = "orianne";
+      nfs.enabledOn = "anastasia";
       nix-cache.enabledOn = "helga";
       syncthing.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
@@ -135,6 +137,14 @@ in
                 '';
                 type = types.bool;
                 default = config.enabledOn == thisMachinesName;
+                readOnly = true;
+              };
+              enabledOnOtherServer = mkOption {
+                description = ''
+                  Whether the service is running on a machine that is not the current one.
+                '';
+                type = types.bool;
+                default = (config.enabledOn != null) && (config.enabledOn != thisMachinesName);
                 readOnly = true;
               };
             };
