@@ -59,11 +59,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1766969701,
-        "narHash": "sha256-t/GGoQt1tNTK/76wks+XiOjcjWNVh30wVj2uMPdpwCI=",
+        "lastModified": 1778147926,
+        "narHash": "sha256-gvcr15ku4lbWsySw0bUvldrmpTo6sJt3j2/TTGcQ6fI=",
         "ref": "refs/heads/main",
-        "rev": "ad1dafa93d2c8da0662b8aa05d0516bfcc601132",
-        "revCount": 292,
+        "rev": "4a68799773d44fb0f9cb36e5aee038e108d6dea2",
+        "revCount": 295,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/lesboloss-es/camelotte.git"
@@ -114,11 +114,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1778417947,
-        "narHash": "sha256-4wkIhTtG5wZipt6LSQOFTWBN8xrjJa4BSo/7R9XYf3M=",
+        "lastModified": 1778460391,
+        "narHash": "sha256-u35MwEXblOHktVS9zcJn4vZL0wyctcHg3rQYWEqrEeo=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "a77cb675adcaddeec16a99c3439322611d5e547f",
+        "rev": "b6b82159353e7b63a436b9c2364bed50924daf7e",
         "type": "github"
       },
       "original": {
@@ -272,11 +272,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1777678872,
-        "narHash": "sha256-EPIFsulyon7Z1vLQq5Fk64GR8L7cQsT+IPhcsukVbgk=",
+        "lastModified": 1777988971,
+        "narHash": "sha256-qIoWPDs+0/8JecyYgE3gpKQxW/4bLW/gp45vow9ioCQ=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "5250617bffd85403b14dbf43c3870e7f255d2c16",
+        "rev": "0678d8986be1661af6bb555f3489f2fdfc31f6ff",
         "type": "github"
       },
       "original": {
@@ -801,11 +801,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1777578337,
-        "narHash": "sha256-Ad49moKWeXtKBJNy2ebiTQUEgdLyvGmTeykAQ9xM+Z4=",
+        "lastModified": 1777954456,
+        "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+        "rev": "549bd84d6279f9852cae6225e372cc67fb91a4c1",
         "type": "github"
       },
       "original": {
@@ -1177,11 +1177,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1777650095,
-        "narHash": "sha256-y9Hs9mwDx8qFoZrQ+76isN2X4+VLKtN9Ilsj2HJ4lm4=",
+        "lastModified": 1778259643,
+        "narHash": "sha256-9zioqL+gqOiMN+29yWRc3TmdgXmupoK5ixt/dWtRiqA=",
         "owner": "tweag",
         "repo": "topiary",
-        "rev": "4878a960f45511c45386044b0238cf76095f96e3",
+        "rev": "17c46c93fd674b4c35adfa24bff26260be9e5262",
         "type": "github"
       },
       "original": {
