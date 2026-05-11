@@ -21,6 +21,9 @@ let
     ;
   keys = import ../keys/keys.nix;
 
+  ## Fixed deterministic location for SSH_AUTH_SOCK on remote locations.
+  remoteSshAuthSock = "${config.home.homeDirectory}/.ssh/auth.sock";
+
 in
 {
   config = mkMerge [
@@ -41,7 +44,7 @@ in
       ## deterministic location. This is meant to be used in conjunction with
       ## `keep-agent-alive` on the client side, which maintains a persistent SSH
       ## connection with agent forwarding and symlinks the agent socket here.
-      home.sessionVariables.SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/auth.sock";
+      home.sessionVariables.SSH_AUTH_SOCK = remoteSshAuthSock;
 
       ## Every SSH session with agent forwarding symlinks its agent socket to the
       ## deterministic path above. This way, `keep-agent-alive` keeps it fresh,
@@ -241,7 +244,7 @@ in
               -o "ServerAliveCountMax 2" \
               -o "ExitOnForwardFailure yes" \
               -A "$server" -- \
-              'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
+              'echo "Agent forwarding established." && while true; do if ! [ -e "${remoteSshAuthSock}" ]; then echo "Authentication socket ${remoteSshAuthSock} does not exist anymore."; exit 1; else echo "Auth sock ${remoteSshAuthSock} OK"; fi; sleep 10; done'
           '';
         };
       in
@@ -249,10 +252,7 @@ in
         home.packages = [ keep-agent-alive ];
         systemd.user.services."keep-agent-alive@" = {
           Unit.Description = "Keep SSH agent alive on %i";
-          Service = {
-            ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
-            Environment = "SSH_AUTH_SOCK=${config.home.sessionVariables.SSH_AUTH_SOCK}";
-          };
+          Service.ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
         };
       }
     ))
