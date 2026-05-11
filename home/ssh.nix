@@ -241,7 +241,7 @@ in
               -o "ServerAliveCountMax 2" \
               -o "ExitOnForwardFailure yes" \
               -A "$server" -- \
-              'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
+              'echo "Agent forwarding established ($(date +"%F %T"))." && while true; do if ! [ -e "$SSH_AUTH_SOCK" ]; then echo "Authentication socket $SSH_AUTH_SOCK does not exist anymore."; exit 1; fi; sleep 10; done'
           '';
         };
       in
