@@ -21,6 +21,8 @@ let
     ;
   keys = import ../keys/keys.nix;
 
+  remoteSshAuthSock = home: "${home}/.ssh/auth.sock";
+
 in
 {
   config = mkMerge [
@@ -41,7 +43,7 @@ in
       ## deterministic location. This is meant to be used in conjunction with
       ## `keep-agent-alive` on the client side, which maintains a persistent SSH
       ## connection with agent forwarding and symlinks the agent socket here.
-      home.sessionVariables.SSH_AUTH_SOCK = "${config.home.homeDirectory}/.ssh/auth.sock";
+      home.sessionVariables.SSH_AUTH_SOCK = remoteSshAuthSock config.home.homeDirectory;
 
       ## Every SSH session with agent forwarding symlinks its agent socket to the
       ## deterministic path above. This way, `keep-agent-alive` keeps it fresh,
@@ -222,27 +224,28 @@ in
           if config.programs.ssh.package != null then config.programs.ssh.package else pkgs.openssh;
         keep-agent-alive = pkgs.writeShellApplication {
           name = "keep-agent-alive";
-          runtimeInputs = [
-            pkgs.autossh
-            sshPackage
-          ];
+          runtimeInputs = [ sshPackage ];
           text = ''
             if [ $# -ne 1 ]; then
               echo "Usage: keep-agent-alive <server>" >&2
               exit 1
             fi
             server="$1"
-            echo "Keeping SSH agent alive on $server..."
-            export AUTOSSH_PATH="${sshPackage}/bin/ssh"
-            # shellcheck disable=SC2016
-            exec autossh \
-              -M 0 \
-              -o "ServerAliveInterval 10" \
-              -o "ServerAliveCountMax 2" \
-              -o "ExitOnForwardFailure yes" \
-              -A "$server" -- \
-              'echo "Agent forwarding established ($(date +"%F %T"))." && exec sleep infinity'
+            echo "Establishing agent forwarding with $server..."
+            "${sshPackage}/bin/ssh" \
+              -o ServerAliveInterval=10 \
+              -o ServerAliveCountMax=2 \
+              -o ForwardAgent=yes \
+              -o ExitOnForwardFailure=yes \
+              "$server" -- \
+              'echo "Agent forwarding established." && while true; do
+                 sleep 10
+                 [ -e "${remoteSshAuthSock "."}" ] || { echo "Lost auth socket."; exit 88; }
+               done'
           '';
+          ## NOTE: In the previous script, we crucially use `remoteSshAuthSock`
+          ## and not `config.home.sessionVariables.SSH_AUTH_SOCK`, because the
+          ## latter would be interpreted on the graphical machine.
         };
       in
       {
@@ -251,8 +254,13 @@ in
           Unit.Description = "Keep SSH agent alive on %i";
           Service = {
             ExecStart = "${keep-agent-alive}/bin/keep-agent-alive %i";
-            Environment = "SSH_AUTH_SOCK=${config.home.sessionVariables.SSH_AUTH_SOCK}";
+            Environment = "SSH_AUTH_SOCK=${config.home.sessionVariables.SSH_AUTH_SOCK}"; # forward SSH_AUTH_SOCK into the service
+            Restart = "always"; # restart no matter what
+            RestartSec = "1sec"; # wait at least 1 second before retrying
+            RestartMaxDelaySec = "1min"; # don't wait more than 1 minute before retrying
+            RestartSteps = "4"; # number of steps to back off from RestartSec to RestartMaxDelaySec
           };
+          Unit.StartLimitIntervalSec = "0"; # prevent systemd from exiting if too many failures occur in the same time window
         };
       }
     ))
