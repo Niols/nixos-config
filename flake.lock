@@ -59,11 +59,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1778147926,
-        "narHash": "sha256-gvcr15ku4lbWsySw0bUvldrmpTo6sJt3j2/TTGcQ6fI=",
+        "lastModified": 1778749130,
+        "narHash": "sha256-lNlDLGewwfxfJ/lVAzePQYwZSjyic1yB2hpjnnjxSnk=",
         "ref": "refs/heads/main",
-        "rev": "4a68799773d44fb0f9cb36e5aee038e108d6dea2",
-        "revCount": 295,
+        "rev": "5272db8f003a08422e56611bc4c366c1898b3540",
+        "revCount": 296,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/lesboloss-es/camelotte.git"
@@ -114,11 +114,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1778670269,
-        "narHash": "sha256-bqWD8HdN49QpJVC5R9ymPXKWrsh/qWJF99c68GfCl+g=",
+        "lastModified": 1778750126,
+        "narHash": "sha256-Gs9azwdUn0FvJzLenndaTzyL9/cIFd1vAaDoocDm7Mc=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "7f5e904fa2e9c0f4b412ad5a25515119762244ba",
+        "rev": "97798a712d1814e5a3b7653ecc2f07cdc0eb2c01",
         "type": "github"
       },
       "original": {
