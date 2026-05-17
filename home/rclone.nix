@@ -32,9 +32,13 @@ in
       (pkgs.writeShellApplication {
         name = "sync-tarcisius";
         text = ''
-          rclone sync \
-            'gdrive:Tarcisius/Bladmuziek harmonie orkest' \
-            ~/.syncthing/MobileSheets/Tarcisius/'Google Drive (unstable)'
+          for subdir in 'Bladmuziek harmonie orkest' 'Muziekmap leerlingenorkest (huidige muziek)'; do
+            echo "Syncing \"$subdir\"..."
+            rclone sync \
+                gdrive:Tarcisius/"$subdir" \
+                ~/.syncthing/MobileSheets/Tarcisius/'0_Google Drive (unstable)'/"$subdir"
+            echo "Done syncing \"$subdir\"."
+          done
         '';
       })
     ];
