@@ -18,6 +18,7 @@ in
   config.services.autorandr = {
     enable = true;
     defaultTarget = "default";
+    enableLidListener = true;
 
     profiles =
       let

@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:niols/nixpkgs/autorandr-lid-listener";
 
     ## NOTE: NixOps4 has become a bit complicated recently, so I keep things in
     ## sync manually. This involves fixing the specific commit of nixops4 and
