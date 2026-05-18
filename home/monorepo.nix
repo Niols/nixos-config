@@ -22,14 +22,20 @@ in
       ## support 1200. Maybe there is a nice middleground that can be found, but
       ## I'd rather be safe than sorry.
       AHREFS_ADMIN_MAX_P = 200;
-      ## https://ahrefs.slack.com/archives/C01NT4U32JD/p1763978422745349?thread_ts=1763441475.049519&cid=C01NT4U32JD
-      AHREFS_PRE_COMMIT_CHECK_RULAH = "true";
-      ## https://ahrefs.slack.com/archives/C8SH6JK62/p1779008144833829
-      AHREFS_GITHOOKS_DEVHOOKS = "TRUE";
+
       ## Have both pre-commit and pre-push hooks. This is the default for now,
       ## but pre-commit might stop being enabled by default in the future.
       AHREFS_PRECOMMIT_CHECKS = "TRUE";
       AHREFS_PREPUSH_CHECKS = "TRUE";
+
+      ## Use in-house devhooks rather than pre-commit, see:
+      ## https://ahrefs.slack.com/archives/C8SH6JK62/p1779008144833829
+      AHREFS_GITHOOKS_DEVHOOKS = "TRUE";
+
+      ## More variables for debugging purposes. It doesn't make much sense to
+      ## activate them via Nix, so they are more here for documentation.
+      #AHREFS_PREPUSH_TRACE = "TRUE";
+      #AHREFS_PREPUSH_DEBUG = "TRUE";
     };
   };
 }
