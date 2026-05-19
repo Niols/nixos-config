@@ -173,8 +173,25 @@ in
             name = "telegraf";
             ensureDBOwnership = true;
           }
+          {
+            name = "grafana";
+            # see privileges below
+          }
         ];
       };
+      systemd.services.postgresql.postStart = lib.mkAfter ''
+        psql -tA <<'EOF'
+          \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
+          ALTER USER "grafana" WITH PASSWORD :'password';
+          GRANT CONNECT ON DATABASE "telegraf" TO "grafana";
+          \connect telegraf
+          GRANT USAGE ON SCHEMA public TO "grafana";
+          GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
+          ALTER DEFAULT PRIVILEGES FOR ROLE "telegraf" IN SCHEMA public
+            GRANT SELECT ON TABLES TO "grafana";
+        EOF
+      '';
+      age.secrets.postgresql-password-grafana.owner = "postgres";
 
       ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
       ## read secrets from files instead of storing them in the config. See:

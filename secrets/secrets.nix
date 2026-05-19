@@ -150,6 +150,8 @@ concatMapAttrs
         gromit-niols
       ];
 
+      postgresql-password-grafana = [ orianne ];
+
       rutorrent-passwd = [ helga ];
 
       wireguard-ahlaya-ahrefs-key = [ ahlaya ];
