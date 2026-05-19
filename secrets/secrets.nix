@@ -103,6 +103,10 @@ concatMapAttrs
       matrix-synapse-macaroon-secret = [ helga ];
       matrix-synapse-registration-secret = [ helga ];
 
+      mosquitto-password-nrg_dongle_pro = [ orianne ];
+      mosquitto-password-telegraf = [ orianne ];
+      telegraf-secrets = [ orianne ];
+
       netrc-niols = [
         ahlaya-niols
         ahlaya-work

@@ -13,8 +13,11 @@ let
     optionalString
     ;
 
+  mqttPort = 1883;
   nodeMetricsPort = 9000;
   processMetricsPort = 9256;
+  telegrafMetricsPort = 9273;
+  telegrafScrapeIntervalSeconds = 10; # must match the publishing interval of the dongles
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -83,8 +86,73 @@ in
               labels = { inherit server; };
             }) machines.servers;
           }
+          {
+            job_name = "telegraf";
+            scrape_interval = "${toString telegrafScrapeIntervalSeconds}s";
+            static_configs = [ { targets = [ "localhost:${toString telegrafMetricsPort}" ]; } ];
+          }
         ];
         port = prometheusPort;
+      };
+
+      ## MQTT broker, to receive messages from IoT devices; in a first instance,
+      ## the NRG Dongle Pro.
+      services.mosquitto = {
+        enable = true;
+        logType = [ "all" ]; # FIXME: remove
+        listeners = [
+          {
+            address = "0.0.0.0";
+            port = mqttPort;
+            users = {
+              nrg_dongle_pro = {
+                acl = [ "write nrg_dongle_pro/#" ];
+                passwordFile = config.age.secrets.mosquitto-password-nrg_dongle_pro.path;
+              };
+              telegraf = {
+                acl = [ "read #" ];
+                passwordFile = config.age.secrets.mosquitto-password-telegraf.path;
+              };
+            };
+          }
+        ];
+      };
+      networking.firewall.allowedTCPPorts = [ mqttPort ];
+
+      ## Telegraf to bridge data betwen providers; in a first instance between
+      ## MQTT/Mosquitto and Prometheus.
+      ##
+      ## NOTE[May 2026]: I don't like this so much, because it's weirdly
+      ## push-and-pull, as in the dongle pushes MQTT onto Mosquitto, which then
+      ## passes to Telegraf, but then Prometheus pulls it, and things can get
+      ## desynchronised. A better solution would be for Telegraf to push into a
+      ## database, but that would be more work to set up and maintain, and it
+      ## isn't my focus at the moment.
+      ##
+      services.telegraf = {
+        enable = true;
+        extraConfig = {
+          inputs.mqtt_consumer = {
+            servers = [ "tcp://localhost:${toString mqttPort}" ];
+            username = "telegraf";
+            password = "\${MOSQUITTO_PASSWORD}"; # set from secrets, see `environmentFiles` below
+            topics = [ "nrg_dongle_pro/#" ];
+            data_format = "value";
+            data_type = "float";
+            name_prefix = "nrg_dongle_pro_"; # works only because we have only one provider
+            topic_parsing = [
+              {
+                topic = "nrg_dongle_pro/+";
+                measurement = "_/measurement";
+              }
+            ];
+          };
+          outputs.prometheus_client = {
+            listen = "127.0.0.1:${toString telegrafMetricsPort}";
+            expiration_interval = "${toString (1.2 * telegrafScrapeIntervalSeconds)}s"; # more than 1 scrape interval, but less than 2
+          };
+        };
+        environmentFiles = [ config.age.secrets.telegraf-secrets.path ];
       };
 
       ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
@@ -127,15 +195,15 @@ in
       };
 
       ############################################################################
-      ## Daily backup of Grafana
+      ## Daily backup of Monitoring data
       ##
-      ## There is no need backing up Prometheus or the node exporters; if things
-      ## crash and we lose our monitoring data, it isn't a big deal. Grafana,
-      ## however, will store the dashboards and everything, and that is fairly
-      ## important.
+      ## TODO: Rename.
 
       _common.hester.backupJobs.grafana = {
-        paths = [ "/var/lib/grafana" ];
+        paths = [
+          "/var/lib/prometheus2"
+          "/var/lib/grafana"
+        ];
         repokeyFile = config.age.secrets.hester-grafana-backup-repokey.path;
         identityFile = config.age.secrets.hester-grafana-backup-identity.path;
       };
