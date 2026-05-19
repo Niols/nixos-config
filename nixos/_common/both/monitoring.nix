@@ -16,8 +16,6 @@ let
   mqttPort = 1883;
   nodeMetricsPort = 9000;
   processMetricsPort = 9256;
-  telegrafMetricsPort = 9273;
-  telegrafScrapeIntervalSeconds = 10; # must match the publishing interval of the dongles
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -86,20 +84,15 @@ in
               labels = { inherit server; };
             }) machines.servers;
           }
-          {
-            job_name = "telegraf";
-            scrape_interval = "${toString telegrafScrapeIntervalSeconds}s";
-            static_configs = [ { targets = [ "localhost:${toString telegrafMetricsPort}" ]; } ];
-          }
         ];
         port = prometheusPort;
       };
 
       ## MQTT broker, to receive messages from IoT devices; in a first instance,
       ## the NRG Dongle Pro.
+      ##
       services.mosquitto = {
         enable = true;
-        logType = [ "all" ]; # FIXME: remove
         listeners = [
           {
             address = "0.0.0.0";
@@ -119,15 +112,7 @@ in
       };
       networking.firewall.allowedTCPPorts = [ mqttPort ];
 
-      ## Telegraf to bridge data betwen providers; in a first instance between
-      ## MQTT/Mosquitto and Prometheus.
-      ##
-      ## NOTE[May 2026]: I don't like this so much, because it's weirdly
-      ## push-and-pull, as in the dongle pushes MQTT onto Mosquitto, which then
-      ## passes to Telegraf, but then Prometheus pulls it, and things can get
-      ## desynchronised. A better solution would be for Telegraf to push into a
-      ## database, but that would be more work to set up and maintain, and it
-      ## isn't my focus at the moment.
+      ## Telegraf to bridge data betwen MQTT/Mosquitto and PostgreSQL.
       ##
       services.telegraf = {
         enable = true;
@@ -136,24 +121,67 @@ in
             servers = [ "tcp://localhost:${toString mqttPort}" ];
             username = "telegraf";
             password = "\${MOSQUITTO_PASSWORD}"; # set from secrets, see `environmentFiles` below
-            topics = [ "nrg_dongle_pro/#" ];
-            data_format = "value";
-            data_type = "float";
-            name_prefix = "nrg_dongle_pro_"; # works only because we have only one provider
-            topic_parsing = [
+            topics = [ "nrg_dongle_pro/all" ];
+            data_format = "json_v2";
+            json_v2 = [
               {
-                topic = "nrg_dongle_pro/+";
-                measurement = "_/measurement";
+                measurement_name = "nrg_dongle_pro";
+                field = mapAttrsToList (path: type: { inherit path type; }) {
+                  current_l1 = "float";
+                  current_l2 = "float";
+                  current_l3 = "float";
+                  electricity_tariff = "float";
+                  energy_delivered_tariff1 = "float";
+                  energy_delivered_tariff2 = "float";
+                  energy_returned_tariff1 = "float";
+                  energy_returned_tariff2 = "float";
+                  power_delivered = "float";
+                  power_delivered_l1 = "float";
+                  power_delivered_l2 = "float";
+                  power_delivered_l3 = "float";
+                  power_returned = "float";
+                  power_returned_l1 = "float";
+                  power_returned_l2 = "float";
+                  power_returned_l3 = "float";
+                  timestamp = "string";
+                  voltage_l1 = "float";
+                  voltage_l2 = "float";
+                  voltage_l3 = "float";
+                };
               }
             ];
           };
-          outputs.prometheus_client = {
-            listen = "127.0.0.1:${toString telegrafMetricsPort}";
-            expiration_interval = "${toString (1.2 * telegrafScrapeIntervalSeconds)}s"; # more than 1 scrape interval, but less than 2
-          };
+          outputs.postgresql = { };
         };
         environmentFiles = [ config.age.secrets.telegraf-secrets.path ];
       };
+
+      services.postgresql = {
+        ensureDatabases = [ "telegraf" ];
+        ensureUsers = [
+          {
+            name = "telegraf";
+            ensureDBOwnership = true;
+          }
+          {
+            name = "grafana";
+            # see privileges below
+          }
+        ];
+      };
+      systemd.services.postgresql.postStart = lib.mkAfter ''
+        psql -tA <<'EOF'
+          \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
+          ALTER USER "grafana" WITH PASSWORD :'password';
+          GRANT CONNECT ON DATABASE "telegraf" TO "grafana";
+          \connect telegraf
+          GRANT USAGE ON SCHEMA public TO "grafana";
+          GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
+          ALTER DEFAULT PRIVILEGES FOR ROLE "telegraf" IN SCHEMA public
+            GRANT SELECT ON TABLES TO "grafana";
+        EOF
+      '';
+      age.secrets.postgresql-password-grafana.owner = "postgres";
 
       ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
       ## read secrets from files instead of storing them in the config. See:
@@ -199,8 +227,11 @@ in
       ##
       ## TODO: Rename.
 
+      services.postgresqlBackup.databases = [ "telegraf" ];
+
       _common.hester.backupJobs.grafana = {
         paths = [
+          "/var/backup/postgresql/telegraf.sql.gz"
           "/var/lib/prometheus2"
           "/var/lib/grafana"
         ];
