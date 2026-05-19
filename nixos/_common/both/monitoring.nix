@@ -99,7 +99,6 @@ in
       ## the NRG Dongle Pro.
       services.mosquitto = {
         enable = true;
-        logType = [ "all" ]; # FIXME: remove
         listeners = [
           {
             address = "0.0.0.0";
@@ -136,14 +135,33 @@ in
             servers = [ "tcp://localhost:${toString mqttPort}" ];
             username = "telegraf";
             password = "\${MOSQUITTO_PASSWORD}"; # set from secrets, see `environmentFiles` below
-            topics = [ "nrg_dongle_pro/#" ];
-            data_format = "value";
-            data_type = "float";
-            name_prefix = "nrg_dongle_pro_"; # works only because we have only one provider
-            topic_parsing = [
+            topics = [ "nrg_dongle_pro/all" ];
+            data_format = "json_v2";
+            json_v2 = [
               {
-                topic = "nrg_dongle_pro/+";
-                measurement = "_/measurement";
+                measurement_name = "nrg_dongle_pro";
+                field = mapAttrsToList (path: type: { inherit path type; }) {
+                  current_l1 = "float";
+                  current_l2 = "float";
+                  current_l3 = "float";
+                  electricity_tariff = "float";
+                  energy_delivered_tariff1 = "float";
+                  energy_delivered_tariff2 = "float";
+                  energy_returned_tariff1 = "float";
+                  energy_returned_tariff2 = "float";
+                  power_delivered = "float";
+                  power_delivered_l1 = "float";
+                  power_delivered_l2 = "float";
+                  power_delivered_l3 = "float";
+                  power_returned = "float";
+                  power_returned_l1 = "float";
+                  power_returned_l2 = "float";
+                  power_returned_l3 = "float";
+                  timestamp = "string";
+                  voltage_l1 = "float";
+                  voltage_l2 = "float";
+                  voltage_l3 = "float";
+                };
               }
             ];
           };
