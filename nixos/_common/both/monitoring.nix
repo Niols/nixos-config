@@ -118,15 +118,7 @@ in
       };
       networking.firewall.allowedTCPPorts = [ mqttPort ];
 
-      ## Telegraf to bridge data betwen providers; in a first instance between
-      ## MQTT/Mosquitto and Prometheus.
-      ##
-      ## NOTE[May 2026]: I don't like this so much, because it's weirdly
-      ## push-and-pull, as in the dongle pushes MQTT onto Mosquitto, which then
-      ## passes to Telegraf, but then Prometheus pulls it, and things can get
-      ## desynchronised. A better solution would be for Telegraf to push into a
-      ## database, but that would be more work to set up and maintain, and it
-      ## isn't my focus at the moment.
+      ## Telegraf to bridge data betwen MQTT/Mosquitto and PostgreSQL.
       ##
       services.telegraf = {
         enable = true;
@@ -169,8 +161,19 @@ in
             listen = "127.0.0.1:${toString telegrafMetricsPort}";
             expiration_interval = "${toString (1.2 * telegrafScrapeIntervalSeconds)}s"; # more than 1 scrape interval, but less than 2
           };
+          outputs.postgresql = { };
         };
         environmentFiles = [ config.age.secrets.telegraf-secrets.path ];
+      };
+
+      services.postgresql = {
+        ensureDatabases = [ "telegraf" ];
+        ensureUsers = [
+          {
+            name = "telegraf";
+            ensureDBOwnership = true;
+          }
+        ];
       };
 
       ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
@@ -217,8 +220,11 @@ in
       ##
       ## TODO: Rename.
 
+      services.postgresqlBackup.databases = [ "telegraf" ];
+
       _common.hester.backupJobs.grafana = {
         paths = [
+          "/var/backup/postgresql/telegraf.sql.gz"
           "/var/lib/prometheus2"
           "/var/lib/grafana"
         ];
