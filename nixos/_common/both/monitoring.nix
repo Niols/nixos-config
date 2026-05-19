@@ -16,8 +16,6 @@ let
   mqttPort = 1883;
   nodeMetricsPort = 9000;
   processMetricsPort = 9256;
-  telegrafMetricsPort = 9273;
-  telegrafScrapeIntervalSeconds = 10; # must match the publishing interval of the dongles
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -86,17 +84,13 @@ in
               labels = { inherit server; };
             }) machines.servers;
           }
-          {
-            job_name = "telegraf";
-            scrape_interval = "${toString telegrafScrapeIntervalSeconds}s";
-            static_configs = [ { targets = [ "localhost:${toString telegrafMetricsPort}" ]; } ];
-          }
         ];
         port = prometheusPort;
       };
 
       ## MQTT broker, to receive messages from IoT devices; in a first instance,
       ## the NRG Dongle Pro.
+      ##
       services.mosquitto = {
         enable = true;
         listeners = [
@@ -156,10 +150,6 @@ in
                 };
               }
             ];
-          };
-          outputs.prometheus_client = {
-            listen = "127.0.0.1:${toString telegrafMetricsPort}";
-            expiration_interval = "${toString (1.2 * telegrafScrapeIntervalSeconds)}s"; # more than 1 scrape interval, but less than 2
           };
           outputs.postgresql = { };
         };
