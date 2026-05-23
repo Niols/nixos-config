@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkOption types;
@@ -13,6 +18,32 @@ in
     '';
     type = types.str;
     default = "0000";
+  };
+
+  ## NOTE: Little hack while waiting for the `enableLidListener` option to get
+  ## upstreamed; see https://github.com/NixOS/nixpkgs/pull/521560
+  ##
+  config.systemd.services.autorandr-lid-listener = {
+    wantedBy = [ "multi-user.target" ];
+    description = "Runs autorandr whenever the lid state changes";
+    serviceConfig = {
+      ExecStart = pkgs.writeShellScript "autorandr-lid-listener" ''
+        stdbuf -oL ${pkgs.libinput}/bin/libinput debug-events | \
+          grep -E --line-buffered '^[[:space:]-]+event[0-9]+[[:space:]]+SWITCH_TOGGLE[[:space:]]' | \
+          while read line; do
+            ${pkgs.autorandr}/bin/autorandr \
+              --batch \
+              --change \
+              --default ${config.services.autorandr.defaultTarget} \
+              ${lib.optionalString config.services.autorandr.ignoreLid "--ignore-lid"} \
+              ${lib.optionalString config.services.autorandr.matchEdid "--match-edid"}
+          done
+      '';
+      Type = "simple";
+      Restart = "always";
+      RestartSec = 30;
+      SyslogIdentifier = "autorandr";
+    };
   };
 
   config.services.autorandr = {
