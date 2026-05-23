@@ -76,35 +76,34 @@ in
       programs.ssh.matchBlocks =
         (concatMapAttrs (
           server: meta:
-          ## For each server, we generate two blocks, one for the hostnames and
-          ## one for the IPs. This ensures that we can connect to the IPs
-          ## directly and that will still pick up on our configuration.
           let
-            hosts = [
-              server
-              "${server}.niols.fr"
-            ];
-            ips =
-              optional (meta ? ipv4) meta.ipv4
-              ++ optional (meta ? ipv6) meta.ipv6
-              ++ optional (meta ? internalIpv4) meta.internalIpv4
-              ++ optional (meta ? internalIpv6) meta.internalIpv6;
-            makeMatchBlock = hosts: {
-              match = "Host ${concatStringsSep "," hosts}";
+            fqdn = "${server}.niols.fr";
+            ips = optional (meta ? ipv4) meta.ipv4 ++ optional (meta ? ipv6) meta.ipv6;
+          in
+          {
+            "${server}" = {
+              match = "Host ${
+                concatStringsSep "," (
+                  ips
+                  ++ [
+                    server
+                    fqdn
+                  ]
+                )
+              }";
               user = "root";
               identitiesOnly = true;
               identityFile = "~/.ssh/id_niols";
               forwardAgent = true; # those are our machines, we trust them
               userKnownHostsFile = toFile "${server}-known_hosts" (
-                concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") ips
+                concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") (ips ++ [ fqdn ])
               );
             };
-          in
-          {
-            "${server}-hosts" = makeMatchBlock hosts // {
-              hostname = meta.ipv4 or meta.ipv6 or meta.internalIpv4 or meta.internalIpv6;
+
+            "${server}-short" = {
+              match = "Host ${server}";
+              hostname = fqdn;
             };
-            "${server}-ips" = makeMatchBlock ips;
           }
         ) machines.servers)
 
