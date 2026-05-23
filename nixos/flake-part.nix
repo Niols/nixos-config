@@ -47,10 +47,13 @@ let
 
   ## The special arguments that we need to propagate throughout the whole
   ## codebase and all the modules, specialised for the given machine.
+  ##
   specialArgsFor = name: {
     inherit inputs;
     machines = machines // {
       this = machines.all.${name};
+      otherLaptops = filterAttrs (otherName: _: otherName != name) machines.laptops;
+      otherServers = filterAttrs (otherName: _: otherName != name) machines.servers;
     };
   };
 
