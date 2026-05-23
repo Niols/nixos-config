@@ -155,5 +155,10 @@ concatMapAttrs
       rutorrent-passwd = [ helga ];
 
       wireguard-ahlaya-ahrefs-key = [ ahlaya ];
+
+      wireguard-anastasia-niols-key = [ anastasia ];
+      wireguard-helga-niols-key = [ helga ];
+      wireguard-orianne-niols-key = [ orianne ];
+      wireguard-siegfried-niols-key = [ siegfried ];
     }
   )
