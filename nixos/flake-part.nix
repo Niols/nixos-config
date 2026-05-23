@@ -16,7 +16,7 @@ let
     };
     anastasia = {
       kind = "server";
-      internalIpv4 = "192.168.1.11";
+      localIp = "192.168.1.11"; # IP on the local network, in this case a home 192.168.* network
       cores = 2;
     };
     gromit = {
