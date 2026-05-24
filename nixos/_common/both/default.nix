@@ -32,6 +32,7 @@ in
     ./ftp-server.nix
     ./git-server.nix
     ./hester.nix
+    ./ids.nix
     ./mastodon.nix
     ./matrix.nix
     ./medias.nix
