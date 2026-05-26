@@ -29,18 +29,11 @@ in
           api-endpoint = "https://${domain}/";
           database.url = "postgresql://${user}@localhost/${user}?host=/run/postgresql";
           storage.type = "local";
-          storage.path = "/hester/services/atticd";
+          storage.path = "/data/services/atticd";
           garbage-collection.inteval = "24 hours";
           garbage-collection.default-retention-period = "1 month";
         };
         environmentFile = config.age.secrets.atticd-environment.path;
-      };
-
-      ## Mount the right folder on Hester with the proper permissions.
-      _common.hester.fileSystems.services-atticd = {
-        path = "/services/atticd";
-        uid = user;
-        gid = config.services.atticd.group;
       };
 
       services.postgresql = {
