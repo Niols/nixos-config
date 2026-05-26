@@ -31,6 +31,7 @@ let
     nextcloud = 2000; # was 993 on Orianne
     dancelor = 2001; # was 989 on Orianne
     jellyfin = 2002; # was 994 on Orianne
+    atticd = 2003; # was automated on Helga
     rtorrent = 2004; # was 993 on Helga
     rutorrent = 2005; # was 992 on Helga
     galene = 2006; # was 990 on Helga
@@ -63,6 +64,7 @@ let
     nextcloud = 2000; # was 991 on Orianne
     dancelor = 2001; # was 986 on Orianne
     jellyfin = 2002; # was 992 on Orianne
+    atticd = 2003; # was automated on Orianne
     rtorrent = 2004; # was 990 on Helga
     rutorrent = 2005; # was 989 on Helga
     galene = 2006; # was 987 on Helga
