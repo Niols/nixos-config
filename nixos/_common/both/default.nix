@@ -65,7 +65,7 @@ in
       medias.enabledOn = "orianne";
       monitor.enabledOn = "orianne";
       nfs.enabledOn = "anastasia";
-      nix-cache.enabledOn = "helga";
+      nix-cache.enabledOn = "anastasia";
       syncthing.enabledOn = "siegfried";
       teamspeak.enabledOn = "helga";
       torrent.enabledOn = "helga";
