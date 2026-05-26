@@ -13,6 +13,7 @@
 - [Steam](./docs/steam.md)
 - [Syncthing](./docs/syncthing.md)
 - [Xfce](./docs/xfce.md)
+- [When the Nix cache is down](./docs/nix-cache-down.md)
 
 ## Organisation
 
