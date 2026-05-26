@@ -56,6 +56,7 @@ in
   ## ZFS from force-importing pools; we will have to `zpool import -f` manually.
   networking.hostId = "f96b4cab";
   boot.zfs.forceImportAll = false;
+  boot.zfs.forceImportRoot = false;
 
   services.zfs = {
     autoScrub.enable = true;

@@ -70,6 +70,7 @@ concatMapAttrs
       hester-dancelor-backup-repokey = [ orianne ];
       hester-dancelor-backup-identity = [ orianne ];
       hester-samba-credentials = [
+        anastasia
         helga
         orianne
         siegfried

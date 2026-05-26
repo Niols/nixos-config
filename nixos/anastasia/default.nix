@@ -20,5 +20,7 @@
       ## | 1 | enp1s0 | 2.5G | e4:3a:6e:85:83:3f |
       ## | 2 | enp2s0 |  10G | e4:3a:6e:85:83:40 |
       ## | 3 | enp5s0 | 2.5G | e4:3a:6e:85:84:38 |
+
+      _common.hester.fileSystems.root.path = "";
     };
 }
