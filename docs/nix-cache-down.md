@@ -19,15 +19,11 @@ nixops| Nix crashed. This is a bug. Please report this at https://github.com/Nix
 [...]
 ```
 
-On 26 May, I found a way around it, but I messed up with many things and it is
-unclear which one helped:
+On the **target machine**, remove `nix-cache.niols.fr/nixos-config` from
+`/etc/nix/nix.conf` and `systemctl restart nix-daemon`.
 
-- Removed `nix-cache.niols.fr/nixos-config` from `/etc/nix/nix.conf` and `systemctl restart nix-daemon`
-- Same but on the target machine (this one is the one that got it working)
-- Same for `~/.config/nix/nix.conf` on local machine
-- Run `nixops4 apply` with `NIX_CONFIG="substituters = https://cache.nixos.org"`
-- Removed `~/.local/share/nix/trusted-settings.json`
-- Made sure there was no `.#nixConfig` that would include them.
+On the deployer, run:
 
-I need to check again which ones were necessary. The one on the target machine
-was crucial, but I don't really understand why it was even necessary.
+```
+NIX_CONFIG="substituters = https://cache.nixos.org" nixops4 apply <args>
+```

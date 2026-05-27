@@ -25,7 +25,7 @@ concatMapAttrs
       ############################################################################
       ## Files and their host keys
 
-      atticd-environment = [ helga ];
+      atticd-environment = [ anastasia ];
       attic-client-config = [
         ahlaya-niols
         ahlaya-work
@@ -65,8 +65,8 @@ concatMapAttrs
       syncthing-gromit-cert = [ gromit ];
       syncthing-gromit-key = [ gromit ];
 
-      hester-atticd-backup-repokey = [ helga ];
-      hester-atticd-backup-identity = [ helga ];
+      hester-atticd-backup-repokey = [ anastasia ];
+      hester-atticd-backup-identity = [ anastasia ];
       hester-dancelor-backup-repokey = [ orianne ];
       hester-dancelor-backup-identity = [ orianne ];
       hester-samba-credentials = [
