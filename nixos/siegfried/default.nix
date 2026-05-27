@@ -5,7 +5,6 @@
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
         ../_common/server.nix
-        ./nginx.nix
       ];
 
       x_niols.thisMachinesName = "siegfried";
@@ -49,5 +48,8 @@
           kernelModules = [ "nvme" ];
         };
       };
+
+      x_niols.nginxXSSProtection = true;
+      x_niols.nginxXFrameOptionsDeny = true;
     };
 }

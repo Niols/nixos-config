@@ -5,7 +5,6 @@
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
         ../_common/server.nix
-        ./nginx.nix
         ./storage.nix
       ];
 
@@ -47,5 +46,8 @@
 
       ## REVIEW: not sure if we need this
       networking.useDHCP = lib.mkDefault true;
+
+      x_niols.nginxXSSProtection = false;
+      x_niols.nginxXFrameOptionsDeny = true;
     };
 }

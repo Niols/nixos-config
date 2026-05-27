@@ -40,6 +40,7 @@ in
     ./motd.nix
     ./network.nix
     ./nfs.nix
+    ./nginx.nix
     ./nix-cache.nix
     ./ssh.nix
     ./syncthing.nix
