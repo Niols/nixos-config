@@ -3,6 +3,7 @@
 let
   inherit (lib)
     mkOption
+    mkIf
     mkDefault
     optionalString
     types
@@ -30,7 +31,7 @@ in
     '';
   };
 
-  config = {
+  config = mkIf config.x_niols.isServer {
     networking.firewall.allowedTCPPorts = [
       80
       443
