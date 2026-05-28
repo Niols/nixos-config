@@ -217,7 +217,7 @@ in
         steps = setupSteps ++ [
           setupEmulationLayerStep
           {
-            name = "Run check “\${{ matrix.check }}”";
+            name = "Run checki “\${{ matrix.check }}”";
             run = ''
               export NIX_CONFIG=$(cat nix-config)
               nix build .#checks.''${{ matrix.system }}.''${{ matrix.check }} --print-build-logs
