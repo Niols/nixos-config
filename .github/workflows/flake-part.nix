@@ -6,7 +6,11 @@ let
     attrValues
     concatMap
     mapAttrs
+    mapAttrsToList
     optionalString
+    toJSON
+    toFile
+    concatStringsSep
     ;
 
   setupSteps = [
@@ -68,16 +72,13 @@ in
           enable = true;
           files = "\\.nix$";
           pass_filenames = false;
-          entry = "${pkgs.writeShellScript "make-github-workflows" ''
-            W=$(
-              ${pkgs.nix}/bin/nix eval \
-                --extra-experimental-features 'nix-command flakes' \
-                --impure --raw --expr 'with builtins; toJSON (getFlake (toString ./.)).github-workflows'
-            ) || exit 7
-            for workflow in $(echo "$W" | ${pkgs.jq}/bin/jq -r 'keys[]'); do
-              echo "$W" | ${pkgs.jq}/bin/jq ".$workflow" > .github/workflows/''${workflow}.yml || exit 7
-            done
-          ''}";
+          entry = "${pkgs.writeShellScript "make-github-workflows" (
+            concatStringsSep "\n" (
+              mapAttrsToList (name: workflow: ''
+                cp ${toFile "github-workflow-${name}.yml" (toJSON workflow)} .github/workflows/${name}.yml
+              '') self.github-workflows
+            )
+          )}";
         };
         prettier.excludes = [ ".github/workflows/.*\\.yml$" ];
       };
