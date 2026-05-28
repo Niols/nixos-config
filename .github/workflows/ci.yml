@@ -1,226 +1,237 @@
----
-name: CI
-
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - "*"
-  pull_request:
-
-## We specify a concurrency group with automated cancellation. This means that
-## other pushes on the same `github.ref` (eg. other pushes to the same pull
-## request) cancel previous occurrences of the CI.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  discover:
-    name: Discover
-    runs-on: ubuntu-latest
-    outputs:
-      checks: ${{ steps.json.outputs.checks }}
-      homeConfigurations: ${{ steps.json.outputs.homeConfigurations }}
-      nixosConfigurations: ${{ steps.json.outputs.nixosConfigurations }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            ## Access token to avoid triggering GitHub's rate limiting.
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Gather outputs from the flake
-        id: json
-        run: |
-          set -o pipefail # important for the `exit 7` below
-          {
-            if [[ "$GITHUB_REF" =~ ^refs/tags/ ]]; then
-              echo >&2 "This CI was triggered by a tag, so only the corresponding home or NixOS configuration will be built."
-              echo checks=[]
-              if [[ "$GITHUB_REF" =~ ^refs/tags/home-(.+)-on- ]]; then
-                echo homeConfigurations="[\"${BASH_REMATCH[1]}\"]"
-                echo nixosConfigurations=[]
-              elif [[ "$GITHUB_REF" =~ ^refs/tags/nixos-(.+)-gen- ]]; then
-                echo homeConfigurations=[]
-                echo nixosConfigurations="[\"${BASH_REMATCH[1]}\"]"
-              else
-                echo >&2 "This is neither a home nor a NixOS configuration, so I do not know what to do."
-                exit 2
-              fi
-            else
-              echo >&2 "This CI was not triggered by a tag, so all available checks, home and NixOS configurations will be built."
-              read_and_output () {
-                printf '%s=' "$1"
-                nix eval --impure --raw --expr "
-                  with builtins;
-                  let flake = getFlake (toString ./.); in
-                  toJSON (attrNames flake.$2)
-                " || exit 7
-                echo
-              }
-              read_and_output checks checks.x86_64-linux
-              read_and_output homeConfigurations homeConfigurations
-              read_and_output nixosConfigurations nixosConfigurations
-            fi
-          } | tee $GITHUB_OUTPUT
-
-  summarise:
-    name: Summarise
-    runs-on: ubuntu-latest
-    needs:
-      - discover
-      - checks
-      - homeConfigurations
-      - nixosConfigurations
-    if: always()
-    steps:
-      - uses: re-actors/alls-green@release/v1
-        with:
-          jobs: ${{ toJSON(needs) }}
-          allowed-skips: checks, homeConfigurations, nixosConfigurations
-
-  checks:
-    name: Check
-    needs: discover
-    runs-on: ubuntu-latest
-    ## Only run if checks != [], which we test indirectly.
-    if: contains(needs.discover.outputs.checks, '"')
-    strategy:
-      matrix:
-        system: [x86_64-linux, aarch64-linux]
-        check: ${{ fromJson(needs.discover.outputs.checks) }}
-      fail-fast: false
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v6
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Get flake inputs and install Attic
-        run: nix profile add .#attic
-      - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.5
-        with:
-          endpoint: https://nix-cache.niols.fr/
-          cache: nixos-config
-          token: ${{ secrets.ATTIC_TOKEN }}
-      - name: Set up emulation layer if necessary
-        run: |
-          ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
-          ## machines, so we detect that, install the emulation binaries for
-          ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
-          system=${{ matrix.system }}
-          echo "system = $system" > nix-config
-          if [ $system != x86_64-linux ]; then
-            printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
-            sudo apt-get update -y && sudo apt-get install -y qemu-user-static
-          fi
-      - name: Run check “${{ matrix.check }}”
-        run: |
-          export NIX_CONFIG=$(cat nix-config)
-          nix build .#checks.${{ matrix.system }}.${{ matrix.check }} --print-build-logs
-
-  homeConfigurations:
-    name: Home
-    needs: discover
-    runs-on: ubuntu-latest
-    ## Only run if homeConfigurations != [], which we test indirectly.
-    if: contains(needs.discover.outputs.homeConfigurations, '"')
-    strategy:
-      matrix:
-        home: ${{ fromJson(needs.discover.outputs.homeConfigurations) }}
-      fail-fast: false
-    steps:
-      - name: Check out repository code.
-        uses: actions/checkout@v6
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-        ## NOTE: We build the home configurations as impure because they get
-        ## their `home.username` and `home.homeDirectory` from the environment
-        ## when they are not used via the Home Manager NixOS module.
-      - name: Build Home configuration “${{ matrix.home }}”
-        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --impure --print-build-logs
-
-  nixosConfigurations:
-    name: NixOS
-    needs: discover
-    runs-on: ubuntu-latest
-    ## Only run if nixosConfigurations != [], which we test indirectly.
-    if: contains(needs.discover.outputs.nixosConfigurations, '"')
-    strategy:
-      matrix:
-        nixos: ${{ fromJson(needs.discover.outputs.nixosConfigurations) }}
-      fail-fast: false
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-        ## NOTE: The cache is not that performant network-wise and it is often
-        ## faster to build the configurations directly; however, every now and
-        ## then, we start having to actually build things, and then the cache is
-        ## beneficial. It provides a reasonable average case. It is always very
-        ## beneficial when deploying.
-      - name: Install Attic
-        run: nix profile add .#attic
-      - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.5
-        with:
-          endpoint: https://nix-cache.niols.fr/
-          cache: nixos-config
-          token: ${{ secrets.ATTIC_TOKEN }}
-        ## FIXME: Freeing space takes about 3-4 minutes as of 15 September 2025,
-        ## which is lost time on small configurations. It would be nicer if we
-        ## could decide whether that is actually necessary.
-      - name: Free some extra space
-        run: |
-          echo 'Available storage before:'
-          sudo df -h
-          echo
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-          echo 'Available storage after:'
-          sudo df -h
-          echo
-      - name: Set up emulation layer if necessary
-        run: |
-          ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
-          ## machines, so we detect that, install the emulation binaries for
-          ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
-          system=$(nix eval --impure --raw .#nixosConfigurations.${{ matrix.nixos }}.pkgs.stdenv.hostPlatform.system)
-          echo "system = $system" > nix-config
-          if [ $system != x86_64-linux ]; then
-            printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
-            sudo apt-get update -y && sudo apt-get install -y qemu-user-static
-          fi
-      - name: Build NixOS configuration “${{ matrix.nixos }}”
-        run: |
-          export NIX_CONFIG=$(cat nix-config)
-          nix build .#nixosConfigurations.${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
-      - name: Remaining space
-        run: |
-          echo 'Available storage:'
-          sudo df -h
-      - name: Deploy NixOps4 component “${{ matrix.nixos }}” if it exists
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          if nix develop --command nixops4 members list 2>/dev/null | grep '^${{ matrix.nixos }}$'; then
-            echo "${{ secrets.DEPLOY_KEY }}" > deploy-key
-            chmod 600 deploy-key
-            nix develop --command ssh-agent bash -c '
-              ssh-add deploy-key
-              export NIX_CONFIG=$(cat nix-config)
-              nixops4 apply ${{ matrix.nixos }}
-            '
-          fi
+{
+  "concurrency": {
+    "cancel-in-progress": true,
+    "group": "${{ github.workflow }}-${{ github.ref }}"
+  },
+  "jobs": {
+    "checks": {
+      "name": "Check",
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "name": "Check out repository",
+          "uses": "actions/checkout@v6"
+        },
+        {
+          "name": "Install Nix",
+          "uses": "cachix/install-nix-action@v31",
+          "with": {
+            "extra_nix_config": "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
+          }
+        },
+        {
+          "name": "Install Attic",
+          "run": "nix profile add .#attic"
+        },
+        {
+          "name": "Set up Attic cache",
+          "uses": "ryanccn/attic-action@v0.5",
+          "with": {
+            "cache": "nixos-config",
+            "endpoint": "https://nix-cache.niols.fr/",
+            "token": "${{ secrets.ATTIC_TOKEN }}"
+          }
+        },
+        {
+          "name": "Set up emulation layer if necessary",
+          "run": "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\nif [ $system != x86_64-linux ]; then\n  printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\\n' \"$system\"\n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\nfi\n"
+        },
+        {
+          "name": "Run check “${{ matrix.check }}”",
+          "run": "export NIX_CONFIG=$(cat nix-config)\nnix build .#checks.${{ matrix.system }}.${{ matrix.check }} --print-build-logs\n"
+        }
+      ],
+      "strategy": {
+        "fail-fast": false,
+        "matrix": {
+          "include": [
+            {
+              "check": "nixops-providers",
+              "system": "aarch64-linux"
+            },
+            {
+              "check": "pre-commit",
+              "system": "aarch64-linux"
+            },
+            {
+              "check": "nixops-deployment",
+              "system": "x86_64-linux"
+            },
+            {
+              "check": "nixops-providers",
+              "system": "x86_64-linux"
+            },
+            {
+              "check": "pre-commit",
+              "system": "x86_64-linux"
+            }
+          ]
+        }
+      }
+    },
+    "homeConfigurations": {
+      "name": "Home",
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "name": "Check out repository",
+          "uses": "actions/checkout@v6"
+        },
+        {
+          "name": "Install Nix",
+          "uses": "cachix/install-nix-action@v31",
+          "with": {
+            "extra_nix_config": "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
+          }
+        },
+        {
+          "name": "Install Attic",
+          "run": "nix profile add .#attic"
+        },
+        {
+          "name": "Set up Attic cache",
+          "uses": "ryanccn/attic-action@v0.5",
+          "with": {
+            "cache": "nixos-config",
+            "endpoint": "https://nix-cache.niols.fr/",
+            "token": "${{ secrets.ATTIC_TOKEN }}"
+          }
+        },
+        {
+          "name": "Build Home configuration “${{ matrix.home }}”",
+          "run": "nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --impure --print-build-logs"
+        }
+      ],
+      "strategy": {
+        "fail-fast": false,
+        "matrix": {
+          "include": [
+            {
+              "home": "headless-work"
+            }
+          ]
+        }
+      }
+    },
+    "nixosConfigurations": {
+      "name": "NixOS",
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "name": "Check out repository",
+          "uses": "actions/checkout@v6"
+        },
+        {
+          "name": "Install Nix",
+          "uses": "cachix/install-nix-action@v31",
+          "with": {
+            "extra_nix_config": "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
+          }
+        },
+        {
+          "name": "Install Attic",
+          "run": "nix profile add .#attic"
+        },
+        {
+          "name": "Set up Attic cache",
+          "uses": "ryanccn/attic-action@v0.5",
+          "with": {
+            "cache": "nixos-config",
+            "endpoint": "https://nix-cache.niols.fr/",
+            "token": "${{ secrets.ATTIC_TOKEN }}"
+          }
+        },
+        {
+          "if": "${{ matrix.xtraSpace == 'extra-space' }}",
+          "name": "Free some extra space",
+          "run": "echo 'Available storage before:'\nsudo df -h\necho\nsudo rm -rf /usr/share/dotnet\nsudo rm -rf /usr/local/lib/android\nsudo rm -rf /opt/ghc\nsudo rm -rf /opt/hostedtoolcache/CodeQL\necho 'Available storage after:'\nsudo df -h\necho\n"
+        },
+        {
+          "name": "Set up emulation layer if necessary",
+          "run": "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\nif [ $system != x86_64-linux ]; then\n  printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\\n' \"$system\"\n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\nfi\n"
+        },
+        {
+          "name": "Build NixOS configuration “${{ matrix.nixos }}”",
+          "run": "export NIX_CONFIG=$(cat nix-config)\nnix build .#nixosConfigurations.${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs\n"
+        },
+        {
+          "name": "Remaining space",
+          "run": "echo 'Available storage:'\nsudo df -h\n"
+        },
+        {
+          "if": "${{ github.ref == 'refs/heads/main' }}",
+          "name": "Deploy NixOps4 component “${{ matrix.nixos }}” if it exists",
+          "run": "if nix develop --command nixops4 members list 2>/dev/null | grep '^${{ matrix.nixos }}$'; then\n  echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\n  chmod 600 deploy-key\n  nix develop --command ssh-agent bash -c '\n    ssh-add deploy-key\n    export NIX_CONFIG=$(cat nix-config)\n    nixops4 apply ${{ matrix.nixos }}\n  '\nfi\n"
+        }
+      ],
+      "strategy": {
+        "fail-fast": false,
+        "matrix": {
+          "include": [
+            {
+              "nixos": "ahlaya",
+              "system": "x86_64-linux",
+              "xtraSpace": "extra-space"
+            },
+            {
+              "nixos": "anastasia",
+              "system": "x86_64-linux",
+              "xtraSpace": ""
+            },
+            {
+              "nixos": "gromit",
+              "system": "x86_64-linux",
+              "xtraSpace": "extra-space"
+            },
+            {
+              "nixos": "helga",
+              "system": "x86_64-linux",
+              "xtraSpace": ""
+            },
+            {
+              "nixos": "orianne",
+              "system": "aarch64-linux",
+              "xtraSpace": ""
+            },
+            {
+              "nixos": "siegfried",
+              "system": "x86_64-linux",
+              "xtraSpace": ""
+            }
+          ]
+        }
+      }
+    },
+    "summarise": {
+      "if": "always()",
+      "name": "Summarise",
+      "needs": [
+        "checks",
+        "homeConfigurations",
+        "nixosConfigurations"
+      ],
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "uses": "re-actors/alls-green@release/v1",
+          "with": {
+            "allowed-skips": "checks, homeConfigurations, nixosConfigurations",
+            "jobs": "${{ toJSON(needs) }}"
+          }
+        }
+      ]
+    }
+  },
+  "name": "CI",
+  "on": {
+    "pull_request": {},
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "tags": [
+        "*"
+      ]
+    }
+  }
+}
