@@ -54,6 +54,16 @@ let
     '';
   };
 
+  makeGithubWorkflowsFor =
+    pkgs:
+    "${pkgs.writeShellScript "make-github-workflows" (
+      concatStringsSep "\n" (
+        mapAttrsToList (name: workflow: ''
+          cp ${toFile "github-workflow-${name}.yml" (toJSON workflow)} .github/workflows/${name}.yml
+        '') self.github-workflows
+      )
+    )}";
+
 in
 {
   perSystem =
@@ -72,15 +82,16 @@ in
           enable = true;
           files = "\\.nix$";
           pass_filenames = false;
-          entry = "${pkgs.writeShellScript "make-github-workflows" (
-            concatStringsSep "\n" (
-              mapAttrsToList (name: workflow: ''
-                cp ${toFile "github-workflow-${name}.yml" (toJSON workflow)} .github/workflows/${name}.yml
-              '') self.github-workflows
-            )
-          )}";
+          entry = makeGithubWorkflowsFor pkgs;
         };
         prettier.excludes = [ ".github/workflows/.*\\.yml$" ];
+      };
+
+      ## Standalone version of `make-github-workflows`.
+      ##
+      apps.make-github-workflows = {
+        type = "app";
+        program = makeGithubWorkflowsFor pkgs;
       };
     };
 
@@ -217,7 +228,7 @@ in
         steps = setupSteps ++ [
           setupEmulationLayerStep
           {
-            name = "Run checki “\${{ matrix.check }}”";
+            name = "Run check “\${{ matrix.check }}”";
             run = ''
               export NIX_CONFIG=$(cat nix-config)
               nix build .#checks.''${{ matrix.system }}.''${{ matrix.check }} --print-build-logs
