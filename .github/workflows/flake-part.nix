@@ -99,10 +99,7 @@ in
     name = "CI";
 
     on = {
-      push = {
-        branches = [ "main" ];
-        tags = [ "*" ];
-      };
+      push.branches = [ "main" ];
       pull_request = { };
     };
 
