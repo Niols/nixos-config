@@ -13,7 +13,7 @@ let
     concatStringsSep
     ;
 
-  setupSteps = [
+  basicSetupSteps = [
     {
       name = "Check out repository";
       uses = "actions/checkout@v6";
@@ -23,6 +23,9 @@ let
       uses = "cachix/install-nix-action@v31";
       "with".extra_nix_config = "access-tokens = github.com=\${{ secrets.GITHUB_TOKEN }}";
     }
+  ];
+
+  atticSetupSteps = [
     {
       name = "Install Attic";
       run = "nix profile add .#attic";
@@ -139,15 +142,18 @@ in
           matrix.include = map (home: { inherit home; }) (attrNames self.homeConfigurations);
           fail-fast = false;
         };
-        steps = setupSteps ++ [
-          {
-            ## NOTE: We build the home configurations as impure because they get
-            ## their `home.username` and `home.homeDirectory` from the environment
-            ## when they are not used via the Home Manager NixOS module.
-            name = "Build Home configuration “\${{ matrix.home }}”";
-            run = "nix build .#homeConfigurations.\${{ matrix.home }}.activationPackage --impure --print-build-logs";
-          }
-        ];
+        steps =
+          basicSetupSteps
+          ++ atticSetupSteps
+          ++ [
+            {
+              ## NOTE: We build the home configurations as impure because they get
+              ## their `home.username` and `home.homeDirectory` from the environment
+              ## when they are not used via the Home Manager NixOS module.
+              name = "Build Home configuration “\${{ matrix.home }}”";
+              run = "nix build .#homeConfigurations.\${{ matrix.home }}.activationPackage --impure --print-build-logs";
+            }
+          ];
       };
 
       nixosConfigurations = {
@@ -163,54 +169,57 @@ in
           );
           fail-fast = false;
         };
-        steps = setupSteps ++ [
-          {
-            name = "Free some extra space";
-            "if" = "\${{ matrix.xtraSpace == 'extra-space' }}";
-            run = ''
-              echo 'Available storage before:'
-              sudo df -h
-              echo
-              sudo rm -rf /usr/share/dotnet
-              sudo rm -rf /usr/local/lib/android
-              sudo rm -rf /opt/ghc
-              sudo rm -rf /opt/hostedtoolcache/CodeQL
-              echo 'Available storage after:'
-              sudo df -h
-              echo
-            '';
-          }
-          setupEmulationLayerStep
-          {
-            name = "Build NixOS configuration “\${{ matrix.nixos }}”";
-            run = ''
-              export NIX_CONFIG=$(cat nix-config)
-              nix build .#nixosConfigurations.''${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
-            '';
-          }
-          {
-            name = "Remaining space";
-            run = ''
-              echo 'Available storage:'
-              sudo df -h
-            '';
-          }
-          {
-            name = "Deploy NixOps4 component “\${{ matrix.nixos }}” if it exists";
-            "if" = "\${{ github.ref == 'refs/heads/main' }}";
-            run = ''
-              if nix develop --command nixops4 members list 2>/dev/null | grep '^''${{ matrix.nixos }}$'; then
-                echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
-                chmod 600 deploy-key
-                nix develop --command ssh-agent bash -c '
-                  ssh-add deploy-key
-                  export NIX_CONFIG=$(cat nix-config)
-                  nixops4 apply ''${{ matrix.nixos }}
-                '
-              fi
-            '';
-          }
-        ];
+        steps =
+          basicSetupSteps
+          ++ atticSetupSteps
+          ++ [
+            {
+              name = "Free some extra space";
+              "if" = "\${{ matrix.xtraSpace == 'extra-space' }}";
+              run = ''
+                echo 'Available storage before:'
+                sudo df -h
+                echo
+                sudo rm -rf /usr/share/dotnet
+                sudo rm -rf /usr/local/lib/android
+                sudo rm -rf /opt/ghc
+                sudo rm -rf /opt/hostedtoolcache/CodeQL
+                echo 'Available storage after:'
+                sudo df -h
+                echo
+              '';
+            }
+            setupEmulationLayerStep
+            {
+              name = "Build NixOS configuration “\${{ matrix.nixos }}”";
+              run = ''
+                export NIX_CONFIG=$(cat nix-config)
+                nix build .#nixosConfigurations.''${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
+              '';
+            }
+            {
+              name = "Remaining space";
+              run = ''
+                echo 'Available storage:'
+                sudo df -h
+              '';
+            }
+            {
+              name = "Deploy NixOps4 component “\${{ matrix.nixos }}” if it exists";
+              "if" = "\${{ github.ref == 'refs/heads/main' }}";
+              run = ''
+                if nix develop --command nixops4 members list 2>/dev/null | grep '^''${{ matrix.nixos }}$'; then
+                  echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
+                  chmod 600 deploy-key
+                  nix develop --command ssh-agent bash -c '
+                    ssh-add deploy-key
+                    export NIX_CONFIG=$(cat nix-config)
+                    nixops4 apply ''${{ matrix.nixos }}
+                  '
+                fi
+              '';
+            }
+          ];
       };
 
       checks = {
@@ -222,18 +231,58 @@ in
           ) (attrNames self.checks);
           fail-fast = false;
         };
-        steps = setupSteps ++ [
-          setupEmulationLayerStep
-          {
-            name = "Run check “\${{ matrix.check }}”";
-            run = ''
-              export NIX_CONFIG=$(cat nix-config)
-              nix build .#checks.''${{ matrix.system }}.''${{ matrix.check }} --print-build-logs
-            '';
-          }
-        ];
+        steps =
+          basicSetupSteps
+          ++ atticSetupSteps
+          ++ [
+            setupEmulationLayerStep
+            {
+              name = "Run check “\${{ matrix.check }}”";
+              run = ''
+                export NIX_CONFIG=$(cat nix-config)
+                nix build .#checks.''${{ matrix.system }}.''${{ matrix.check }} --print-build-logs
+              '';
+            }
+          ];
 
       };
+    };
+  };
+
+  flake.github-workflows.bump-dancelor = {
+    name = "Bump Dancelor";
+
+    on = {
+      workflow_dispatch = { }; # manual triggering
+      repository_dispatch.types = [ "bump-dancelor" ]; # when Dancelor changes
+    };
+
+    jobs.bump-dancelor = {
+      name = "Bump Dancelor";
+      runs-on = "ubuntu-latest";
+
+      steps = basicSetupSteps ++ [
+        {
+          name = "Update flake.lock and create the pull request";
+          id = "update";
+          uses = "determinatesystems/update-flake-lock@v28";
+          "with" = {
+            token = "\${{ secrets.GH_TOKEN_FOR_UPDATES }}";
+            inputs = "dancelor";
+            pr-title = "Bump Dancelor";
+            branch = "dancelor/bump-dancelor";
+            git-author-name = "Dancelor";
+            git-author-email = "dancelor@dancelor.org";
+            git-committer-name = "Dancelor";
+            git-committer-email = "dancelor@dancelor.org";
+          };
+        }
+        {
+          name = "Set up auto-merge for the pull request";
+          run = "gh pr merge --auto --squash \${{ steps.update.outputs.pull-request-number }}";
+          env.GH_TOKEN = "\${{ secrets.GH_TOKEN_FOR_UPDATES }}";
+        }
+      ];
     };
   };
 }
