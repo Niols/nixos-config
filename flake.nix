@@ -52,6 +52,7 @@
         ./keys/flake-part.nix
         ./secrets/flake-part.nix
         ./tests/flake-part.nix
+        ./.github/workflows/flake-part.nix
       ];
 
       ## ==================== [ Home Configurations ] ==================== ##
