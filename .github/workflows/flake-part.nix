@@ -62,7 +62,10 @@ let
     "${pkgs.writeShellScript "make-github-workflows" (
       concatStringsSep "\n" (
         mapAttrsToList (name: workflow: ''
-          ${pkgs.yq}/bin/yq --yaml-output . ${toFile "github-workflow-${name}.yml" (toJSON workflow)} > .github/workflows/${name}.yml
+          ${pkgs.yq}/bin/yq \
+            --yaml-output --width 100 \
+            . ${toFile "github-workflow-${name}.yml" (toJSON workflow)} \
+            > .github/workflows/${name}.yml
         '') self.github-workflows
       )
     )}";

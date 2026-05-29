@@ -21,10 +21,9 @@ jobs:
           endpoint: https://nix-cache.niols.fr/
           token: ${{ secrets.ATTIC_TOKEN }}
       - name: Set up emulation layer if necessary
-        run: "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\n\
-          if [ $system != x86_64-linux ]; then\n  printf 'This configuration is a\
-          \ %s, for which we need to install QEMU emulation binaries.\\n' \"$system\"\
-          \n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\n\
+        run: "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\nif [ $system != x86_64-linux\
+          \ ]; then\n  printf 'This configuration is a %s, for which we need to install QEMU emulation\
+          \ binaries.\\n' \"$system\"\n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\n\
           fi\n"
       - name: Run check “${{ matrix.check }}”
         run: 'export NIX_CONFIG=$(cat nix-config)
@@ -65,8 +64,7 @@ jobs:
           endpoint: https://nix-cache.niols.fr/
           token: ${{ secrets.ATTIC_TOKEN }}
       - name: Build Home configuration “${{ matrix.home }}”
-        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --impure
-          --print-build-logs
+        run: nix build .#homeConfigurations.${{ matrix.home }}.activationPackage --impure --print-build-logs
     strategy:
       fail-fast: false
       matrix:
@@ -114,16 +112,14 @@ jobs:
 
           '
       - name: Set up emulation layer if necessary
-        run: "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\n\
-          if [ $system != x86_64-linux ]; then\n  printf 'This configuration is a\
-          \ %s, for which we need to install QEMU emulation binaries.\\n' \"$system\"\
-          \n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\n\
+        run: "system=${{ matrix.system }}\necho \"system = $system\" > nix-config\nif [ $system != x86_64-linux\
+          \ ]; then\n  printf 'This configuration is a %s, for which we need to install QEMU emulation\
+          \ binaries.\\n' \"$system\"\n  sudo apt-get update -y && sudo apt-get install -y qemu-user-static\n\
           fi\n"
       - name: Build NixOS configuration “${{ matrix.nixos }}”
         run: 'export NIX_CONFIG=$(cat nix-config)
 
-          nix build .#nixosConfigurations.${{ matrix.nixos }}.config.system.build.toplevel
-          --print-build-logs
+          nix build .#nixosConfigurations.${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
 
           '
       - name: Remaining space
@@ -134,11 +130,10 @@ jobs:
           '
       - if: ${{ github.ref == 'refs/heads/main' }}
         name: Deploy NixOps4 component “${{ matrix.nixos }}” if it exists
-        run: "if nix develop --command nixops4 members list 2>/dev/null | grep '^${{\
-          \ matrix.nixos }}$'; then\n  echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\n\
-          \  chmod 600 deploy-key\n  nix develop --command ssh-agent bash -c '\n \
-          \   ssh-add deploy-key\n    export NIX_CONFIG=$(cat nix-config)\n    nixops4\
-          \ apply ${{ matrix.nixos }}\n  '\nfi\n"
+        run: "if nix develop --command nixops4 members list 2>/dev/null | grep '^${{ matrix.nixos }}$';\
+          \ then\n  echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\n  chmod 600 deploy-key\n  nix develop\
+          \ --command ssh-agent bash -c '\n    ssh-add deploy-key\n    export NIX_CONFIG=$(cat nix-config)\n\
+          \    nixops4 apply ${{ matrix.nixos }}\n  '\nfi\n"
     strategy:
       fail-fast: false
       matrix:

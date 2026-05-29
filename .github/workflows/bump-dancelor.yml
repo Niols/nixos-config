@@ -24,8 +24,7 @@ jobs:
       - env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
         name: Set up auto-merge for the pull request
-        run: gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number
-          }}
+        run: gh pr merge --auto --squash ${{ steps.update.outputs.pull-request-number }}
 name: Bump Dancelor
 'on':
   repository_dispatch:
