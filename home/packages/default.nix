@@ -14,6 +14,12 @@
   ]
   ++ config.x_niols.commonPackages;
 
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacsWithPackagesFromUsePackage { config = ./emacs.el; };
+  };
+  xdg.configFile."emacs/init.el".source = ./emacs.el;
+
   ## Run the OPAM hook if it exists. This can be shared between all
   ## sessions; we do not however enforce the existence of OPAM.
   programs.bash.profileExtra = ''

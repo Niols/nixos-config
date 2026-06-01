@@ -22,7 +22,6 @@ in
 
     ./background
     ./direnv.nix
-    ./doom
     ./face
     ./git.nix
     ./gtk.nix
