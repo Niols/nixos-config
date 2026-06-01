@@ -93,6 +93,7 @@
     "cD" #'+lookup/references
     "cr" #'lsp-rename
     "cw" #'delete-trailing-whitespace
+    "cx" #'consult-flymake
 
     "f"  '(:ignore t :which-key "files")
     "fc" #'crux-copy-file-preserve-attributes
@@ -145,7 +146,9 @@
   (consult-project-function
    (lambda (may-prompt)
      (when-let (project (project-current nil))
-       (project-root project)))))
+       (project-root project))))
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref))
 
 (use-package vertico
   :ensure t
