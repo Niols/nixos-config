@@ -221,19 +221,25 @@ in
     (mkIf (config.x_niols.thisMachinesName == "anastasia") {
       systemd.services.update-dns-with-public-ip = {
         script = ''
+          echo "Getting current IP..." >&2
           current_ip=$(${pkgs.dnsutils}/bin/dig -4 +short myip.opendns.com @resolver1.opendns.com)
           if [ -z "$current_ip" ]; then
-            echo "Failed to get current IP" >&2
+            echo "Failed getting current IP." >&2
             exit 1
           fi
+          echo "Done getting current IP; got $current_ip." >&2
 
           ${forConcat (attrNames machines.servers) (
             server:
             optionalString (server != "anastasia") ''
+              echo "Checking DNS record on ${server}..." >&2
               dns_ip=$(${pkgs.dnsutils}/bin/dig -4 +short anastasia.niols.fr @${server}.niols.fr)
 
-              if [ "$current_ip" != "$dns_ip" ]; then
-                echo "Updating DNS record for anastasia on ${server} to $current_ip..."
+              if [ "$current_ip" = "$dns_ip" ]; then
+                echo "The DNS record does contain the correct IP already." >&2
+
+              else
+                echo "Updating DNS record on ${server} to $current_ip..." >&2
                 ${pkgs.dnsutils}/bin/nsupdate -k ${config.age.secrets.bind-key-anastasia-ddns.path} <<-EOF
                   server ${server}.niols.fr
                   zone niols.fr
@@ -241,6 +247,7 @@ in
                   update add anastasia.niols.fr 60 A $current_ip
                   send
               EOF
+                echo "Done updating DNS record on ${server}." >&2
               fi
             ''
           )}
