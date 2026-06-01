@@ -208,3 +208,9 @@
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
+
+(use-package yaml-ts-mode
+  :mode "\\.ya?ml\\'")
+
+(use-package toml-ts-mode
+  :mode "\\.toml\\'")
