@@ -83,7 +83,7 @@ in
           {
             ${server} = {
               header = "Host ${
-                concatStringsSep "," (
+                concatStringsSep " " (
                   ips
                   ++ [
                     server
