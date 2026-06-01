@@ -21,7 +21,10 @@ let
     {
       name = "Install Nix";
       uses = "cachix/install-nix-action@v31";
-      "with".extra_nix_config = "access-tokens = github.com=\${{ secrets.GITHUB_TOKEN }}";
+      "with".extra_nix_config = ''
+        access-tokens = github.com=''${{ secrets.GITHUB_TOKEN }}
+        download-attempts = 10 # more than usual because nix-cache might be down
+      '';
     }
   ];
 
