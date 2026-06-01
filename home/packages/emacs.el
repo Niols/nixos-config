@@ -195,14 +195,15 @@
   :after magit
   :config (magit-todos-mode))
 
-;; ==================== [ OCaml ] ==================== ;;
+;; ==================== [ Prog ] ==================== ;;
+
+(use-package eglot
+  :hook (prog-mode . eglot-ensure))
 
 (use-package tuareg
   :ensure t
   :mode ("\\.ml\\'" . tuareg-mode)
         ("\\.mli\\'" . tuareg-mode))
-
-;; ==================== [ Nix ] ==================== ;;
 
 (use-package nix-mode
   :ensure t
