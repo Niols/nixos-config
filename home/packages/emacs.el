@@ -77,6 +77,9 @@
     :states '(normal visual)
     :prefix "SPC")
   (my/leader
+    ;; Convention: lowercase for safe operations; uppercase for
+    ;; destructive/dangerous operations.
+
     "SPC" #'project-find-file
     "*"  #'consult-ripgrep
 
@@ -93,8 +96,9 @@
 
     "f"  '(:ignore t :which-key "files")
     "fc" #'crux-copy-file-preserve-attributes
+    "fD" #'crux-delete-file-and-buffer
     "ff" #'find-file
-    "fr" #'crux-rename-file-and-buffer
+    "fR" #'crux-rename-file-and-buffer
     "fs" #'save-buffer
 
     "g"  '(:ignore t :which-key "git")
