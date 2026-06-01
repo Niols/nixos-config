@@ -34,8 +34,9 @@
 
     dancelor.url = "github:paris-branch/dancelor";
 
-    doomemacs.url = "github:doomemacs/doomemacs";
-    doomemacs.flake = false;
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.inputs.nixpkgs-stable.follows = "";
   };
 
   outputs =
