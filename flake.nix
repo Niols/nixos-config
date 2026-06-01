@@ -35,9 +35,8 @@
     dancelor.url = "github:paris-branch/dancelor";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    ## FIXME:
-    # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    # emacs-overlay.inputs.nixpkgs-stable.follows = "";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.inputs.nixpkgs-stable.follows = "";
   };
 
   outputs =
