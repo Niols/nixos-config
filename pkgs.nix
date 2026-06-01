@@ -13,6 +13,10 @@ in
 import inputs.nixpkgs {
   inherit system;
 
+  overlays = [
+    (import inputs.emacs-overlay)
+  ];
+
   config.allowUnfreePredicate =
     pkg:
     elem (getName pkg) [
