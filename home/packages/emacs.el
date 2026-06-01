@@ -171,7 +171,9 @@
      (todos . hide)
      (pullreqs . show)
      (issues . hide)))
-  (magit-process-finish-apply-ansi-colors t))
+  (magit-process-finish-apply-ansi-colors t)
+  :config
+  (add-hook 'git-commit-mode-hook #'evil-insert-state))
 
 (use-package forge
   :ensure t
