@@ -1,4 +1,9 @@
-{ self, inputs, ... }:
+{
+  self,
+  inputs,
+  withSystem,
+  ...
+}:
 
 let
   inherit (inputs.nixpkgs.lib)
@@ -87,6 +92,8 @@ let
           self.nixosModules.${name}
           inputs.home-manager.nixosModules.home-manager
         ];
+
+        nixpkgs.pkgs = withSystem config.nixpkgs.hostPlatform.system ({ pkgs, ... }: pkgs);
 
         home-manager = {
           ## By default, Home Manager uses a private pkgs instance that is
