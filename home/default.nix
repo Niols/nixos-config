@@ -22,7 +22,6 @@ in
 
     ./background
     ./direnv.nix
-    ./doom
     ./face
     ./git.nix
     ./gtk.nix
@@ -70,6 +69,7 @@ in
   config = mkMerge [
     {
       home.stateVersion = "21.05";
+      home.enableNixpkgsReleaseCheck = false; # we use nixpkgs unstable and have extended testing
 
       ## NOTE: It is important to enable Bash so that Home Manager activates
       ## properly. Otherwise, see Home Manager's documentation.

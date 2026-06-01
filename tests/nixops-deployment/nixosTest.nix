@@ -151,7 +151,6 @@ in
           --override-input nix-index-database ${inputs.nix-index-database} \
           --override-input agenix ${inputs.agenix} \
           --override-input dancelor ${inputs.dancelor} \
-          --override-input doomemacs ${inputs.doomemacs} \
           ;
       """)
 

@@ -16,25 +16,8 @@ in
   };
 
   config = {
-    ## Allow a selected set of unfree packages for this list.
-    ##
-    ## FIXME: Home Manager does not like this because we are using
-    ## `useGlobalPkgs` in the NixOS configurations. Figure it out.
-    ##
-    nixpkgs.config.allowUnfreePredicate = (
-      pkg:
-      builtins.elem (pkgs.lib.getName pkg) [
-        "claude-code"
-        "discord"
-        "slack"
-        "steam"
-        "steam-unwrapped"
-        "teamspeak-client"
-        "teamspeak-server"
-        "unrar"
-        "zoom"
-      ]
-    );
+    ## NOTE: For nixpkgs.config.allowUnfreePredicate, see file
+    ## pkgs.nix at the root of the repository.
 
     ## We want Vim available everywhere as a good default editor. For proper
     ## IDE, we still use Emacs with Evil.

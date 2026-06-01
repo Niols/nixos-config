@@ -34,124 +34,144 @@
 
     dancelor.url = "github:paris-branch/dancelor";
 
-    doomemacs.url = "github:doomemacs/doomemacs";
-    doomemacs.flake = false;
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.inputs.nixpkgs-stable.follows = "";
   };
 
   outputs =
     inputs@{ self, ... }:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      { withSystem, ... }:
 
-      imports = [
-        inputs.git-hooks.flakeModule
-        ./nixos/flake-part.nix
-        ./keys/flake-part.nix
-        ./secrets/flake-part.nix
-        ./tests/flake-part.nix
-        ./.github/workflows/flake-part.nix
-      ];
+      {
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
 
-      ## ==================== [ Home Configurations ] ==================== ##
+        imports = [
+          inputs.git-hooks.flakeModule
+          ./nixos/flake-part.nix
+          ./keys/flake-part.nix
+          ./secrets/flake-part.nix
+          ./tests/flake-part.nix
+          ./.github/workflows/flake-part.nix
 
-      flake.homeConfigurations.headless-work = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit (self) machines;
-        };
-        modules = [
-          self.homeModules.secrets
-          ./home
           {
-            x_niols.isWork = true;
-            x_niols.isHeadless = true;
-            x_niols.agePublicKey = self.keys.homes.headless-work;
-            home.uid = 2067;
-            home.username = "me";
-            home.homeDirectory = "/home/me";
+            ## Inject our customised set of packages into the whole flake.
+            perSystem =
+              { system, lib, ... }:
+              {
+                _module.args.pkgs = import ./pkgs.nix { inherit inputs system lib; };
+              };
           }
         ];
-      };
 
-      ## ==================== [ Development environment ] ==================== ##
+        ## ==================== [ Home Configurations ] ==================== ##
 
-      perSystem =
-        {
-          config,
-          pkgs,
-          inputs',
-          ...
-        }:
-        {
-          formatter = pkgs.nixfmt;
+        flake.homeConfigurations.headless-work = inputs.home-manager.lib.homeManagerConfiguration {
+          ## As a NixOS module, `pkgs` is gotten from the one in the NixOS
+          ## configuration. Standalone home configurations must specify which
+          ## one to use on their own, but we make sure to grab the `pkgs` from
+          ## the flake (eg. not inputs.nixpkgs.legacyPackages.<system>).
+          pkgs = withSystem "x86_64-linux" ({ pkgs, ... }: pkgs);
 
-          pre-commit.settings.hooks = {
-            nixfmt.enable = true;
-            deadnix.enable = true;
-            prettier.enable = true;
+          extraSpecialArgs = {
+            inherit inputs;
+            inherit (self) machines;
           };
 
-          devShells.default = pkgs.mkShell {
-            packages = [
-              pkgs.nil
-              inputs'.disko.packages.disko
-              inputs'.nixops4.packages.default
-
-              ## FIXME: Move the following to `secrets/default.nix`
-              inputs'.agenix.packages.default
-              (pkgs.writeScriptBin "agenix-rekey" ''
-                set -euC
-                cp "$1" /tmp/age-key
-                ssh-keygen -p -N "" -f /tmp/age-key
-                if [ -d secrets ]; then cd secrets; fi
-                ${inputs'.agenix.packages.agenix}/bin/agenix -i /tmp/age-key -r
-                rm -f /tmp/age-key
-              '')
-
-              pkgs.attic-client
-              pkgs.bind # provides the `tsig-keygen` utility
-              pkgs.borgbackup
-              pkgs.apacheHttpd # provides the `htpasswd` utility
-              pkgs.easyrsa # for OpenVPN's `easyrsa` command
-              pkgs.openssl # for key/cert pair generation
-              pkgs.wireguard-tools # for `wg`
-            ];
-            shellHook = config.pre-commit.installationScript;
-          };
-
-          devShells.install = pkgs.mkShell {
-            packages = [
-              inputs'.disko.packages.disko
-              pkgs.autorandr
-              pkgs.gh
-            ];
-          };
-
-          ## Expose Home Manager as one of the packages of the flake. This is
-          ## useful when trying to use it on a random machine as it avoids
-          ## having to first get Home Manager (and probably a nixpkgs), and then
-          ## also get this flake. REVIEW: Still needed now that `rebuild` is
-          ## also exposed?
-          packages.home-manager = inputs'.home-manager.packages.home-manager;
-
-          ## Expose the `rebuild` utility as an app from the flake.
-          apps.rebuild = {
-            type = "app";
-            program = "${pkgs.callPackage ./rebuild.nix { }}/bin/rebuild";
-          };
-
-          ## Expose the `attic` client. The CI uses it, and we would rather
-          ## install it from our flake, so as to avoid getting nixpkgs twice.
-          packages.attic = pkgs.attic-client;
+          modules = [
+            self.homeModules.secrets
+            ./home
+            {
+              x_niols.isWork = true;
+              x_niols.isHeadless = true;
+              x_niols.agePublicKey = self.keys.homes.headless-work;
+              home.uid = 2067;
+              home.username = "me";
+              home.homeDirectory = "/home/me";
+            }
+          ];
         };
 
-      ## Improve the way `inputs'` are computed by also handling the case of
-      ## flakes having a `lib.${system}` attribute.
-      ##
-      perInput = system: flake: if flake ? lib.${system} then { lib = flake.lib.${system}; } else { };
-    };
+        ## ==================== [ Development environment ] ==================== ##
+
+        perSystem =
+          {
+            config,
+            pkgs,
+            inputs',
+            ...
+          }:
+          {
+            formatter = pkgs.nixfmt;
+
+            pre-commit.settings.hooks = {
+              nixfmt.enable = true;
+              deadnix.enable = true;
+              prettier.enable = true;
+            };
+
+            devShells.default = pkgs.mkShell {
+              packages = [
+                pkgs.nil
+                inputs'.disko.packages.disko
+                inputs'.nixops4.packages.default
+
+                ## FIXME: Move the following to `secrets/default.nix`
+                inputs'.agenix.packages.default
+                (pkgs.writeScriptBin "agenix-rekey" ''
+                  set -euC
+                  cp "$1" /tmp/age-key
+                  ssh-keygen -p -N "" -f /tmp/age-key
+                  if [ -d secrets ]; then cd secrets; fi
+                  ${inputs'.agenix.packages.agenix}/bin/agenix -i /tmp/age-key -r
+                  rm -f /tmp/age-key
+                '')
+
+                pkgs.attic-client
+                pkgs.bind # provides the `tsig-keygen` utility
+                pkgs.borgbackup
+                pkgs.apacheHttpd # provides the `htpasswd` utility
+                pkgs.easyrsa # for OpenVPN's `easyrsa` command
+                pkgs.openssl # for key/cert pair generation
+                pkgs.wireguard-tools # for `wg`
+              ];
+              shellHook = config.pre-commit.installationScript;
+            };
+
+            devShells.install = pkgs.mkShell {
+              packages = [
+                inputs'.disko.packages.disko
+                pkgs.autorandr
+                pkgs.gh
+              ];
+            };
+
+            ## Expose Home Manager as one of the packages of the flake. This is
+            ## useful when trying to use it on a random machine as it avoids
+            ## having to first get Home Manager (and probably a nixpkgs), and then
+            ## also get this flake. REVIEW: Still needed now that `rebuild` is
+            ## also exposed?
+            packages.home-manager = inputs'.home-manager.packages.home-manager;
+
+            ## Expose the `rebuild` utility as an app from the flake.
+            apps.rebuild = {
+              type = "app";
+              program = "${pkgs.callPackage ./rebuild.nix { }}/bin/rebuild";
+            };
+
+            ## Expose the `attic` client. The CI uses it, and we would rather
+            ## install it from our flake, so as to avoid getting nixpkgs twice.
+            packages.attic = pkgs.attic-client;
+          };
+
+        ## Improve the way `inputs'` are computed by also handling the case of
+        ## flakes having a `lib.${system}` attribute.
+        ##
+        perInput = system: flake: if flake ? lib.${system} then { lib = flake.lib.${system}; } else { };
+      }
+    );
 }
