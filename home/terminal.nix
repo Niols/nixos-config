@@ -55,6 +55,9 @@ in
           set -g status off
           set-hook -g window-linked   'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
           set-hook -g window-unlinked 'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
+          unbind C-b
+          set -g prefix C-t
+          bind C-t send-prefix
         '';
       };
     }
