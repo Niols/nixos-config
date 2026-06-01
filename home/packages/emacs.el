@@ -29,6 +29,11 @@
 
 (setq inhibit-startup-screen t)
 
+(global-display-line-numbers-mode 1)
+(add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0)))
+(global-hl-line-mode 1)
+(column-number-mode 1)
+
 ;; ==================== [ Feel ] ==================== ;;
 
 (defun my/evil-shift-right ()
@@ -104,7 +109,7 @@
   :config
   (which-key-mode))
 
-;; (setq confirm-kill-emacs #'y-or-n-p)
+(global-auto-revert-mode 1)
 
 ;; ==================== [ Global ] ==================== ;;
 ;; Some things that simply must be everywhere in Emacs.
