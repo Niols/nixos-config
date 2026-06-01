@@ -68,12 +68,12 @@ in
         ## anyway, but we need the catch-all match block to be defined for
         ## `programs.ssh.extraConfig` to work, so we create it manually.
         enableDefaultConfig = false;
-        matchBlocks."*" = { };
+        settings."*" = { };
       };
     }
 
     {
-      programs.ssh.matchBlocks =
+      programs.ssh.settings =
         (concatMapAttrs (
           server: meta:
           let
@@ -81,8 +81,8 @@ in
             ips = optional (meta ? ipv4) meta.ipv4 ++ optional (meta ? ipv6) meta.ipv6;
           in
           {
-            "${server}" = {
-              match = "Host ${
+            ${server} = {
+              header = "Host ${
                 concatStringsSep "," (
                   ips
                   ++ [
@@ -91,64 +91,59 @@ in
                   ]
                 )
               }";
-              user = "root";
-              identitiesOnly = true;
-              identityFile = "~/.ssh/id_niols";
-              forwardAgent = true; # those are our machines, we trust them
-              userKnownHostsFile = toFile "${server}-known_hosts" (
+              User = "root";
+              IdentitiesOnly = true;
+              IdentityFile = "~/.ssh/id_niols";
+              ForwardAgent = true; # those are our machines, we trust them
+              UserKnownHostsFile = toFile "${server}-known_hosts" (
                 concatMapStringsSep "\n" (ip: "${ip} ${keys.machines.${server}}") (ips ++ [ fqdn ])
               );
             };
 
             "${server}-short" = {
-              match = "Host ${server}";
-              hostname = fqdn;
+              header = "Host ${server}";
+              HostName = fqdn;
             };
           }
         ) machines.servers)
 
         // {
           hester = {
-            host = "hester";
-            user = "u363090";
-            hostname = "hester.niols.fr";
-            port = 23;
+            HostName = "hester.niols.fr";
+            Port = 23;
+            User = "u363090";
           };
 
           ## Mions
           nasgul = {
-            host = "nasgul";
-            hostname = "nasgul.jeannerod.me";
-            port = 40022;
-            user = "niols";
+            HostName = "nasgul.jeannerod.me";
+            Port = 40022;
+            User = "niols";
           };
           gimli = {
-            user = "root";
-            hostname = "192.168.1.11";
-            extraOptions.PubkeyAuthentication = "no";
-            extraOptions.PreferredAuthentications = "password";
+            HostName = "192.168.1.11";
+            User = "root";
+            PubkeyAuthentication = "no";
+            PreferredAuthentications = "password";
           };
 
           ## Youth Branch VPS
           vpsyb = {
-            host = "vpsyb";
-            user = "root";
-            hostname = "137.74.166.97";
-            extraOptions.PubkeyAuthentication = "no";
-            extraOptions.PreferredAuthentications = "password";
+            HostName = "137.74.166.97";
+            User = "root";
+            PubkeyAuthentication = "no";
+            PreferredAuthentications = "password";
           };
 
           ## For things on localhost, we should not check the host's key, and we
           ## should just not keep the keys at all.
           localhost = {
-            host = "localhost";
-            extraOptions.StrictHostKeyChecking = "no";
-            extraOptions.UserKnownHostsFile = "/dev/null";
+            StrictHostKeyChecking = "no";
+            UserKnownHostsFile = "/dev/null";
           };
-          localhost_star = {
-            host = "*.localhost";
-            extraOptions.StrictHostKeyChecking = "no";
-            extraOptions.UserKnownHostsFile = "/dev/null";
+          "*.localhost" = {
+            StrictHostKeyChecking = "no";
+            UserKnownHostsFile = "/dev/null";
           };
         };
     }
@@ -166,11 +161,11 @@ in
         ## has been set up from `~/.ssh` into the right place in the Ahrefs
         ## monorepo.
         includes = [ "~/.ssh/ahrefs/config" ];
-        matchBlocks.hop.user = "nicolas.jeannerod";
+        settings.hop.User = "nicolas.jeannerod";
 
         ## Ahrefs's machines qualify as “weak” crypto from my modern SSH's POV, so
         ## we disable the warning for now. TODO: re-enable once Ahrefs moves on.
-        extraConfig = "WarnWeakCrypto no";
+        settings."*".WarnWeakCrypto = "no";
       };
     })
 
@@ -186,7 +181,7 @@ in
         ];
         nspawnDefault = "uk";
         includeFor = variant: {
-          extraOptions.Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
+          Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
         };
         ## Nspawn aliases go through the `mosh` wrapper which disables agent
         ## forwarding and starts `keep-agent-alive` as a systemd service.
@@ -195,13 +190,15 @@ in
       {
         ## Set up the link to `nspawn-*` and a shorthand to start Mosh directly on
         ## the nspawn in question.
-        programs.ssh.matchBlocks = {
+
+        programs.ssh.settings = {
           nspawn = includeFor nspawnDefault;
         }
         // (genAttrs' nspawnVariants (variant: {
           name = "nspawn-${variant}";
           value = includeFor variant;
         }));
+
         programs.bash.shellAliases = {
           nspawn = aliasFor nspawnDefault;
         }
