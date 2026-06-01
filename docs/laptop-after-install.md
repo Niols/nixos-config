@@ -84,23 +84,3 @@
 
 - Set up Thunderbird. This should be straightforward if the Autoconfig mechanism
   is set correctly for Niols Mail.
-
-- Set up Doom Emacs. Check first that `~/.config/doom` has been installed correctly
-  by Home Manager.
-  ```console
-  $ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-  $ ~/.config/emacs/bin/doom install
-  $ ~/.config/emacs/bin/doom sync
-  ```
-  Check [the official repository] for more up-to-date information. Then set up
-  Forge, by creating a file `~/.netrc` containing, a minima:
-  ```
-  machine api.github.com
-  login niols^forge
-  password <redacted>
-  ```
-  The easiest is to copy it from another machine. See [the documentation of
-  Forge] for more details.
-
-[the official repository]: https://github.com/doomemacs/doomemacs
-[the documentation of Forge]: https://magit.vc/manual/forge/Setup-for-Githubcom.html
