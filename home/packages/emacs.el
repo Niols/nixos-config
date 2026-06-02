@@ -88,9 +88,10 @@
     "bd" #'kill-current-buffer
 
     "c"  '(:ignore t :which-key "code")
-    "ca" #'lsp-execute-code-action
-    "cd" #'+lookup/definition
-    "cD" #'+lookup/references
+    "ca" #'eglot-code-actions
+    "cd" #'xref-find-definitions
+    "cD" #'xref-find-references
+    "ci" #'ff-get-other-file
     "cr" #'lsp-rename
     "cw" #'delete-trailing-whitespace
     "cx" #'consult-flymake
