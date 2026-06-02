@@ -29,7 +29,7 @@ in
           api-endpoint = "https://${domain}/";
           database.url = "postgresql://${user}@localhost/${user}?host=/run/postgresql";
           storage.type = "local";
-          storage.path = "/data/services/atticd";
+          storage.path = "/data/services/nix-cache/atticd";
           garbage-collection.inteval = "24 hours";
           garbage-collection.default-retention-period = "1 month";
         };

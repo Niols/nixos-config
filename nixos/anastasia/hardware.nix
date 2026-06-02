@@ -26,6 +26,14 @@ let
       };
     };
 
+  ## NOTE: To add or remove a new dataset to an existing pool:
+  ##
+  ##     zfs create -o mountpoint=legacy <pool>/<dataset>
+  ##     zfs destroy <pool>/<dataset>
+  ##
+  ## This does not contain the actual mountpoint, because that is only for the
+  ## mounting systemd unit, not for ZFS.
+  ##
   makeZfsDataset = mountpoint: {
     type = "zfs_fs";
     inherit mountpoint;
@@ -175,7 +183,6 @@ in
       mode = "mirror";
       datasetMountpoints = {
         pictures = "/data/pictures";
-        services = "/data/services";
       };
     };
 
@@ -183,6 +190,7 @@ in
       mode = "raidz1";
       datasetMountpoints = {
         medias = "/data/medias";
+        nix-cache = "/data/services/nix-cache";
       };
     };
   };

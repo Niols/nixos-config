@@ -37,12 +37,12 @@ let
   ## disko configuration of the particular host for the datasets (as of May
   ## 2026, Anastasia). At this point, there is no good way for the other
   ## configurations to read this value, so we hardcode it here, but we add an
-  ## assertion in the configuartion of Anastasia that it is the same list.
+  ## assertion in the configuration of Anastasia that it is the same list.
   ##
   datasetMountpoints = [
     "/data/pictures"
-    "/data/services"
     "/data/medias"
+    "/data/services/nix-cache"
   ];
 
 in
@@ -73,7 +73,10 @@ in
       assertions = [
         {
           assertion = (datasetMountpoints == datasetMountpointsForChecking);
-          message = "Hardcoded list of dataset mountpoints does not match the Disko configuration of the host.";
+          message = ''
+            Hardcoded list of dataset mountpoints does not match the Disko configuration of the host.
+              See `nfs.nix` or grep for `datasetMountpoints`.
+          '';
         }
       ];
 
