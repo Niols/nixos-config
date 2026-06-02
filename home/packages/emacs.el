@@ -6,6 +6,17 @@
 ;; NOTE: most of Doom Emacs's bindings can be found here:
 ;; https://github.com/doomemacs/doomemacs/blob/1d7a94b96b4410a3747ec579c728a79413379e64/modules/config/default/%2Bevil-bindings.el
 
+;; GC Magic Hack: prevents GC happening mid-typing and restores it
+;; during idle time. Reinitialises the GC that we disabled in early-init.
+(use-package gcmh
+  :ensure t
+  :hook (after-init . gcmh-mode))
+
+;; To get a breakdown of what takes time on startup.
+(use-package esup
+  :ensure t
+  :defer t)
+
 ;; ==================== [ Looks ] ==================== ;;
 
 (use-package doom-themes

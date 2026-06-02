@@ -38,6 +38,11 @@ in
     };
   };
   xdg.configFile."emacs/init.el".source = ./emacs.el;
+  xdg.configFile."emacs/early-init.el".text = ''
+    ;; Disable GC during init. It will be re-enabled by gcmh - see main config.
+    (setq gc-cons-threshold most-positive-fixnum)
+    (setq package-enable-at-startup nil)
+  '';
 
   ## Run the OPAM hook if it exists. This can be shared between all
   ## sessions; we do not however enforce the existence of OPAM.
