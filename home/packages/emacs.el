@@ -156,7 +156,8 @@
   :config
   (vertico-mode)
   (define-key vertico-map (kbd "C-j") #'vertico-next)
-  (define-key vertico-map (kbd "C-k") #'vertico-previous))
+  (define-key vertico-map (kbd "C-k") #'vertico-previous)
+  (define-key vertico-map (kbd "DEL") #'vertico-directory-delete-char))
 
 (use-package orderless
   :ensure t
