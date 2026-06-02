@@ -24,15 +24,24 @@
   (require 'magit)
   (magit-project-status))
 
+(use-package emacs
+  :custom
+  (inhibit-startup-screen t)
+  (project-switch-commands 'my/require-magit-and-project-status)
+  (auto-revert-verbose nil)
+  :config
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (column-number-mode 1)
+  (global-auto-revert-mode 1)
+  (global-display-line-numbers-mode 1)
+  (global-hl-line-mode 1))
+
 (use-package doom-themes
   :ensure t
   :config
   (load-theme 'doom-one t))
-
-;; Remove menu, toolbar, and scrollbar.
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 
 (set-face-attribute
   'default nil
@@ -42,13 +51,6 @@
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode))
-
-(setq inhibit-startup-screen t)
-
-(global-display-line-numbers-mode 1)
-(add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0)))
-(global-hl-line-mode 1)
-(column-number-mode 1)
 
 ;; ==================== [ Feel ] ==================== ;;
 
@@ -65,7 +67,6 @@
 (use-package evil
   :ensure t
   :init
-  (setq evil-want-integration t)
   (setq evil-want-keybinding nil) ; required for evil-collection
   :config
   (evil-mode 1)
@@ -109,7 +110,7 @@
     "cd" #'xref-find-definitions
     "cD" #'xref-find-references
     "ci" #'ff-get-other-file
-    "cr" #'lsp-rename
+    "cr" #'eglot-rename
     "cw" #'delete-trailing-whitespace
     "cx" #'consult-flymake
 
@@ -131,8 +132,6 @@
   :ensure t
   :hook (after-init . which-key-mode))
 
-(global-auto-revert-mode 1)
-
 ;; ==================== [ Global ] ==================== ;;
 ;; Some things that simply must be everywhere in Emacs.
 
@@ -143,11 +142,6 @@
 (use-package hl-todo
   :ensure t
   :hook (prog-mode . hl-todo-mode))
-
-(show-paren-mode 1)
-
-;; When switching project, go to Magit buffer
-(setq project-switch-commands 'my/require-magit-and-project-status)
 
 ;; Corfu for completion. Company is the old solution, very
 ;; stable and battle-tested, but Corfu uses more modern
@@ -171,6 +165,7 @@
   :ensure t
   :hook (after-init . vertico-mode)
   :config
+  (require 'vertico-directory)
   (define-key vertico-map (kbd "C-j") #'vertico-next)
   (define-key vertico-map (kbd "C-k") #'vertico-previous)
   (define-key vertico-map (kbd "DEL") #'vertico-directory-delete-char))
@@ -202,6 +197,8 @@
   :config
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
 
+(add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0)))
+
 (use-package forge
   :ensure t
   :after magit
@@ -217,8 +214,14 @@
 
 ;; ==================== [ Prog ] ==================== ;;
 
+(defun my/eglot-ensure-if-server ()
+  (require 'eglot)
+  (if (eglot--lookup-mode major-mode)
+      (eglot-ensure)
+    (message "[eglot] (info) no LSP server configured for %s" major-mode)))
+
 (use-package eglot
-  :hook (prog-mode . eglot-ensure))
+  :hook (prog-mode . my/eglot-ensure-if-server))
 
 (use-package tuareg
   :ensure t
