@@ -19,6 +19,11 @@
 
 ;; ==================== [ Looks ] ==================== ;;
 
+(defun my/require-magit-and-project-status ()
+  (interactive)
+  (require 'magit)
+  (magit-project-status))
+
 (use-package doom-themes
   :ensure t
   :config
@@ -78,7 +83,8 @@
   (evil-collection-magit-use-z-for-folds t))
 
 (use-package crux
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package general
   :ensure t
@@ -115,7 +121,7 @@
     "fs" #'save-buffer
 
     "g"  '(:ignore t :which-key "git")
-    "gg" #'magit-project-status
+    "gg" #'my/require-magit-and-project-status
 
     "p"  '(:ignore t :which-key "projects")
     "pp" #'project-switch-project
@@ -123,8 +129,7 @@
 
 (use-package which-key
   :ensure t
-  :config
-  (which-key-mode))
+  :hook (after-init . which-key-mode))
 
 (global-auto-revert-mode 1)
 
@@ -142,7 +147,7 @@
 (show-paren-mode 1)
 
 ;; When switching project, go to Magit buffer
-(setq project-switch-commands 'magit-project-status)
+(setq project-switch-commands 'my/require-magit-and-project-status)
 
 ;; Corfu for completion. Company is the old solution, very
 ;; stable and battle-tested, but Corfu uses more modern
@@ -164,21 +169,23 @@
 
 (use-package vertico
   :ensure t
+  :hook (after-init . vertico-mode)
   :config
-  (vertico-mode)
   (define-key vertico-map (kbd "C-j") #'vertico-next)
   (define-key vertico-map (kbd "C-k") #'vertico-previous)
   (define-key vertico-map (kbd "DEL") #'vertico-directory-delete-char))
 
 (use-package orderless
   :ensure t
-  :config
-  (setq completion-styles '(orderless basic)))
+  :after vertico
+  :custom
+  (completion-styles '(orderless basic)))
 
 ;; ==================== [ Magit ] ==================== ;;
 
 (use-package magit
   :ensure t
+  :defer t
   :custom
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-section-initial-visibility-alist
