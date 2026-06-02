@@ -26,6 +26,31 @@ let
       };
     };
 
+  ## NOTE: To add or remove a new dataset to an existing pool:
+  ##
+  ##     zfs create -o mountpoint=legacy <pool>/<dataset>
+  ##     zfs destroy <pool>/<dataset>
+  ##
+  ## This does not contain the actual mountpoint, because that is only for the
+  ## mounting systemd unit, not for ZFS.
+  ##
+  makeZfsDataset = mountpoint: {
+    type = "zfs_fs";
+    inherit mountpoint;
+    options.mountpoint = "legacy";
+    mountOptions = [ "nofail" ];
+  };
+
+  makeZfsPool =
+    { mode, datasetMountpoints }:
+    {
+      type = "zpool";
+      inherit mode;
+      mountpoint = null; # use the default, so that `option.mountpoint` works
+      rootFsOptions.mountpoint = "none"; # do not mount the root of the pool
+      datasets = mapAttrs (_: makeZfsDataset) datasetMountpoints;
+    };
+
 in
 {
   imports = [ inputs.disko.nixosModules.disko ];
@@ -154,42 +179,20 @@ in
     ## the system will boot even if the datasets fail to mount, and we add a
     ## `TimeoutStartSec` to the ZFS import services.
 
-    zpool.important = {
-      type = "zpool";
+    zpool.important = makeZfsPool {
       mode = "mirror";
-      mountpoint = null; # use the default, so that `option.mountpoint` works
-      rootFsOptions.mountpoint = "none"; # do not mount the root of the pool
-      datasets = {
-        "pictures" = {
-          type = "zfs_fs";
-          mountpoint = "/data/pictures";
-          options.mountpoint = "legacy";
-          mountOptions = [ "nofail" ];
-        };
-        "services" = {
-          type = "zfs_fs";
-          mountpoint = "/data/services";
-          options.mountpoint = "legacy";
-          mountOptions = [ "nofail" ];
-        };
+      datasetMountpoints = {
+        pictures = "/data/pictures";
       };
     };
 
-    zpool.unimportant = {
-      type = "zpool";
+    zpool.unimportant = makeZfsPool {
       mode = "raidz1";
-      mountpoint = null; # use the default, so that `option.mountpoint` works
-      rootFsOptions.mountpoint = "none"; # do not mount the root of the pool
-      datasets = {
-        "medias" = {
-          type = "zfs_fs";
-          mountpoint = "/data/medias";
-          options.mountpoint = "legacy";
-          mountOptions = [ "nofail" ];
-        };
+      datasetMountpoints = {
+        medias = "/data/medias";
+        nix-cache = "/data/services/nix-cache";
       };
     };
-
   };
 
   systemd.services."zfs-import-important".serviceConfig.TimeoutStartSec = 60;
