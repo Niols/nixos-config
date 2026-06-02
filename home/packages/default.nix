@@ -1,5 +1,19 @@
 { config, pkgs, ... }:
 
+let
+  inherit (pkgs)
+    callPackage
+    emacsWithPackagesFromUsePackage
+    ;
+
+  lilypondMode = pkgs.emacsPackages.trivialBuild {
+    pname = "lilypond-mode";
+    version = pkgs.lilypond.version;
+    src = "${pkgs.lilypond}/share/emacs/site-lisp";
+  };
+
+in
+
 {
   imports = [
     ./garbage-collect.nix
@@ -9,14 +23,19 @@
   ];
 
   home.packages = [
-    (pkgs.callPackage ../../rebuild.nix { })
+    (callPackage ../../rebuild.nix { })
     pkgs.opencode
   ]
   ++ config.x_niols.commonPackages;
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsWithPackagesFromUsePackage { config = ./emacs.el; };
+    package = emacsWithPackagesFromUsePackage {
+      config = ./emacs.el;
+      extraEmacsPackages = _epkgs: [
+        lilypondMode
+      ];
+    };
   };
   xdg.configFile."emacs/init.el".source = ./emacs.el;
 

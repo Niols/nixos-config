@@ -216,3 +216,16 @@
 
 (use-package toml-ts-mode
   :mode "\\.toml\\'")
+
+(use-package d-mode
+  :ensure t
+  :mode "\\.d\\'")
+
+(use-package lilypond-mode
+  ;; NOTE: no `:ensure t` here because it ships with LilyPond and not
+  ;; in *ELPA, so it needs to be provided by the Nix environment.
+  :mode "\\.ly\\'")
+
+(use-package flycheck-lilypond
+  :ensure t
+  :after lilypond-mode)
