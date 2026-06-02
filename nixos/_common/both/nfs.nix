@@ -43,6 +43,7 @@ let
     "/data/pictures"
     "/data/medias"
     "/data/services/nix-cache"
+    "/data/services/torrent"
   ];
 
 in
