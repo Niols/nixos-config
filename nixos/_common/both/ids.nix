@@ -38,6 +38,7 @@ let
     mastodon = 2007; # was 992 on Siegfried
     vsftpd = 2008; # was 990 on Siegfried
     # ftp-nginx = 2009; # no user, but a group
+    # medias = 2010; # no user, but a group
   };
 
   normalUids = {
@@ -71,6 +72,7 @@ let
     mastodon = 2007; # was 991 on Siegfried
     vsftpd = 2008; # was 989 on Siegfried
     ftp-nginx = 2009; # was 988 on Siegfried
+    medias = 2010;
   };
 
   inherit (lib) mapAttrs;
