@@ -265,7 +265,8 @@ in
         serviceConfig.Type = "oneshot";
         requires = [ "network-online.target" ]; # fails if network isn't online
         after = [ "network-online.target" ]; # only runs after network is online
-        wantedBy = [ "network-online.target" ]; # runs when network comes online
+        ## NOTE: this `wantedBy` might be why the unit triggers on `nixos-rebuild`, so I removed it as of 3 June 2026
+        # wantedBy = [ "network-online.target" ]; # runs when network comes online;
       };
 
       systemd.timers.update-dns-with-public-ip = {
