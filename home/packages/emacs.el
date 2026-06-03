@@ -158,8 +158,11 @@
    (lambda (may-prompt)
      (when-let (project (project-current nil))
        (project-root project))))
-  (xref-show-xrefs-function #'consult-xref)
-  (xref-show-definitions-function #'consult-xref))
+  :config
+  (require 'consult-xref)
+  (require 'consult-flymake)
+  (setq xref-show-xrefs-function #'consult-xref
+	xref-show-definitions-function #'consult-xref))
 
 (use-package vertico
   :ensure t
@@ -195,9 +198,8 @@
      (issues . hide)))
   (magit-process-finish-apply-ansi-colors t)
   :config
-  (add-hook 'git-commit-mode-hook #'evil-insert-state))
-
-(add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0)))
+  (add-hook 'git-commit-mode-hook #'evil-insert-state)
+  (add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0))))
 
 (use-package forge
   :ensure t
