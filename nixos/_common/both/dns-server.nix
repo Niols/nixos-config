@@ -222,40 +222,51 @@ in
       systemd.services.update-dns-with-public-ip = {
         script = ''
           echo "Getting current IP..." >&2
-          current_ip=$(${pkgs.dnsutils}/bin/dig -4 +short myip.opendns.com @resolver1.opendns.com)
-          if [ -z "$current_ip" ]; then
-            echo "Failed getting current IP." >&2
+          if current_ip=$(${pkgs.dnsutils}/bin/dig -4 +short myip.opendns.com @resolver1.opendns.com); then
+            if [ -n "$current_ip" ]; then
+              echo "Done getting current IP; got $current_ip." >&2
+            else
+              echo "Failed getting current IP; got the empty string." >&2
+              exit 1
+            fi
+          else
+            echo "Failed getting current IP; dig exited with error code $?." >&2
             exit 1
           fi
-          echo "Done getting current IP; got $current_ip." >&2
 
+          failure=false
           ${forConcat (attrNames machines.servers) (
             server:
             optionalString (server != "anastasia") ''
               echo "Checking DNS record on ${server}..." >&2
-              dns_ip=$(${pkgs.dnsutils}/bin/dig -4 +short anastasia.niols.fr @${server}.niols.fr)
-
-              if [ "$current_ip" = "$dns_ip" ]; then
-                echo "The DNS record does contain the correct IP already." >&2
-
-              else
-                echo "Updating DNS record on ${server} to $current_ip..." >&2
-                ${pkgs.dnsutils}/bin/nsupdate -k ${config.age.secrets.bind-key-anastasia-ddns.path} <<-EOF
-                  server ${server}.niols.fr
-                  zone niols.fr
-                  update delete anastasia.niols.fr A
-                  update add anastasia.niols.fr 60 A $current_ip
-                  send
+              if dns_ip=$(${pkgs.dnsutils}/bin/dig -4 +short anastasia.niols.fr @${server}.niols.fr); then
+                echo "Done checking DNS record; got $dns_ip." >&2
+                if [ "$current_ip" = "$dns_ip" ]; then
+                  echo "The DNS record does contain the correct IP already." >&2
+                else
+                  echo "Updating DNS record on ${server} to $current_ip..." >&2
+                  ${pkgs.dnsutils}/bin/nsupdate -k ${config.age.secrets.bind-key-anastasia-ddns.path} <<-EOF
+                    server ${server}.niols.fr
+                    zone niols.fr
+                    update delete anastasia.niols.fr A
+                    update add anastasia.niols.fr 60 A $current_ip
+                    send
               EOF
-                echo "Done updating DNS record on ${server}." >&2
+                  echo "Done updating DNS record on ${server}." >&2
+                fi
+              else
+                echo "Failred checking DNS record; dig exited with error code $?." >&2
+                failure=true
               fi
             ''
           )}
+          if $failure; then exit 1; fi
         '';
         serviceConfig.Type = "oneshot";
         requires = [ "network-online.target" ]; # fails if network isn't online
         after = [ "network-online.target" ]; # only runs after network is online
-        wantedBy = [ "network-online.target" ]; # runs when network comes online
+        ## NOTE: this `wantedBy` might be why the unit triggers on `nixos-rebuild`, so I removed it as of 3 June 2026
+        # wantedBy = [ "network-online.target" ]; # runs when network comes online;
       };
 
       systemd.timers.update-dns-with-public-ip = {
