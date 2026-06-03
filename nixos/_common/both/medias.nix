@@ -9,6 +9,7 @@ in
     (mkIf config.x_niols.services.medias.enabledOnAnyServer {
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         medias  IN  CNAME  ${config.x_niols.services.medias.enabledOn}
+        medias-new  IN  CNAME  anastasia
       '';
     })
 
@@ -22,9 +23,8 @@ in
         serverName = "medias.niols.fr";
         forceSSL = true;
         enableACME = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8096";
-        };
+        ## from https://jellyfin.org/docs/general/networking/index.html
+        locations."/".proxyPass = "http://127.0.0.1:8096";
       };
 
       users.groups.hester.members = [ "jellyfin" ];
@@ -40,6 +40,24 @@ in
         repokeyFile = config.age.secrets.hester-jellyfin-backup-repokey.path;
         identityFile = config.age.secrets.hester-jellyfin-backup-identity.path;
       };
+    })
+
+    ## FIXME[June 2026]: The following is only for beta
+    ## testing. Remove when possible.
+    ##
+    (mkIf (config.x_niols.thisMachinesName == "anastasia") {
+      services.jellyfin = {
+        enable = true;
+        openFirewall = false;
+      };
+      services.nginx.virtualHosts.medias = {
+        serverName = "medias-new.niols.fr";
+        forceSSL = true;
+        enableACME = true;
+        ## from https://jellyfin.org/docs/general/networking/index.html
+        locations."/".proxyPass = "http://127.0.0.1:8096";
+      };
+      users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
     })
   ];
 }
