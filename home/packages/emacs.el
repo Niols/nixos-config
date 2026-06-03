@@ -209,11 +209,6 @@
     :background 'unspecified
     :inherit '(italic forge-dimmed)))
 
-(use-package magit-todos
-  :ensure t
-  :after magit
-  :config (magit-todos-mode))
-
 ;; ==================== [ Prog ] ==================== ;;
 
 (defun my/eglot-ensure-if-server ()
