@@ -3,7 +3,7 @@
 let
   inherit (lib) mkMerge mkIf;
 
-  dataDir = "/hester/services/rtorrent";
+  dataDir = "/data/services/torrent/rtorrent";
 
 in
 {
@@ -49,17 +49,12 @@ in
         '';
       };
 
-      ## Mount Hester's /services/rtorrent, owned by `rtorrent`, but give `niols`
-      ## access to it.
-      _common.hester.fileSystems.services-rtorrent = {
-        path = "/services/rtorrent";
-        uid = config.services.rtorrent.user;
-        gid = config.services.rtorrent.group;
+      ## Make sure Anastasia is automounted before starting rtorrent.
+      ##
+      systemd.services.torrent.unitConfig = {
+        requires = [ "data-services-torrent.automount" ];
+        after = [ "data-services-torrent.automount" ];
       };
-      users.groups.${config.services.rtorrent.group}.members = [ "niols" ];
-
-      ## While we're at it, mount Hester's /medias so we can move things there.
-      _common.hester.fileSystems.medias.path = "/medias";
 
       services.rutorrent = {
         enable = true;

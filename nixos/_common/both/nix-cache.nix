@@ -36,6 +36,13 @@ in
         environmentFile = config.age.secrets.atticd-environment.path;
       };
 
+      ## Make sure Anastasia is automounted before starting atticd.
+      ##
+      systemd.services.atticd.unitConfig = {
+        requires = [ "data-services-nix\x2dcache.automount" ];
+        after = [ "data-services-nix\x2dcache.automount" ];
+      };
+
       services.postgresql = {
         ensureDatabases = [ user ];
         ensureUsers = [

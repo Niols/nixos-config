@@ -191,6 +191,7 @@ in
       datasetMountpoints = {
         medias = "/data/medias";
         nix-cache = "/data/services/nix-cache";
+        torrent = "/data/services/torrent";
       };
     };
   };
