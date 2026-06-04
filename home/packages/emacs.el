@@ -54,6 +54,13 @@
 
 ;; ==================== [ Feel ] ==================== ;;
 
+(use-package undo-fu
+  :ensure t)
+
+(use-package undo-fu-session
+  :ensure t
+  :config (undo-fu-session-global-mode))
+
 (defun my/evil-shift-right ()
   (interactive)
   (call-interactively #'evil-shift-right)
@@ -73,7 +80,8 @@
   (define-key evil-visual-state-map (kbd ">") #'my/evil-shift-right)
   (define-key evil-visual-state-map (kbd "<") #'my/evil-shift-left)
   :custom
-  (evil-shift-width 2))
+  (evil-shift-width 2)
+  (evil-undo-system 'undo-fu))
 
 (use-package evil-collection
   :ensure t
