@@ -93,7 +93,7 @@
 
 (use-package crux
   :ensure t
-  :defer t)
+  :hook (after-init . (lambda () (require 'crux))))
 
 (use-package general
   :ensure t
