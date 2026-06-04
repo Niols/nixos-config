@@ -212,6 +212,8 @@
 (use-package forge
   :ensure t
   :after magit
+  :custom
+  (forge-add-default-bindings nil)
   :config
   (set-face-attribute 'forge-pullreq-draft nil
     :background 'unspecified
