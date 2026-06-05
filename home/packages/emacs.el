@@ -228,9 +228,13 @@
 
 (defun my/eglot-ensure-if-server ()
   (require 'eglot)
-  (if (eglot--lookup-mode major-mode)
-      (eglot-ensure)
-    (message "[eglot] (info) no LSP server configured for %s" major-mode)))
+  (cond
+   ((and buffer-file-name (string-suffix-p ".mll" buffer-file-name))
+    (message "[eglot] (info) blacklisted extension .mll"))
+   ((not (eglot--lookup-mode major-mode))
+    (message "[eglot] (info) no LSP server configured for %s" major-mode))
+   (t
+    (eglot-ensure))))
 
 (use-package eglot
   ;; built-in
@@ -242,8 +246,21 @@
 
 (use-package tuareg
   :ensure t
-  :mode ("\\.ml\\'" . tuareg-mode)
-        ("\\.mli\\'" . tuareg-mode))
+  :mode ("\\.ml[ilp]?\\'" . tuareg-mode))
+
+(use-package tuareg-menhir
+  ;; provided by tuareg
+  :mode ("\\.mly\\'" . tuareg-menhir-mode))
+
+(use-package tuareg-opam
+  ;; provided by tuareg
+  :mode ("\\.opam\\'" . tuareg-opam-mode)
+  :init (require 'flymake-proc)) ;; https://github.com/ocaml/tuareg/pull/310
+
+(use-package dune
+  :ensure t
+  :mode ("/dune\\'" . dune-mode)
+        ("/dune-project\\'" . dune-mode))
 
 (use-package nix-mode
   :ensure t
