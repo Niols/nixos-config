@@ -14,6 +14,8 @@ let
     mkIf
     listToAttrs
     map
+    sortOn
+    id
     ;
 
   forConcat = l: f: concatMapStringsSep "\n" f l;
@@ -40,8 +42,9 @@ let
   ## assertion in the configuration of Anastasia that it is the same list.
   ##
   datasetMountpoints = [
-    "/data/pictures"
     "/data/medias"
+    "/data/pictures"
+    "/data/services/cloud"
     "/data/services/nix-cache"
     "/data/services/torrent"
   ];
@@ -73,7 +76,7 @@ in
     (mkIf config.x_niols.services.nfs.enabledOnThisServer {
       assertions = [
         {
-          assertion = (datasetMountpoints == datasetMountpointsForChecking);
+          assertion = (sortOn id datasetMountpoints == sortOn id datasetMountpointsForChecking);
           message = ''
             Hardcoded list of dataset mountpoints does not match the Disko configuration of the host.
               See `nfs.nix` or grep for `datasetMountpoints`.

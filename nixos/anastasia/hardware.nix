@@ -183,6 +183,7 @@ in
       mode = "mirror";
       datasetMountpoints = {
         pictures = "/data/pictures";
+        cloud = "/data/services/cloud";
       };
     };
 
