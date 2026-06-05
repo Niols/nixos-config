@@ -240,8 +240,12 @@
 
 (use-package tuareg
   :ensure t
-  :mode ("\\.ml\\'" . tuareg-mode)
-        ("\\.mli\\'" . tuareg-mode))
+  :mode "\\.ml[ily]?\\'")
+
+(use-package dune
+  :ensure t
+  :mode ("/dune\\'" . dune-mode)
+        ("/dune-project\\'" . dune-mode))
 
 (use-package nix-mode
   :ensure t
