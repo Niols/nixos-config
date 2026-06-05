@@ -35,7 +35,6 @@ let
     rtorrent = 2004; # was 993 on Helga
     rutorrent = 2005; # was 992 on Helga
     galene = 2006; # was 990 on Helga
-    mastodon = 2007; # was 992 on Siegfried
     vsftpd = 2008; # was 990 on Siegfried
     # ftp-nginx = 2009; # no user, but a group
     # medias = 2010; # no user, but a group
@@ -69,7 +68,6 @@ let
     rtorrent = 2004; # was 990 on Helga
     rutorrent = 2005; # was 989 on Helga
     galene = 2006; # was 987 on Helga
-    mastodon = 2007; # was 991 on Siegfried
     vsftpd = 2008; # was 989 on Siegfried
     ftp-nginx = 2009; # was 988 on Siegfried
     medias = 2010;

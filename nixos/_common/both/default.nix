@@ -33,7 +33,6 @@ in
     ./git-server.nix
     ./hester.nix
     ./ids.nix
-    ./mastodon.nix
     ./matrix.nix
     ./medias.nix
     ./monitoring.nix
@@ -60,7 +59,6 @@ in
       dancelor.enabledOn = "orianne";
       ftp.enabledOn = "siegfried";
       git.enabledOn = "anastasia";
-      mastodon.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "anastasia";
       monitor.enabledOn = "orianne";

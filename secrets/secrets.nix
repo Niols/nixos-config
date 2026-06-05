@@ -96,8 +96,6 @@ concatMapAttrs
 
       ftp-password-kerl = [ siegfried ];
 
-      mastodon-noreply-password = [ siegfried ];
-
       no-reply-smtp-password = [ orianne ];
 
       matrix-synapse-signing-key = [ helga ];
