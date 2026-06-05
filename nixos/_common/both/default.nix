@@ -62,7 +62,7 @@ in
       git.enabledOn = "siegfried";
       mastodon.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
-      medias.enabledOn = "orianne";
+      medias.enabledOn = "anastasia";
       monitor.enabledOn = "orianne";
       nfs.enabledOn = "anastasia";
       nix-cache.enabledOn = "anastasia";

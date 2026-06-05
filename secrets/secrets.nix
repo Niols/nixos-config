@@ -81,8 +81,8 @@ concatMapAttrs
       hester-git-backup-identity = [ siegfried ];
       hester-grafana-backup-repokey = [ orianne ];
       hester-grafana-backup-identity = [ orianne ];
-      hester-jellyfin-backup-repokey = [ orianne ];
-      hester-jellyfin-backup-identity = [ orianne ];
+      hester-jellyfin-backup-repokey = [ anastasia ];
+      hester-jellyfin-backup-identity = [ anastasia ];
       hester-matrix-backup-repokey = [ helga ];
       hester-matrix-backup-identity = [ helga ];
       hester-niolscloud-backup-repokey = [ orianne ];
