@@ -51,10 +51,10 @@ let
 
       @  IN  SOA ${head (attrNames machines.servers)}.niols.fr admin.niols.fr (
         ${toString inputs.self.lastModified} ; serial number - need to increase with every change
-        3600    ; refresh - how often secondary name servers should check for zone updates
-        1800    ; retry - in case of failure to contact primary, how long to wait before retrying
-        604800  ; expire - in case of failure to contact primary, how long before giving up
-        86400   ; negative TTL - how long to cache negative responses for
+        1200    ; 20 minutes - refresh - how often secondary name servers should check for zone updates
+        600     ; 10 minutes - retry - in case of failure to contact primary, how long to wait before retrying
+        1209600 ; 14 days - expire - in case of failure to contact primary, how long before giving up
+        300     ; 5 minutes - negative TTL - how long to cache negative responses for
       )
 
       ${forConcatAttrs machines.servers (
@@ -173,8 +173,11 @@ in
         '';
       };
 
-      ## On start, copy the zone files that we generated to the location where
-      ## BIND can modify them. This is because we want to support NSUPDATEs.
+      ## On start, copy the zone files that we generated to the
+      ## location where BIND can modify them. This is because we want
+      ## to support NSUPDATEs. Does this only if the generated file
+      ## has changed, so that, if it didn't, then we do not lose what
+      ## has been NSUPDATEd so far.
       ##
       systemd.services.bind = {
         preStart = lib.mkAfter ''
@@ -182,14 +185,14 @@ in
           ${forConcat domains (
             domain:
             let
-              s = zoneFileTemplate domain; # s for “source”
-              t = "/etc/bind/${domain}.zone"; # t for “target”
+              source = zoneFileTemplate domain;
+              target = "/etc/bind/${domain}.zone";
             in
             ''
-              if ! cmp -s ${s} ${t}.tpl; then
-                rm -f ${t}{,.jnl,.orig}
-                cp ${s} ${t}.orig
-                cp ${s} ${t}
+              if ! cmp -s ${source} ${target}.orig; then
+                rm -f ${target}{,.jnl,.orig}
+                cp ${source} ${target}.orig
+                cp ${source} ${target}
               fi
             ''
           )}
@@ -255,7 +258,7 @@ in
                   echo "Done updating DNS record on ${server}." >&2
                 fi
               else
-                echo "Failred checking DNS record; dig exited with error code $?." >&2
+                echo "Failed checking DNS record; dig exited with error code $?." >&2
                 failure=true
               fi
             ''
