@@ -235,6 +235,9 @@
 (use-package eglot
   :hook (prog-mode . my/eglot-ensure-if-server))
 
+(use-package cram-mode
+  :mode "\\.t\\'")
+
 (use-package tuareg
   :ensure t
   :mode ("\\.ml\\'" . tuareg-mode)
