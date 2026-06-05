@@ -45,6 +45,7 @@ let
     "/data/medias"
     "/data/pictures"
     "/data/services/cloud"
+    "/data/services/git"
     "/data/services/nix-cache"
     "/data/services/torrent"
   ];

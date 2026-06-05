@@ -77,8 +77,8 @@ concatMapAttrs
         ahlaya
         gromit
       ];
-      hester-git-backup-repokey = [ siegfried ];
-      hester-git-backup-identity = [ siegfried ];
+      hester-git-backup-repokey = [ anastasia ];
+      hester-git-backup-identity = [ anastasia ];
       hester-grafana-backup-repokey = [ orianne ];
       hester-grafana-backup-identity = [ orianne ];
       hester-jellyfin-backup-repokey = [ anastasia ];

@@ -59,7 +59,7 @@ in
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "orianne";
       ftp.enabledOn = "siegfried";
-      git.enabledOn = "siegfried";
+      git.enabledOn = "anastasia";
       mastodon.enabledOn = "siegfried";
       matrix.enabledOn = "helga";
       medias.enabledOn = "anastasia";
