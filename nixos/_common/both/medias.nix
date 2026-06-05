@@ -9,7 +9,7 @@ in
     (mkIf config.x_niols.services.medias.enabledOnAnyServer {
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         medias  IN  CNAME  ${config.x_niols.services.medias.enabledOn}
-        medias-new  IN  CNAME  anastasia
+        medias-old  IN  CNAME  orianne
       '';
     })
 
@@ -27,7 +27,7 @@ in
         locations."/".proxyPass = "http://127.0.0.1:8096";
       };
 
-      users.groups.hester.members = [ "jellyfin" ];
+      users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
 
       ############################################################################
       ## Daily backup
@@ -42,21 +42,22 @@ in
       };
     })
 
-    ## FIXME[June 2026]: The following is only for beta
-    ## testing. Remove when possible.
+    ## FIXME[June 2026]: The following is the legacy media server, kept in case
+    ## the new setup on Anastasia isn't up to standard.
     ##
-    (mkIf (config.x_niols.thisMachinesName == "anastasia") {
+    (mkIf (config.x_niols.thisMachinesName == "orianne") {
       services.jellyfin = {
         enable = true;
         openFirewall = false;
       };
       services.nginx.virtualHosts.medias = {
-        serverName = "medias-new.niols.fr";
+        serverName = "medias-old.niols.fr";
         forceSSL = true;
         enableACME = true;
         ## from https://jellyfin.org/docs/general/networking/index.html
         locations."/".proxyPass = "http://127.0.0.1:8096";
       };
+      users.groups.hester.members = [ "jellyfin" ]; # for read access to medias
       users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
     })
   ];
