@@ -173,8 +173,11 @@ in
         '';
       };
 
-      ## On start, copy the zone files that we generated to the location where
-      ## BIND can modify them. This is because we want to support NSUPDATEs.
+      ## On start, copy the zone files that we generated to the
+      ## location where BIND can modify them. This is because we want
+      ## to support NSUPDATEs. Does this only if the generated file
+      ## has changed, so that, if it didn't, then we do not lose what
+      ## has been NSUPDATEd so far.
       ##
       systemd.services.bind = {
         preStart = lib.mkAfter ''
@@ -182,14 +185,14 @@ in
           ${forConcat domains (
             domain:
             let
-              s = zoneFileTemplate domain; # s for “source”
-              t = "/etc/bind/${domain}.zone"; # t for “target”
+              source = zoneFileTemplate domain;
+              target = "/etc/bind/${domain}.zone";
             in
             ''
-              if ! cmp -s ${s} ${t}.tpl; then
-                rm -f ${t}{,.jnl,.orig}
-                cp ${s} ${t}.orig
-                cp ${s} ${t}
+              if ! cmp -s ${source} ${target}.orig; then
+                rm -f ${target}{,.jnl,.orig}
+                cp ${source} ${target}.orig
+                cp ${source} ${target}
               fi
             ''
           )}
