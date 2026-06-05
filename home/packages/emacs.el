@@ -156,7 +156,9 @@
 ;; Emacs infrastructure.
 (use-package corfu
   :ensure t
-  :hook (prog-mode . corfu-mode))
+  :hook (prog-mode . corfu-mode)
+  :custom
+  (corfu-auto t))
 
 (use-package consult
   :ensure t
