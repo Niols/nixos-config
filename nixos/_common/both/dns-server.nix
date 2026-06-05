@@ -51,10 +51,10 @@ let
 
       @  IN  SOA ${head (attrNames machines.servers)}.niols.fr admin.niols.fr (
         ${toString inputs.self.lastModified} ; serial number - need to increase with every change
-        3600    ; refresh - how often secondary name servers should check for zone updates
-        1800    ; retry - in case of failure to contact primary, how long to wait before retrying
-        604800  ; expire - in case of failure to contact primary, how long before giving up
-        86400   ; negative TTL - how long to cache negative responses for
+        1200    ; 20 minutes - refresh - how often secondary name servers should check for zone updates
+        600     ; 10 minutes - retry - in case of failure to contact primary, how long to wait before retrying
+        1209600 ; 14 days - expire - in case of failure to contact primary, how long before giving up
+        300     ; 5 minutes - negative TTL - how long to cache negative responses for
       )
 
       ${forConcatAttrs machines.servers (
@@ -255,7 +255,7 @@ in
                   echo "Done updating DNS record on ${server}." >&2
                 fi
               else
-                echo "Failred checking DNS record; dig exited with error code $?." >&2
+                echo "Failed checking DNS record; dig exited with error code $?." >&2
                 failure=true
               fi
             ''
