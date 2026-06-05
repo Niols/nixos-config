@@ -84,16 +84,9 @@ in
       users.users.kerl = {
         isNormalUser = true;
         hashedPasswordFile = config.age.secrets.ftp-password-kerl.path;
-        home = "/hester/services/ftp/kerl";
+        home = "/data/services/ftp/kerl";
       };
       services.openssh.settings.DenyUsers = [ "kerl" ];
-
-      ## Home on Hester for Kerl.
-      _common.hester.fileSystems.services-ftp-kerl = {
-        path = "/services/ftp/kerl";
-        uid = "kerl";
-        gid = "ftp";
-      };
     })
   ];
 }
