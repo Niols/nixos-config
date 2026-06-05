@@ -42,8 +42,9 @@ let
   ## assertion in the configuration of Anastasia that it is the same list.
   ##
   datasetMountpoints = [
-    "/data/pictures"
     "/data/medias"
+    "/data/pictures"
+    "/data/services/cloud"
     "/data/services/nix-cache"
     "/data/services/torrent"
   ];
