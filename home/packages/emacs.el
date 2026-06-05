@@ -61,15 +61,20 @@
   :ensure t
   :config (undo-fu-session-global-mode))
 
+(defun my/evil-shift (fn)
+  (let ((beg (region-beginning))
+        (end (region-end))
+        (type (evil-visual-type)))
+    (call-interactively fn)
+    (evil-visual-make-selection beg end type)))
+
 (defun my/evil-shift-right ()
   (interactive)
-  (call-interactively #'evil-shift-right)
-  (evil-visual-restore))
+  (my/evil-shift #'evil-shift-right))
 
 (defun my/evil-shift-left ()
   (interactive)
-  (call-interactively #'evil-shift-left)
-  (evil-visual-restore))
+  (my/evil-shift #'evil-shift-left))
 
 (use-package evil
   :ensure t
