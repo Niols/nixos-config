@@ -6,6 +6,15 @@ let
     emacsWithPackagesFromUsePackage
     ;
 
+  cramMode = pkgs.emacsPackages.trivialBuild rec {
+    pname = "cram-mode";
+    version = "73026b4b9c8b74326186095dbb3ef7bdf9d4925b";
+    src = pkgs.fetchurl {
+      url = "https://gist.github.com/mikeshulman/ab124d5db7aaa9330ff6457649b05f3a/raw/${version}/cram-mode.el";
+      hash = "sha256-E4Rim1jaVyWtCTIBQr/dKowAdsliND7C4kjz8MZXLSk=";
+    };
+  };
+
   lilypondMode = pkgs.emacsPackages.trivialBuild {
     pname = "lilypond-mode";
     version = pkgs.lilypond.version;
@@ -33,6 +42,7 @@ in
     package = emacsWithPackagesFromUsePackage {
       config = ./emacs.el;
       extraEmacsPackages = _epkgs: [
+        cramMode
         lilypondMode
       ];
     };

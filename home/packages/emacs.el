@@ -236,6 +236,10 @@
   ;; built-in
   :hook (prog-mode . my/eglot-ensure-if-server))
 
+(use-package cram-mode
+  ;; provided by Nix
+  :mode "\\.t\\'")
+
 (use-package tuareg
   :ensure t
   :mode ("\\.ml\\'" . tuareg-mode)
