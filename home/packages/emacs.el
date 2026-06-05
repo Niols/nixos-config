@@ -233,6 +233,7 @@
     (message "[eglot] (info) no LSP server configured for %s" major-mode)))
 
 (use-package eglot
+  ;; built-in
   :hook (prog-mode . my/eglot-ensure-if-server))
 
 (use-package tuareg
@@ -245,9 +246,11 @@
   :mode "\\.nix\\'")
 
 (use-package yaml-ts-mode
+  ;; built-in
   :mode "\\.ya?ml\\'")
 
 (use-package toml-ts-mode
+  ;; built-in
   :mode "\\.toml\\'")
 
 (use-package d-mode
@@ -255,8 +258,7 @@
   :mode "\\.d\\'")
 
 (use-package lilypond-mode
-  ;; NOTE: no `:ensure t` here because it ships with LilyPond and not
-  ;; in *ELPA, so it needs to be provided by the Nix environment.
+  ;; provided by Nix
   :mode "\\.ly\\'")
 
 (use-package flycheck-lilypond
