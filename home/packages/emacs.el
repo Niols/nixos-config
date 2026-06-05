@@ -64,11 +64,14 @@
 (defun my/evil-shift-right ()
   (interactive)
   (call-interactively #'evil-shift-right)
+  (evil-normal-state)
   (evil-visual-restore))
 
 (defun my/evil-shift-left ()
   (interactive)
   (call-interactively #'evil-shift-left)
+  (call-interactively fn)
+  (evil-normal-state)
   (evil-visual-restore))
 
 (use-package evil
