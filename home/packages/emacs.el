@@ -36,7 +36,8 @@
   (column-number-mode 1)
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
-  (global-hl-line-mode 1))
+  (global-hl-line-mode 1)
+  (global-visual-line-mode 1))
 
 (use-package doom-themes
   :ensure t
@@ -78,13 +79,17 @@
   :ensure t
   :init
   (setq evil-want-keybinding nil) ; required for evil-collection
+  :custom
+  (evil-shift-width 2)
+  (evil-undo-system 'undo-fu)
+  (evil-respect-visual-line-mode t)
   :config
   (evil-mode 1)
   (define-key evil-visual-state-map (kbd ">") #'my/evil-shift-right)
   (define-key evil-visual-state-map (kbd "<") #'my/evil-shift-left)
-  :custom
-  (evil-shift-width 2)
-  (evil-undo-system 'undo-fu))
+  (dolist (map (list evil-normal-state-map evil-visual-state-map evil-insert-state-map evil-motion-state-map evil-emacs-state-map))
+    (define-key map (kbd "<up>") #'evil-previous-visual-line)
+    (define-key map (kbd "<down>") #'evil-next-visual-line)))
 
 (use-package evil-collection
   :ensure t
@@ -137,7 +142,9 @@
 
     "p"  '(:ignore t :which-key "projects")
     "pp" #'project-switch-project
-    ))
+
+    "t"  '(:ignore t :which-key "toggles")
+    "tw" #'toggle-word-wrap))
 
 (use-package which-key
   :ensure t
