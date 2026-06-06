@@ -36,7 +36,6 @@ concatMapAttrs
         anastasia
         helga
         orianne
-        siegfried
       ];
 
       dancelor-github-token = [ orianne ];
@@ -55,7 +54,6 @@ concatMapAttrs
       password-helga-niols = [ helga ];
       password-helga-root = [ helga ];
       password-orianne-root = [ orianne ];
-      password-siegfried-root = [ siegfried ];
 
       syncthing-server-passwd = [ anastasia ];
       syncthing-server-cert = [ anastasia ];
@@ -73,7 +71,6 @@ concatMapAttrs
         anastasia
         helga
         orianne
-        siegfried
         ahlaya
         gromit
       ];
@@ -128,7 +125,6 @@ concatMapAttrs
         gromit
         helga
         orianne
-        siegfried
         # homes:
         ahlaya-niols
         ahlaya-work
@@ -158,6 +154,5 @@ concatMapAttrs
       wireguard-anastasia-niols-key = [ anastasia ];
       wireguard-helga-niols-key = [ helga ];
       wireguard-orianne-niols-key = [ orianne ];
-      wireguard-siegfried-niols-key = [ siegfried ];
     }
   )

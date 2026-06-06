@@ -35,7 +35,7 @@ let
     rtorrent = 2004; # was 993 on Helga
     rutorrent = 2005; # was 992 on Helga
     galene = 2006; # was 990 on Helga
-    vsftpd = 2008; # was 990 on Siegfried
+    vsftpd = 2008;
     # ftp-nginx = 2009; # no user, but a group
     # medias = 2010; # no user, but a group
   };
@@ -43,7 +43,7 @@ let
   normalUids = {
     niols = 1000;
     work = 1001;
-    kerl = 1010; # was 1001 on Siegfried
+    kerl = 1010;
   };
 
   gids = {
@@ -68,8 +68,8 @@ let
     rtorrent = 2004; # was 990 on Helga
     rutorrent = 2005; # was 989 on Helga
     galene = 2006; # was 987 on Helga
-    vsftpd = 2008; # was 989 on Siegfried
-    ftp-nginx = 2009; # was 988 on Siegfried
+    vsftpd = 2008;
+    ftp-nginx = 2009;
     medias = 2010;
   };
 

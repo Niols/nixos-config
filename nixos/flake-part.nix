@@ -54,14 +54,6 @@ let
       wgPublicKey = "Gu3XXcxqxQDy+N1yFZ7fbJMpJWKOBJKeF95doHmQMT0=";
       cores = 4;
     };
-    siegfried = rec {
-      kind = "server";
-      ipv4 = "158.178.201.160";
-      internalIndex = 4;
-      internalIp = "${wgIpPrefix}.${toString internalIndex}";
-      wgPublicKey = "yOThiN76Wzh6Hq8IDbmc2xmWbQ+IU24gSn0skiZA9B8=";
-      cores = 2;
-    };
   };
   machines = {
     inherit all wgIpPrefix;
@@ -150,7 +142,6 @@ in
     ./anastasia
     ./helga
     ./orianne
-    ./siegfried
     ./gromit.nix
 
     ## NixOps4
