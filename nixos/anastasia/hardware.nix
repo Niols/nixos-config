@@ -182,8 +182,9 @@ in
     zpool.important = makeZfsPool {
       mode = "mirror";
       datasetMountpoints = {
-        pictures = "/data/pictures";
         cloud = "/data/services/cloud";
+        git = "/data/services/git";
+        pictures = "/data/pictures";
       };
     };
 
