@@ -186,6 +186,7 @@ in
         ftp = "/data/services/ftp";
         git = "/data/services/git";
         pictures = "/data/pictures";
+        syncthing = "/data/services/syncthing";
       };
     };
 

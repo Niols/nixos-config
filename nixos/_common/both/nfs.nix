@@ -48,6 +48,7 @@ let
     "/data/services/ftp"
     "/data/services/git"
     "/data/services/nix-cache"
+    "/data/services/syncthing"
     "/data/services/torrent"
   ];
 
