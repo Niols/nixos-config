@@ -165,9 +165,6 @@ jobs:
           - nixos: orianne
             system: aarch64-linux
             xtraSpace: ''
-          - nixos: siegfried
-            system: x86_64-linux
-            xtraSpace: ''
   summarise:
     if: always()
     name: Summarise

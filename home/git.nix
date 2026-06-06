@@ -49,9 +49,6 @@
 
       init.defaultBranch = "main";
 
-      ## FIXME: Maybe this should rather be in Siegfried's configuration?
-      safe.directory = [ "/hester/services/git/niols.fr.git" ];
-
       ## Used by forge (via ghub) to access GitHub.
       github.user = "niols";
 
