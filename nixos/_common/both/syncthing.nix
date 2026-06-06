@@ -49,7 +49,7 @@ in
           "Camille"
           "Oxana"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
@@ -59,14 +59,20 @@ in
           "Camille"
           "Oxana"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
         Music.devices = [
           "Barbara"
           "Phineas"
-          "Siegfried"
+          "Server"
+        ];
+
+        Scottish-ish.devices = [
+          "Barbara"
+          "Phineas"
+          "Server"
         ];
 
         "Boox/Documents".devices = [
@@ -74,7 +80,7 @@ in
           "Camille"
           "Oxana"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
@@ -83,14 +89,14 @@ in
           "Camille"
           "Oxana"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
         "Phineas/DCIM".devices = [
           "Ahlaya"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
@@ -100,21 +106,21 @@ in
           "Camille"
           "Oxana"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
         "Phineas/Download".devices = [
           "Ahlaya"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
 
         "Phineas/Pictures".devices = [
           "Ahlaya"
           "Phineas"
-          "Siegfried"
+          "Server"
           "Gromit"
         ];
       };
@@ -127,10 +133,7 @@ in
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
         Ahlaya.id = "SGAFF5O-IMVLLWM-G5JG6R3-Y6HWZBH-I4R7NPO-5YK3HL3-CABWEYB-IB27KAB";
         Gromit.id = "TKMS33R-MUJALFM-DOXFCQO-NS7UWJ2-FHW4EBE-EJMZZGZ-HSM3EO7-JAQEHQ5";
-        Siegfried = {
-          id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
-          addresses = [ "tcp://siegfried.niols.fr/" ];
-        };
+        Server.id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
       };
     };
   };

@@ -57,9 +57,9 @@ concatMapAttrs
       password-orianne-root = [ orianne ];
       password-siegfried-root = [ siegfried ];
 
-      syncthing-siegfried-passwd = [ siegfried ];
-      syncthing-siegfried-cert = [ siegfried ];
-      syncthing-siegfried-key = [ siegfried ];
+      syncthing-server-passwd = [ anastasia ];
+      syncthing-server-cert = [ anastasia ];
+      syncthing-server-key = [ anastasia ];
       syncthing-ahlaya-cert = [ ahlaya ];
       syncthing-ahlaya-key = [ ahlaya ];
       syncthing-gromit-cert = [ gromit ];
@@ -87,8 +87,8 @@ concatMapAttrs
       hester-matrix-backup-identity = [ helga ];
       hester-niolscloud-backup-repokey = [ orianne ];
       hester-niolscloud-backup-identity = [ orianne ];
-      hester-syncthing-backup-repokey = [ siegfried ];
-      hester-syncthing-backup-identity = [ siegfried ];
+      hester-syncthing-backup-repokey = [ anastasia ];
+      hester-syncthing-backup-identity = [ anastasia ];
       hester-teamspeak-backup-repokey = [ helga ];
       hester-teamspeak-backup-identity = [ helga ];
       hester-web-backup-repokey = [ helga ];
