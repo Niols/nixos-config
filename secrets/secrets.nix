@@ -94,7 +94,7 @@ concatMapAttrs
       hester-web-backup-repokey = [ helga ];
       hester-web-backup-identity = [ helga ];
 
-      ftp-password-kerl = [ siegfried ];
+      ftp-password-kerl = [ anastasia ];
 
       no-reply-smtp-password = [ orianne ];
 

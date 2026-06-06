@@ -57,7 +57,7 @@ in
       call.enabledOn = "helga";
       cloud.enabledOn = "orianne";
       dancelor.enabledOn = "orianne";
-      ftp.enabledOn = "siegfried";
+      ftp.enabledOn = "anastasia";
       git.enabledOn = "anastasia";
       matrix.enabledOn = "helga";
       medias.enabledOn = "anastasia";
