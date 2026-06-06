@@ -48,6 +48,8 @@ in
         };
       };
 
+      users.groups.medias.members = [ "syncthing" ];
+
       age.secrets."syncthing-server-passwd" = {
         mode = "600";
         owner = "nginx";
