@@ -124,11 +124,12 @@
                 inputs'.agenix.packages.default
                 (pkgs.writeScriptBin "agenix-rekey" ''
                   set -euC
-                  cp "$1" /tmp/age-key
-                  ssh-keygen -p -N "" -f /tmp/age-key
+                  key=$(mktemp)
+                  cp "$1" "$key"
+                  ssh-keygen -p -N "" -f "$key"
                   if [ -d secrets ]; then cd secrets; fi
-                  ${inputs'.agenix.packages.agenix}/bin/agenix -i /tmp/age-key -r
-                  rm -f /tmp/age-key
+                  ${inputs'.agenix.packages.agenix}/bin/agenix -i "$key" -r
+                  rm -f "$key"
                 '')
 
                 pkgs.attic-client

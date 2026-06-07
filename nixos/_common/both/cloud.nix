@@ -55,7 +55,7 @@ in
         settings.trusted_domains = otherHostNames;
 
         home = "/var/lib/nextcloud";
-        datadir = "/var/lib/nextcloud";
+        datadir = "/data/services/cloud/nextcloud";
 
         https = true; # use HTTPS for links
 
@@ -132,6 +132,11 @@ in
         phpOptions."opcache.interned_strings_buffer" = "16";
       };
 
+      ## NextCloud does not play well with XSS protection, so it needs
+      ## to be disabled globally and re-enabled by other non-NextCloud
+      ## services that need it.
+      x_niols.nginxXSSProtection = false;
+
       age.secrets = {
         niolscloud-admin-password = {
           mode = "640";
@@ -181,6 +186,7 @@ in
         paths = [
           "/var/lib/nextcloud"
           "/var/backup/postgresql/nextcloud.sql.gz"
+          "/data/services/cloud"
         ];
         repokeyFile = config.age.secrets.hester-niolscloud-backup-repokey.path;
         identityFile = config.age.secrets.hester-niolscloud-backup-identity.path;

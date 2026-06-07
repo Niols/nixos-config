@@ -55,7 +55,7 @@ in
     x_niols.services = {
       ahrefs-vpn-tunnel.enabledOn = "helga";
       call.enabledOn = "helga";
-      cloud.enabledOn = "orianne";
+      cloud.enabledOn = "anastasia";
       dancelor.enabledOn = "orianne";
       ftp.enabledOn = "anastasia";
       git.enabledOn = "anastasia";

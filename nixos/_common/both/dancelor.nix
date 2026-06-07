@@ -94,6 +94,11 @@ in
         };
       };
 
+      ## We do not actually want this on a global level because
+      ## Dancelor relies on embedding objects. This should be
+      ## reactivated on a per-server basis.
+      x_niols.nginxXFrameOptionsDeny = false;
+
       ############################################################################
       ## Daily backup
       ##

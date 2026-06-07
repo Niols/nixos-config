@@ -46,8 +46,5 @@
 
       ## REVIEW: not sure if we need this
       networking.useDHCP = lib.mkDefault true;
-
-      x_niols.nginxXSSProtection = false;
-      x_niols.nginxXFrameOptionsDeny = true;
     };
 }

@@ -82,8 +82,8 @@ concatMapAttrs
       hester-jellyfin-backup-identity = [ anastasia ];
       hester-matrix-backup-repokey = [ helga ];
       hester-matrix-backup-identity = [ helga ];
-      hester-niolscloud-backup-repokey = [ orianne ];
-      hester-niolscloud-backup-identity = [ orianne ];
+      hester-niolscloud-backup-repokey = [ anastasia ];
+      hester-niolscloud-backup-identity = [ anastasia ];
       hester-syncthing-backup-repokey = [ anastasia ];
       hester-syncthing-backup-identity = [ anastasia ];
       hester-teamspeak-backup-repokey = [ helga ];
@@ -112,9 +112,9 @@ concatMapAttrs
         headless-work
       ];
 
-      niolscloud-admin-password = [ orianne ];
-      niolscloud-secrets = [ orianne ];
-      niolscloud-exporter-token = [ orianne ];
+      niolscloud-admin-password = [ anastasia ];
+      niolscloud-exporter-token = [ orianne ]; # for the monitoring machine, not the cloud machine
+      niolscloud-secrets = [ anastasia ];
 
       ## Read-only authentication to substituters. This is distributed widely
       ## and should not contain sensitive tokens. See `attic-client-config` for
