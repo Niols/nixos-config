@@ -186,6 +186,7 @@ in
         paths = [
           "/var/lib/nextcloud"
           "/var/backup/postgresql/nextcloud.sql.gz"
+          "/data/services/cloud"
         ];
         repokeyFile = config.age.secrets.hester-niolscloud-backup-repokey.path;
         identityFile = config.age.secrets.hester-niolscloud-backup-identity.path;
