@@ -36,8 +36,7 @@
   (column-number-mode 1)
   (global-auto-revert-mode 1)
   (global-display-line-numbers-mode 1)
-  (global-hl-line-mode 1)
-  (global-visual-line-mode 1))
+  (global-hl-line-mode 1))
 
 (use-package doom-themes
   :ensure t
@@ -82,7 +81,6 @@
   :custom
   (evil-shift-width 2)
   (evil-undo-system 'undo-fu)
-  (evil-respect-visual-line-mode t)
   :config
   (evil-mode 1)
   (define-key evil-visual-state-map (kbd ">") #'my/evil-shift-right)
