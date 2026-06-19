@@ -53,6 +53,7 @@ in
       tmux
       unrar
       unzip
+      upterm
       wget
       yamllint
       yq
