@@ -76,7 +76,6 @@ in
       ## but not anymore, now that it is in Dancelor directly.
       services.nginx.virtualHosts.dancelor = {
         serverName = "dancelor.org";
-        serverAliases = [ "www.dancelor.org" ];
         forceSSL = true;
         enableACME = true;
         locations."/" = {
@@ -92,6 +91,11 @@ in
             add_header X-XSS-Protection "1; mode=block";
           '';
         };
+      };
+      services.nginx.virtualHosts.dancelor_www = {
+        serverName = "www.dancelor.org";
+        enableACME = true;
+        globalRedirect = "dancelor.org";
       };
 
       ## We do not actually want this on a global level because
