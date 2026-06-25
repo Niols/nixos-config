@@ -149,6 +149,14 @@
   :ensure t
   :hook (after-init . which-key-mode))
 
+;; Re-run flymake whenever changing buffer, because things might have
+;; changed. Sadly, we bind on `buffer-list-update-hook` which triggers
+;; more often than we'd want; I couldn't find anything better.
+(add-hook 'buffer-list-update-hook
+          (lambda ()
+            (when (bound-and-true-p flymake-mode)
+              (flymake-start))))
+
 ;; ==================== [ Global ] ==================== ;;
 ;; Some things that simply must be everywhere in Emacs.
 
