@@ -42,27 +42,6 @@ in
     }
 
     {
-      programs.tmux = {
-        enable = true;
-        escapeTime = 0;
-        historyLimit = 1000000;
-        keyMode = "vi";
-        mouse = true;
-
-        ## Hide the status bar, but trigger hooks on window creation/deletion to
-        ## show the status bar if there are more than 1 windows.
-        extraConfig = ''
-          set -g status off
-          set-hook -g window-linked   'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
-          set-hook -g window-unlinked 'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
-          unbind C-b
-          set -g prefix C-t
-          bind C-t send-prefix
-        '';
-      };
-    }
-
-    {
       programs.bash = {
         enable = true;
 
