@@ -256,6 +256,16 @@
    (t
     (eglot-ensure))))
 
+;; Whenever the window changes, eg. because we have changed buffer or
+;; because we have deleted a buffer, which lands us on a new one, tell
+;; eglot that the new file was “opened”, such that it might update its
+;; diagnosis of the file.
+(add-hook 'window-state-change-functions
+          (lambda (_)
+            (when (and (bound-and-true-p flymake-mode)
+                       (eglot-current-server))
+              (eglot--signal-textDocument/didOpen))))
+
 (use-package eglot
   ;; built-in
   :hook (prog-mode . my/eglot-ensure-if-server))
