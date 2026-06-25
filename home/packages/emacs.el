@@ -29,6 +29,7 @@
   (inhibit-startup-screen t)
   (project-switch-commands 'my/require-magit-and-project-status)
   (auto-revert-verbose nil)
+  (make-backup-files nil)
   :config
   (menu-bar-mode -1)
   (tool-bar-mode -1)
