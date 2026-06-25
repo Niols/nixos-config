@@ -98,9 +98,23 @@
   :custom
   (evil-collection-magit-use-z-for-folds t))
 
-(use-package crux
-  :ensure t
-  :hook (after-init . (lambda () (require 'crux))))
+(defun my/copy-file-and-visit (new-path)
+  (interactive "FNew path: ")
+  (make-directory (file-name-directory new-path) t)
+  (copy-file (buffer-file-name) new-path)
+  (find-file new-path))
+
+(defun my/rename-visited-file (new-path)
+  (interactive "FNew path: ")
+  (make-directory (file-name-directory new-path) t)
+  (rename-visited-file new-path))
+
+(defun my/delete-file-and-buffer ()
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (delete-file filename)
+      (kill-buffer))))
 
 (use-package general
   :ensure t
@@ -130,10 +144,10 @@
     "cx" #'consult-flymake
 
     "f"  '(:ignore t :which-key "files")
-    "fc" #'crux-copy-file-preserve-attributes
-    "fD" #'crux-delete-file-and-buffer
+    "fc" #'my/copy-file-and-visit
+    "fD" #'my/delete-file-and-buffer
     "ff" #'find-file
-    "fR" #'crux-rename-file-and-buffer
+    "fR" #'my/rename-visited-file
     "fs" #'save-buffer
 
     "g"  '(:ignore t :which-key "git")
