@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -68,6 +73,18 @@ in
       };
 
       programs.fzf.enable = true;
+
+      home.packages = [
+        (pkgs.writeShellScriptBin "tmate" ''
+          server=ssh://''${1:-orianne.niols.fr}:2222
+          printf >&2 '\033[1;31mtmate: upterm emulating tmate\033[0m — sharing a tmux session via \033[1m%s\033[0m\n\n' "''${server}"
+          exec env SSH_AUTH_SOCK= ${pkgs.upterm}/bin/upterm host \
+            --server "''${server}" \
+            --private-key "$HOME"/.ssh/id_niols \
+            --force-command 'tmux attach -t pair-programming' \
+            -- tmux new -s pair-programming
+        '')
+      ];
     }
   ];
 }
