@@ -72,6 +72,16 @@ in
           allow-recording = false;
         };
 
+        settings.groups.ahrefs = {
+          displayName = "Ahrefs";
+          public = true;
+          wildcard-user = {
+            password.type = "wildcard"; # any user with any password
+            permissions = "present";
+          };
+          allow-recording = false;
+        };
+
         dataDir = "/etc/galene/data";
         groupsDir = "/etc/galene/groups";
       };

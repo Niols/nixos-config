@@ -41,6 +41,7 @@ in
     ./nfs.nix
     ./nginx.nix
     ./nix-cache.nix
+    ./pairing.nix
     ./ssh.nix
     ./syncthing.nix
     ./syncthing-server.nix # FIXME: merge?

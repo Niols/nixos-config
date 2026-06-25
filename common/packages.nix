@@ -53,6 +53,7 @@ in
       tmux
       unrar
       unzip
+      upterm
       wget
       yamllint
       yq
@@ -70,6 +71,31 @@ in
       lt = "${pkgs.lsd}/bin/lsd --tree";
       lla = "${pkgs.lsd}/bin/lsd -lA";
       llt = "${pkgs.lsd}/bin/lsd -l --tree";
+    };
+
+    programs.tmux = {
+      enable = true;
+      escapeTime = 0;
+      historyLimit = 1000000;
+      keyMode = "vi";
+
+      extraConfig = ''
+        ## Mouse support: select panes, resize, scroll
+        set -g mouse on
+
+        ## Hide the status bar, but show it whenever more than one window exists
+        set -g status off
+        set-hook -g window-linked   'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
+        set-hook -g window-unlinked 'if -F "#{e|>:#{session_windows},1}" "set status on" "set status off"'
+
+        ## Use C-t as a prefix instead of C-b (C-t twice to send a literal C-t)
+        unbind C-b
+        set -g prefix C-t
+        bind C-t send-prefix
+
+        ## Size shared sessions to the smallest client, padding larger ones with dots
+        set -g window-size smallest
+      '';
     };
   };
 }
