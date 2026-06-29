@@ -114,11 +114,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1782384943,
-        "narHash": "sha256-E0tVL3JtrFpNSEE3ozyY/95j9gwNENzMYczHb4wALx0=",
+        "lastModified": 1782692819,
+        "narHash": "sha256-LzyZvFowfif45gT67gY3lGm+V0ZuJ6atyFqKhvAg6us=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "87cf7df2f1cedfca5dcfb99dc3cd296b17346696",
+        "rev": "59f2569871cbbd22da6d4661195579d1b3dba1bc",
         "type": "github"
       },
       "original": {
@@ -809,11 +809,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1781577229,
-        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
+        "lastModified": 1782467914,
+        "narHash": "sha256-pGvFkM8N0xEkIIXDe5YYfbEAvHrk4IxBrjB/x8OomhE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
+        "rev": "e73de5be04e0eff4190a1432b946d469c794e7b4",
         "type": "github"
       },
       "original": {
@@ -1198,11 +1198,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1781929923,
-        "narHash": "sha256-nwwDKDRpfkaRFYfmlWP6Fm7EAaJyqlZUw2DiFZJuyOc=",
+        "lastModified": 1782676566,
+        "narHash": "sha256-omhm6SIqLnOhe4utXmT9hAFHWJ7GcVIeIAaZdvpT6Vc=",
         "owner": "tweag",
         "repo": "topiary",
-        "rev": "170f09f987c76776f8830c8e1019592b32284c6d",
+        "rev": "dcb6065f3c3626f3d4d265663228bfa51f6b4c49",
         "type": "github"
       },
       "original": {
