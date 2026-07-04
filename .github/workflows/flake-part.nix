@@ -35,7 +35,7 @@ let
     }
     {
       name = "Set up Attic cache";
-      uses = "ryanccn/attic-action@v0.5";
+      uses = "ryanccn/attic-action@v0.4.1";
       "with" = {
         endpoint = "https://nix-cache.niols.fr/";
         cache = "nixos-config";
