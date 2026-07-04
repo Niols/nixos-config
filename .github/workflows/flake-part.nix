@@ -16,7 +16,7 @@ let
   basicSetupSteps = [
     {
       name = "Check out repository";
-      uses = "actions/checkout@v6";
+      uses = "actions/checkout@v7";
     }
     {
       name = "Install Nix";
