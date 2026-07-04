@@ -19,7 +19,7 @@ jobs:
       - name: Install Attic
         run: nix profile add .#attic
       - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.5
+        uses: ryanccn/attic-action@v0.4.1
         with:
           cache: nixos-config
           endpoint: https://nix-cache.niols.fr/
@@ -66,7 +66,7 @@ jobs:
       - name: Install Attic
         run: nix profile add .#attic
       - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.5
+        uses: ryanccn/attic-action@v0.4.1
         with:
           cache: nixos-config
           endpoint: https://nix-cache.niols.fr/
@@ -95,7 +95,7 @@ jobs:
       - name: Install Attic
         run: nix profile add .#attic
       - name: Set up Attic cache
-        uses: ryanccn/attic-action@v0.5
+        uses: ryanccn/attic-action@v0.4.1
         with:
           cache: nixos-config
           endpoint: https://nix-cache.niols.fr/
