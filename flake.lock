@@ -111,14 +111,15 @@
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",
         "nixpkgs": "nixpkgs",
+        "sqlgg": "sqlgg",
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1782821039,
-        "narHash": "sha256-cI04cIXsVgwMsnwYMrdYEq39B6qiJq6TLdhSfBlhRog=",
+        "lastModified": 1783162411,
+        "narHash": "sha256-GxA7aLFxaO1tqu87nvckJlLW54gCdV8xWhzfdcX7J5Y=",
         "owner": "paris-branch",
         "repo": "dancelor",
-        "rev": "05ad2a0f45b1f74a52e4e4f372310b9e89fd1381",
+        "rev": "d58435a762b4bb6772c71d7158088e217a4264ba",
         "type": "github"
       },
       "original": {
@@ -1172,6 +1173,22 @@
       "original": {
         "owner": "thomashoneyman",
         "repo": "slimlock",
+        "type": "github"
+      }
+    },
+    "sqlgg": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783161475,
+        "narHash": "sha256-2fE11H7aKcTsVcZN2Qm2XaRSbjERP7j09NPT/GwzhT4=",
+        "owner": "niols",
+        "repo": "sqlgg",
+        "rev": "4fee597f34d40cf85ee8abbdcce6792a82de95db",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niols",
+        "repo": "sqlgg",
         "type": "github"
       }
     },
