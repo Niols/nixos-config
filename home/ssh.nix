@@ -179,7 +179,7 @@ in
           "us"
           "ustrixie"
         ];
-        nspawnDefault = "uk";
+        nspawnDefault = "uktrixie";
         includeFor = variant: {
           Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
         };
