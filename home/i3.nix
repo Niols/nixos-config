@@ -119,6 +119,9 @@ in
           "${modifier}+Shift+r" = "restart";
           "${modifier}+Shift+e" = "exec xfce4-session-logout";
           "${modifier}+Shift+d" = "exec xflock4";
+
+          "${modifier}+Shift+b" = "move scratchpad";
+          "${modifier}+b" = "scratchpad show";
         };
 
         ## Resizing
