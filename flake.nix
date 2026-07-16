@@ -79,7 +79,7 @@
 
           extraSpecialArgs = {
             inherit inputs;
-            inherit (self) machines;
+            machines = import ./machines.nix;
           };
 
           modules = [
