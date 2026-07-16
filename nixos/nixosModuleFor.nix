@@ -2,7 +2,7 @@
   self,
   inputs,
   lib,
-  withSystem,
+  pkgsFor,
   machines,
 }:
 
@@ -37,7 +37,7 @@ let
           inputs.home-manager.nixosModules.home-manager
         ];
 
-        nixpkgs.pkgs = withSystem config.nixpkgs.hostPlatform.system ({ pkgs, ... }: pkgs);
+        nixpkgs.pkgs = pkgsFor config.nixpkgs.hostPlatform.system;
 
         home-manager = {
           ## By default, Home Manager uses a private pkgs instance that is

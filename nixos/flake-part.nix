@@ -19,9 +19,9 @@ let
         self
         inputs
         lib
-        withSystem
         machines
         ;
+      pkgsFor = system: withSystem system ({ pkgs, ... }: pkgs);
     })
     specialArgsFor
     nixosModuleFor
