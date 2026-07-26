@@ -315,3 +315,10 @@
 (use-package flycheck-lilypond
   :ensure t
   :after lilypond-mode)
+
+(use-package csv-mode
+  :ensure t
+  :mode "\\.csv\\'"
+  :hook
+  ((csv-mode . csv-align-mode)
+   (csv-mode . csv-guess-set-separator)))
