@@ -41,9 +41,15 @@ in
     enable = true;
     package = emacsWithPackagesFromUsePackage {
       config = ./emacs.el;
-      extraEmacsPackages = _epkgs: [
+      extraEmacsPackages = epkgs: [
         cramMode
         lilypondMode
+        (epkgs.treesit-grammars.with-grammars (
+          grammars: with grammars; [
+            tree-sitter-toml
+            tree-sitter-yaml
+          ]
+        ))
       ];
     };
   };
