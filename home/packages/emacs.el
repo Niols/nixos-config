@@ -318,7 +318,10 @@
 
 (use-package csv-mode
   :ensure t
-  :mode "\\.csv\\'")
+  :mode "\\.csv\\'"
+  :hook
+  ((csv-mode . csv-align-mode)
+   (csv-mode . csv-guess-set-separator)))
 
 (use-package lua-ts-mode
   ;; built-in; grammar provided by Nix
