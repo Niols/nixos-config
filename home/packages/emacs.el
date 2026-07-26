@@ -315,3 +315,7 @@
 (use-package flycheck-lilypond
   :ensure t
   :after lilypond-mode)
+
+(use-package csv-mode
+  :ensure t
+  :mode "\\.csv\\'")
