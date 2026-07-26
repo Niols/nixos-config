@@ -319,3 +319,7 @@
 (use-package csv-mode
   :ensure t
   :mode "\\.csv\\'")
+
+(use-package lua-ts-mode
+  ;; built-in; grammar provided by Nix
+  :mode "\\.lua\\'")

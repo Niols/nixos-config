@@ -46,6 +46,7 @@ in
         lilypondMode
         (epkgs.treesit-grammars.with-grammars (
           grammars: with grammars; [
+            tree-sitter-lua
             tree-sitter-toml
             tree-sitter-yaml
           ]
