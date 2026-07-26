@@ -297,11 +297,11 @@
   :mode "\\.nix\\'")
 
 (use-package yaml-ts-mode
-  ;; built-in
+  ;; built-in; grammar provided by Nix
   :mode "\\.ya?ml\\'")
 
 (use-package toml-ts-mode
-  ;; built-in
+  ;; built-in; grammar provided by Nix
   :mode "\\.toml\\'")
 
 (use-package d-mode
