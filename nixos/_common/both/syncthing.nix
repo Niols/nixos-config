@@ -64,13 +64,16 @@ in
         ];
 
         Music.devices = [
+          "Ahlaya"
           "Barbara"
           "Phineas"
           "Server"
         ];
 
         Scottish-ish.devices = [
+          "Ahlaya"
           "Barbara"
+          "Gromit"
           "Phineas"
           "Server"
         ];
