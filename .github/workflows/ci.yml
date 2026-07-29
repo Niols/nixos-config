@@ -47,6 +47,8 @@ jobs:
             system: x86_64-linux
           - check: nixops-providers
             system: x86_64-linux
+          - check: nixos-helga
+            system: x86_64-linux
           - check: pre-commit
             system: x86_64-linux
   homeConfigurations:
