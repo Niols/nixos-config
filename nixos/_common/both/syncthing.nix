@@ -66,6 +66,7 @@ in
         Music.devices = [
           "Ahlaya"
           "Barbara"
+          "Gromit"
           "Phineas"
           "Server"
         ];
