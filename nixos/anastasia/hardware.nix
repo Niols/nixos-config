@@ -26,14 +26,6 @@ let
       };
     };
 
-  ## NOTE: To add or remove a new dataset to an existing pool:
-  ##
-  ##     zfs create -o mountpoint=legacy <pool>/<dataset>
-  ##     zfs destroy <pool>/<dataset>
-  ##
-  ## This does not contain the actual mountpoint, because that is only for the
-  ## mounting systemd unit, not for ZFS.
-  ##
   makeZfsDataset = mountpoint: {
     type = "zfs_fs";
     inherit mountpoint;
@@ -161,6 +153,15 @@ in
     ## we don't want a long interruption for the important data, and we don't
     ## mind as much for medias.
 
+    ## NOTE: To add or remove a dataset to/from an existing pool:
+    ##
+    ##     zfs create -o mountpoint=legacy <pool>/<dataset>
+    ##     zfs destroy <pool>/<dataset>
+    ##
+    ## Then redeploy Anastasia to actually make the directory. This does not
+    ## contain the actual mountpoint, because that is only for the mounting
+    ## systemd unit, not for ZFS.
+
     ## NOTE: A lot of ZFS-related Disko options only ever have an impact during
     ## initial installation, and changing them will have no effect. We still set
     ## them here for documentation purposes, but this might not actually be
@@ -196,6 +197,7 @@ in
         medias = "/data/medias";
         nix-cache = "/data/services/nix-cache";
         torrent = "/data/services/torrent";
+        web = "/data/services/web";
       };
     };
   };

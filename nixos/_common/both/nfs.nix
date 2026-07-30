@@ -50,6 +50,7 @@ let
     "/data/services/nix-cache"
     "/data/services/syncthing"
     "/data/services/torrent"
+    "/data/services/web"
   ];
 
 in

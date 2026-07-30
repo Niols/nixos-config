@@ -49,39 +49,44 @@ in
 
     (mkIf config.x_niols.services.web.enabledOnThisServer {
       services.nginx.virtualHosts."niols.fr" = {
-        serverName = "niols.fr";
-        serverAliases = [
-          "www.niols.fr"
-          "nicolas.jeannerod.fr"
-          "www.nicolas.jeannerod.fr"
-        ];
-
+        serverAliases = [ "www.niols.fr" ];
         forceSSL = true;
         enableACME = true;
+        root = "/data/services/web/niols.fr";
+        locations =
+          ## Serve the website, but also inject well-known files, potentially
+          ## from other machine configurations.
+          {
+            "/" = {
+              index = "index.html";
+              tryFiles = "$uri $uri/ =404";
+            };
+          }
+          // (mapAttrs' (file: text: {
+            name = "= /.well-known/${file}";
+            value.extraConfig = ''
+              default_type application/xml;
+              add_header Access-Control-Allow-Origin *;
+              return 200 '${escape [ "'" ] text}';
+              ## Repeat headers from the server context.
+              add_header Strict-Transport-Security $hsts_header;
+              add_header Referrer-Policy origin-when-cross-origin;
+              add_header X-Frame-Options DENY;
+              add_header X-Content-Type-Options nosniff;
+              add_header X-XSS-Protection "1; mode=block";
+            '';
+          }) config.x_niols.wellKnownFiles);
+      };
 
-        root = "/hester/services/web/niols.fr";
-
-        locations = {
-          "/" = {
-            index = "index.html";
-            tryFiles = "$uri $uri/ =404";
-          };
-        }
-        ## Inject well-known files, potentially from other machines.
-        // (mapAttrs' (file: text: {
-          name = "= /.well-known/${file}";
-          value.extraConfig = ''
-            default_type application/xml;
-            add_header Access-Control-Allow-Origin *;
-            return 200 '${escape [ "'" ] text}';
-            ## Repeat headers from the server context.
-            add_header Strict-Transport-Security $hsts_header;
-            add_header Referrer-Policy origin-when-cross-origin;
-            add_header X-Frame-Options DENY;
-            add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
-          '';
-        }) config.x_niols.wellKnownFiles);
+      services.nginx.virtualHosts."nicolas.jeannerod.fr" = {
+        serverAliases = [ "www.nicolas.jeannerod.fr" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/data/services/web/nicolas.jeannerod.fr";
+        locations."/" = {
+          index = "index.html";
+          tryFiles = "$uri $uri/ =404";
+        };
       };
 
       ## FIXME: Maybe somewhere else?
@@ -111,26 +116,15 @@ in
         </clientConfig>
       '';
 
-      systemd.services.nginx.unitConfig = {
-        requires = [ "hester.automount" ];
-        after = [ "hester.automount" ];
-      };
-
-      _common.hester.fileSystems.services-web = {
-        path = "/services/web";
-        worldReadable = true;
-      };
-
       ############################################################################
       ## Daily backup
 
       _common.hester.backupJobs.web = {
         startAt = "*-*-* 05:00:00";
-        paths = [ "/hester/services/web" ];
+        paths = [ "/data/services/web" ];
         repokeyFile = config.age.secrets.hester-web-backup-repokey.path;
         identityFile = config.age.secrets.hester-web-backup-identity.path;
       };
-      systemd.services.borgbackup-job-web.unitConfig.RequiresMountsFor = "/hester";
     })
   ];
 }
