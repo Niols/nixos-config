@@ -44,7 +44,7 @@ in
         picard
         nextcloud-client # needs to be here AND in `xdg.autostart`
         signal-desktop
-        texlive.combined.scheme-full
+        texliveFull
         thunderbird
         tor-browser
         vlc
