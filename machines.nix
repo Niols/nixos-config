@@ -23,43 +23,69 @@ let
   ##
   wgIpPrefix = "10.187.93";
 
-  ## Some metadata for the machines of this configuration.
+  ## Some metadata for the machines of this configuration. Machines
+  ## can have a bunch of different IPs:
   ##
-  all = mapAttrs (name: meta: meta // { inherit name; }) {
+  ## - public IPs (fields `ipv4` and `ipv6`) are static IPs on the
+  ##   public network, eg. IPs given for a VM by a cloud provider
+  ##
+  ## - “local” IPs are IPs on the local network, for instance in a
+  ##   home 192.168.* network, or internally to a cloud provider
+  ##
+  ## - “internal” IPs are IPs in the WireGuard network that binds all
+  ##   machines together; it is derived from `wgIpPrefix` and the
+  ##   internal index of each machine.
+
+  makeAll = mapAttrs (
+    name: meta:
+    meta
+    // {
+      inherit name;
+    }
+    // (
+      if meta ? internalIndex then
+        { internalIp = "${wgIpPrefix}.${toString meta.internalIndex}"; }
+      else
+        { }
+    )
+  );
+
+  all = makeAll {
     ahlaya = {
       kind = "laptop";
     };
-    anastasia = rec {
+
+    anastasia = {
       kind = "server";
-      localIp = "192.168.1.11"; # on the local network, in this case a home 192.168.* network
+      localIp = "192.168.1.11";
       internalIndex = 1;
-      internalIp = "${wgIpPrefix}.${toString internalIndex}"; # on the internal WireGuard network
       wgPublicKey = "ElfanRos88bHayCTJM9qhg1XPOM/egor8ShHoOXAz1c=";
       cores = 2;
     };
+
     gromit = {
       kind = "laptop";
     };
-    helga = rec {
+
+    helga = {
       kind = "server";
       ipv4 = "188.245.212.11";
       ipv6 = "2a01:4f8:1c1c:42dc::1"; # in fact, we have the whole /64 subnet
       internalIndex = 2;
-      internalIp = "${wgIpPrefix}.${toString internalIndex}";
       wgPublicKey = "bWTTesse8keIrCO8MWmXFhhHcvwmn+s+DY2nHFi+tmw=";
       cores = 2;
     };
-    orianne = rec {
+
+    orianne = {
       kind = "server";
       ipv4 = "89.168.38.231";
       internalIndex = 3;
-      internalIp = "${wgIpPrefix}.${toString internalIndex}";
       wgPublicKey = "Gu3XXcxqxQDy+N1yFZ7fbJMpJWKOBJKeF95doHmQMT0=";
       cores = 4;
     };
   };
-in
 
+in
 {
   inherit all wgIpPrefix;
   laptops = filterAttrs (_: { kind, ... }: kind == "laptop") all;
