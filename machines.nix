@@ -81,7 +81,7 @@ let
       ipv4 = "89.168.38.231";
       internalIndex = 3;
       wgPublicKey = "Gu3XXcxqxQDy+N1yFZ7fbJMpJWKOBJKeF95doHmQMT0=";
-      cores = 4;
+      cores = 2;
     };
   };
 
