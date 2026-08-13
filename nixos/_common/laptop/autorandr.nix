@@ -259,6 +259,7 @@ in
         philips-usbc-laptop-closed-dp-3-8 = make-only-laptop-closed "DP-3-8" philipsUsbC "2560x1440";
         philips-hdmi-laptop-open-dp-2 = make-only-laptop-open "DP-2" philipsHdmi "2560x1440";
         philips-hdmi-laptop-open-dp-3 = make-only-laptop-open "DP-3" philipsHdmi "2560x1440";
+        philips-usbc-laptop-open-dp-1-8 = make-only-laptop-open "DP-1-8" philipsUsbC "2560x1440";
         philips-usbc-laptop-open-dp-2-8 = make-only-laptop-open "DP-2-8" philipsUsbC "2560x1440";
         philips-usbc-laptop-open-dp-3-8 = make-only-laptop-open "DP-3-8" philipsUsbC "2560x1440";
 
