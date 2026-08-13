@@ -230,6 +230,7 @@
      (pullreqs . show)
      (issues . hide)))
   (magit-process-finish-apply-ansi-colors t)
+  (magit-diff-refine-hunk t)
   :config
   (add-hook 'git-commit-mode-hook #'evil-insert-state)
   (add-hook 'magit-mode-hook (lambda () (display-line-numbers-mode 0))))
