@@ -107,8 +107,13 @@ if $is_dirty; then
     esac
 fi
 
+get_current_commit () { git log --max-count=1 --format=%h; }
+
 current_branch=$(git branch --show-current)
+current_commit=$(get_current_commit)
 readonly current_branch
+readonly current_commit
+
 if [ "$current_branch" != main ]; then
     if [ -n "$current_branch" ]; then
 	warning 'The current branch is not `main` but `%s`.' "$current_branch"
@@ -197,6 +202,10 @@ fi
 if $is_dirty; then
     info 'Not adding a Git tag for the current generation, because the working directory is dirty.'
 
+elif current_commit_again=$(get_current_commit); [ "$current_commit_again" != "$current_commit" ]; then
+    warning 'Commit has changed during rebuild (from %s to %s); not adding a Git tag because it is unclear what has been rebuilt.' \
+	    "$current_commit" "$current_commit_again"
+
 else
     info 'Adding a Git tag for the current generation...'
     hostname=$(hostname -s)
@@ -232,7 +241,7 @@ else
         tag=$tag_with_rebuild
     fi
     info 'Tagging as: %s\nwith description: %s.' "$tag" "$description"
-    git tag "$tag" -m "$description"
+    git tag "$tag" "$current_commit" --message="$description"
     info 'done.\nPushing changes to remote...'
     git push --tags
     info 'done.'
