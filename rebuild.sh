@@ -3,9 +3,9 @@ set -euC
 # shellcheck disable=SC2059
 info () { fmt=$1; shift; printf "\e[37m[INF] $fmt\e[0m\n" "$@"; }
 # shellcheck disable=SC2059
-warning () { fmt=$1; shift; printf "\e[33m[WRN] $fmt\e[0m\n" "$@"; }
+warning () { fmt=$1; shift; printf "\e[33m\e[1m[WRN] $fmt\e[0m\n" "$@"; }
 # shellcheck disable=SC2059
-error () { fmt=$1; shift; printf "\e[31m[ERR] $fmt\e[0m\n" "$@"; }
+error () { fmt=$1; shift; printf "\e[31m\e[1m[ERR] $fmt\e[0m\n" "$@"; }
 # shellcheck disable=SC2059,SC2229
 ask () { var=$1; shift; fmt=$1; shift; printf "\e[37m\e[1m[ASK]\e[22m $fmt\e[0m " "$@"; read -r "$var"; }
 
@@ -82,15 +82,15 @@ if $is_dirty; then
         # shellcheck disable=SC2154
         case $response in
             p)
-		info 'You can also pass the --dirty argument to do this automatically.'
-		action_if_dirty=proceed
-		;;
+                info 'You can also pass the --dirty argument to do this automatically.'
+                action_if_dirty=proceed
+                ;;
             a)
-		action_if_dirty=abort
-		;;
+                action_if_dirty=abort
+                ;;
             *)
-		error 'Unexpected response: `%s`.' "$response"
-		exit 2
+                error 'Unexpected response: `%s`.' "$response"
+                exit 2
         esac
     fi
     case $action_if_dirty in
@@ -116,46 +116,46 @@ readonly current_commit
 
 if [ "$current_branch" != main ]; then
     if [ -n "$current_branch" ]; then
-	warning 'The current branch is not `main` but `%s`.' "$current_branch"
+        warning 'The current branch is not `main` but `%s`.' "$current_branch"
     else
-	warning 'The repository is in a detached HEAD state.'
+        warning 'The repository is in a detached HEAD state.'
     fi
     if [ $action_if_not_main = ask ]; then
-	[ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
+        [ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
         ask response 'Do you want to \e[1m[c]\e[22mheckout `main`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$on_current_branch"
         # shellcheck disable=SC2154
         case $response in
             c)
-		info 'You can also pass the --main argument to do this automatically.'
-		action_if_not_main=checkout
-		;;
+                info 'You can also pass the --main argument to do this automatically.'
+                action_if_not_main=checkout
+                ;;
             s)
-		info 'You can also pass the --stay argument to do this automatically.'
-		action_if_not_main=stay
-		;;
+                info 'You can also pass the --stay argument to do this automatically.'
+                action_if_not_main=stay
+                ;;
             a)
-		action_if_not_main=abort
-		;;
+                action_if_not_main=abort
+                ;;
             *)
-		error 'Unexpected response: `%s`.' "$response"
-		exit 2
+                error 'Unexpected response: `%s`.' "$response"
+                exit 2
         esac
     fi
     case $action_if_not_main in
         checkout)
             if $is_dirty; then
-		error 'Cannot checkout `main` when working directory is dirty.'
-		exit 2
+                error 'Cannot checkout `main` when working directory is dirty.'
+                exit 2
             else
-		info 'Checking out `main`...'
-		git checkout main
-		info 'done.'
+                info 'Checking out `main`...'
+                git checkout main
+                info 'done.'
             fi
             ;;
         stay)
-	    if [ -n "$current_branch" ]; then
-		info 'This script will only pull from and push to `%s`.' "$current_branch"
-	    fi
+            if [ -n "$current_branch" ]; then
+                info 'This script will only pull from and push to `%s`.' "$current_branch"
+            fi
             ;;
         abort)
             info 'Aborting.'
@@ -173,7 +173,7 @@ if $update; then
         exit 2
     fi
     if [ -z "$current_branch" ]; then
-	error 'Cannot update when in detached state.'
+        error 'Cannot update when in detached state.'
         exit 2
     fi
     info 'Updating the configuration repository...'
@@ -186,9 +186,9 @@ if [ -z "$home_profile" ]; then
     if ! [ -e /etc/NIXOS ]; then
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
-    sudo true
+    sudo true # check sudo access
     sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
-    info 'done.'
+
 else
     info 'Rebuilding Home configuration...'
     home-manager \
@@ -196,15 +196,15 @@ else
         switch --impure --flake ~/.config/nixos#"$home_profile" \
         |& nom
     echo "$home_profile" >| ~/.config/nixos/.home-profile
-    info 'done.'
 fi
+info 'done.'
 
 if $is_dirty; then
     info 'Not adding a Git tag for the current generation, because the working directory is dirty.'
 
 elif current_commit_again=$(get_current_commit); [ "$current_commit_again" != "$current_commit" ]; then
     warning 'Commit has changed during rebuild (from %s to %s); not adding a Git tag because it is unclear what has been rebuilt.' \
-	    "$current_commit" "$current_commit_again"
+            "$current_commit" "$current_commit_again"
 
 else
     info 'Adding a Git tag for the current generation...'
