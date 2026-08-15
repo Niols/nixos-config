@@ -110,9 +110,14 @@ fi
 current_branch=$(git branch --show-current)
 readonly current_branch
 if [ "$current_branch" != main ]; then
-    warning 'The current branch is not `main` but `%s`.' "$current_branch"
+    if [ -n "$current_branch" ]; then
+	warning 'The current branch is not `main` but `%s`.' "$current_branch"
+    else
+	warning 'The repository is in a detached HEAD state.'
+    fi
     if [ $action_if_not_main = ask ]; then
-        ask response 'Do you want to \e[1m[c]\e[22mheckout `main`, \e[1m[s]\e[22mtay on `%s`, or \e[1m[a]\e[22mbort?' "$current_branch"
+	[ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
+        ask response 'Do you want to \e[1m[c]\e[22mheckout `main`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$on_current_branch"
         # shellcheck disable=SC2154
         case $response in
             c)
@@ -143,7 +148,9 @@ if [ "$current_branch" != main ]; then
             fi
             ;;
         stay)
-            info 'This script will only pull from and push to `%s`.' "$current_branch"
+	    if [ -n "$current_branch" ]; then
+		info 'This script will only pull from and push to `%s`.' "$current_branch"
+	    fi
             ;;
         abort)
             info 'Aborting.'
@@ -158,6 +165,10 @@ fi
 if $update; then
     if $is_dirty; then
         error 'Cannot update when working directory is dirty.'
+        exit 2
+    fi
+    if [ -z "$current_branch" ]; then
+	error 'Cannot update when in detached state.'
         exit 2
     fi
     info 'Updating the configuration repository...'
