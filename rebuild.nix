@@ -3,7 +3,6 @@
   git,
   nix-output-monitor,
   home-manager,
-  readFile,
 }:
 
 writeShellApplication {
@@ -14,5 +13,5 @@ writeShellApplication {
     home-manager
   ];
   excludeShellChecks = [ "SC2016" ];
-  text = readFile ./rebuild.sh;
+  text = builtins.readFile ./rebuild.sh;
 }
