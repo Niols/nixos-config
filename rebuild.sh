@@ -186,9 +186,9 @@ if [ -z "$home_profile" ]; then
     if ! [ -e /etc/NIXOS ]; then
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
-    sudo true
+    sudo true # check sudo access
     sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
-    info 'done.'
+
 else
     info 'Rebuilding Home configuration...'
     home-manager \
@@ -196,8 +196,8 @@ else
         switch --impure --flake ~/.config/nixos#"$home_profile" \
         |& nom
     echo "$home_profile" >| ~/.config/nixos/.home-profile
-    info 'done.'
 fi
+info 'done.'
 
 if $is_dirty; then
     info 'Not adding a Git tag for the current generation, because the working directory is dirty.'
