@@ -211,18 +211,16 @@ in
               '';
             }
             {
-              name = "Deploy NixOps4 component “\${{ matrix.nixos }}” if it exists";
+              name = "Deploy machine “\${{ matrix.nixos }}” if it is a server";
               "if" = "\${{ github.ref == 'refs/heads/main' }}";
               run = ''
-                if nix develop --command nixops4 members list 2>/dev/null | grep '^''${{ matrix.nixos }}$'; then
-                  echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
-                  chmod 600 deploy-key
-                  nix develop --command ssh-agent bash -c '
-                    ssh-add deploy-key
-                    export NIX_CONFIG=$(cat nix-config)
-                    nixops4 apply ''${{ matrix.nixos }}
-                  '
-                fi
+                echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
+                chmod 600 deploy-key
+                ssh-agent bash -c '
+                  ssh-add deploy-key
+                  export NIX_CONFIG=$(cat nix-config)
+                  nix run .#rebuild -- deploy --flake cwd --target ''${{ matrix.nixos }} --no-reboot --log raw
+                '
               '';
             }
           ];
