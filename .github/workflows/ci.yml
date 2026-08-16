@@ -39,13 +39,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - check: nixops-providers
-            system: aarch64-linux
           - check: pre-commit
             system: aarch64-linux
           - check: deployment
-            system: x86_64-linux
-          - check: nixops-providers
             system: x86_64-linux
           - check: pre-commit
             system: x86_64-linux
@@ -141,11 +137,10 @@ jobs:
 
           '
       - if: ${{ github.ref == 'refs/heads/main' }}
-        name: Deploy NixOps4 component “${{ matrix.nixos }}” if it exists
-        run: "if nix develop --command nixops4 members list 2>/dev/null | grep '^${{ matrix.nixos }}$';\
-          \ then\n  echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\n  chmod 600 deploy-key\n  nix develop\
-          \ --command ssh-agent bash -c '\n    ssh-add deploy-key\n    export NIX_CONFIG=$(cat nix-config)\n\
-          \    nixops4 apply ${{ matrix.nixos }}\n  '\nfi\n"
+        name: Deploy machine “${{ matrix.nixos }}” if it is a server
+        run: "echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\nchmod 600 deploy-key\nssh-agent bash -c\
+          \ '\n  ssh-add deploy-key\n  export NIX_CONFIG=$(cat nix-config)\n  nix run .#rebuild -- deploy\
+          \ --flake cwd --target ${{ matrix.nixos }} --no-reboot --log raw\n'\n"
     strategy:
       fail-fast: false
       matrix:
