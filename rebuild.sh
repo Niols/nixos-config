@@ -213,8 +213,9 @@ if [ -n "$home_profile" ]; then
 elif [ -n "$target" ]; then
     info 'Rebuilding and deploying `%s`...' "$target"
 
-    if ipv4_output=$(nix eval --import --raw --expr "(import ./machines.nix).servers.$target.ipv4" 2>&1); then
+    if ipv4_output=$(nix eval --impure --raw --expr "(import ./machines.nix).servers.$target.ipv4" 2>&1); then
 	target_host=root@$ipv4_output
+	info 'Recognising target `%s` as host `%s`.' "$target" "$target_host"
     else
         error 'Something went wrong when finding the target host. Probably, the machine does'
 	error 'not exist or is not a server: %s' "$ipv4_output"
