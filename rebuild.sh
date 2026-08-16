@@ -248,9 +248,15 @@ elif current_commit_again=$(get_current_commit); [ "$current_commit_again" != "$
 
 else
     info 'Adding a Git tag for the current generation...'
-    hostname=$(hostname -s)
+    [ -z "$target" ] && hostname=$(hostname -s) || hostname=$target
+
     if [ -z "$home_profile" ]; then
-        output=$(nixos-rebuild list-generations --json | jq '.[] | select(.current == true)')
+	if [ -z "$target" ]; then
+	    output=$(nixos-rebuild list-generations --json)
+	else
+	    output=$(ssh "$target_host" nixos-rebuild list-generations --json)
+	fi
+        output=$(echo "$output" | jq '.[] | select(.current == true)')
         if [ -z "$output" ]; then
             error 'No current generation found.'
             exit 2
@@ -261,6 +267,7 @@ else
         tag=nixos-$hostname-gen-$generation
         description="NixOS configuration \`$hostname\` — generation $generation ($date - $nixosVersion)"
     else
+
         generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
         if ! [[ "$generation" =~ ^[0-9]+$ ]]; then
             error 'Could not find the Home generation.'
@@ -270,6 +277,7 @@ else
         tag=home-$home_profile-on-$hostname-gen-$generation
         description="Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
     fi
+
     if [ -n "$(git tag --list "$tag")" ]; then
         info 'The tag already exists. This means that you rebuilt something that did not change the configuration at all. Tagging anyway...'
         rebuild_number=2
