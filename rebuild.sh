@@ -217,8 +217,7 @@ elif [ -n "$target" ]; then
 	target_host=root@$ipv4_output
 	info 'Recognising target `%s` as host `%s`.' "$target" "$target_host"
     else
-        error 'Something went wrong when finding the target host. Probably, the machine does'
-	error 'not exist or is not a server: %s' "$ipv4_output"
+        error 'Something went wrong when finding the target host. Probably, the machine does not exist or is not a server: %s' "$ipv4_output"
         exit 2
     fi
     readonly target_host
