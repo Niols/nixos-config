@@ -107,7 +107,7 @@ if $is_dirty; then
     esac
 fi
 
-get_current_commit () { git log --max-count=1 --format=%hash; }
+get_current_commit () { git log --max-count=1 --format=%h; }
 
 current_branch=$(git branch --show-current)
 current_commit=$(get_current_commit)
