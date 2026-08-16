@@ -26,6 +26,7 @@ Usage: $0 [option [option ...]] [action]
     --update, -u          pull the configuration before rebuilding (default: do not update)
     --home-profile <s>    run a Home Manager installation with this profile (default: autodetect)
     --target <s>, -t      install and deploy a NixOS configuration for this machine (default: current machine)
+    --dry-run             do not actually build or deploy anything
     --help, -h            show this help and exit
 EOF
 }
@@ -36,6 +37,7 @@ action_if_dirty=ask
 action_if_not_main=ask
 home_profile=
 target=
+dry_run=false
 
 while [ $# -gt 0 ]; do
     case $1 in
@@ -47,6 +49,7 @@ while [ $# -gt 0 ]; do
         --update|-u) update=true ;;
         --home-profile) shift; home_profile=$1 ;;
         --target|-t) shift; target=$1 ;;
+	--dry-run) dry_run=true ;;
         --help|-h) usage; exit 1 ;;
         *) error 'Unexpected argument: %s\n' "$1"; usage; exit 2 ;;
     esac
@@ -56,6 +59,15 @@ done
 readonly action
 readonly update
 readonly target
+readonly dry_run
+
+run () {
+    if $dry_run; then
+	printf '[DRY RUN] %s\n' "$*"
+    else
+	"$@"
+    fi
+}
 
 if [ -z "$home_profile" ] && [ -e ~/.config/nixos/.home-profile ]; then
     home_profile=$(cat ~/.config/nixos/.home-profile)
@@ -76,7 +88,7 @@ fi
 if ! [ -e ~/.config/nixos ]; then
     mkdir -p ~/.config
     info 'The repository could not be found, cloning...'
-    git clone git@github.com:niols/nixos-config.git ~/.config/nixos
+    run git clone git@github.com:niols/nixos-config.git ~/.config/nixos
     info 'done.'
 fi
 
@@ -157,7 +169,7 @@ if [ "$current_branch" != main ]; then
 		exit 2
             else
 		info 'Checking out `main`...'
-		git checkout main
+		run git checkout main
 		info 'done.'
             fi
             ;;
@@ -186,13 +198,13 @@ if $update; then
         exit 2
     fi
     info 'Updating the configuration repository...'
-    git pull --ff-only
+    run git pull --ff-only
     info 'done.'
 fi
 
 if [ -n "$home_profile" ]; then
     info 'Rebuilding Home configuration...'
-    home-manager \
+    run home-manager \
         --extra-experimental-features 'nix-command flakes' \
         switch --impure --flake ~/.config/nixos#"$home_profile" \
         |& nom
@@ -210,7 +222,7 @@ elif [ -n "$target" ]; then
     fi
     readonly target_host
 
-    nixos-rebuild $action \
+    run nixos-rebuild $action \
 	--flake ~/.config/nixos#"$target" \
 	--target-host "$target_host" \
 	--builders '@/etc/nix/machines' \
@@ -222,8 +234,8 @@ else
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
 
-    sudo true # check sudo access
-    sudo nixos-rebuild $action \
+    run sudo true # check sudo access
+    run sudo nixos-rebuild $action \
          --flake ~/.config/nixos \
          --builders '@/etc/nix/machines' \
         |& nom
@@ -272,9 +284,9 @@ else
         tag=$tag_with_rebuild
     fi
     info 'Tagging as: %s\nwith description: %s.' "$tag" "$description"
-    git tag "$tag" "$current_commit" --message="$description"
+    run git tag "$tag" "$current_commit" --message="$description"
     info 'done.\nPushing changes to remote...'
-    git push --tags
+    run git push --tags
     info 'done.'
 fi
 
@@ -285,9 +297,9 @@ if [ "$action" != switch ] && [ -z "$home_profile" ]; then
         info 'Rebooting...'
 
 	if [ -n "$target" ]; then
-	    ssh "$target_host" reboot
+	    run ssh "$target_host" reboot
 	else
-	    reboot
+	    run reboot
 	fi
     fi
 fi
