@@ -62,11 +62,8 @@ readonly target
 readonly dry_run
 
 run () {
-    if $dry_run; then
-	printf '\e[36m\e[1m[RUN] %s\e[0m\n' "$*"
-    else
-	"$@"
-    fi
+    printf '\e[36m\e[1m[RUN] %s\e[0m\n' "$*"
+    if ! $dry_run; then "$@"; fi
 }
 
 if [ -z "$home_profile" ] && [ -e ~/.config/nixos/.home-profile ]; then
