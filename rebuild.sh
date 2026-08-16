@@ -203,8 +203,7 @@ if [ -n "$home_profile" ]; then
     info 'Rebuilding Home configuration...'
     run home-manager \
         --extra-experimental-features 'nix-command flakes' \
-        switch --impure --flake ~/.config/nixos#"$home_profile" \
-        |& nom
+        switch --impure --flake ~/.config/nixos#"$home_profile"
     echo "$home_profile" >| ~/.config/nixos/.home-profile
 
 elif [ -n "$target" ]; then
@@ -222,8 +221,7 @@ elif [ -n "$target" ]; then
     run nixos-rebuild $action \
 	--flake ~/.config/nixos#"$target" \
 	--target-host "$target_host" \
-	--builders '@/etc/nix/machines' \
-	|& nom
+	--builders '@/etc/nix/machines'
 else
 
     info 'Rebuilding NixOS configuration...'
@@ -234,8 +232,7 @@ else
     run sudo true # check sudo access
     run sudo nixos-rebuild $action \
          --flake ~/.config/nixos \
-         --builders '@/etc/nix/machines' \
-        |& nom
+         --builders '@/etc/nix/machines'
 fi
 info 'done.'
 
