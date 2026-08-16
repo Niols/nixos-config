@@ -241,6 +241,7 @@ else
         tag=$tag_with_rebuild
     fi
     info 'Tagging as: %s\nwith description: %s.' "$tag" "$description"
+    echo git tag "$tag" "$current_commit" --message="$description"
     git tag "$tag" "$current_commit" --message="$description"
     info 'done.\nPushing changes to remote...'
     git push --tags
