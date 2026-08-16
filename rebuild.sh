@@ -63,7 +63,7 @@ readonly dry_run
 
 run () {
     if $dry_run; then
-	printf '\e[36m[RUN] %s\e[0m\n' "$*"
+	printf '\e[36m\e[1m[RUN] %s\e[0m\n' "$*"
     else
 	"$@"
     fi
