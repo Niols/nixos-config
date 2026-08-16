@@ -25,6 +25,7 @@ Usage: $0 [option [option ...]] [action]
     --stay, -s            stay on the branch if it is not main (default: ask)
     --update, -u          pull the configuration before rebuilding (default: do not update)
     --home-profile <s>    run a Home Manager installation with this profile (default: autodetect)
+    --target <s>, -t      install and deploy a NixOS configuration for this machine (default: current machine)
     --help, -h            show this help and exit
 EOF
 }
@@ -34,6 +35,7 @@ update=false
 action_if_dirty=ask
 action_if_not_main=ask
 home_profile=
+target=
 
 while [ $# -gt 0 ]; do
     case $1 in
@@ -44,6 +46,7 @@ while [ $# -gt 0 ]; do
         --stay|-s) action_if_not_main=stay ;;
         --update|-u) update=true ;;
         --home-profile) shift; home_profile=$1 ;;
+        --target|-t) shift; target=$1 ;;
         --help|-h) usage; exit 1 ;;
         *) error 'Unexpected argument: %s\n' "$1"; usage; exit 2 ;;
     esac
@@ -52,12 +55,18 @@ done
 
 readonly action
 readonly update
+readonly target
 
 if [ -z "$home_profile" ] && [ -e ~/.config/nixos/.home-profile ]; then
     home_profile=$(cat ~/.config/nixos/.home-profile)
     info 'Detected a Home Manager installation; will use home profile `%s`.' "$home_profile"
 fi
 readonly home_profile
+
+if [ -n "$target" ] && [ -n "$home_profile" ]; then
+    error 'Cannot use --target with a home profile.'
+    exit 2
+fi
 
 if [ "$action" = boot ] && [ -n "$home_profile" ]; then
     error 'Cannot use action %s with a home profile.' "$action"
@@ -181,21 +190,48 @@ if $update; then
     info 'done.'
 fi
 
-if [ -z "$home_profile" ]; then
-    info 'Rebuilding NixOS configuration...'
-    if ! [ -e /etc/NIXOS ]; then
-        warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
-    fi
-    sudo true # check sudo access
-    sudo nixos-rebuild $action --flake ~/.config/nixos --builders '@/etc/nix/machines' |& nom
-
-else
+if [ -n "$home_profile" ]; then
     info 'Rebuilding Home configuration...'
     home-manager \
         --extra-experimental-features 'nix-command flakes' \
         switch --impure --flake ~/.config/nixos#"$home_profile" \
         |& nom
     echo "$home_profile" >| ~/.config/nixos/.home-profile
+
+elif [ -n "$target" ]; then
+    info 'Rebuilding and deploying `%s`...' "$target"
+
+    if
+        target_host_output=$(nix eval --impure --raw --expr "
+            let m = (import ./machines.nix).servers.$target; in
+            m.ipv4 or m.ipv6 or \"$target.niols.fr\"
+        ")
+    then
+        target_host=root@$target_host_output
+        info 'Recognising target `%s` as host `%s`.' "$target" "$target_host"
+    else
+        error 'Something went wrong when finding the target host. Probably, the machine does not exist or is not a server?'
+        exit 2
+    fi
+    readonly target_host
+
+    nixos-rebuild $action \
+        --flake ~/.config/nixos#"$target" \
+        --target-host "$target_host" \
+        --builders '@/etc/nix/machines' \
+        |& nom
+else
+
+    info 'Rebuilding NixOS configuration...'
+    if ! [ -e /etc/NIXOS ]; then
+        warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
+    fi
+
+    sudo true # check sudo access
+    sudo nixos-rebuild $action \
+         --flake ~/.config/nixos \
+         --builders '@/etc/nix/machines' \
+        |& nom
 fi
 info 'done.'
 
@@ -208,9 +244,15 @@ elif current_commit_again=$(get_current_commit); [ "$current_commit_again" != "$
 
 else
     info 'Adding a Git tag for the current generation...'
-    hostname=$(hostname -s)
+    [ -z "$target" ] && hostname=$(hostname -s) || hostname=$target
+
     if [ -z "$home_profile" ]; then
-        output=$(nixos-rebuild list-generations --json | jq '.[] | select(.current == true)')
+        if [ -z "$target" ]; then
+            output=$(nixos-rebuild list-generations --json)
+        else
+            output=$(ssh "$target_host" nixos-rebuild list-generations --json)
+        fi
+        output=$(echo "$output" | jq '.[] | select(.current == true)')
         if [ -z "$output" ]; then
             error 'No current generation found.'
             exit 2
@@ -221,6 +263,7 @@ else
         tag=nixos-$hostname-gen-$generation
         description="NixOS configuration \`$hostname\` — generation $generation ($date - $nixosVersion)"
     else
+
         generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
         if ! [[ "$generation" =~ ^[0-9]+$ ]]; then
             error 'Could not find the Home generation.'
@@ -230,6 +273,7 @@ else
         tag=home-$home_profile-on-$hostname-gen-$generation
         description="Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
     fi
+
     if [ -n "$(git tag --list "$tag")" ]; then
         info 'The tag already exists. This means that you rebuilt something that did not change the configuration at all. Tagging anyway...'
         rebuild_number=2
@@ -247,12 +291,17 @@ else
     info 'done.'
 fi
 
-if [ "$action" != switch ]; then
+if [ "$action" != switch ] && [ -z "$home_profile" ]; then
     ask answer 'Do you wish to reboot? (y/N)'
     # shellcheck disable=SC2154
     if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
         info 'Rebooting...'
-        reboot
+
+        if [ -n "$target" ]; then
+            ssh "$target_host" reboot
+        else
+            reboot
+        fi
     fi
 fi
 
