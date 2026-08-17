@@ -136,8 +136,7 @@ jobs:
           sudo df -h
 
           '
-      - if: ${{ github.ref == 'refs/heads/main' }}
-        name: Deploy machine “${{ matrix.nixos }}” if it is a server
+      - name: Deploy machine “${{ matrix.nixos }}” if it is a server
         run: "echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\nchmod 600 deploy-key\nssh-agent bash -c\
           \ '\n  ssh-add deploy-key\n  export NIX_CONFIG=$(cat nix-config)\n  nix run .#rebuild -- deploy\
           \ --flake cwd --target ${{ matrix.nixos }} --no-reboot --log raw\n'\n"
