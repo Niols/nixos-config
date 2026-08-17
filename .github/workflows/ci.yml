@@ -41,7 +41,7 @@ jobs:
         include:
           - check: pre-commit
             system: aarch64-linux
-          - check: nixops-deployment
+          - check: deployment
             system: x86_64-linux
           - check: pre-commit
             system: x86_64-linux
