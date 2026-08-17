@@ -212,7 +212,7 @@ in
             }
             {
               name = "Deploy machine “\${{ matrix.nixos }}” if it is a server";
-              "if" = "\${{ github.ref == 'refs/heads/main' }}";
+              # "if" = "\${{ github.ref == 'refs/heads/main' }}"; # FIXME: for testing purposes
               run = ''
                 echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
                 chmod 600 deploy-key
