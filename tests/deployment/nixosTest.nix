@@ -17,18 +17,10 @@ let
     attrNames
     ;
   inherit (hostPkgs)
-    runCommand
     writeText
-    system
     ;
 
   forConcat = xs: f: concatStringsSep "\n" (map f xs);
-
-  ## We will need to override some inputs by the empty flake, so we make one.
-  emptyFlake = runCommand "empty-flake" { } ''
-    mkdir $out
-    echo "{ outputs = { self }: {}; }" > $out/flake.nix
-  '';
 
   sourceFileset = fileset.toSource {
     root = ../..;
@@ -52,14 +44,14 @@ in
 {
   _class = "nixosTest";
 
-  name = "nixops-deployment";
+  name = "deployment";
 
   nodes = {
     deployer = {
       imports = [ ./deployerNode.nix ];
       _module.args = { inherit inputs; };
 
-      environment.systemPackages = [ inputs.nixops4.packages.${system}.default ];
+      environment.systemPackages = [ (hostPkgs.callPackage ../../rebuild.nix { flakeRoot = ../..; }) ];
       system.extraDependenciesFromModule =
         { pkgs, ... }:
         {
@@ -100,7 +92,7 @@ in
           );
         in
         ''
-          deployer.copy_from_host("${targetNetworkJSON}", "tests/nixops-deployment/${tm}-network.json")
+          deployer.copy_from_host("${targetNetworkJSON}", "tests/deployment/${tm}-network.json")
         ''
       )}
 
@@ -114,7 +106,7 @@ in
     with subtest("Configure the target host key"):
       ${forConcat targetMachines (tm: ''
         host_key = ${tm}.succeed("ssh-keyscan ${tm} | grep -v '^#' | cut -f 2- -d ' ' | head -n 1")
-        deployer.succeed(f"echo '{host_key}' > tests/nixops-deployment/${tm}_host_key.pub")
+        deployer.succeed(f"echo '{host_key}' > tests/deployment/${tm}_host_key.pub")
       '')}
 
     ## NOTE: This is super slow. It could probably be optimised in Nix, for
@@ -125,21 +117,11 @@ in
     ## lock file to use locally available inputs, as we cannot download them.
     ##
     with subtest("Override the flake and its lock"):
-      deployer.succeed("cp tests/nixops-deployment/flake-under-test.nix flake.nix")
+      deployer.succeed("cp tests/deployment/flake-under-test.nix flake.nix")
       deployer.succeed("""
         nix flake lock --extra-experimental-features 'flakes nix-command' \
           --offline -v \
           --override-input nixpkgs ${inputs.nixpkgs} \
-          \
-          --override-input nixops4 ${inputs.nixops4.packages.${system}.flake-in-a-bottle} \
-          --override-input nixops4/flake-parts ${inputs.nixops4.inputs.flake-parts} \
-          --override-input nixops4/flake-parts/nixpkgs-lib ${inputs.nixops4.inputs.flake-parts.inputs.nixpkgs-lib} \
-          \
-          --override-input nixops4-nixos ${inputs.nixops4-nixos} \
-          --override-input nixops4-nixos/flake-parts ${inputs.nixops4-nixos.inputs.flake-parts} \
-          --override-input nixops4-nixos/flake-parts/nixpkgs-lib ${inputs.nixops4-nixos.inputs.flake-parts.inputs.nixpkgs-lib} \
-          --override-input nixops4-nixos/nixops4-nixos ${emptyFlake} \
-          --override-input nixops4-nixos/git-hooks-nix ${emptyFlake} \
           \
           --override-input home-manager ${inputs.home-manager} \
           --override-input nixos-hardware ${inputs.nixos-hardware} \
@@ -159,7 +141,9 @@ in
       cowsay.fail("cowsay 1>&2")
 
     with subtest("Run the deployment"):
-      deployer.succeed("nixops4 apply check-deployment --show-trace --no-interactive 1>&2")
+      ${forConcat targetMachines (tm: ''
+        deployer.succeed("rebuild deploy --flake cwd --target ${tm} 1>&2")
+      '')}
 
     with subtest("Check the deployment"):
       hello.succeed("hello 1>&2")
