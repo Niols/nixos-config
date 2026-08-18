@@ -64,7 +64,7 @@ in
         mionsRoom = "00ffffffffffff0010ac16f04c464a302913010380342078ea1ec5ae4f34b1260e5054a54b008180a940d100714f0101010101010101283c80a070b023403020360006442100001a000000ff00463532354d394135304a464c0a000000fc0044454c4c2055323431300a2020000000fd00384c1e5111000a202020202020013e020329f15090050403020716011f121314201511062309070767030c001000382d83010000e3050301023a801871382d40582c450006442100001e011d8018711c1620582c250006442100009e011d007251d01e206e28550006442100001e8c0ad08a20e02d10103e960006442100001800000000000000000000000000003e";
 
         ## Single screen, with laptop closed.
-        make-only-laptop-closed = key: fingerprint: mode: {
+        make-laptop-closed = key: fingerprint: mode: {
           fingerprint = {
             ${key} = fingerprint;
           };
@@ -76,20 +76,28 @@ in
           };
         };
 
-        ## Single screen, with laptop open.
-        make-only-laptop-open = key: fingerprint: mode: {
+        ## Single screen, with laptop open and laptop screen on.
+        make-laptop-open-on = key: fingerprint: mode: laptopConfig: {
           fingerprint = {
             "eDP-1" = laptop;
             ${key} = fingerprint;
           };
           config = {
-            "eDP-1".enable = false;
+            "eDP-1" = {
+              enable = true;
+            }
+            // laptopConfig;
             ${key} = {
               primary = true;
               inherit mode;
             };
           };
         };
+
+        ## Single screen, with laptop open but laptop screen off.
+        make-laptop-open-off =
+          key: fingerprint: mode:
+          make-laptop-open-on key fingerprint mode { enable = false; };
 
         ## Double screen at Tweag's office, with laptop closed.
         make-tweag-double-laptop-closed = key: {
@@ -252,72 +260,33 @@ in
 
         ## Single Philips screen, with laptop open and closed and USB-C hub
         ## plugged on first or second port.
-        philips-hdmi-laptop-closed-dp-2 = make-only-laptop-closed "DP-2" philipsHdmi "2560x1440";
-        philips-hdmi-laptop-closed-dp-3 = make-only-laptop-closed "DP-3" philipsHdmi "2560x1440";
-        philips-usbc-laptop-closed-dp-1-8 = make-only-laptop-closed "DP-1-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-closed-dp-2-8 = make-only-laptop-closed "DP-2-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-closed-dp-3-8 = make-only-laptop-closed "DP-3-8" philipsUsbC "2560x1440";
-        philips-hdmi-laptop-open-dp-2 = make-only-laptop-open "DP-2" philipsHdmi "2560x1440";
-        philips-hdmi-laptop-open-dp-3 = make-only-laptop-open "DP-3" philipsHdmi "2560x1440";
-        philips-usbc-laptop-open-dp-1-8 = make-only-laptop-open "DP-1-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-open-dp-2-8 = make-only-laptop-open "DP-2-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-open-dp-3-8 = make-only-laptop-open "DP-3-8" philipsUsbC "2560x1440";
+        philips-hdmi-laptop-closed-dp-2 = make-laptop-closed "DP-2" philipsHdmi "2560x1440";
+        philips-hdmi-laptop-closed-dp-3 = make-laptop-closed "DP-3" philipsHdmi "2560x1440";
+        philips-usbc-laptop-closed-dp-1-8 = make-laptop-closed "DP-1-8" philipsUsbC "2560x1440";
+        philips-usbc-laptop-closed-dp-2-8 = make-laptop-closed "DP-2-8" philipsUsbC "2560x1440";
+        philips-usbc-laptop-closed-dp-3-8 = make-laptop-closed "DP-3-8" philipsUsbC "2560x1440";
+        philips-hdmi-laptop-open-dp-2 = make-laptop-open-off "DP-2" philipsHdmi "2560x1440";
+        philips-hdmi-laptop-open-dp-3 = make-laptop-open-off "DP-3" philipsHdmi "2560x1440";
+        philips-usbc-laptop-open-dp-1-8 = make-laptop-open-off "DP-1-8" philipsUsbC "2560x1440";
+        philips-usbc-laptop-open-dp-2-8 = make-laptop-open-off "DP-2-8" philipsUsbC "2560x1440";
+        philips-usbc-laptop-open-dp-3-8 = make-laptop-open-off "DP-3-8" philipsUsbC "2560x1440";
 
-        ## Single LG screen, with laptop closed and USB-C hub plugged on first
-        ## or second port.
-        lg-usbc-laptop-closed-dp-1 = make-only-laptop-closed "DP-1" lgUsbC "3440x1440";
-        lg-usbc-laptop-closed-dp-2 = make-only-laptop-closed "DP-2" lgUsbC "3440x1440";
-        lg-usbc-laptop-closed-dp-3 = make-only-laptop-closed "DP-3" lgUsbC "3440x1440";
-
-        ## Single LG screen, with laptop open and USB-C hub plugged on first or
-        ## second port.
-        lg-usbc-laptop-open-dp-1 = {
-          fingerprint = {
-            "eDP-1" = laptop;
-            "DP-1" = lgUsbC;
-          };
-          config = {
-            "DP-1" = {
-              primary = true;
-              mode = "3440x1440";
-            };
-            "eDP-1" = {
-              mode = "1680x1050";
-              position = "880x1440";
-            };
-          };
+        ## Single LG screen, with laptop open and closed and USB-C hub
+        ## plugged on first or second port.
+        lg-usbc-laptop-closed-dp-1 = make-laptop-closed "DP-1" lgUsbC "3440x1440";
+        lg-usbc-laptop-closed-dp-2 = make-laptop-closed "DP-2" lgUsbC "3440x1440";
+        lg-usbc-laptop-closed-dp-3 = make-laptop-closed "DP-3" lgUsbC "3440x1440";
+        lg-usbc-laptop-open-dp-1 = make-laptop-open-on "DP-1" lgUsbC "3440x1440" {
+          mode = "1680x1050";
+          position = "880x1440";
         };
-        lg-usbc-laptop-open-dp-2 = {
-          fingerprint = {
-            "eDP-1" = laptop;
-            "DP-2" = lgUsbC;
-          };
-          config = {
-            "DP-2" = {
-              primary = true;
-              mode = "3440x1440";
-            };
-            "eDP-1" = {
-              mode = "1680x1050";
-              position = "880x1440";
-            };
-          };
+        lg-usbc-laptop-open-dp-2 = make-laptop-open-on "DP-2" lgUsbC "3440x1440" {
+          mode = "1680x1050";
+          position = "880x1440";
         };
-        lg-usbc-laptop-open-dp-3 = {
-          fingerprint = {
-            "eDP-1" = laptop;
-            "DP-3" = lgUsbC;
-          };
-          config = {
-            "DP-3" = {
-              primary = true;
-              mode = "3440x1440";
-            };
-            "eDP-1" = {
-              mode = "1680x1050";
-              position = "880x1440";
-            };
-          };
+        lg-usbc-laptop-open-dp-3 = make-laptop-open-on "DP-3" lgUsbC "3440x1440" {
+          mode = "1680x1050";
+          position = "880x1440";
         };
 
         ## Double screen at Tweag's office, with laptop open and closed and USB-C
