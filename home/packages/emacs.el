@@ -45,9 +45,9 @@
   (load-theme 'doom-one t))
 
 (set-face-attribute
-  'default nil
-  :font "Fira Code Nerd Font" ; NOTE: Fira Code does not support italic
-  :height 100) ; in 1/10 of pt
+ 'default nil
+ :font "Fira Code Nerd Font" ; NOTE: Fira Code does not support italic
+ :height 100) ; in 1/10 of pt
 
 (use-package doom-modeline
   :ensure t
@@ -116,6 +116,15 @@
       (delete-file filename)
       (kill-buffer))))
 
+(defun my/format ()
+  (interactive)
+  (if (eglot-current-server)
+      (if (use-region-p)
+          (eglot-format (region-beginning) (region-end))
+        (eglot-format-buffer))
+    (when (y-or-n-p "No LSP server. Format with apheleia?")
+      (call-interactively #'apheleia-format-buffer))))
+
 (use-package general
   :ensure t
   :config
@@ -138,6 +147,7 @@
     "ca" #'eglot-code-actions
     "cd" #'xref-find-definitions
     "cD" #'xref-find-references
+    "cf" #'my/format
     "ci" #'ff-get-other-file
     "cr" #'eglot-rename
     "cw" #'delete-trailing-whitespace
@@ -242,8 +252,8 @@
   (forge-add-default-bindings nil)
   :config
   (set-face-attribute 'forge-pullreq-draft nil
-    :background 'unspecified
-    :inherit '(italic forge-dimmed)))
+		      :background 'unspecified
+		      :inherit '(italic forge-dimmed)))
 
 ;; ==================== [ Prog ] ==================== ;;
 
@@ -291,7 +301,7 @@
 (use-package dune
   :ensure t
   :mode ("/dune\\'" . dune-mode)
-        ("/dune-project\\'" . dune-mode))
+  ("/dune-project\\'" . dune-mode))
 
 (use-package nix-mode
   :ensure t
@@ -331,3 +341,6 @@
 (use-package reason-mode
   :ensure t
   :mode "\\.rei?\\'")
+
+(use-package apheleia
+  :ensure t)
