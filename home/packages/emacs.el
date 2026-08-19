@@ -66,6 +66,7 @@
 
 (use-package undo-fu-session
   :ensure t
+  :after undo-fu
   :config (undo-fu-session-global-mode))
 
 (defun my/evil-shift (fn)
