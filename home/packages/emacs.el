@@ -1,10 +1,14 @@
-;; -*- lexical-binding: t; -*-
+;;; emacs.el --- my hand-crafted Emacs configuration -*- lexical-binding: t; -*-
 
+;;; Commentary:
+;;
 ;; NOTE: the old Doom Emacs configuration can be found here:
 ;; https://github.com/Niols/nixos-config/tree/7e7b7d0e6337b655aa46a02b592b9b312218a5f8/home/doom
-
+;;
 ;; NOTE: most of Doom Emacs's bindings can be found here:
 ;; https://github.com/doomemacs/doomemacs/blob/1d7a94b96b4410a3747ec579c728a79413379e64/modules/config/default/%2Bevil-bindings.el
+
+;;; Code:
 
 ;; GC Magic Hack: prevents GC happening mid-typing and restores it
 ;; during idle time. Reinitialises the GC that we disabled in early-init.
@@ -20,6 +24,7 @@
 ;; ==================== [ Looks ] ==================== ;;
 
 (defun my/require-magit-and-project-status ()
+  "Load Magit and open the status buffer for the current project."
   (interactive)
   (require 'magit)
   (magit-project-status))
@@ -30,6 +35,7 @@
   (project-switch-commands 'my/require-magit-and-project-status)
   (auto-revert-verbose nil)
   (make-backup-files nil)
+  (indent-tabs-mode nil)
   :config
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -45,9 +51,9 @@
   (load-theme 'doom-one t))
 
 (set-face-attribute
-  'default nil
-  :font "Fira Code Nerd Font" ; NOTE: Fira Code does not support italic
-  :height 100) ; in 1/10 of pt
+ 'default nil
+ :font "Fira Code Nerd Font" ; NOTE: Fira Code does not support italic
+ :height 100) ; in 1/10 of pt
 
 (use-package doom-modeline
   :ensure t
@@ -60,20 +66,24 @@
 
 (use-package undo-fu-session
   :ensure t
+  :after undo-fu
   :config (undo-fu-session-global-mode))
 
-(defun my/evil-shift-right ()
-  (interactive)
-  (call-interactively #'evil-shift-right)
-  (evil-normal-state)
-  (evil-visual-restore))
-
-(defun my/evil-shift-left ()
-  (interactive)
-  (call-interactively #'evil-shift-left)
+(defun my/evil-shift (fn)
+  "Shift selection using FN and restore the visual selection."
   (call-interactively fn)
   (evil-normal-state)
   (evil-visual-restore))
+
+(defun my/evil-shift-right ()
+  "Shift selection right and restore the visual selection."
+  (interactive)
+  (my/evil-shift #'evil-shift-right))
+
+(defun my/evil-shift-left ()
+  "Shift selection left and restore the visual selection."
+  (interactive)
+  (my/evil-shift #'evil-shift-left))
 
 (use-package evil
   :ensure t
@@ -99,22 +109,37 @@
   (evil-collection-magit-use-z-for-folds t))
 
 (defun my/copy-file-and-visit (new-path)
+  "Copy current buffer's file to NEW-PATH and visit it."
   (interactive "FNew path: ")
   (make-directory (file-name-directory new-path) t)
   (copy-file (buffer-file-name) new-path)
   (find-file new-path))
 
 (defun my/rename-visited-file (new-path)
+  "Rename current buffer's file to NEW-PATH, creating directories as needed."
   (interactive "FNew path: ")
   (make-directory (file-name-directory new-path) t)
   (rename-visited-file new-path))
 
 (defun my/delete-file-and-buffer ()
+  "Delete the current buffer's file and kill the buffer."
   (interactive)
   (let ((filename (buffer-file-name)))
     (when filename
       (delete-file filename)
       (kill-buffer))))
+
+(defun my/format ()
+  "Format the current buffer or region using Eglot or Apheleia."
+  (interactive)
+  (if (eglot-current-server)
+      (if (use-region-p)
+          (eglot-format (region-beginning) (region-end))
+        (eglot-format-buffer))
+    (when (y-or-n-p "No LSP server.  Format with apheleia?")
+      (progn
+        (require 'apheleia)
+        (call-interactively #'apheleia-format-buffer)))))
 
 (use-package general
   :ensure t
@@ -138,6 +163,7 @@
     "ca" #'eglot-code-actions
     "cd" #'xref-find-definitions
     "cD" #'xref-find-references
+    "cf" #'my/format
     "ci" #'ff-get-other-file
     "cr" #'eglot-rename
     "cw" #'delete-trailing-whitespace
@@ -191,11 +217,11 @@
    (lambda (may-prompt)
      (when-let (project (project-current nil))
        (project-root project))))
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref)
   :config
   (require 'consult-xref)
-  (require 'consult-flymake)
-  (setq xref-show-xrefs-function #'consult-xref
-	xref-show-definitions-function #'consult-xref))
+  (require 'consult-flymake))
 
 (use-package vertico
   :ensure t
@@ -242,12 +268,17 @@
   (forge-add-default-bindings nil)
   :config
   (set-face-attribute 'forge-pullreq-draft nil
-    :background 'unspecified
-    :inherit '(italic forge-dimmed)))
+                      :background 'unspecified
+                      :inherit '(italic forge-dimmed)))
 
 ;; ==================== [ Prog ] ==================== ;;
 
+(use-package flymake
+  ;; built-in
+  :hook (prog-mode . flymake-mode))
+
 (defun my/eglot-ensure-if-server ()
+  "Start Eglot if an LSP server is configured for the current major mode."
   (require 'eglot)
   (cond
    ((and buffer-file-name (string-suffix-p ".mll" buffer-file-name))
@@ -257,19 +288,18 @@
    (t
     (eglot-ensure))))
 
-;; Whenever the window changes, eg. because we have changed buffer or
-;; because we have deleted a buffer, which lands us on a new one, tell
-;; eglot that the new file was “opened”, such that it might update its
-;; diagnosis of the file.
-(add-hook 'window-state-change-functions
-          (lambda (_)
-            (when (and (bound-and-true-p flymake-mode)
-                       (eglot-current-server))
-              (eglot--signal-textDocument/didOpen))))
-
 (use-package eglot
   ;; built-in
-  :hook (prog-mode . my/eglot-ensure-if-server))
+  :hook (prog-mode . my/eglot-ensure-if-server)
+  :config
+  ;; Whenever the window changes, eg. because we have changed buffer or
+  ;; because we have deleted a buffer, which lands us on a new one, tell
+  ;; eglot that the new file was “opened”, such that it might update its
+  ;; diagnosis of the file.
+  (add-hook 'window-state-change-functions
+            (lambda (_)
+              (when (and (bound-and-true-p flymake-mode) (eglot-current-server))
+                (eglot--signal-textDocument/didOpen)))))
 
 (use-package cram-mode
   ;; provided by Nix
@@ -291,7 +321,7 @@
 (use-package dune
   :ensure t
   :mode ("/dune\\'" . dune-mode)
-        ("/dune-project\\'" . dune-mode))
+  ("/dune-project\\'" . dune-mode))
 
 (use-package nix-mode
   :ensure t
@@ -327,3 +357,17 @@
 (use-package lua-ts-mode
   ;; built-in; grammar provided by Nix
   :mode "\\.lua\\'")
+
+(use-package reason-mode
+  :ensure t
+  :mode "\\.rei?\\'")
+
+(use-package apheleia
+  :ensure t
+  :defer t)
+
+;; ==================== [ The End ] ==================== ;;
+
+;; Silence the flymake warning about a missing footer.
+(provide 'emacs)
+;;; emacs.el ends here

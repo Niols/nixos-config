@@ -1,0 +1,309 @@
+set -euC
+
+# shellcheck disable=SC2059
+info () { fmt=$1; shift; printf "\e[37m[INF] $fmt\e[0m\n" "$@"; }
+# shellcheck disable=SC2059
+warning () { fmt=$1; shift; printf "\e[33m\e[1m[WRN] $fmt\e[0m\n" "$@"; }
+# shellcheck disable=SC2059
+error () { fmt=$1; shift; printf "\e[31m\e[1m[ERR] $fmt\e[0m\n" "$@"; }
+# shellcheck disable=SC2059,SC2229
+ask () { var=$1; shift; fmt=$1; shift; printf "\e[37m\e[1m[ASK]\e[22m $fmt\e[0m " "$@"; read -r "$var"; }
+
+usage () {
+    cat <<EOF
+Usage: $0 [option [option ...]] [action]
+
+[action] can be one of:
+
+    boot      make the configuration the default boot entry
+    switch    make the configuration the default boot entry, and activate it (default)
+
+[option] can be one of:
+
+    --dirty, -d           proceed even if the repository is dirty (default: ask)
+    --main, -m            checkout main if on another branch (default: ask)
+    --stay, -s            stay on the branch if it is not main (default: ask)
+    --update, -u          pull the configuration before rebuilding (default: do not update)
+    --home-profile <s>    run a Home Manager installation with this profile (default: autodetect)
+    --target <s>, -t      install and deploy a NixOS configuration for this machine (default: current machine)
+    --dry-run             do not actually build or deploy anything
+    --help, -h            show this help and exit
+EOF
+}
+
+action=switch
+update=false
+action_if_dirty=ask
+action_if_not_main=ask
+home_profile=
+target=
+dry_run=false
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        boot) action=boot ;;
+        switch) action=switch ;;
+        --dirty|-d) action_if_dirty=proceed ;;
+        --main|-m) action_if_not_main=checkout ;;
+        --stay|-s) action_if_not_main=stay ;;
+        --update|-u) update=true ;;
+        --home-profile) shift; home_profile=$1 ;;
+        --target|-t) shift; target=$1 ;;
+        --dry-run) dry_run=true ;;
+        --help|-h) usage; exit 1 ;;
+        *) error 'Unexpected argument: %s\n' "$1"; usage; exit 2 ;;
+    esac
+    shift
+done
+
+readonly action
+readonly update
+readonly target
+readonly dry_run
+
+run () {
+    printf '\e[36m\e[1m[RUN] %s\e[0m\n' "$*"
+    if ! $dry_run; then "$@"; fi
+}
+
+if [ -z "$home_profile" ] && [ -e ~/.config/nixos/.home-profile ]; then
+    home_profile=$(cat ~/.config/nixos/.home-profile)
+    info 'Detected a Home Manager installation; will use home profile `%s`.' "$home_profile"
+fi
+readonly home_profile
+
+if [ -n "$target" ] && [ -n "$home_profile" ]; then
+    error 'Cannot use --target with a home profile.'
+    exit 2
+fi
+
+if [ "$action" = boot ] && [ -n "$home_profile" ]; then
+    error 'Cannot use action %s with a home profile.' "$action"
+    exit 2
+fi
+
+if ! [ -e ~/.config/nixos ]; then
+    mkdir -p ~/.config
+    info 'The repository could not be found, cloning...'
+    run git clone git@github.com:niols/nixos-config.git ~/.config/nixos
+    info 'done.'
+fi
+
+cd ~/.config/nixos
+
+if [ -n "$(git status --porcelain)" ]; then is_dirty=true; else is_dirty=false; fi
+readonly is_dirty
+if $is_dirty; then
+    warning 'The working directory is dirty.'
+    if [ $action_if_dirty = ask ]; then
+        ask response 'Do you want to \e[1m[p]\e[22mroceed anyway or \e[1m[a]\e[22mbort?'
+        # shellcheck disable=SC2154
+        case $response in
+            p)
+                info 'You can also pass the --dirty argument to do this automatically.'
+                action_if_dirty=proceed
+                ;;
+            a)
+                action_if_dirty=abort
+                ;;
+            *)
+                error 'Unexpected response: `%s`.' "$response"
+                exit 2
+        esac
+    fi
+    case $action_if_dirty in
+        proceed)
+            info 'Proceeding. Some functionalities, such as tagging, will not be available.'
+            ;;
+        abort)
+            info 'Aborting.'
+            exit 2
+            ;;
+        *)
+            error 'Unexpected action if the repository is dirty: `%s`.' "$action_if_dirty"
+            exit 3
+    esac
+fi
+
+get_current_commit () { git log --max-count=1 --format=%h; }
+
+current_branch=$(git branch --show-current)
+current_commit=$(get_current_commit)
+readonly current_branch
+readonly current_commit
+
+if [ "$current_branch" != main ]; then
+    if [ -n "$current_branch" ]; then
+        warning 'The current branch is not `main` but `%s`.' "$current_branch"
+    else
+        warning 'The repository is in a detached HEAD state.'
+    fi
+    if [ $action_if_not_main = ask ]; then
+        [ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
+        ask response 'Do you want to \e[1m[c]\e[22mheckout `main`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$on_current_branch"
+        # shellcheck disable=SC2154
+        case $response in
+            c)
+                info 'You can also pass the --main argument to do this automatically.'
+                action_if_not_main=checkout
+                ;;
+            s)
+                info 'You can also pass the --stay argument to do this automatically.'
+                action_if_not_main=stay
+                ;;
+            a)
+                action_if_not_main=abort
+                ;;
+            *)
+                error 'Unexpected response: `%s`.' "$response"
+                exit 2
+        esac
+    fi
+    case $action_if_not_main in
+        checkout)
+            if $is_dirty; then
+                error 'Cannot checkout `main` when working directory is dirty.'
+                exit 2
+            else
+                info 'Checking out `main`...'
+                run git checkout main
+                info 'done.'
+            fi
+            ;;
+        stay)
+            if [ -n "$current_branch" ]; then
+                info 'This script will only pull from and push to `%s`.' "$current_branch"
+            fi
+            ;;
+        abort)
+            info 'Aborting.'
+            exit 2
+            ;;
+        *)
+            error 'Unexpected action if the branch is not main: `%s`.' "$action_if_not_main"
+            exit 3
+    esac
+fi
+
+if $update; then
+    if $is_dirty; then
+        error 'Cannot update when working directory is dirty.'
+        exit 2
+    fi
+    if [ -z "$current_branch" ]; then
+        error 'Cannot update when in detached state.'
+        exit 2
+    fi
+    info 'Updating the configuration repository...'
+    run git pull --ff-only
+    info 'done.'
+fi
+
+if [ -n "$home_profile" ]; then
+    info 'Rebuilding Home configuration...'
+    run home-manager \
+        --extra-experimental-features 'nix-command flakes' \
+        switch --impure --flake ~/.config/nixos#"$home_profile"
+    echo "$home_profile" >| ~/.config/nixos/.home-profile
+
+elif [ -n "$target" ]; then
+    info 'Rebuilding and deploying `%s`...' "$target"
+
+    if
+        target_host_output=$(nix eval --impure --raw --expr "
+            let m = (import ./machines.nix).servers.$target; in
+            m.ipv4 or m.ipv6 or \"$target.niols.fr\"
+        ")
+    then
+        target_host=root@$target_host_output
+        info 'Recognising target `%s` as host `%s`.' "$target" "$target_host"
+    else
+        error 'Something went wrong when finding the target host. Probably, the machine does not exist or is not a server?'
+        exit 2
+    fi
+    readonly target_host
+
+    run nixos-rebuild $action --target-host "$target_host" --flake ~/.config/nixos#"$target"
+else
+
+    info 'Rebuilding NixOS configuration...'
+    if ! [ -e /etc/NIXOS ]; then
+        warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
+    fi
+
+    run sudo true # check sudo access
+    run sudo nixos-rebuild $action --flake ~/.config/nixos
+fi
+info 'done.'
+
+if $is_dirty; then
+    info 'Not adding a Git tag for the current generation, because the working directory is dirty.'
+
+elif current_commit_again=$(get_current_commit); [ "$current_commit_again" != "$current_commit" ]; then
+    warning 'Commit has changed during rebuild (from %s to %s); not adding a Git tag because it is unclear what has been rebuilt.' \
+            "$current_commit" "$current_commit_again"
+
+else
+    info 'Adding a Git tag for the current generation...'
+    [ -z "$target" ] && hostname=$(hostname -s) || hostname=$target
+
+    if [ -z "$home_profile" ]; then
+        if [ -z "$target" ]; then
+            output=$(nixos-rebuild list-generations --json)
+        else
+            output=$(ssh "$target_host" nixos-rebuild list-generations --json)
+        fi
+        output=$(echo "$output" | jq '.[] | select(.current == true)')
+        if [ -z "$output" ]; then
+            error 'No current generation found.'
+            exit 2
+        fi
+        generation=$(echo "$output" | jq -r .generation)
+        date=$(echo "$output" | jq -r .date | cut -d ' ' -f 1)
+        nixosVersion=$(echo "$output" | jq -r .nixosVersion)
+        tag=nixos-$hostname-gen-$generation
+        description="NixOS configuration \`$hostname\` — generation $generation ($date - $nixosVersion)"
+    else
+
+        generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
+        if ! [[ "$generation" =~ ^[0-9]+$ ]]; then
+            error 'Could not find the Home generation.'
+            exit 2
+        fi
+        date=$(date +'%Y-%m-%d')
+        tag=home-$home_profile-on-$hostname-gen-$generation
+        description="Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
+    fi
+
+    if [ -n "$(git tag --list "$tag")" ]; then
+        info 'The tag already exists. This means that you rebuilt something that did not change the configuration at all. Tagging anyway...'
+        rebuild_number=2
+        tag_with_rebuild=$tag-rebuild-$rebuild_number
+        while [ -n "$(git tag --list "$tag_with_rebuild")" ]; do
+            rebuild_number=$((rebuild_number + 1))
+            tag_with_rebuild=$tag-rebuild-$rebuild_number
+        done
+        tag=$tag_with_rebuild
+    fi
+    info 'Tagging as: %s\nwith description: %s.' "$tag" "$description"
+    run git tag "$tag" "$current_commit" --message="$description"
+    info 'done.\nPushing changes to remote...'
+    run git push --tags
+    info 'done.'
+fi
+
+if [ "$action" != switch ] && [ -z "$home_profile" ]; then
+    ask answer 'Do you wish to reboot? (y/N)'
+    # shellcheck disable=SC2154
+    if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
+        info 'Rebooting...'
+
+        if [ -n "$target" ]; then
+            run ssh "$target_host" reboot
+        else
+            run reboot
+        fi
+    fi
+fi
+
+info 'All done!'
