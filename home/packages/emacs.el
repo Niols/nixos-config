@@ -137,7 +137,9 @@
           (eglot-format (region-beginning) (region-end))
         (eglot-format-buffer))
     (when (y-or-n-p "No LSP server.  Format with apheleia?")
-      (call-interactively #'apheleia-format-buffer))))
+      (progn
+        (require 'apheleia)
+        (call-interactively #'apheleia-format-buffer)))))
 
 (use-package general
   :ensure t
@@ -361,7 +363,8 @@
   :mode "\\.rei?\\'")
 
 (use-package apheleia
-  :ensure t)
+  :ensure t
+  :defer t)
 
 ;; ==================== [ The End ] ==================== ;;
 
