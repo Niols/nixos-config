@@ -116,6 +116,15 @@
       (delete-file filename)
       (kill-buffer))))
 
+(defun my/format ()
+  (interactive)
+  (if (eglot-current-server)
+      (if (use-region-p)
+	  (eglot-format (region-beginning) (region-end))
+	  (eglot-format-buffer))
+      (when (y-or-n-p "No LSP server. Format with apheleia?")
+	(apheleia-format-buffer))))
+
 (use-package general
   :ensure t
   :config
@@ -138,6 +147,7 @@
     "ca" #'eglot-code-actions
     "cd" #'xref-find-definitions
     "cD" #'xref-find-references
+    "cf" #'my/format
     "ci" #'ff-get-other-file
     "cr" #'eglot-rename
     "cw" #'delete-trailing-whitespace
@@ -331,3 +341,6 @@
 (use-package reason-mode
   :ensure t
   :mode "\\.rei?\\'")
+
+(use-package apheleia
+  :ensure t)
