@@ -327,3 +327,7 @@
 (use-package lua-ts-mode
   ;; built-in; grammar provided by Nix
   :mode "\\.lua\\'")
+
+(use-package reason-mode
+  :ensure t
+  :mode "\\.rei?\\'")
