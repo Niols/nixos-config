@@ -123,8 +123,7 @@
 	  (eglot-format (region-beginning) (region-end))
 	(eglot-format-buffer))
     (when (y-or-n-p "No LSP server. Format with apheleia?")
-      (let ((current-prefix-arg '(4)))
-        (call-interactively #'apheleia-format-buffer)))))
+        (call-interactively #'apheleia-format-buffer))))
 
 (use-package general
   :ensure t
