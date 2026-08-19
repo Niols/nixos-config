@@ -1,10 +1,14 @@
-;; -*- lexical-binding: t; -*-
+;;; emacs.el --- my hand-crafted Emacs configuration -*- lexical-binding: t; -*-
 
+;;; Commentary:
+;;
 ;; NOTE: the old Doom Emacs configuration can be found here:
 ;; https://github.com/Niols/nixos-config/tree/7e7b7d0e6337b655aa46a02b592b9b312218a5f8/home/doom
-
+;;
 ;; NOTE: most of Doom Emacs's bindings can be found here:
 ;; https://github.com/doomemacs/doomemacs/blob/1d7a94b96b4410a3747ec579c728a79413379e64/modules/config/default/%2Bevil-bindings.el
+
+;;; Code:
 
 ;; GC Magic Hack: prevents GC happening mid-typing and restores it
 ;; during idle time. Reinitialises the GC that we disabled in early-init.
@@ -20,6 +24,7 @@
 ;; ==================== [ Looks ] ==================== ;;
 
 (defun my/require-magit-and-project-status ()
+  "Load Magit and open the status buffer for the current project."
   (interactive)
   (require 'magit)
   (magit-project-status))
@@ -63,18 +68,21 @@
   :ensure t
   :config (undo-fu-session-global-mode))
 
-(defun my/evil-shift-right ()
-  (interactive)
-  (call-interactively #'evil-shift-right)
-  (evil-normal-state)
-  (evil-visual-restore))
-
-(defun my/evil-shift-left ()
-  (interactive)
-  (call-interactively #'evil-shift-left)
+(defun my/evil-shift (fn)
+  "Shift selection using FN and restore the visual selection."
   (call-interactively fn)
   (evil-normal-state)
   (evil-visual-restore))
+
+(defun my/evil-shift-right ()
+  "Shift selection right and restore the visual selection."
+  (interactive)
+  (my/evil-shift #'evil-shift-right))
+
+(defun my/evil-shift-left ()
+  "Shift selection left and restore the visual selection."
+  (interactive)
+  (my/evil-shift #'evil-shift-left))
 
 (use-package evil
   :ensure t
@@ -100,17 +108,20 @@
   (evil-collection-magit-use-z-for-folds t))
 
 (defun my/copy-file-and-visit (new-path)
+  "Copy current buffer's file to NEW-PATH and visit it."
   (interactive "FNew path: ")
   (make-directory (file-name-directory new-path) t)
   (copy-file (buffer-file-name) new-path)
   (find-file new-path))
 
 (defun my/rename-visited-file (new-path)
+  "Rename current buffer's file to NEW-PATH, creating directories as needed."
   (interactive "FNew path: ")
   (make-directory (file-name-directory new-path) t)
   (rename-visited-file new-path))
 
 (defun my/delete-file-and-buffer ()
+  "Delete the current buffer's file and kill the buffer."
   (interactive)
   (let ((filename (buffer-file-name)))
     (when filename
@@ -118,12 +129,13 @@
       (kill-buffer))))
 
 (defun my/format ()
+  "Format the current buffer or region using Eglot or Apheleia."
   (interactive)
   (if (eglot-current-server)
       (if (use-region-p)
           (eglot-format (region-beginning) (region-end))
         (eglot-format-buffer))
-    (when (y-or-n-p "No LSP server. Format with apheleia?")
+    (when (y-or-n-p "No LSP server.  Format with apheleia?")
       (call-interactively #'apheleia-format-buffer))))
 
 (use-package general
@@ -206,7 +218,7 @@
   (require 'consult-xref)
   (require 'consult-flymake)
   (setq xref-show-xrefs-function #'consult-xref
-	xref-show-definitions-function #'consult-xref))
+        xref-show-definitions-function #'consult-xref))
 
 (use-package vertico
   :ensure t
@@ -253,8 +265,8 @@
   (forge-add-default-bindings nil)
   :config
   (set-face-attribute 'forge-pullreq-draft nil
-		      :background 'unspecified
-		      :inherit '(italic forge-dimmed)))
+                      :background 'unspecified
+                      :inherit '(italic forge-dimmed)))
 
 ;; ==================== [ Prog ] ==================== ;;
 
@@ -263,6 +275,7 @@
   :hook (prog-mode . flymake-mode))
 
 (defun my/eglot-ensure-if-server ()
+  "Start Eglot if an LSP server is configured for the current major mode."
   (require 'eglot)
   (cond
    ((and buffer-file-name (string-suffix-p ".mll" buffer-file-name))
@@ -349,3 +362,9 @@
 
 (use-package apheleia
   :ensure t)
+
+;; ==================== [ The End ] ==================== ;;
+
+;; Silence the flymake warning about a missing footer.
+(provide 'emacs)
+;;; emacs.el ends here
