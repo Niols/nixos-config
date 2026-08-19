@@ -258,6 +258,10 @@
 
 ;; ==================== [ Prog ] ==================== ;;
 
+(use-package flymake
+  ;; built-in
+  :hook (prog-mode . flymake-mode))
+
 (defun my/eglot-ensure-if-server ()
   (require 'eglot)
   (cond
