@@ -121,10 +121,10 @@
   (interactive)
   (if (eglot-current-server)
       (if (use-region-p)
-	  (eglot-format (region-beginning) (region-end))
-	(eglot-format-buffer))
+          (eglot-format (region-beginning) (region-end))
+        (eglot-format-buffer))
     (when (y-or-n-p "No LSP server. Format with apheleia?")
-        (call-interactively #'apheleia-format-buffer))))
+      (call-interactively #'apheleia-format-buffer))))
 
 (use-package general
   :ensure t
