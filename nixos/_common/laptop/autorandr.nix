@@ -94,10 +94,10 @@ in
           };
         };
 
-        ## Single screen, with laptop open but laptop screen off.
-        make-laptop-open-off =
-          key: fingerprint: mode:
-          make-laptop-open-on key fingerprint mode { enable = false; };
+        # ## Single screen, with laptop open but laptop screen off.
+        # make-laptop-open-off =
+        #   key: fingerprint: mode:
+        #   make-laptop-open-on key fingerprint mode { enable = false; };
 
         ## Double screen at Tweag's office, with laptop closed.
         make-tweag-double-laptop-closed = key: {
@@ -265,11 +265,26 @@ in
         philips-usbc-laptop-closed-dp-1-8 = make-laptop-closed "DP-1-8" philipsUsbC "2560x1440";
         philips-usbc-laptop-closed-dp-2-8 = make-laptop-closed "DP-2-8" philipsUsbC "2560x1440";
         philips-usbc-laptop-closed-dp-3-8 = make-laptop-closed "DP-3-8" philipsUsbC "2560x1440";
-        philips-hdmi-laptop-open-dp-2 = make-laptop-open-off "DP-2" philipsHdmi "2560x1440";
-        philips-hdmi-laptop-open-dp-3 = make-laptop-open-off "DP-3" philipsHdmi "2560x1440";
-        philips-usbc-laptop-open-dp-1-8 = make-laptop-open-off "DP-1-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-open-dp-2-8 = make-laptop-open-off "DP-2-8" philipsUsbC "2560x1440";
-        philips-usbc-laptop-open-dp-3-8 = make-laptop-open-off "DP-3-8" philipsUsbC "2560x1440";
+        philips-hdmi-laptop-open-dp-2 = make-laptop-open-on "DP-2" philipsHdmi "2560x1440" {
+          mode = "1680x1050";
+          position = "440x1440";
+        };
+        philips-hdmi-laptop-open-dp-3 = make-laptop-open-on "DP-3" philipsHdmi "2560x1440" {
+          mode = "1680x1050";
+          position = "440x1440";
+        };
+        philips-usbc-laptop-open-dp-1-8 = make-laptop-open-on "DP-1-8" philipsUsbC "2560x1440" {
+          mode = "1680x1050";
+          position = "440x1440";
+        };
+        philips-usbc-laptop-open-dp-2-8 = make-laptop-open-on "DP-2-8" philipsUsbC "2560x1440" {
+          mode = "1680x1050";
+          position = "440x1440";
+        };
+        philips-usbc-laptop-open-dp-3-8 = make-laptop-open-on "DP-3-8" philipsUsbC "2560x1440" {
+          mode = "1680x1050";
+          position = "440x1440";
+        };
 
         ## Single LG screen, with laptop open and closed and USB-C hub
         ## plugged on first or second port.
