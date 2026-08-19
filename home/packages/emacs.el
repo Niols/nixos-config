@@ -217,11 +217,11 @@
    (lambda (may-prompt)
      (when-let (project (project-current nil))
        (project-root project))))
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref)
   :config
   (require 'consult-xref)
-  (require 'consult-flymake)
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref))
+  (require 'consult-flymake))
 
 (use-package vertico
   :ensure t
