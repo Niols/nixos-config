@@ -39,18 +39,27 @@ in
 
   programs.emacs = {
     enable = true;
-    package = emacsWithPackagesFromUsePackage {
-      config = ./emacs.el;
-      extraEmacsPackages = epkgs: [
-        cramMode
-        lilypondMode
-        (epkgs.treesit-grammars.with-grammars (
-          grammars: with grammars; [
-            tree-sitter-lua
-            tree-sitter-toml
-            tree-sitter-yaml
-          ]
-        ))
+    package = pkgs.symlinkJoin {
+      ## The following is a way to make an “Emacs” package that also contains the tools
+      ## that it looks to have around, without them leaking into the global environment.
+      name = "emacs-with-tools";
+      paths = [
+        (emacsWithPackagesFromUsePackage {
+          config = ./emacs.el;
+          extraEmacsPackages = epkgs: [
+            cramMode
+            lilypondMode
+            (epkgs.treesit-grammars.with-grammars (
+              grammars: with grammars; [
+                tree-sitter-lua
+                tree-sitter-toml
+                tree-sitter-yaml
+              ]
+            ))
+          ];
+        })
+        ## External tools which Emacs wants to have:
+        pkgs.prettier
       ];
     };
   };
