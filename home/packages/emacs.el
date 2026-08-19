@@ -30,6 +30,7 @@
   (project-switch-commands 'my/require-magit-and-project-status)
   (auto-revert-verbose nil)
   (make-backup-files nil)
+  (indent-tabs-mode nil)
   :config
   (menu-bar-mode -1)
   (tool-bar-mode -1)
