@@ -223,10 +223,7 @@ elif [ -n "$target" ]; then
     fi
     readonly target_host
 
-    run nixos-rebuild $action \
-        --flake ~/.config/nixos#"$target" \
-        --target-host "$target_host" \
-        --builders '@/etc/nix/machines'
+    run nixos-rebuild $action --target-host "$target_host" --flake ~/.config/nixos#"$target"
 else
 
     info 'Rebuilding NixOS configuration...'
@@ -235,9 +232,7 @@ else
     fi
 
     run sudo true # check sudo access
-    run sudo nixos-rebuild $action \
-         --flake ~/.config/nixos \
-         --builders '@/etc/nix/machines'
+    run sudo nixos-rebuild $action --flake ~/.config/nixos
 fi
 info 'done.'
 
