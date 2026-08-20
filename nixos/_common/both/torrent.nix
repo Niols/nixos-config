@@ -25,10 +25,10 @@ in
           pieces.sync.always_safe.set = 1
 
           ## Watch for .torrent in rtorrent/watch
-          schedule2 = watch_watch, 10, 10, "load.start=${dataDir}/watch/*.torrent"
+          schedule = watch_watch, 10, 10, "load.start=${dataDir}/watch/*.torrent"
 
           ## Active view
-          schedule2 = filter_active,30,30,"view.filter = active,\"or={d.up.rate=,d.down.rate=}\""
+          schedule = filter_active,30,30,"view.filter = active,\"or={d.up.rate=,d.down.rate=}\""
 
           ## Automatically move finished downloads to rtorrent/complete
           method.insert = d.get_finished_dir, simple, "cat=${dataDir}/complete/,$d.custom1="
