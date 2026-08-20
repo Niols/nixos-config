@@ -1,4 +1,5 @@
 {
+  flakeRoot,
   writeShellApplication,
   git,
   home-manager,
@@ -27,6 +28,7 @@ writeShellApplication {
   ## NOTE: The `rebuild` script needs to know some things from the flake.
   ## It could call Nix, but we find it easier to just inject things statically.
   runtimeEnv = {
+    __nix__flake_root = flakeRoot;
     __nix__all_deploy_targets = concatStringsSep " " (attrNames servers);
   }
   // (mapAttrs' (name: meta: {
