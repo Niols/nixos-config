@@ -269,7 +269,7 @@ rebuild_deploy ()
     fi
     readonly target_host
 
-    run nixos-rebuild $action --target-host "$target_host" --flake "$local_repo"\#"$target"
+    run nixos-rebuild $action --target-host "$target_host" --flake "$local_repo"\#"$target" --elevate=sudo
 
     info 'done.'
 }
@@ -282,8 +282,7 @@ rebuild_nixos ()
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
 
-    run sudo true # check sudo access
-    run sudo nixos-rebuild $action --flake "$local_repo"
+    run nixos-rebuild $action --flake "$local_repo" --elevate=sudo
 
     info 'done.'
 }
