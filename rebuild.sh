@@ -47,8 +47,8 @@ parse_cli ()
 {
     action=switch
     update=false
-    action_if_dirty=ask
-    action_if_not_main=ask
+    wtd_if_dirty=ask
+    wtd_if_not_main=ask
     home_profile=
     target=
     dry_run=false
@@ -57,9 +57,9 @@ parse_cli ()
         case $1 in
             boot) action=boot ;;
             switch) action=switch ;;
-            --dirty|-d) action_if_dirty=proceed ;;
-            --main|-m) action_if_not_main=checkout ;;
-            --stay|-s) action_if_not_main=stay ;;
+            --dirty|-d) wtd_if_dirty=proceed ;;
+            --main|-m) wtd_if_not_main=checkout ;;
+            --stay|-s) wtd_if_not_main=stay ;;
             --update|-u) update=true ;;
             --home-profile) shift; home_profile=$1 ;;
             --target|-t) shift; target=$1 ;;
@@ -120,23 +120,23 @@ repo_check_dirty ()
 
     if $is_dirty; then
         warning 'The working directory is dirty.'
-        if [ $action_if_dirty = ask ]; then
+        if [ $wtd_if_dirty = ask ]; then
             ask response 'Do you want to \e[1m[p]\e[22mroceed anyway or \e[1m[a]\e[22mbort?'
             # shellcheck disable=SC2154
             case $response in
                 p)
                     info 'You can also pass the --dirty argument to do this automatically.'
-                    action_if_dirty=proceed
+                    wtd_if_dirty=proceed
                     ;;
                 a)
-                    action_if_dirty=abort
+                    wtd_if_dirty=abort
                     ;;
                 *)
                     error 'Unexpected response: `%s`.' "$response"
                     exit 2
             esac
         fi
-        case $action_if_dirty in
+        case $wtd_if_dirty in
             proceed)
                 info 'Proceeding. Some functionalities, such as tagging, will not be available.'
                 ;;
@@ -145,7 +145,7 @@ repo_check_dirty ()
                 exit 2
                 ;;
             *)
-                error 'Unexpected action if the repository is dirty: `%s`.' "$action_if_dirty"
+                error 'Unexpected instruction when the repository is dirty: `%s`.' "$wtd_if_dirty"
                 exit 3
         esac
     fi
@@ -169,21 +169,21 @@ repo_check_branch_commit ()
             warning 'The repository is in a detached HEAD state.'
         fi
 
-        if [ $action_if_not_main = ask ]; then
+        if [ $wtd_if_not_main = ask ]; then
             [ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
             ask response 'Do you want to \e[1m[c]\e[22mheckout `%s`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$main_branch" "$on_current_branch"
             # shellcheck disable=SC2154
             case $response in
                 c)
                     info 'You can also pass the --main argument to do this automatically.'
-                    action_if_not_main=checkout
+                    wtd_if_not_main=checkout
                     ;;
                 s)
                     info 'You can also pass the --stay argument to do this automatically.'
-                    action_if_not_main=stay
+                    wtd_if_not_main=stay
                     ;;
                 a)
-                    action_if_not_main=abort
+                    wtd_if_not_main=abort
                     ;;
                 *)
                     error 'Unexpected response: `%s`.' "$response"
@@ -191,7 +191,7 @@ repo_check_branch_commit ()
             esac
         fi
 
-        case $action_if_not_main in
+        case $wtd_if_not_main in
             checkout)
                 if $is_dirty; then
                     error 'Cannot checkout `%s` when working directory is dirty.' "$main_branch"
@@ -212,7 +212,7 @@ repo_check_branch_commit ()
                 exit 2
                 ;;
             *)
-                error 'Unexpected action if the branch is not `%s`: `%s`.' "$main_branch" "$action_if_not_main"
+                error 'Unexpected instruction when the branch is not `%s`: `%s`.' "$main_branch" "$wtd_if_not_main"
                 exit 3
         esac
     fi
