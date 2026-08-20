@@ -44,11 +44,14 @@ deploy-specific [option]:
 
 [option] can be one of:
 
-    --dirty, -d         proceed even if the repository is dirty (default: ask)
-    --main, -m          checkout main if on another branch (default: ask)
-    --stay, -s          stay on the branch if it is not main (default: ask)
-    --update, -u        pull the configuration before rebuilding (default: do not update)
+    --clone, -c         if the local repository doesn't exist, clone it (default: ask)
+    --dirty, -d         proceed even if the local repository is dirty (default: ask)
     --dry-run           do not actually build or deploy anything
+    --embedded, -e      use the flake from which this script comes
+    --github, -g        use the flake from github instead of the local repository
+    --main, -m          checkout main if the local repository is on another branch (default: ask)
+    --stay, -s          stay on the branch if the local repository is not on main (default: ask)
+    --update, -u        pull the configuration of the local repository before rebuilding
     --help, -h          show this help and exit
 EOF
 
@@ -62,10 +65,12 @@ parse_cli ()
     action=switch
     home_profile=
     deploy_targets=
+    flake_source=local
 
     update=false
     dry_run=false
 
+    wtd_if_absent=ask
     wtd_if_dirty=ask
     wtd_if_not_main=ask
 
@@ -90,6 +95,9 @@ parse_cli ()
             --update|-u) update=true ;;
             --dry-run) dry_run=true ;;
 
+            --clone|-c) wtd_if_absent=clone ;;
+            --embedded|-e) wtd_if_absent=nothing; flake_source=embedded ;;
+            --github|-g) wtd_if_absent=nothing; flake_source=github ;;
             --dirty|-d) wtd_if_dirty=proceed ;;
             --main|-m) wtd_if_not_main=checkout ;;
             --stay|-s) wtd_if_not_main=stay ;;
@@ -145,14 +153,64 @@ on_target () {
 
 repo_setup ()
 {
-    if ! [ -e "$local_repo" ]; then
-        mkdir -p "$(dirname "$local_repo")"
-        info 'The repository could not be found, cloning...'
-        run git clone git@github.com:"$github_repo".git "$local_repo"
-        info 'done.'
+    if [ -e "$local_repo" ]; then
+        local_repo_is_present=true
+    else
+        local_repo_is_present=false
     fi
 
-    cd "$local_repo"
+    if ! $local_repo_is_present; then
+        info 'The local repository is absent.'
+
+        if [ $wtd_if_absent = ask ]; then
+            ask response 'Do you want to \e[1m[c]\e[22mlone it, use the \e[1m[e]\e[22mmbedded flake, or use the flake from \e[1m[g]\e[22mithub?'
+            # shellcheck disable=SC2154
+            case $response in
+                c)
+                    info 'You can also pass the --clone argument to do this automatically.'
+                    wtd_if_absent=clone
+                    ;;
+                e)
+                    wtd_if_absent=nothing
+                    flake_source=embedded
+                    ;;
+                g)
+                    wtd_if_absent=nothing
+                    flake_source=github
+                    ;;
+                *)
+                    die 'Unexpected response: `%s`.' "$response"
+            esac
+        fi
+
+        case $wtd_if_absent in
+            clone)
+                info 'Cloning the github repository locally...'
+                mkdir -p "$(dirname "$local_repo")"
+                run git clone git@github.com:"$github_repo".git "$local_repo"
+                info 'done.'
+                local_repo_is_present=true
+                ;;
+            nothing)
+                true # do nothing
+                ;;
+            *)
+                die 'Unexpected instruction when the repository is absent: `%s`.' "$wtd_if_absent"
+        esac
+    fi
+
+    if $local_repo_is_present; then
+        cd "$local_repo"
+    fi
+
+    case $flake_source in
+        local) flake=$local_repo ;;
+        embedded) flake=$__nix__flake_root ;;
+        github) flake=github:$github_repo ;;
+        *) die 'Unexpected flake source: `%s`.' "$flake_source"
+    esac
+
+    readonly local_repo_is_present flake
 }
 
 ## ================== [ Check if the repository is dirty ] =================== ##
@@ -164,6 +222,7 @@ repo_check_dirty ()
 
     if $is_dirty; then
         warning 'The working directory is dirty.'
+
         if [ $wtd_if_dirty = ask ]; then
             ask response 'Do you want to \e[1m[p]\e[22mroceed anyway or \e[1m[a]\e[22mbort?'
             # shellcheck disable=SC2154
@@ -179,6 +238,7 @@ repo_check_dirty ()
                     die 'Unexpected response: `%s`.' "$response"
             esac
         fi
+
         case $wtd_if_dirty in
             proceed)
                 info 'Proceeding. Some functionalities, such as tagging, will not be available.'
@@ -205,105 +265,110 @@ repo_check_branch_commit ()
     current_commit=$(get_current_commit)
     readonly current_branch current_commit
 
-    if [ "$current_branch" != "$main_branch" ]; then
-        if [ -n "$current_branch" ]; then
-            warning 'The current branch is not `%s` but `%s`.' "$main_branch" "$current_branch"
-        else
-            warning 'The repository is in a detached HEAD state.'
-        fi
+    if [ "$current_branch" = "$main_branch" ]; then
+        return
+    fi
 
-        if [ $wtd_if_not_main = ask ]; then
-            [ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
-            ask response 'Do you want to \e[1m[c]\e[22mheckout `%s`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$main_branch" "$on_current_branch"
-            # shellcheck disable=SC2154
-            case $response in
-                c)
-                    info 'You can also pass the --main argument to do this automatically.'
-                    wtd_if_not_main=checkout
-                    ;;
-                s)
-                    info 'You can also pass the --stay argument to do this automatically.'
-                    wtd_if_not_main=stay
-                    ;;
-                a)
-                    wtd_if_not_main=abort
-                    ;;
-                *)
-                    die 'Unexpected response: `%s`.' "$response"
-            esac
-        fi
+    if [ -n "$current_branch" ]; then
+        warning 'The current branch is not `%s` but `%s`.' "$main_branch" "$current_branch"
+    else
+        warning 'The repository is in a detached HEAD state.'
+    fi
 
-        case $wtd_if_not_main in
-            checkout)
-                $is_dirty && die 'Cannot checkout `%s` when working directory is dirty.' "$main_branch"
-                info 'Checking out `%s`...' "$main_branch"
-                run git checkout "$main_branch"
-                info 'done.'
+    if [ $wtd_if_not_main = ask ]; then
+        [ -n "$current_branch" ] && on_current_branch=$(printf 'on `%s`' "$current_branch") || on_current_branch=detached
+        ask response 'Do you want to \e[1m[c]\e[22mheckout `%s`, \e[1m[s]\e[22mtay %s, or \e[1m[a]\e[22mbort?' "$main_branch" "$on_current_branch"
+        # shellcheck disable=SC2154
+        case $response in
+            c)
+                info 'You can also pass the --main argument to do this automatically.'
+                wtd_if_not_main=checkout
                 ;;
-            stay)
-                if [ -n "$current_branch" ]; then
-                    info 'This script will only pull from and push to `%s`.' "$current_branch"
-                fi
+            s)
+                info 'You can also pass the --stay argument to do this automatically.'
+                wtd_if_not_main=stay
                 ;;
-            abort)
-                info 'Aborting.'
-                exit 2
+            a)
+                wtd_if_not_main=abort
                 ;;
             *)
-                die 'Unexpected instruction when the branch is not `%s`: `%s`.' "$main_branch" "$wtd_if_not_main"
+                die 'Unexpected response: `%s`.' "$response"
         esac
     fi
+
+    case $wtd_if_not_main in
+        checkout)
+            $is_dirty && die 'Cannot checkout `%s` when working directory is dirty.' "$main_branch"
+            info 'Checking out `%s`...' "$main_branch"
+            run git checkout "$main_branch"
+            info 'done.'
+            ;;
+        stay)
+            if [ -n "$current_branch" ]; then
+                info 'This script will only pull from and push to `%s`.' "$current_branch"
+            fi
+            ;;
+        abort)
+            info 'Aborting.'
+            exit 2
+            ;;
+        *)
+            die 'Unexpected instruction when the branch is not `%s`: `%s`.' "$main_branch" "$wtd_if_not_main"
+    esac
 }
 
 ## ===================== [ Update the local repository ] ===================== ##
 
 repo_update ()
 {
-    if $update; then
-        $is_dirty && die 'Cannot update when working directory is dirty.'
-        [ -z "$current_branch" ] && die 'Cannot update when in detached state.'
-        info 'Updating the configuration repository...'
-        run git pull --ff-only
-        info 'done.'
-    fi
+    ! $local_repo_is_present && die 'Cannot update when there is no local repository.'
+    $is_dirty && die 'Cannot update when working directory is dirty.'
+    [ -z "$current_branch" ] && die 'Cannot update when in detached state.'
+
+    info 'Updating the configuration repository...'
+    run git pull --ff-only
+    info 'done.'
 }
 
 ## ===================== [ Actually perform the action ] ===================== ##
 
 rebuild_nixos ()
 {
-    if [ "$action" = boot ] || [ "$action" = switch ]; then
-        info 'Rebuilding NixOS configuration...'
-        if ! [ -e /etc/NIXOS ]; then
-            warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
-        fi
-        run sudo true # check sudo privileges ahead of time
-        run nixos-rebuild $action --flake "$local_repo" --elevate=sudo
-        info 'done.'
+    if ! [ "$action" = boot ] && ! [ "$action" = switch ]; then
+        return
     fi
+
+    info 'Rebuilding NixOS configuration...'
+    if ! [ -e /etc/NIXOS ]; then
+        warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
+    fi
+    run sudo true # check sudo privileges ahead of time
+    run nixos-rebuild $action --flake "$flake" --elevate=sudo
+    info 'done.'
 }
 
 rebuild_home ()
 {
-    if [ "$action" = home ]; then
-        info 'Rebuilding Home configuration...'
-        run home-manager \
-            --extra-experimental-features 'nix-command flakes' \
-            switch --impure --flake "$local_repo"\#"$home_profile"
+    info 'Rebuilding Home configuration...'
+
+    run home-manager \
+        --extra-experimental-features 'nix-command flakes' \
+        switch --impure --flake "$flake"\#"$home_profile"
+
+    if $local_repo_is_present; then
         echo "$home_profile" >| "$local_repo"/.home-profile
-        info 'done.'
     fi
+
+    info 'done.'
 }
 
 deploy_machines ()
 {
-    if [ "$action" = deploy ]; then
-        for deploy_target in $deploy_targets; do
-            info 'Rebuilding and deploying %s...' "$deploy_target"
-            run nixos-rebuild boot --target-host "$(target_host "$deploy_target")" --flake "$local_repo"\#"$deploy_target" --elevate=sudo
-            info 'done deploying %s.' "$deploy_target"
-        done
-    fi
+    for deploy_target in $deploy_targets; do
+        info 'Rebuilding and deploying %s...' "$deploy_target"
+        run nixos-rebuild boot --target-host "$(target_host "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
+        info 'done deploying %s.' "$deploy_target"
+    done
 }
 
 ## ==================== [ Tagging the local repository ] ===================== ##
@@ -345,35 +410,28 @@ tag_this_nixos ()
 
 tag_nixos ()
 {
-    if [ "$action" = boot ] || [ "$action" = switch ]; then
-        output=$(nixos-rebuild list-generations --json)
-        tag_this_nixos "$(hostname -s)" "$output"
-    fi
+    output=$(nixos-rebuild list-generations --json)
+    tag_this_nixos "$(hostname -s)" "$output"
 }
-
 
 tag_deploy ()
 {
-    if [ "$action" = deploy ]; then
-        for deploy_target in $deploy_targets; do
-            output=$(on_target "$deploy_target" nixos-rebuild list-generations --json)
-            tag_this_nixos "$deploy_target" "$output"
-        done
-    fi
+    for deploy_target in $deploy_targets; do
+        output=$(on_target "$deploy_target" nixos-rebuild list-generations --json)
+        tag_this_nixos "$deploy_target" "$output"
+    done
+i
 }
 
 tag_home ()
 {
-    if [ "$action" = home ]; then
-        generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
-        if ! [[ "$generation" =~ ^[0-9]+$ ]]; then die 'Could not find the Home generation.'; fi
-        date=$(date +'%Y-%m-%d')
-        tag_this \
-            "home-$home_profile-on-$hostname-gen-$generation" \
-            "Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
-    fi
+    generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
+    if ! [[ "$generation" =~ ^[0-9]+$ ]]; then die 'Could not find the Home generation.'; fi
+    date=$(date +'%Y-%m-%d')
+    tag_this \
+        "home-$home_profile-on-$hostname-gen-$generation" \
+        "Home configuration \`$home_profile\` on \`$hostname\` — generation $generation ($date)"
 }
-
 
 tag ()
 {
@@ -387,9 +445,11 @@ tag ()
     else
         info 'Adding a Git tag for the current generation...'
 
-        tag_nixos
-        tag_deploy
-        tag_home
+        case $action in
+            boot|switch) tag_nixos ;;
+            home) tag_home ;;
+            deploy) tag_deploy ;;
+        esac
 
         info 'Pushing changes to remote...'
         run git push --tags
@@ -401,27 +461,23 @@ tag ()
 
 reboot_local_machine ()
 {
-    if [ "$action" = boot ]; then
-        ask answer 'Do you wish to reboot? (y/N)'
-        # shellcheck disable=SC2154
-        if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
-            info 'Rebooting...'
-            run reboot
-        fi
+    ask answer 'Do you wish to reboot? (y/N)'
+    # shellcheck disable=SC2154
+    if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
+        info 'Rebooting...'
+        run reboot
     fi
 }
 
 reboot_remote_machines ()
 {
-    if [ "$action" = deploy ]; then
-        ask answer 'Do you wish to reboot the remote machine(s)? (y/N)'
-        # shellcheck disable=SC2154
-        if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
-            info 'Rebooting...'
-            for deploy_target in $deploy_targets; do
-                run on_target "$deploy_target" reboot
-            done
-        fi
+    ask answer 'Do you wish to reboot the remote machine(s)? (y/N)'
+    # shellcheck disable=SC2154
+    if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
+        info 'Rebooting...'
+        for deploy_target in $deploy_targets; do
+            run on_target "$deploy_target" reboot
+        done
     fi
 }
 
@@ -432,17 +488,28 @@ info 'Welcome!'
 parse_cli "$@"
 
 repo_setup
-repo_check_dirty
-repo_check_branch_commit
-repo_update
 
-rebuild_nixos
-rebuild_home
-deploy_machines
+if $local_repo_is_present; then
+    repo_check_dirty
+    repo_check_branch_commit
+fi
+if $update; then
+    repo_update
+fi
 
-tag
+case $action in
+    boot|switch) rebuild_nixos ;;
+    home) rebuild_home ;;
+    deploy) deploy_machines ;;
+esac
 
-reboot_local_machine
-reboot_remote_machines
+if $local_repo_is_present; then
+    tag
+fi
+
+case $action in
+    boot) reboot_local_machine ;;
+    deploy) reboot_remote_machines ;;
+esac
 
 info 'All done!'
