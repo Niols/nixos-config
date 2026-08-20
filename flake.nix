@@ -161,7 +161,7 @@
             ## Expose the `rebuild` utility as an app from the flake.
             apps.rebuild = {
               type = "app";
-              program = "${pkgs.callPackage ./rebuild.nix { }}/bin/rebuild";
+              program = "${pkgs.callPackage ./rebuild.nix { flakeRoot = ./.; }}/bin/rebuild";
             };
 
             ## Expose the `attic` client. The CI uses it, and we would rather

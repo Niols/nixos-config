@@ -32,7 +32,7 @@ in
   ];
 
   home.packages = [
-    (callPackage ../../rebuild.nix { })
+    (callPackage ../../rebuild.nix { flakeRoot = ../..; })
     pkgs.opencode
   ]
   ++ config.x_niols.commonPackages;
