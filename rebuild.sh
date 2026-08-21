@@ -50,6 +50,8 @@ deploy-specific [option]:
     --embedded, -e      use the flake from which this script comes
     --github, -g        use the flake from github instead of the local repository
     --main, -m          checkout main if the local repository is on another branch (default: ask)
+    --reboot, -r        reboot the machine/s at the end (default: ask)
+    --no-reboot, -nr    do not reboot the machine/s at the end (default: ask)
     --stay, -s          stay on the branch if the local repository is not on main (default: ask)
     --update, -u        pull the configuration of the local repository before rebuilding
     --help, -h          show this help and exit
@@ -73,6 +75,7 @@ parse_cli ()
     wtd_if_absent=ask
     wtd_if_dirty=ask
     wtd_if_not_main=ask
+    wtd_reboot=ask
 
     while [ $# -gt 0 ]; do
         case $1 in
@@ -101,6 +104,8 @@ parse_cli ()
             --dirty|-d) wtd_if_dirty=proceed ;;
             --main|-m) wtd_if_not_main=checkout ;;
             --stay|-s) wtd_if_not_main=stay ;;
+            --reboot|-r) wtd_reboot=reboot ;;
+            --no-reboot|-nr) wtd_reboot=nothing ;;
 
             --help|-h) usage 0 ;;
             *) die_with_usage 'Unexpected argument: %s\n' "$1" ;;
@@ -458,26 +463,41 @@ tag ()
 
 ## ======================== [ Suggesting to reboot ] ========================= ##
 
-reboot_local_machine ()
+reboot_gen ()
 {
-    ask answer 'Do you wish to reboot? (y/N)'
-    # shellcheck disable=SC2154
-    if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
-        info 'Rebooting...'
-        run reboot
+    details=$1; shift
+
+    if [ "$wtd_reboot" = ask ]; then
+        ask answer 'Do you wish to reboot%s? (y/N)' "$details"
+        # shellcheck disable=SC2154
+        if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
+            wtd_reboot=reboot
+        else
+            wtd_reboot=nothing
+        fi
     fi
+
+    case $wtd_reboot in
+        reboot) info 'Rebooting...'; "$@" ;;
+        nothing) : ;;
+        *) die 'Unexpected instruction to reboot: `%s`.' "$wtd_reboot" ;;
+    esac
 }
 
-reboot_remote_machines ()
+reboot_remote_machines_callback ()
 {
-    ask answer 'Do you wish to reboot the remote machine(s)? (y/N)'
-    # shellcheck disable=SC2154
-    if [[ "$answer" == [yY] || "$answer" == [yY][eE][sS] ]]; then
-        info 'Rebooting...'
-        for deploy_target in $deploy_targets; do
-            run on_target "$deploy_target" reboot
-        done
-    fi
+    for deploy_target in $deploy_targets; do
+        run on_target "$deploy_target" reboot
+    done
+    info 'Done.'
+}
+
+reboot_local_machine () {
+    reboot_gen '' run reboot
+}
+
+reboot_remote_machines () {
+    reboot_gen ' the remote machine/s' reboot_remote_machines_callback
 }
 
 ## =========================== [ The actual loop ] =========================== ##
