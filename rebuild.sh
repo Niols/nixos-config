@@ -356,6 +356,28 @@ repo_update ()
 
 ## ===================== [ Actually perform the action ] ===================== ##
 
+run_nixos_rebuild () {
+    ## NOTE: `--option eval-cache false` because NixOS configurations very often
+    ## miss the cache anyway, so this actually speeds up computation. It also
+    ## avoids multiple parallel invocations clashing with one another.
+    ## See eg. https://github.com/NixOS/nix/pull/12102
+
+    ## NOTE: `--log-format raw` because the default `bar` flake format actually
+    ## causes a massive slowdown, and doesn't work well at all in GitHub's logs
+    ## or in parallel invocations.
+    ## See eg. https://github.com/NixOS/nix/issues/8949
+
+    nixos_rebuild_action=$1; shift
+
+    run nixos-rebuild \
+        "$nixos_rebuild_action" \
+        --flake "$flake" \
+        --elevate=sudo \
+        --option eval-cache false \
+        --log-format raw \
+        "$@"
+}
+
 rebuild_nixos ()
 {
     if ! [ "$action" = boot ] && ! [ "$action" = switch ]; then
@@ -363,14 +385,13 @@ rebuild_nixos ()
     fi
 
     info 'Rebuilding NixOS configuration...'
+
     if ! [ -e /etc/NIXOS ]; then
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
+
     run sudo true # check sudo privileges ahead of time
-    run nixos-rebuild $action \
-        --flake "$flake" \
-        --elevate=sudo \
-        --option eval-cache false
+    run_nixos_rebuild $action
     info 'done.'
 }
 
@@ -393,13 +414,7 @@ deploy_machines ()
 {
     info 'Rebuilding and deploying%s...' "$deploy_targets"
     for deploy_target in $deploy_targets; do
-        run nixos-rebuild boot \
-            --target-host "$(deploy_target_userhost "$deploy_target")" \
-            --flake "$flake"\#"$deploy_target" \
-            --elevate=sudo \
-            --log-format raw \
-            --option eval-cache false \
-            &
+        run_nixos_rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" &
     done
     wait
     info 'done deploying all targets.'
