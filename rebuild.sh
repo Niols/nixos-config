@@ -390,9 +390,10 @@ deploy_machines ()
 {
     for deploy_target in $deploy_targets; do
         info 'Rebuilding and deploying %s...' "$deploy_target"
-        run nixos-rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
-        info 'done deploying %s.' "$deploy_target"
+        run nixos-rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo &
     done
+    wait
+    info 'done deploying all targets.'
 }
 
 ## ==================== [ Tagging the local repository ] ===================== ##
