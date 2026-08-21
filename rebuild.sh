@@ -504,6 +504,7 @@ tag_deploy ()
 
 tag_home ()
 {
+    hostname=$(hostname -s)
     generation=$(home-manager generations | grep '(current)' | cut -d ' ' -f 5)
     if ! [[ "$generation" =~ ^[0-9]+$ ]]; then die 'Could not find the Home generation.'; fi
     date=$(date +'%Y-%m-%d')
