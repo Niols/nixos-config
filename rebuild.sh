@@ -5,8 +5,9 @@ set -euC
 github_repo=niols/nixos-config
 local_repo=~/.config/nixos
 main_branch=main
+number_of_ssh_attempts=100
 
-readonly github_repo local_repo main_branch
+readonly github_repo local_repo main_branch number_of_ssh_attempts
 
 ## ========================== [ Loggers & helpers ] ========================== ##
 
@@ -141,17 +142,25 @@ run () {
     if ! $dry_run; then "$@"; fi
 }
 
-target_host () {
-    if eval "[ -n \"\${__nix__deploy_target_host__$1+x}\" ]"; then
-        eval "echo \"\$__nix__deploy_target_host__$1\""
+deploy_target_gen () {
+    if eval "[ -n \"\${__nix__deploy_target_$1__$2+x}\" ]"; then
+        eval "echo \"\$__nix__deploy_target_$1__$2\""
     else
-        die 'Unknown target: `%s`' "$1"
+        die 'Unknown target: `%s`' "$2"
     fi
+}
+
+deploy_target_host () { deploy_target_gen host "$@"; }
+
+deploy_target_userhost () {
+    user=$(deploy_target_gen user "$@")
+    host=$(deploy_target_gen host "$@")
+    echo "$user@$host"
 }
 
 on_target () {
     target=$1; shift
-    ssh "$(target_host "$target")" -- "$@"
+    ssh "$(deploy_target_userhost "$target")" -- "$@"
 }
 
 ## ===================== [ Set up the local repository ] ===================== ##
@@ -371,7 +380,7 @@ deploy_machines ()
 {
     for deploy_target in $deploy_targets; do
         info 'Rebuilding and deploying %s...' "$deploy_target"
-        run nixos-rebuild boot --target-host "$(target_host "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
+        run nixos-rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
         info 'done deploying %s.' "$deploy_target"
     done
 }
@@ -490,6 +499,34 @@ reboot_remote_machines_callback ()
         run on_target "$deploy_target" reboot
     done
     info 'Done.'
+    sleep 1
+    info 'Waiting for machines to be up...'
+
+    remaining_attempts=$number_of_ssh_attempts
+
+    for deploy_target in $deploy_targets; do
+        has_printed_a_dot=false
+        is_up=false
+
+        for attempt_number in $(seq $remaining_attempts); do
+            if nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; then
+                remaining_attempts=$((remaining_attempts - attempt_number))
+                is_up=true
+                break
+            else
+                printf .; has_printed_a_dot=true
+                sleep 2
+            fi
+        done
+
+        $has_printed_a_dot && printf '\n'
+
+        if $is_up; then
+            info 'Machine `%s` is up.' "$deploy_target"
+        else
+            warning 'Machine `%s` is still not up after %d attempts. Giving up.' "$deploy_target" $number_of_ssh_attempts
+        fi
+    done
 }
 
 reboot_local_machine () {
