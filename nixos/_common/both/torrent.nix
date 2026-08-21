@@ -51,9 +51,9 @@ in
 
       ## Make sure Anastasia is automounted before starting rtorrent.
       ##
-      systemd.services.torrent.unitConfig = {
-        requires = [ "data-services-torrent.automount" ];
-        after = [ "data-services-torrent.automount" ];
+      systemd.services.rtorrent.unitConfig = {
+        Requires = [ "data-services-torrent.automount" ];
+        After = [ "data-services-torrent.automount" ];
       };
 
       services.rutorrent = {
