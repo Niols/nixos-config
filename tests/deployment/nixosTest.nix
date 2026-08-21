@@ -142,7 +142,7 @@ in
 
     with subtest("Run the deployment"):
       ${forConcat targetMachines (tm: ''
-        deployer.succeed("rebuild switch --target-host ${tm} 1>&2")
+        deployer.succeed("rebuild deploy --flake cwd --target ${tm} 1>&2")
       '')}
 
     with subtest("Check the deployment"):
