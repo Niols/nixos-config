@@ -136,7 +136,7 @@ run () {
     if ! $dry_run; then "$@"; fi
 }
 
-target_host () {
+deploy_target_host () {
     if eval "[ -n \"\${__nix__deploy_target_host__$1+x}\" ]"; then
         eval "echo \"\$__nix__deploy_target_host__$1\""
     else
@@ -146,7 +146,7 @@ target_host () {
 
 on_target () {
     target=$1; shift
-    ssh "$(target_host "$target")" -- "$@"
+    ssh "$(deploy_target_host "$target")" -- "$@"
 }
 
 ## ===================== [ Set up the local repository ] ===================== ##
@@ -366,7 +366,7 @@ deploy_machines ()
 {
     for deploy_target in $deploy_targets; do
         info 'Rebuilding and deploying %s...' "$deploy_target"
-        run nixos-rebuild boot --target-host "$(target_host "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
+        run nixos-rebuild boot --target-host "$(deploy_target_host "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
         info 'done deploying %s.' "$deploy_target"
     done
 }
@@ -476,6 +476,15 @@ reboot_remote_machines ()
         info 'Rebooting...'
         for deploy_target in $deploy_targets; do
             run on_target "$deploy_target" reboot
+        done
+        info 'Done.'
+        sleep 1
+        info 'Waiting for machines to be up...'
+        for deploy_target in $deploy_targets; do
+            until nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; do
+                sleep 2
+            done
+            info 'Machine `%s` is up.' "$deploy_target"
         done
     fi
 }
