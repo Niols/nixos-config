@@ -5,8 +5,9 @@ set -euC
 github_repo=niols/nixos-config
 local_repo=~/.config/nixos
 main_branch=main
+number_of_ssh_attempts=50
 
-readonly github_repo local_repo main_branch
+readonly github_repo local_repo main_branch number_of_ssh_attempts
 
 ## ========================== [ Loggers & helpers ] ========================== ##
 
@@ -511,14 +512,28 @@ reboot_remote_machines_callback ()
 
     sleep 1
     info 'Waiting for machines to be up...'
+
     for deploy_target in $deploy_targets; do
         has_printed_a_dot=false
-        until nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; do
-            printf .; has_printed_a_dot=true
-            sleep 2
+        is_up=false
+
+        for _ in $(seq $number_of_ssh_attempts); do
+            if nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; then
+                is_up=true
+                break
+            else
+                printf .; has_printed_a_dot=true
+                sleep 2
+            fi
         done
+
         $has_printed_a_dot && printf '\n'
-        info 'Machine `%s` is up.' "$deploy_target"
+
+        if $is_up; then
+            info 'Machine `%s` is up.' "$deploy_target"
+        else
+            warning 'Machine `%s` is still not up after %d attempts. Giving up.' "$deploy_target" $number_of_ssh_attempts
+        fi
     done
 }
 
