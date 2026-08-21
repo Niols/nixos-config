@@ -71,6 +71,7 @@ in
               "nofail" # boot continues even if the mount fails, rather than going into emergency mode
               "x-systemd.automount" # defer the actual mount until the path is first accessed
               "x-systemd.mount-timeout=10" # give up trying to mount after 10s
+              "x-systemd.after=wireguard-niols.service" # keep WG up until this mount has been torn down
             ];
           };
         }) datasetMountpoints
