@@ -219,7 +219,7 @@ in
                 ssh-agent bash -c '
                   ssh-add deploy-key
                   export NIX_CONFIG=$(cat nix-config)
-                  nix run .#rebuild -- deploy --flake cwd --target ''${{ matrix.nixos }}
+                  nix run .#rebuild -- deploy --flake cwd --target ''${{ matrix.nixos }} --log raw
                 '
               '';
             }
