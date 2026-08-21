@@ -5,7 +5,7 @@ set -euC
 github_repo=niols/nixos-config
 local_repo=~/.config/nixos
 main_branch=main
-number_of_ssh_attempts=50
+number_of_ssh_attempts=100
 
 readonly github_repo local_repo main_branch number_of_ssh_attempts
 
@@ -523,12 +523,15 @@ reboot_remote_machines_callback ()
     sleep 1
     info 'Waiting for machines to be up...'
 
+    remaining_attempts=$number_of_ssh_attempts
+
     for deploy_target in $deploy_targets; do
         has_printed_a_dot=false
         is_up=false
 
-        for _ in $(seq $number_of_ssh_attempts); do
+        for attempt_number in $(seq $remaining_attempts); do
             if nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; then
+                remaining_attempts=$((remaining_attempts - attempt_number))
                 is_up=true
                 break
             else
