@@ -47,7 +47,8 @@ deploy-specific [option]:
     --clone, -c         if the local repository doesn't exist, clone it (default: ask)
     --dirty, -d         proceed even if the local repository is dirty (default: ask)
     --dry-run           do not actually build or deploy anything
-    --flake, -f <s>     use the flake from (local|github|embedded|cwd) (default: local)
+    --flake, -f <local|github|embedded|cwd>
+                        use the flake from the given source (default: local)
     --main, -m          checkout main if the local repository is on another branch (default: ask)
     --stay, -s          stay on the branch if the local repository is not on main (default: ask)
     --update, -u        pull the configuration of the local repository before rebuilding
