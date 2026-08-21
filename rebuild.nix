@@ -34,7 +34,11 @@ writeShellApplication {
     __nix__all_deploy_targets = concatStringsSep " " (attrNames servers);
   }
   // (mapAttrs' (name: meta: {
+    name = "__nix__deploy_target_user__${name}";
+    value = "root";
+  }) servers)
+  // (mapAttrs' (name: meta: {
     name = "__nix__deploy_target_host__${name}";
-    value = "root@${meta.ipv4 or meta.ipv6 or "${name}.niols.fr"}";
+    value = meta.ipv4 or meta.ipv6 or "${name}.niols.fr";
   }) servers);
 }
