@@ -138,8 +138,8 @@ jobs:
           '
       - name: Deploy machine “${{ matrix.nixos }}” if it is a server
         run: "echo \"${{ secrets.DEPLOY_KEY }}\" > deploy-key\nchmod 600 deploy-key\nssh-agent bash -c\
-          \ '\n  ssh-add deploy-key\n  export NIX_CONFIG=$(cat nix-config)\n  nix run .#rebuild -- --target\
-          \ ${{ matrix.nixos }}\n'\n"
+          \ '\n  ssh-add deploy-key\n  export NIX_CONFIG=$(cat nix-config)\n  nix run .#rebuild -- deploy\
+          \ --target ${{ matrix.nixos }} --embedded\n'\n"
     strategy:
       fail-fast: false
       matrix:
