@@ -499,11 +499,12 @@ reboot_remote_machines ()
         sleep 1
         info 'Waiting for machines to be up...'
         for deploy_target in $deploy_targets; do
+            has_printed_a_dot=false
             until nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; do
-                printf .
+                printf .; has_printed_a_dot=true
                 sleep 2
             done
-            printf '\n'
+            $has_printed_a_dot && printf '\n'
             info 'Machine `%s` is up.' "$deploy_target"
         done
     fi
