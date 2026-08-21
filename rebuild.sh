@@ -144,17 +144,25 @@ run () {
     if ! $dry_run; then "$@"; fi
 }
 
-deploy_target_host () {
-    if eval "[ -n \"\${__nix__deploy_target_host__$1+x}\" ]"; then
-        eval "echo \"\$__nix__deploy_target_host__$1\""
+deploy_target_gen () {
+    if eval "[ -n \"\${__nix__deploy_target_$1__$2+x}\" ]"; then
+        eval "echo \"\$__nix__deploy_target_$1__$2\""
     else
-        die 'Unknown target: `%s`' "$1"
+        die 'Unknown target: `%s`' "$2"
     fi
+}
+
+deploy_target_host () { deploy_target_gen host "$@"; }
+
+deploy_target_userhost () {
+    user=$(deploy_target_gen user "$@")
+    host=$(deploy_target_gen host "$@")
+    echo "$user@$host"
 }
 
 on_target () {
     target=$1; shift
-    ssh "$(deploy_target_host "$target")" -- "$@"
+    ssh "$(deploy_target_userhost "$target")" -- "$@"
 }
 
 in_local_repo () {
@@ -375,7 +383,7 @@ deploy_machines ()
 {
     for deploy_target in $deploy_targets; do
         info 'Rebuilding and deploying %s...' "$deploy_target"
-        run nixos-rebuild boot --target-host "$(deploy_target_host "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
+        run nixos-rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo
         info 'done deploying %s.' "$deploy_target"
     done
 }
@@ -491,8 +499,10 @@ reboot_remote_machines ()
         info 'Waiting for machines to be up...'
         for deploy_target in $deploy_targets; do
             until nc -z -w2 "$(deploy_target_host "$deploy_target")" 22 2>/dev/null; do
+                printf .
                 sleep 2
             done
+            printf '\n'
             info 'Machine `%s` is up.' "$deploy_target"
         done
     fi
