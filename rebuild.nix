@@ -4,6 +4,7 @@
   git,
   home-manager,
   nixos-rebuild-ng,
+  nix-output-monitor,
   lib,
 }:
 
@@ -23,6 +24,7 @@ writeShellApplication {
     git
     home-manager
     nixos-rebuild-ng
+    nix-output-monitor
   ];
   excludeShellChecks = [ "SC2016" ];
   text = builtins.readFile ./rebuild.sh;
