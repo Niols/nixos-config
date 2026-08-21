@@ -35,7 +35,7 @@ writeShellApplication {
     __nix__flake_root = flakeRoot;
     __nix__all_deploy_targets = concatStringsSep " " (attrNames servers);
   }
-  // (mapAttrs' (name: meta: {
+  // (mapAttrs' (name: _meta: {
     name = "__nix__deploy_target_user__${name}";
     value = "root";
   }) servers)
