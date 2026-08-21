@@ -391,7 +391,6 @@ run_nixos_rebuild () {
 
     run nixos-rebuild \
         "$nixos_rebuild_action" \
-        --flake "$flake" \
         "$@" \
         --elevate=sudo \
         --option eval-cache false \
@@ -412,7 +411,7 @@ rebuild_nixos ()
     fi
 
     run sudo true # check sudo privileges ahead of time
-    run_nixos_rebuild $action | maybe_nom
+    run_nixos_rebuild $action --flake "$flake" | maybe_nom
     info 'done.'
 }
 
@@ -441,7 +440,11 @@ deploy_machines ()
     info 'Rebuilding and deploying%s...' "$deploy_targets"
     {
         for deploy_target in $deploy_targets; do
-            run_nixos_rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" &
+            run_nixos_rebuild \
+                boot \
+                --flake "$flake"\#"$deploy_target" \
+                --target-host "$(deploy_target_userhost "$deploy_target")" \
+                &
         done
         wait
     } | maybe_nom
