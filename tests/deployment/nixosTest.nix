@@ -51,7 +51,7 @@ in
       imports = [ ./deployerNode.nix ];
       _module.args = { inherit inputs; };
 
-      environment.systemPackages = [ (hostPkgs.callPackage ../../rebuild.nix { }) ];
+      environment.systemPackages = [ (hostPkgs.callPackage ../../rebuild.nix { flakeRoot = ../..; }) ];
       system.extraDependenciesFromModule =
         { pkgs, ... }:
         {
