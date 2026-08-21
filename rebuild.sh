@@ -24,7 +24,7 @@ ask () { var=$1; shift; fmt=$1; shift; printf "\e[37m\e[1m[ASK]\e[22m $fmt\e[0m 
 ## ======================== [ Command line parsing ] ========================= ##
 
 usage () {
-    cat <<EOF
+    cat <<EOF >&2
 Usage: $0 <action> [option ...]
 
 <action> can be one of:
@@ -48,8 +48,8 @@ deploy-specific [option]:
     --clone, -c         if the local repository doesn't exist, clone it (default: ask)
     --dirty, -d         proceed even if the local repository is dirty (default: ask)
     --dry-run           do not actually build or deploy anything
-    --embedded, -e      use the flake from which this script comes
-    --github, -g        use the flake from github instead of the local repository
+    --flake, -f <local|github|embedded|cwd>
+                        use the flake from the given source (default: local)
     --main, -m          checkout main if the local repository is on another branch (default: ask)
     --reboot, -r        reboot the machine/s at the end (default: ask)
     --no-reboot, -nr    do not reboot the machine/s at the end (default: ask)
@@ -61,7 +61,7 @@ EOF
     exit "$1"
 }
 
-die_with_usage () { error "$@"; usage 2; }
+die_with_usage () { error "$@"; printf >&2 '\n'; usage 2; }
 
 parse_cli ()
 {
@@ -86,22 +86,30 @@ parse_cli ()
             deploy) action=deploy ;;
 
             --profile|-p)
-                [ "$action" != home ] && die '--profile must be placed after the `home` action.'
-                [ -n "$home_profile" ] && die '--profile can only be specified one.'
+                [ "$action" != home ] && die_with_usage '--profile must be placed after the `home` action.'
+                [ -n "$home_profile" ] && die_with_usage '--profile can only be specified once.'
                 shift; home_profile=$1
                 ;;
 
             --target|-t)
-                [ "$action" != deploy ] && die '--deploy must be placed after the `deploy` action.'
+                [ "$action" != deploy ] && die_with_usage '--deploy must be placed after the `deploy` action.'
                 shift; deploy_targets="$deploy_targets $1"
+                ;;
+
+            --flake|-f)
+                shift
+                [ "$flake_source" != local ] && die_with_usage '--flake can only be specified once.'
+                case $1 in
+                    local) flake_source=local ;;
+                    github|embedded|cwd) wtd_if_absent=nothing; flake_source=$1 ;;
+                    *) die_with_usage 'Unexpected flake source: `%s`' ;;
+                esac
                 ;;
 
             --update|-u) update=true ;;
             --dry-run) dry_run=true ;;
 
             --clone|-c) wtd_if_absent=clone ;;
-            --embedded|-e) wtd_if_absent=nothing; flake_source=embedded ;;
-            --github|-g) wtd_if_absent=nothing; flake_source=github ;;
             --dirty|-d) wtd_if_dirty=proceed ;;
             --main|-m) wtd_if_not_main=checkout ;;
             --stay|-s) wtd_if_not_main=stay ;;
@@ -109,7 +117,7 @@ parse_cli ()
             --no-reboot|-nr) wtd_reboot=nothing ;;
 
             --help|-h) usage 0 ;;
-            *) die_with_usage 'Unexpected argument: %s\n' "$1" ;;
+            *) die_with_usage 'Unexpected argument: `%s`' "$1" ;;
         esac
         shift
     done
@@ -117,6 +125,7 @@ parse_cli ()
     readonly action
     readonly update
     readonly dry_run
+    readonly flake_source
 
     if [ "$action" = home ] && [ -z "$home_profile" ]; then
         if [ -e "$local_repo"/.home-profile ]; then
@@ -163,6 +172,10 @@ on_target () {
     ssh "$(deploy_target_userhost "$target")" -- "$@"
 }
 
+in_local_repo () {
+    (cd "$local_repo" && "$@")
+}
+
 ## ===================== [ Set up the local repository ] ===================== ##
 
 repo_setup ()
@@ -201,7 +214,7 @@ repo_setup ()
             clone)
                 info 'Cloning the github repository locally...'
                 mkdir -p "$(dirname "$local_repo")"
-                run git clone git@github.com:"$github_repo".git "$local_repo"
+                run in_local_repo git clone git@github.com:"$github_repo".git "$local_repo"
                 info 'done.'
                 local_repo_is_present=true
                 ;;
@@ -213,14 +226,11 @@ repo_setup ()
         esac
     fi
 
-    if $local_repo_is_present; then
-        cd "$local_repo"
-    fi
-
     case $flake_source in
         local) flake=$local_repo ;;
         embedded) flake=$__nix__flake_root ;;
         github) flake=github:$github_repo ;;
+        cwd) flake=$PWD ;;
         *) die 'Unexpected flake source: `%s`.' "$flake_source"
     esac
 
@@ -231,7 +241,7 @@ repo_setup ()
 
 repo_check_dirty ()
 {
-    if [ -n "$(git status --porcelain)" ]; then is_dirty=true; else is_dirty=false; fi
+    if [ -n "$(in_local_repo git status --porcelain)" ]; then is_dirty=true; else is_dirty=false; fi
     readonly is_dirty
 
     if $is_dirty; then
@@ -270,8 +280,8 @@ repo_check_dirty ()
 
 ## ======================= [ Check the branch/commit ] ======================= ##
 
-get_current_branch () { git branch --show-current; }
-get_current_commit () { git log --max-count=1 --format=%h; }
+get_current_branch () { in_local_repo git branch --show-current; }
+get_current_commit () { in_local_repo git log --max-count=1 --format=%h; }
 
 repo_check_branch_commit ()
 {
@@ -314,7 +324,7 @@ repo_check_branch_commit ()
         checkout)
             $is_dirty && die 'Cannot checkout `%s` when working directory is dirty.' "$main_branch"
             info 'Checking out `%s`...' "$main_branch"
-            run git checkout "$main_branch"
+            run in_local_repo git checkout "$main_branch"
             info 'done.'
             ;;
         stay)
@@ -340,7 +350,7 @@ repo_update ()
     [ -z "$current_branch" ] && die 'Cannot update when in detached state.'
 
     info 'Updating the configuration repository...'
-    run git pull --ff-only
+    run in_local_repo git pull --ff-only
     info 'done.'
 }
 
@@ -392,11 +402,11 @@ tag_this ()
     tag=$1
     description=$2
 
-    if [ -n "$(git tag --list "$tag")" ]; then
+    if [ -n "$(in_local_repo git tag --list "$tag")" ]; then
         info 'The tag already exists. This means that you rebuilt something that did not change the configuration at all. Tagging anyway...'
         rebuild_number=2
         tag_with_rebuild=$tag-rebuild-$rebuild_number
-        while [ -n "$(git tag --list "$tag_with_rebuild")" ]; do
+        while [ -n "$(in_local_repo git tag --list "$tag_with_rebuild")" ]; do
             rebuild_number=$((rebuild_number + 1))
             tag_with_rebuild=$tag-rebuild-$rebuild_number
         done
@@ -404,7 +414,7 @@ tag_this ()
     fi
 
     info 'Tagging as: %s\nwith description: %s.' "$tag" "$description"
-    run git tag "$tag" "$current_commit" --message="$description"
+    run in_local_repo git tag "$tag" "$current_commit" --message="$description"
 
     info 'done.'
 }
@@ -465,7 +475,7 @@ tag ()
         esac
 
         info 'Pushing changes to remote...'
-        run git push --tags
+        run in_local_repo git push --tags
         info 'done.'
     fi
 }
