@@ -5,6 +5,7 @@
   home-manager,
   nixos-rebuild-ng,
   nix-output-monitor,
+  writeText,
   lib,
 }:
 
@@ -12,12 +13,20 @@ let
   inherit (lib)
     concatStringsSep
     attrNames
-    mapAttrs'
+    listToAttrs
+    concatMap
     ;
 
   servers = (import ./machines.nix).servers;
+  serverNames = attrNames servers;
+  hostFor = name: servers.${name}.ipv4 or servers.${name}.ipv6 or "${name}.niols.fr";
+
+  keys = (import ./keys/keys.nix).machines;
+
+  knownHosts = concatStringsSep "\n" (map (name: "${hostFor name} ${keys.${name}}") serverNames);
 
 in
+
 writeShellApplication {
   name = "rebuild";
   runtimeInputs = [
@@ -33,14 +42,19 @@ writeShellApplication {
   ## It could call Nix, but we find it easier to just inject things statically.
   runtimeEnv = {
     __nix__flake_root = flakeRoot;
-    __nix__all_deploy_targets = concatStringsSep " " (attrNames servers);
+    __nix__all_deploy_targets = concatStringsSep " " serverNames;
+    __nix__known_hosts_file = writeText "known-hosts" knownHosts;
   }
-  // (mapAttrs' (name: _meta: {
-    name = "__nix__deploy_target_user__${name}";
-    value = "root";
-  }) servers)
-  // (mapAttrs' (name: meta: {
-    name = "__nix__deploy_target_host__${name}";
-    value = meta.ipv4 or meta.ipv6 or "${name}.niols.fr";
-  }) servers);
+  // (listToAttrs (
+    concatMap (name: [
+      {
+        name = "__nix__deploy_target_user__${name}";
+        value = "root";
+      }
+      {
+        name = "__nix__deploy_target_host__${name}";
+        value = hostFor name;
+      }
+    ]) serverNames
+  ));
 }
