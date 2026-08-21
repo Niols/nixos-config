@@ -389,6 +389,8 @@ run_nixos_rebuild () {
 
     nixos_rebuild_action=$1; shift
 
+    export NIX_SSHOPTS="-o UserKnownHostsFile=$__nix__known_hosts_file"
+
     run nixos-rebuild \
         "$nixos_rebuild_action" \
         "$@" \
