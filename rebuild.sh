@@ -367,7 +367,10 @@ rebuild_nixos ()
         warning 'This does not look like a NixOS machine. Do you mean to run this script with --home-profile?'
     fi
     run sudo true # check sudo privileges ahead of time
-    run nixos-rebuild $action --flake "$flake" --elevate=sudo --option eval-cache false
+    run nixos-rebuild $action \
+        --flake "$flake" \
+        --elevate=sudo \
+        --option eval-cache false
     info 'done.'
 }
 
@@ -388,9 +391,15 @@ rebuild_home ()
 
 deploy_machines ()
 {
+    info 'Rebuilding and deploying%s...' "$deploy_targets"
     for deploy_target in $deploy_targets; do
-        info 'Rebuilding and deploying %s...' "$deploy_target"
-        run nixos-rebuild boot --target-host "$(deploy_target_userhost "$deploy_target")" --flake "$flake"\#"$deploy_target" --elevate=sudo --option eval-cache false &
+        run nixos-rebuild boot \
+            --target-host "$(deploy_target_userhost "$deploy_target")" \
+            --flake "$flake"\#"$deploy_target" \
+            --elevate=sudo \
+            --log-format raw \
+            --option eval-cache false \
+            &
     done
     wait
     info 'done deploying all targets.'
