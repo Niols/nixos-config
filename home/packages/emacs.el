@@ -238,6 +238,11 @@
   :custom
   (completion-styles '(orderless basic)))
 
+(use-package flyspell
+  ;; built-in; aspell and dictionnaries provided by Nix
+  :hook ((text-mode . flyspell-mode)
+         (prog-mode . flyspell-prog-mode)))
+
 ;; ==================== [ Magit ] ==================== ;;
 
 (use-package magit

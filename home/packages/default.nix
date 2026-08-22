@@ -60,6 +60,12 @@ in
         })
         ## External tools which Emacs wants to have:
         pkgs.prettier
+        (pkgs.aspellWithDicts (
+          dicts: with dicts; [
+            en
+            fr
+          ]
+        ))
       ];
     };
   };
