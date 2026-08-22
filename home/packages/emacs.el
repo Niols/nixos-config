@@ -243,6 +243,12 @@
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)))
 
+(use-package langtool
+  :ensure t ;; binary provided by Nix
+  :custom
+  (langtool-language-tool-server-jar nil)
+  (langtool-bin "languagetool"))
+
 ;; ==================== [ Magit ] ==================== ;;
 
 (use-package magit
