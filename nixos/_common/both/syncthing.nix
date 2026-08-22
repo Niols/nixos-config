@@ -45,7 +45,6 @@ in
       settings.folders = makeSyncthingFolders {
         Organiser.devices = [
           "Ahlaya"
-          "Barbara"
           "Camille"
           "Oxana"
           "Phineas"
@@ -55,7 +54,6 @@ in
 
         MobileSheets.devices = [
           "Ahlaya"
-          "Barbara"
           "Camille"
           "Oxana"
           "Phineas"
@@ -65,7 +63,6 @@ in
 
         Music.devices = [
           "Ahlaya"
-          "Barbara"
           "Gromit"
           "Phineas"
           "Server"
@@ -73,7 +70,6 @@ in
 
         Scottish-ish.devices = [
           "Ahlaya"
-          "Barbara"
           "Gromit"
           "Phineas"
           "Server"
@@ -106,7 +102,6 @@ in
 
         "Phineas/Documents".devices = [
           "Ahlaya"
-          "Barbara"
           "Camille"
           "Oxana"
           "Phineas"
@@ -131,7 +126,6 @@ in
 
       overrideDevices = true;
       settings.devices = {
-        Barbara.id = "E7HZWE3-HB34JFR-DQ32B5K-NAUHD24-W7IS5RX-NDCR546-KAKWW5D-BV3Y3Q6";
         Camille.id = "IHKVBZ6-H5VAFJ2-KIQPURT-JQBGLHH-YLEKPBN-SB2WHUJ-5KZHNKP-6WPKOQR";
         Phineas.id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
