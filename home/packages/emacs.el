@@ -243,6 +243,12 @@
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)))
 
+(use-package flymake-languagetool
+  :ensure t ;; binary provided by Nix
+  :hook (text-mode . flymake-languagetool-setup)
+  :custom
+  (flymake-languagetool-server-command '("languagetool-commandline")))
+
 ;; ==================== [ Magit ] ==================== ;;
 
 (use-package magit

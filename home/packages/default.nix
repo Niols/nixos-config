@@ -66,6 +66,7 @@ in
             fr
           ]
         ))
+        pkgs.languagetool
       ];
     };
   };
