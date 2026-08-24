@@ -290,14 +290,11 @@ repo_check_dirty ()
 
 ## ======================= [ Check the branch/commit ] ======================= ##
 
-get_current_branch () { in_local_repo git branch --show-current; }
-get_current_commit () { in_local_repo git log --max-count=1 --format=%h; }
 
-repo_check_branch_commit ()
+repo_check_branch ()
 {
-    current_branch=$(get_current_branch)
-    current_commit=$(get_current_commit)
-    readonly current_branch current_commit
+    current_branch=$(in_local_repo git branch --show-current)
+    readonly current_branch
 
     if [ "$current_branch" = "$main_branch" ]; then
         return
@@ -362,6 +359,16 @@ repo_update ()
     info 'Updating the configuration repository...'
     run in_local_repo git pull --ff-only
     info 'done.'
+}
+
+## ========================== [ Check the commit ] =========================== ##
+
+get_current_commit () { in_local_repo git log --max-count=1 --format=%h; }
+
+repo_check_commit ()
+{
+    current_commit=$(get_current_commit)
+    readonly current_commit
 }
 
 ## ===================== [ Actually perform the action ] ===================== ##
@@ -616,10 +623,9 @@ repo_setup
 
 if $local_repo_is_present; then
     repo_check_dirty
-    repo_check_branch_commit
-fi
-if $update; then
-    repo_update
+    repo_check_branch
+    $update && repo_update
+    repo_check_commit
 fi
 
 case $action in
