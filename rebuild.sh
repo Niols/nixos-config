@@ -177,9 +177,12 @@ deploy_target_userhost () {
     echo "$user@$host"
 }
 
+export NIX_SSHOPTS="-o UserKnownHostsFile=$__nix__known_hosts_file"
+# shellcheck disable=SC2086
+
 on_target () {
     target=$1; shift
-    ssh "$(deploy_target_userhost "$target")" -- "$@"
+    ssh $NIX_SSHOPTS "$(deploy_target_userhost "$target")" -- "$@"
 }
 
 in_local_repo () {
@@ -395,8 +398,6 @@ run_nixos_rebuild () {
     ## See eg. https://github.com/NixOS/nix/pull/12102
 
     nixos_rebuild_action=$1; shift
-
-    export NIX_SSHOPTS="-o UserKnownHostsFile=$__nix__known_hosts_file"
 
     run nixos-rebuild \
         "$nixos_rebuild_action" \
