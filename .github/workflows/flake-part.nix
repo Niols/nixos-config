@@ -3,15 +3,20 @@
 let
   inherit (lib)
     attrNames
-    attrValues
-    concatMap
-    mapAttrs
     mapAttrsToList
-    optionalString
     toJSON
     toFile
     concatStringsSep
+    filterAttrs
     ;
+
+  machines = import ../../machines.nix;
+
+  aarch64Machines = attrNames (
+    filterAttrs (
+      _: nixosConfiguration: nixosConfiguration.pkgs.stdenv.hostPlatform.system == "aarch64-linux"
+    ) self.nixosConfigurations
+  );
 
   basicSetupSteps = [
     {
@@ -44,19 +49,45 @@ let
     }
   ];
 
+  ## NOTE: Laptops have a very large closure that doesn't necessarily
+  ## fit on the GitHub runners, so we make extra space by deleting
+  ## pre-installed stuff that we don't need.
+  ##
+  freeExtraSpaceStep = {
+    name = "Free some extra space";
+    "if" = "\${{ contains(fromJSON('${toJSON (attrNames machines.laptops)}'), matrix.nixos) }}";
+    run = ''
+      echo 'Available storage before:'
+      sudo df -h
+      echo
+      sudo rm -rf /usr/share/dotnet
+      sudo rm -rf /usr/local/lib/android
+      sudo rm -rf /opt/ghc
+      sudo rm -rf /opt/hostedtoolcache/CodeQL
+      echo 'Available storage after:'
+      sudo df -h
+      echo
+    '';
+  };
+
+  remainingSpaceStep = {
+    name = "Remaining space";
+    run = ''
+      echo 'Available storage:'
+      sudo df -h
+    '';
+  };
+
   ## NOTE: Orianne is an ARM machine, but the GitHub runners are Intel
   ## machines, so we detect that, install the emulation binaries for
   ## QEMU and tell Nix to behave as an `aarch64-linux` machine.
   ##
   setupEmulationLayerStep = {
-    name = "Set up emulation layer if necessary";
+    name = "Set up emulation layer";
+    "if" = "\${{ contains(fromJSON('${toJSON aarch64Machines}'), matrix.nixos) }}";
     run = ''
-      system=''${{ matrix.system }}
-      echo "system = $system" > nix-config
-      if [ $system != x86_64-linux ]; then
-        printf 'This configuration is a %s, for which we need to install QEMU emulation binaries.\n' "$system"
-        sudo apt-get update -y && sudo apt-get install -y qemu-user-static
-      fi
+      echo "system = aarch64-linux" > nix-config
+      sudo apt-get update -y && sudo apt-get install -y qemu-user-static
     '';
   };
 
@@ -125,9 +156,10 @@ in
         name = "Summarise";
         runs-on = "ubuntu-latest";
         needs = [
-          "checks"
-          "homeConfigurations"
-          "nixosConfigurations"
+          "check"
+          "home"
+          "nixos"
+          "deploy"
         ];
         "if" = "always()";
         steps = [
@@ -135,13 +167,13 @@ in
             uses = "re-actors/alls-green@release/v1";
             "with" = {
               jobs = "\${{ toJSON(needs) }}";
-              allowed-skips = "checks, homeConfigurations, nixosConfigurations";
+              allowed-skips = "check, home, nixos, deploy";
             };
           }
         ];
       };
 
-      homeConfigurations = {
+      home = {
         name = "Home";
         runs-on = "ubuntu-latest";
         strategy = {
@@ -162,39 +194,18 @@ in
           ];
       };
 
-      nixosConfigurations = {
+      nixos = {
         name = "NixOS";
         runs-on = "ubuntu-latest";
         strategy = {
-          matrix.include = attrValues (
-            mapAttrs (name: nixosConfiguration: {
-              nixos = name;
-              system = nixosConfiguration.pkgs.stdenv.hostPlatform.system;
-              xtraSpace = optionalString (!(nixosConfiguration.config.x_niols.isServer)) "extra-space"; # laptops have very big closures
-            }) self.nixosConfigurations
-          );
+          matrix.nixos = attrNames machines.all;
           fail-fast = false;
         };
         steps =
           basicSetupSteps
           ++ atticSetupSteps
           ++ [
-            {
-              name = "Free some extra space";
-              "if" = "\${{ matrix.xtraSpace == 'extra-space' }}";
-              run = ''
-                echo 'Available storage before:'
-                sudo df -h
-                echo
-                sudo rm -rf /usr/share/dotnet
-                sudo rm -rf /usr/local/lib/android
-                sudo rm -rf /opt/ghc
-                sudo rm -rf /opt/hostedtoolcache/CodeQL
-                echo 'Available storage after:'
-                sudo df -h
-                echo
-              '';
-            }
+            freeExtraSpaceStep
             setupEmulationLayerStep
             {
               name = "Build NixOS configuration “\${{ matrix.nixos }}”";
@@ -203,38 +214,50 @@ in
                 nix build .#nixosConfigurations.''${{ matrix.nixos }}.config.system.build.toplevel --print-build-logs
               '';
             }
+            remainingSpaceStep
+          ];
+      };
+
+      deploy = {
+        name = "Deploy";
+        runs-on = "ubuntu-latest";
+        needs = [ "nixos" ];
+        steps =
+          basicSetupSteps
+          ++ atticSetupSteps
+          ++ [
+            ## NOTE: No emulation layer because we already built the
+            ## configuration so everything should be in Attic. If not,
+            ## we might as well fail.
             {
-              name = "Remaining space";
-              run = ''
-                echo 'Available storage:'
-                sudo df -h
-              '';
-            }
-            {
-              name = "Deploy NixOps4 component “\${{ matrix.nixos }}” if it exists";
+              name = "Deploy machines";
               "if" = "\${{ github.ref == 'refs/heads/main' }}";
               run = ''
-                if nix develop --command nixops4 members list 2>/dev/null | grep '^''${{ matrix.nixos }}$'; then
-                  echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
-                  chmod 600 deploy-key
-                  nix develop --command ssh-agent bash -c '
-                    ssh-add deploy-key
-                    export NIX_CONFIG=$(cat nix-config)
-                    nixops4 apply ''${{ matrix.nixos }}
-                  '
-                fi
+                echo "''${{ secrets.DEPLOY_KEY }}" > deploy-key
+                chmod 600 deploy-key
+                ssh-agent bash -c '
+                  ssh-add deploy-key
+                  export NIX_CONFIG=$(cat nix-config)
+                  nix run .#rebuild -- deploy --action boot --reboot --flake cwd --log raw
+                '
               '';
+              ## FIXME: It is very brutal to reboot the machine
+              ## always, but it avoids the problem of bricked
+              ## configurations that I have had lately. I think we
+              ## should detect “significant” changes of configuration,
+              ## somehow, and only reboot then. (Now even a README
+              ## change will reboot all my servers.)  Alternatively,
+              ## we can push the update but not reboot the machine and
+              ## only have a reboot happen in the middle of the night.
             }
           ];
       };
 
-      checks = {
+      check = {
         name = "Check";
         runs-on = "ubuntu-latest";
         strategy = {
-          matrix.include = concatMap (
-            system: map (check: { inherit system check; }) (attrNames self.checks.${system})
-          ) (attrNames self.checks);
+          matrix.check = attrNames self.checks.x86_64-linux;
           fail-fast = false;
         };
         steps =
@@ -246,7 +269,7 @@ in
               name = "Run check “\${{ matrix.check }}”";
               run = ''
                 export NIX_CONFIG=$(cat nix-config)
-                nix build .#checks.''${{ matrix.system }}.''${{ matrix.check }} --print-build-logs
+                nix build .#checks.x86_64-linux.''${{ matrix.check }} --print-build-logs
               '';
             }
           ];

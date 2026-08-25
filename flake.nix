@@ -2,16 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    ## NOTE: NixOps4 has become a bit complicated recently, so I keep things in
-    ## sync manually. This involves fixing the specific commit of nixops4 and
-    ## nixpkgs (which itself means duplicating nixpkgs) from nixops4-nixos's
-    ## development flake. See https://github.com/nixops4/nixops4-nixos/issues/17
-    nixpkgs-for-nixops4.url = "github:NixOS/nixpkgs/e6eae2ee2110f3d31110d5c222cd395303343b08";
-    nixops4.url = "github:nixops4/nixops4/75ebb067893d1ff071b481a7696563c99917421b";
-    nixops4.inputs.nixpkgs.follows = "nixpkgs-for-nixops4";
-    nixops4-nixos.url = "github:nixops4/nixops4-nixos";
-    nixops4-nixos.inputs.nixpkgs.follows = "nixpkgs";
-
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -118,7 +108,6 @@
               packages = [
                 pkgs.nil
                 inputs'.disko.packages.disko
-                inputs'.nixops4.packages.default
 
                 ## FIXME: Move the following to `secrets/default.nix`
                 inputs'.agenix.packages.default

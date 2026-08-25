@@ -1,5 +1,5 @@
 {
-  flakeRoot,
+  ## callPackage'd arguments
   writeShellApplication,
   git,
   home-manager,
@@ -7,6 +7,10 @@
   nix-output-monitor,
   writeText,
   lib,
+  ## custom arguments
+  flakeRoot,
+  servers ? ((import ./machines.nix).servers),
+  keys ? ((import ./keys/keys.nix).machines),
 }:
 
 let
@@ -17,12 +21,8 @@ let
     concatMap
     ;
 
-  servers = (import ./machines.nix).servers;
   serverNames = attrNames servers;
   hostFor = name: servers.${name}.ipv4 or servers.${name}.ipv6 or "${name}.niols.fr";
-
-  keys = (import ./keys/keys.nix).machines;
-
   knownHosts = concatStringsSep "\n" (map (name: "${hostFor name} ${keys.${name}}") serverNames);
 
 in

@@ -198,7 +198,10 @@
 
 (use-package hl-todo
   :ensure t
-  :hook (prog-mode . hl-todo-mode))
+  :hook ((prog-mode . hl-todo-mode)
+         (text-mode . hl-todo-mode))
+  :config
+  (add-to-list 'hl-todo-keyword-faces '("REVIEW" . "#44dddd")))
 
 ;; Corfu for completion. Company is the old solution, very
 ;; stable and battle-tested, but Corfu uses more modern

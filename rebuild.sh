@@ -25,26 +25,18 @@ ask () { var=$1; shift; fmt=$1; shift; printf "\e[37m\e[1m[ASK]\e[22m $fmt\e[0m 
 
 usage () {
     cat <<EOF >&2
-Usage: $0 <action> [option ...]
+Usage: $0 [command] [option ...]
 
-<action> can be one of:
+<command> can be one of:
 
-    switch    install a NixOS configuration and activate it (default)
-    boot      install a NixOS configuration as default boot entry
+    nixos     install a NixOS configuration
     home      run a Home Manager installation
     deploy    build and deploy a NixOS configuration
 
-home-specific [option]:
+The default is to autodetect between nixos and home. [option] can be one of:
 
-    --profile, -p <s>   install the home profile <s> (default: autodetect)
-
-deploy-specific [option]:
-
-    --target, -t <s>    deploy the target machine <s>. this option can be repeated to
-                        deploy several machines. (default: deploy all machines)
-
-[option] can be one of:
-
+    --action, -a <switch|boot>
+                        action to pass nixos-rebuild (default: ask) [nixos- and deploy-specific]
     --clone, -c         if the local repository doesn't exist, clone it (default: ask)
     --dirty, -d         proceed even if the local repository is dirty (default: ask)
     --dry-run           do not actually build or deploy anything
@@ -52,9 +44,12 @@ deploy-specific [option]:
                         use the flake from the given source (default: local)
     --log <raw|nom>     which type of logs to produce (default: nom)
     --main, -m          checkout main if the local repository is on another branch (default: ask)
+    --profile, -p <s>   install the home profile <s> (default: autodetect) [home-specific]
     --reboot, -r        reboot the machine/s at the end (default: ask)
     --no-reboot, -nr    do not reboot the machine/s at the end (default: ask)
     --stay, -s          stay on the branch if the local repository is not on main (default: ask)
+    --target, -t <s>    deploy the target machine <s>. this option can be repeated to
+                        deploy several machines. (default: deploy all machines) [deploy-specific]
     --update, -u        pull the configuration of the local repository before rebuilding
     --help, -h          show this help and exit
 EOF
@@ -66,7 +61,8 @@ die_with_usage () { error "$@"; printf >&2 '\n'; usage 2; }
 
 parse_cli ()
 {
-    action=switch
+    command=
+    action=
     home_profile=
     deploy_targets=
     flake_source=local
@@ -82,19 +78,28 @@ parse_cli ()
 
     while [ $# -gt 0 ]; do
         case $1 in
-            switch) action=switch ;;
-            boot) action=boot ;;
-            home) action=home ;;
-            deploy) action=deploy ;;
+            nixos) command=nixos ;;
+            home) command=home ;;
+            deploy) command=deploy ;;
 
             --profile|-p)
-                [ "$action" != home ] && die_with_usage '--profile must be placed after the `home` action.'
+                [ "$command" != home ] && die_with_usage '--profile must be placed after the `home` command.'
                 [ -n "$home_profile" ] && die_with_usage '--profile can only be specified once.'
                 shift; home_profile=$1
                 ;;
 
+            --action|-a)
+                [ "$command" != nixos ] && [ "$command" != deploy ] && die_with_usage '--action must be placed after the `nixos` or `deploy` commands.'
+                [ -n "$action" ] && die_with_usage '--action can only be specified once.'
+                shift
+                case $1 in
+                    boot|switch) action=$1 ;;
+                    *) die_with_usage 'Unexpected action: `%s`' "$1" ;;
+                esac
+                ;;
+
             --target|-t)
-                [ "$action" != deploy ] && die_with_usage '--deploy must be placed after the `deploy` action.'
+                [ "$command" != deploy ] && die_with_usage '--deploy must be placed after the `deploy` command.'
                 shift; deploy_targets="$deploy_targets $1"
                 ;;
 
@@ -132,22 +137,11 @@ parse_cli ()
         shift
     done
 
-    readonly action
     readonly update
     readonly dry_run
     readonly flake_source
 
-    if [ "$action" = home ] && [ -z "$home_profile" ]; then
-        if [ -e "$local_repo"/.home-profile ]; then
-            home_profile=$(cat "$local_repo"/.home-profile)
-            info 'Detected a Home Manager installation; will use home profile `%s`.' "$home_profile"
-        else
-            die_with_usage 'Could not detect a Home Manager installation; specify it with --profile.'
-        fi
-    fi
-    readonly home_profile
-
-    if [ "$action" = deploy ] && [ -z "$deploy_targets" ]; then
+    if [ "$command" = deploy ] && [ -z "$deploy_targets" ]; then
         deploy_targets=" $__nix__all_deploy_targets"
         info 'No deploy targets specified, will deploy:%s.' "$deploy_targets"
     fi
@@ -177,9 +171,12 @@ deploy_target_userhost () {
     echo "$user@$host"
 }
 
+export NIX_SSHOPTS="-o UserKnownHostsFile=$__nix__known_hosts_file"
+# shellcheck disable=SC2086
+
 on_target () {
     target=$1; shift
-    ssh "$(deploy_target_userhost "$target")" -- "$@"
+    ssh $NIX_SSHOPTS "$(deploy_target_userhost "$target")" -- "$@"
 }
 
 in_local_repo () {
@@ -371,7 +368,62 @@ repo_check_commit ()
     readonly current_commit
 }
 
-## ===================== [ Actually perform the action ] ===================== ##
+## ========================= [ Check the command ] ========================== ##
+
+detect_home_profile () {
+    if $local_repo_is_present && [ -e "$local_repo"/.home-profile ]; then
+        info 'Detected a Home Manager installation; will use home profile `%s`.' "$home_profile"
+        home_profile=$(cat "$local_repo"/.home-profile)
+        return 0
+    else
+        return 1
+    fi
+}
+
+check_command ()
+{
+    if [ -z "$command" ]; then
+        if detect_home_profile; then
+            command=home
+        else
+            info 'Could not detect a Home Manager installation; assuming NixOS.'
+            command=nixos
+        fi
+
+    elif [ "$command" = home ]; then
+        if ! detect_home_profile; then
+            die_with_usage 'Could not detect a Home Manager installation; specify with --profile.'
+        fi
+    fi
+
+    readonly command
+}
+
+## ========================= [ Check the action ] =========================== ##
+
+check_action ()
+{
+    if [ -z "$action" ]; then
+        ask response 'Do you want to \e[1m[b]\e[22moot or to \e[1m[s]\e[22mwitch?'
+        # shellcheck disable=SC2154
+        case $response in
+            b)
+                info 'You can also pass --action boot to do this automatically.'
+                action=boot
+                ;;
+            s)
+                info 'You can also pass --action switch to do this automatically.'
+                action=switch
+                ;;
+            *)
+                die 'Unexpected response: `%s`.' "$response"
+        esac
+    fi
+
+    readonly action
+}
+
+## ==================== [ Actually perform the command ] ==================== ##
 
 log_format () {
     case $log in
@@ -394,12 +446,8 @@ run_nixos_rebuild () {
     ## avoids multiple parallel invocations clashing with one another.
     ## See eg. https://github.com/NixOS/nix/pull/12102
 
-    nixos_rebuild_action=$1; shift
-
-    export NIX_SSHOPTS="-o UserKnownHostsFile=$__nix__known_hosts_file"
-
     run nixos-rebuild \
-        "$nixos_rebuild_action" \
+        "$action" \
         "$@" \
         --elevate=sudo \
         --option eval-cache false \
@@ -409,10 +457,6 @@ run_nixos_rebuild () {
 
 rebuild_nixos ()
 {
-    if ! [ "$action" = boot ] && ! [ "$action" = switch ]; then
-        return
-    fi
-
     info 'Rebuilding NixOS configuration...'
 
     if ! [ -e /etc/NIXOS ]; then
@@ -420,7 +464,7 @@ rebuild_nixos ()
     fi
 
     run sudo true # check sudo privileges ahead of time
-    run_nixos_rebuild $action --flake "$flake" | maybe_nom
+    run_nixos_rebuild --flake "$flake" | maybe_nom
     info 'done.'
 }
 
@@ -450,7 +494,6 @@ deploy_machines ()
     {
         for deploy_target in $deploy_targets; do
             run_nixos_rebuild \
-                boot \
                 --flake "$flake"\#"$deploy_target" \
                 --target-host "$(deploy_target_userhost "$deploy_target")" \
                 &
@@ -534,8 +577,8 @@ tag ()
     else
         info 'Adding a Git tag for the current generation...'
 
-        case $action in
-            boot|switch) tag_nixos ;;
+        case $command in
+            nixos) tag_nixos ;;
             home) tag_home ;;
             deploy) tag_deploy ;;
         esac
@@ -628,8 +671,14 @@ if $local_repo_is_present; then
     repo_check_commit
 fi
 
-case $action in
-    boot|switch) rebuild_nixos ;;
+check_command
+
+case $command in
+    nixos|deploy) check_action ;;
+esac
+
+case $command in
+    nixos) rebuild_nixos ;;
     home) rebuild_home ;;
     deploy) deploy_machines ;;
 esac
@@ -638,9 +687,11 @@ if $local_repo_is_present; then
     tag
 fi
 
-case $action in
-    boot) reboot_local_machine ;;
-    deploy) reboot_remote_machines ;;
-esac
+if [ "$action" = boot ]; then
+    case $command in
+        nixos) reboot_local_machine ;;
+        deploy) reboot_remote_machines ;;
+    esac
+fi
 
 info 'All done!'
