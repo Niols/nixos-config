@@ -205,14 +205,6 @@ in
             criteria.class = "^(localsend_app|.blueman-manager-wrapped|Gcr-prompter)$";
             command = "floating enable";
           }
-          {
-            ## FIXME: This also captures the main Zoom window, which is clearly
-            ## not what we want. Grab more details with `xprop` and find
-            ## something that differentiates “notifications” and main window.
-            criteria.title = "^zoom$";
-            criteria.class = "[zoom]*";
-            command = "floating enable";
-          }
         ];
       };
     };
