@@ -165,13 +165,11 @@ in
         assigns =
           if config.x_niols.isWork then
             {
-              "0" = [ { class = "^firefox$"; } ];
               "12" = [ { class = "^Slack$"; } ];
             }
           else
             {
-              "0" = [ { class = "^firefox$"; } ];
-              "11" = [ { class = "^Signal$"; } ];
+              "11" = [ { class = "^signal$"; } ];
               "12" = [ { class = "^thunderbird$"; } ];
             };
 
