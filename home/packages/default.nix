@@ -71,6 +71,7 @@ in
   };
   xdg.configFile."emacs/init.el".source = ./emacs.el;
   xdg.configFile."emacs/early-init.el".text = ''
+    ;;; init.el -*- lexical-binding: t; -*-
     ;; Disable GC during init. It will be re-enabled by gcmh - see main config.
     (setq gc-cons-threshold most-positive-fixnum)
     (setq package-enable-at-startup nil)
