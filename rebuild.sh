@@ -441,15 +441,20 @@ maybe_nom () {
 }
 
 run_nixos_rebuild () {
+    local sudo=
+    if [ "$1" = with_sudo ]; then
+        sudo=sudo
+        shift
+    fi
+
     ## NOTE: `--option eval-cache false` because NixOS configurations very often
     ## miss the cache anyway, so this actually speeds up computation. It also
     ## avoids multiple parallel invocations clashing with one another.
     ## See eg. https://github.com/NixOS/nix/pull/12102
 
-    run nixos-rebuild \
+    run $sudo nixos-rebuild \
         "$action" \
         "$@" \
-        --elevate=sudo \
         --option eval-cache false \
         --log-format "$(log_format)" \
         2>&1
@@ -464,7 +469,7 @@ rebuild_nixos ()
     fi
 
     run sudo true # check sudo privileges ahead of time
-    run_nixos_rebuild --flake "$flake" | maybe_nom
+    run_nixos_rebuild with_sudo --flake "$flake" | maybe_nom
     info 'done.'
 }
 
@@ -496,6 +501,7 @@ deploy_machines ()
             run_nixos_rebuild \
                 --flake "$flake"\#"$deploy_target" \
                 --target-host "$(deploy_target_userhost "$deploy_target")" \
+                --elevate=sudo \
                 &
         done
         wait

@@ -165,13 +165,11 @@ in
         assigns =
           if config.x_niols.isWork then
             {
-              "0" = [ { class = "^firefox$"; } ];
               "12" = [ { class = "^Slack$"; } ];
             }
           else
             {
-              "0" = [ { class = "^firefox$"; } ];
-              "11" = [ { class = "^Signal$"; } ];
+              "11" = [ { class = "^signal$"; } ];
               "12" = [ { class = "^thunderbird$"; } ];
             };
 
@@ -203,14 +201,6 @@ in
             ## Little apps that have a `normal` window type but really behave
             ## more like utilities. They get to float.
             criteria.class = "^(localsend_app|.blueman-manager-wrapped|Gcr-prompter)$";
-            command = "floating enable";
-          }
-          {
-            ## FIXME: This also captures the main Zoom window, which is clearly
-            ## not what we want. Grab more details with `xprop` and find
-            ## something that differentiates “notifications” and main window.
-            criteria.title = "^zoom$";
-            criteria.class = "[zoom]*";
             command = "floating enable";
           }
         ];
