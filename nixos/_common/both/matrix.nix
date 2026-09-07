@@ -16,6 +16,11 @@ in
         matrix  IN  CNAME  ${config.x_niols.services.matrix.enabledOn}
       '';
 
+      x_niols.dnsZoneEntries."niols.fr"."matrix" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.matrix.enabledOn}.niols.fr.";
+      };
+
       ## NOTE: The nginx reverse proxy makes both the client and the federation
       ## services accessible at <public_baseurl>:443. However, other servers will by
       ## default look to communicate to <server_name>:8448, unless there is a JSON

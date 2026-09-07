@@ -10,7 +10,9 @@ let
   inherit (lib)
     mkMerge
     mkIf
+    optional
     optionalString
+    genAttrs
     ;
 
   dancelorServer = machines.servers.${config.x_niols.services.dancelor.enabledOn};
@@ -30,6 +32,18 @@ in
           @    IN  AAAA  ${dancelorServer.ipv6}
           www  IN  AAAA  ${dancelorServer.ipv6}
         '';
+
+      x_niols.dnsZoneEntries."dancelor.org" = genAttrs [ "" "www" ] (
+        _:
+        optional (dancelorServer ? ipv4) {
+          type = "A";
+          value = dancelorServer.ipv4;
+        }
+        ++ optional (dancelorServer ? ipv6) {
+          type = "AAAA";
+          value = dancelorServer.ipv6;
+        }
+      );
     }))
 
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {

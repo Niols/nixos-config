@@ -17,6 +17,11 @@ in
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         nix-cache  IN  CNAME  ${config.x_niols.services.nix-cache.enabledOn}
       '';
+
+      x_niols.dnsZoneEntries."niols.fr"."nix-cache" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.nix-cache.enabledOn}.niols.fr.";
+      };
     })
 
     ## The actual configuration.

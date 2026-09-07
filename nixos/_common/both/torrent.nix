@@ -12,6 +12,11 @@ in
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         torrent  IN  CNAME  helga
       '';
+
+      x_niols.dnsZoneEntries."niols.fr"."torrent" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.torrent.enabledOn}.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.torrent.enabledOnThisServer {

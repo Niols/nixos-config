@@ -238,6 +238,11 @@ in
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         ${serviceName}  IN  CNAME  ${config.x_niols.services.${serviceName}.enabledOn}
       '';
+
+      x_niols.dnsZoneEntries."niols.fr".${serviceName} = {
+        type = "CNAME";
+        value = "${config.x_niols.services.${serviceName}.enabledOn}.niols.fr.";
+      };
     })
 
     ## wstunnel server, behind nginx. Relays WebSocket traffic to the Ahrefs
