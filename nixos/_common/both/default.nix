@@ -28,6 +28,7 @@ in
     ./cloud.nix
     ./databases.nix
     ./dancelor.nix
+    ./dns-new.nix
     ./dns-server.nix
     ./ftp-server.nix
     ./git-server.nix
@@ -58,6 +59,7 @@ in
       call.enabledOn = "helga";
       cloud.enabledOn = "anastasia";
       dancelor.enabledOn = "orianne";
+      dns.enabledOn = "orianne";
       ftp.enabledOn = "anastasia";
       git.enabledOn = "anastasia";
       matrix.enabledOn = "helga";
