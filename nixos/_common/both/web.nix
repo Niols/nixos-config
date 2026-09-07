@@ -14,6 +14,8 @@ let
     types
     optionalString
     escape
+    genAttrs
+    optional
     ;
 
 in
@@ -44,6 +46,31 @@ in
           nicolas      IN  CNAME  www.niols.fr.
           www.nicolas  IN  CNAME  www.niols.fr.
         '';
+
+        x_niols.dnsZoneEntries."niols.fr" = genAttrs [ "" "www" ] (
+          _:
+          optional (webServer ? ipv4) {
+            type = "A";
+            value = webServer.ipv4;
+            octodns.cloudflare.proxied = true;
+          }
+          ++ optional (webServer ? ipv6) {
+            type = "AAAA";
+            value = webServer.ipv6;
+            octodns.cloudflare.proxied = true;
+          }
+        );
+
+        x_niols.dnsZoneEntries."jeannerod.fr" = {
+          "nicolas" = {
+            type = "CNAME";
+            value = "www.niols.fr.";
+          };
+          "www.nicolas" = {
+            type = "CNAME";
+            value = "www.niols.fr.";
+          };
+        };
       }
     ))
 

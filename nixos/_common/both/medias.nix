@@ -11,6 +11,15 @@ in
         medias  IN  CNAME  ${config.x_niols.services.medias.enabledOn}
         medias-old  IN  CNAME  orianne
       '';
+
+      x_niols.dnsZoneEntries."niols.fr"."medias" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.medias.enabledOn}.niols.fr.";
+      };
+      x_niols.dnsZoneEntries."niols.fr"."medias-old" = {
+        type = "CNAME";
+        value = "orianne.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.medias.enabledOnThisServer {

@@ -34,6 +34,11 @@ in
       services.bind.x_niols.zoneEntries."niols.fr" = ''
         call  IN  CNAME  ${config.x_niols.services.call.enabledOn}
       '';
+
+      x_niols.dnsZoneEntries."niols.fr"."call" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.call.enabledOn}.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.call.enabledOnThisServer {
