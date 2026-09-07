@@ -132,6 +132,8 @@ concatMapAttrs
         headless-work
       ];
 
+      octodns-cloudflare-token = [ orianne ];
+
       rclone-gdrive-client-id = [
         ahlaya-niols
         gromit-niols

@@ -15,6 +15,7 @@ let
     genAttrs
     mapAttrs
     listToAttrs
+    replaceStrings
     types
     ;
   inherit (pkgs)
@@ -26,18 +27,67 @@ let
     writeJSON
     ;
 
+  ## Returns the single element of a list, null if empty, or throws if the
+  ## list has more than one distinct element. `context` is used in the
+  ## error message to help pinpoint what went wrong.
+  assertSingleton =
+    context: list:
+    let
+      distinct = lib.unique list;
+    in
+    if distinct == [ ] then
+      null
+    else if builtins.length distinct == 1 then
+      builtins.head distinct
+    else
+      throw "${context}: expected at most one distinct value, got ${builtins.toJSON distinct}";
+
+  mergeSameTypeRecords =
+    name: records:
+    let
+      grouped = lib.groupBy (r: r.type) records;
+    in
+    lib.mapAttrsToList (
+      type: rs:
+      if builtins.length rs == 1 then
+        builtins.head rs
+      else
+        let
+          values = builtins.concatMap (
+            r:
+            if r ? values then
+              r.values
+            else if r ? value then
+              [ r.value ]
+            else
+              [
+                (builtins.removeAttrs r [
+                  "type"
+                  "ttl"
+                ])
+              ]
+          ) rs;
+          ttl = assertSingleton "record ${name} (type ${type})" (
+            builtins.filter (t: t != null) (map (r: r.ttl or null) rs)
+          );
+        in
+        { inherit type values; } // lib.optionalAttrs (ttl != null) { inherit ttl; }
+    ) grouped;
+
   domains = [
     "niols.fr"
     "jeannerod.fr"
     "dancelor.org"
   ];
 
-  octodnsPkg = octodns.withProviders (ps: [ ps.cloudflare ]);
+  octodnsPkg = octodns.withProviders (_ps: [ pkgs.octodns-providers.cloudflare ]); # sic
 
   octodnsZoneFiles = linkFarm "octodns-zones" (
     map (domain: {
       name = "${domain}.yaml";
-      path = writeJSON "${domain}.yaml" config.x_niols.dnsZoneEntries.${domain};
+      path = writeJSON "${domain}.yaml" (
+        mapAttrs mergeSameTypeRecords config.x_niols.dnsZoneEntries.${domain}
+      );
     }) domains
   );
 
@@ -54,7 +104,7 @@ let
       };
       cloudflare = {
         class = "octodns_cloudflare.CloudflareProvider";
-        token = "env/CLOUDFLARE_TOKEN"; # FIXME
+        token = "env/CLOUDFLARE_TOKEN";
       };
     };
     zones = listToAttrs (
@@ -73,6 +123,7 @@ let
     runCommand "octodns-config.yaml"
       {
         nativeBuildInputs = [ octodnsPkg ];
+        CLOUDFLARE_TOKEN = "DUMMY";
       }
       ''
         octodns-validate --config-file=${octodnsConfigUnchecked}
@@ -129,8 +180,8 @@ in
         "" = [
           {
             type = "MX";
-            priority = 5;
-            value = "mta-gw.infomaniak.ch.";
+            preference = 5;
+            exchange = "mta-gw.infomaniak.ch.";
           }
           {
             type = "TXT";
@@ -176,7 +227,9 @@ in
         };
         _dmarc = {
           type = "TXT";
-          value = "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s";
+          value =
+            replaceStrings [ ";" ] [ "\\;" ]
+              "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s";
         };
       };
     }
@@ -192,7 +245,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           DynamicUser = true;
-          EnvironmentFile = "/run/secrets/octodns-cloudflare-env"; # FIXME
+          EnvironmentFile = config.age.secrets.octodns-cloudflare-token.path;
         };
       };
 
