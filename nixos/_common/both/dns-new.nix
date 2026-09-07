@@ -17,6 +17,15 @@ let
     listToAttrs
     replaceStrings
     types
+    groupBy
+    optionalAttrs
+    length
+    head
+    toJSON
+    filter
+    concatMap
+    mapAttrsToList
+    elem
     ;
   inherit (pkgs)
     runCommand
@@ -37,42 +46,50 @@ let
     in
     if distinct == [ ] then
       null
-    else if builtins.length distinct == 1 then
-      builtins.head distinct
+    else if length distinct == 1 then
+      head distinct
     else
-      throw "${context}: expected at most one distinct value, got ${builtins.toJSON distinct}";
+      throw "${context}: expected at most one distinct value, got ${toJSON distinct}";
 
+  ## octoDNS allows a list of type+value for a given record name; however, it
+  ## does not support the list containing twice the same type; those should instead
+  ## be merged into one type with several values.
   mergeSameTypeRecords =
     name: records:
-    let
-      grouped = lib.groupBy (r: r.type) records;
-    in
-    lib.mapAttrsToList (
+    mapAttrsToList (
       type: rs:
-      if builtins.length rs == 1 then
-        builtins.head rs
-      else
-        let
-          values = builtins.concatMap (
-            r:
-            if r ? values then
-              r.values
-            else if r ? value then
-              [ r.value ]
-            else
-              [
-                (builtins.removeAttrs r [
-                  "type"
-                  "ttl"
-                ])
-              ]
-          ) rs;
-          ttl = assertSingleton "record ${name} (type ${type})" (
-            builtins.filter (t: t != null) (map (r: r.ttl or null) rs)
-          );
-        in
-        { inherit type values; } // lib.optionalAttrs (ttl != null) { inherit ttl; }
-    ) grouped;
+      let
+        context = "record `${name}` (type ${type})";
+        singleValueTypes = [
+          ## NOTE: CnameRecord (and others) inherits ValueMixin (singular)
+          ## and therefore requires a .value field, not .values.
+          ## https://github.com/octodns/octodns/blob/main/octodns/record/cname.py
+          "CNAME"
+          "ALIAS"
+          "DNAME"
+        ];
+        values = concatMap (
+          r:
+          if r ? values then
+            r.values
+          else if r ? value then
+            [ r.value ]
+          else
+            throw "${context}: does not contain either .value or .values"
+        ) rs;
+        ttl = assertSingleton context (filter (t: t != null) (map (r: r.ttl or null) rs));
+      in
+      {
+        inherit type;
+      }
+      // (
+        if elem type singleValueTypes then
+          { value = assertSingleton context values; }
+        else
+          { inherit values; }
+      )
+      // optionalAttrs (ttl != null) { inherit ttl; }
+    ) (groupBy (r: r.type) records);
 
   domains = [
     "niols.fr"
@@ -181,8 +198,10 @@ in
         "" = [
           {
             type = "MX";
-            preference = 5;
-            exchange = "mta-gw.infomaniak.ch.";
+            value = {
+              preference = 5;
+              exchange = "mta-gw.infomaniak.ch.";
+            };
           }
           {
             type = "TXT";
