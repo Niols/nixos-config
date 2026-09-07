@@ -105,6 +105,7 @@ let
       cloudflare = {
         class = "octodns_cloudflare.CloudflareProvider";
         token = "env/CLOUDFLARE_TOKEN";
+        pagerules = false; # no URLFWD records and unsupported by CF's _account_ API tokens
       };
     };
     zones = listToAttrs (

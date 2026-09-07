@@ -38,10 +38,12 @@ in
         optional (dancelorServer ? ipv4) {
           type = "A";
           value = dancelorServer.ipv4;
+          octodns.cloudflare.proxied = true;
         }
         ++ optional (dancelorServer ? ipv6) {
           type = "AAAA";
           value = dancelorServer.ipv6;
+          octodns.cloudflare.proxied = true;
         }
       );
     }))
