@@ -306,21 +306,22 @@ in
     ## On servers without a static IP, we periodically check the public IP address
     ## and compare it to the one in the DNS records, and update if need be.
     ##
+    ## NOTE: We also need to inform octoDNS to leave this field alone; see the
+    ## 'dnsZoneEntriesIgnore' stuff above.
+    ##
+    ## NOTE: The 'A' / 'AAAA' records must exist for ddclient to update them. This
+    ## is a one-time bootstraping process that must be done manually.
+    ##
     (mkIf (config.x_niols.isServer && !(machines.this ? ipv4 || machines.this ? ipv6)) {
       services.ddclient = {
         enable = true;
         interval = "5min";
-
         protocol = "cloudflare";
         username = "token";
         passwordFile = config.age.secrets.ddclient-cloudflare-token.path;
-
         zone = "dancelor.org";
         domains = [ "anastasia-test.dancelor.org" ];
-
-        usev4 = "webv4, webv4=ipinfo.io/ip";
-        usev6 = "webv6, webv6=ipinfo.io/ip";
-
+        usev6 = ""; # disable IPv6; FIXME: know whether the machine is IPv6 aware and enable if that is the case
         ssl = true;
       };
     })
