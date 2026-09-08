@@ -29,7 +29,6 @@ in
     ./databases.nix
     ./dancelor.nix
     ./dns.nix
-    ./dns-server.nix
     ./ftp-server.nix
     ./git-server.nix
     ./hester.nix

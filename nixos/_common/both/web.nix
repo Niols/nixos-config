@@ -12,7 +12,6 @@ let
     mkOption
     mapAttrs'
     types
-    optionalString
     escape
     genAttrs
     optional
@@ -33,20 +32,6 @@ in
         webServer = machines.servers.${config.x_niols.services.web.enabledOn};
       in
       {
-        services.bind.x_niols.zoneEntries."niols.fr" =
-          optionalString (webServer ? ipv4) ''
-            @          IN  A      ${webServer.ipv4}
-            www        IN  A      ${webServer.ipv4}
-          ''
-          + optionalString (webServer ? ipv6) ''
-            @          IN  AAAA   ${webServer.ipv6}
-            www        IN  AAAA   ${webServer.ipv6}
-          '';
-        services.bind.x_niols.zoneEntries."jeannerod.fr" = ''
-          nicolas      IN  CNAME  www.niols.fr.
-          www.nicolas  IN  CNAME  www.niols.fr.
-        '';
-
         x_niols.dnsZoneEntries."niols.fr" = genAttrs [ "" "www" ] (
           _:
           optional (webServer ? ipv4) {

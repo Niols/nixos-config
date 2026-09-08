@@ -15,13 +15,6 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.cloud.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        cloud  IN  CNAME  ${config.x_niols.services.cloud.enabledOn}
-      '';
-      services.bind.x_niols.zoneEntries."jeannerod.fr" = ''
-        cloud  IN  CNAME  cloud.niols.fr.
-      '';
-
       x_niols.dnsZoneEntries = {
         "niols.fr"."cloud" = {
           type = "CNAME";

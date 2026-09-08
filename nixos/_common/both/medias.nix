@@ -7,11 +7,6 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.medias.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        medias  IN  CNAME  ${config.x_niols.services.medias.enabledOn}
-        medias-old  IN  CNAME  orianne
-      '';
-
       x_niols.dnsZoneEntries."niols.fr"."medias" = {
         type = "CNAME";
         value = "${config.x_niols.services.medias.enabledOn}.niols.fr.";

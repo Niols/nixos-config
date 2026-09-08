@@ -7,14 +7,6 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.teamspeak.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        ts  IN  CNAME  ${config.x_niols.services.teamspeak.enabledOn};
-      '';
-      ## FIXME: Also handle niols.net with our DNS server.
-      # services.bind.x_niols.zoneEntries."niols.net" = ''
-      #   ts  IN  CNAME  ts.niols.fr.
-      # '';
-
       x_niols.dnsZoneEntries."niols.fr"."ts" = {
         type = "CNAME";
         value = "${config.x_niols.services.teamspeak.enabledOn}.niols.fr.";

@@ -59,10 +59,6 @@ in
     })
 
     (mkIf config.x_niols.services.monitor.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        monitor  IN  CNAME  ${config.x_niols.services.monitor.enabledOn}
-      '';
-
       x_niols.dnsZoneEntries."niols.fr"."monitor" = {
         type = "CNAME";
         value = "${config.x_niols.services.monitor.enabledOn}.niols.fr.";

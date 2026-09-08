@@ -11,7 +11,6 @@ let
     mkMerge
     mkIf
     optional
-    optionalString
     genAttrs
     ;
 
@@ -23,16 +22,6 @@ in
 
   config = mkMerge [
     (mkIf config.x_niols.services.dancelor.enabledOnAnyServer ({
-      services.bind.x_niols.zoneEntries."dancelor.org" =
-        optionalString (dancelorServer ? ipv4) ''
-          @    IN  A     ${dancelorServer.ipv4}
-          www  IN  A     ${dancelorServer.ipv4}
-        ''
-        + optionalString (dancelorServer ? ipv6) ''
-          @    IN  AAAA  ${dancelorServer.ipv6}
-          www  IN  AAAA  ${dancelorServer.ipv6}
-        '';
-
       x_niols.dnsZoneEntries."dancelor.org" = genAttrs [ "" "www" ] (
         _:
         optional (dancelorServer ? ipv4) {
