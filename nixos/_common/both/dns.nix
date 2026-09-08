@@ -241,13 +241,6 @@ in
           type = "CNAME";
           value = "infomaniak.com.";
         };
-        _domainkey = {
-          type = "NS";
-          values = [
-            "ns41.infomaniak.com."
-            "ns42.infomaniak.com."
-          ];
-        };
       });
     }
 
@@ -275,6 +268,28 @@ in
           value =
             replaceStrings [ ";" ] [ "\\;" ]
               "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s";
+        };
+        "20191114._domainkey" = {
+          type = "TXT";
+          value =
+            replaceStrings [ ";" ] [ "\\;" ]
+              "v=DKIM1; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCkv3u+WpVMNwzG6XMscpu1ld3jDiTM2oXvf8i27bwWEngcLeUBruagPcV/iBZSruDkXCS7+v5rINm/hsoOCqNtXCKU36T4GrlDnfeWgYLKesNyc6hCaVvKTj0/+h5vpW57g0ovPf8VsUr2Kt4Nau7px0yTlhfG9lIhA0SFaGZGrwIDAQAB";
+        };
+      };
+      x_niols.dnsZoneEntries."jeannerod.fr" = {
+        "20191114._domainkey" = {
+          type = "TXT";
+          value =
+            replaceStrings [ ";" ] [ "\\;" ]
+              "v=DKIM1; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDafZe92FoK5eS+n8lIv6b/hNVspprSW8P1n7BI8aaBZAlPNSLNNP0PRc1ERFQZ41O2gtN9zSMRwKpFBjyT6gakq3kIYg/bVVTVbbWNWds/M43pDZ7zyfk5N9OfTB+MpFde7GVROZxbCVihJWC6nFrf4a3PdlI854qXVtFyQCoxgwIDAQAB";
+        };
+      };
+      x_niols.dnsZoneEntries."dancelor.org" = {
+        "20231126._domainkey" = {
+          type = "TXT";
+          value =
+            replaceStrings [ ";" ] [ "\\;" ]
+              "v=DKIM1; t=s; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0/NJpAfXJCt5/b8CyPubu9/Wv1Cx+u0LSYBsUNvsOTY0iyiDyKNMpgPTOUzZ6qLJJ+UrMtDhQFPeCcEqHLJ7yVkj+WRmeBR20XhJ+wyZDwITFrPOzO3/NdZtQR3b9tflX2XE6/RmzDscBGzsbe1/a4hfASiqN+vCJNafGsvvewY+wnBuhs9z52fqxAVT6aZXzCpfmnRoXCzNSGIXgxat668xwMXKZ5F40cApPvrSKYkT7hmTo7g0XwS/NyX3bLD4S6/whe8L90XAaTtszAqjPAdI/m63hyhNW0iwveRDfWcsPLXGW3hLmxXRJ+755JzKHDPnqe2l0bZfVpTg/UzMOQIDAQAB";
         };
       };
     }
