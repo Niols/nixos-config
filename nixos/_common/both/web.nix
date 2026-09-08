@@ -52,10 +52,12 @@ in
           optional (webServer ? ipv4) {
             type = "A";
             value = webServer.ipv4;
+            octodns.cloudflare.proxied = true;
           }
           ++ optional (webServer ? ipv6) {
             type = "AAAA";
             value = webServer.ipv6;
+            octodns.cloudflare.proxied = true;
           }
         );
 
@@ -63,10 +65,12 @@ in
           "nicolas" = {
             type = "CNAME";
             value = "www.niols.fr.";
+            octodns.cloudflare.proxied = true;
           };
           "www.nicolas" = {
             type = "CNAME";
             value = "www.niols.fr.";
+            octodns.cloudflare.proxied = true;
           };
         };
       }
