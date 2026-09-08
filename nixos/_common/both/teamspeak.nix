@@ -14,6 +14,11 @@ in
       # services.bind.x_niols.zoneEntries."niols.net" = ''
       #   ts  IN  CNAME  ts.niols.fr.
       # '';
+
+      x_niols.dnsZoneEntries."niols.fr"."ts" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.teamspeak.enabledOn}.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.teamspeak.enabledOnThisServer {
