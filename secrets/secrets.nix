@@ -133,6 +133,7 @@ concatMapAttrs
       ];
 
       octodns-cloudflare-token = [ orianne ];
+      ddclient-cloudflare-token = [ anastasia ];
 
       rclone-gdrive-client-id = [
         ahlaya-niols

@@ -8,6 +8,8 @@
 
 let
   inherit (lib)
+    attrNames
+    filterAttrs
     mkIf
     mkMerge
     optional
@@ -25,6 +27,7 @@ let
     filter
     concatMap
     mapAttrsToList
+    genAttrs'
     elem
     ;
   inherit (pkgs)
@@ -109,10 +112,13 @@ let
   );
 
   octodnsConfigUnchecked = writeJSON "octodns-config-unchecked.yaml" {
-    processors.no-dynamic = {
-      class = "octodns.processor.filter.NameRejectlistFilter";
-      rejectlist = [ "anastasia" ];
-    };
+    processors = genAttrs' domains (domain: {
+      name = "ignores-${domain}";
+      value = {
+        class = "octodns.processor.filter.NameRejectlistFilter";
+        rejectlist = config.x_niols.dnsZoneEntriesIgnore.${domain};
+      };
+    });
     providers = {
       config = {
         class = "octodns.provider.yaml.YamlProvider";
@@ -131,7 +137,7 @@ let
         value = {
           sources = [ "config" ];
           targets = [ "cloudflare" ];
-          processors = [ "no-dynamic" ];
+          processors = [ "ignores-${domain}" ];
         };
       }) domains
     );
@@ -173,6 +179,16 @@ in
           entryType = coercedTo recordType (r: [ r ]) (listOf recordType);
         in
         attrsOf entryType;
+    }
+  );
+
+  options.x_niols.dnsZoneEntriesIgnore = genAttrs domains (
+    domain:
+    mkOption {
+      description = "Entries to ignore for domain ${domain}, typically because they are dynamic IPs.";
+      example = [ "anastasia" ];
+      type = with types; listOf str;
+      default = [ ];
     }
   );
 
@@ -259,7 +275,6 @@ in
         description = "Reconcile DNS zone with Cloudflare via octoDNS";
         path = [ octodnsPkg ];
         script = ''
-          set -euo pipefail
           octodns-sync --config-file=${octodnsConfig} --doit --force
         '';
         serviceConfig = {
@@ -267,6 +282,10 @@ in
           DynamicUser = true;
           EnvironmentFile = config.age.secrets.octodns-cloudflare-token.path;
         };
+        requires = [ "network-online.target" ]; # fails if network isn't online
+        after = [ "network-online.target" ]; # only runs after network is online
+        ## NOTE: this `wantedBy` might be why the unit triggers on `nixos-rebuild`, so I removed it as of 3 June 2026
+        # wantedBy = [ "network-online.target" ]; # runs when network comes online;
       };
 
       systemd.timers.octodns-sync = {
@@ -278,65 +297,32 @@ in
       };
     })
 
-    ## On Anastasia, which sits behind a NAT with dynamic IP, we periodically
-    ## check the public IP address and compare it to the one in the DNS records
-    ## of our servers. If they differ, we update the DNS records with NSUPDATE.
+    {
+      x_niols.dnsZoneEntriesIgnore."niols.fr" = attrNames (
+        filterAttrs (_: meta: !(meta ? ipv4 || meta ? ipv6)) machines.servers
+      );
+    }
+
+    ## On servers without a static IP, we periodically check the public IP address
+    ## and compare it to the one in the DNS records, and update if need be.
     ##
-    # (mkIf (config.x_niols.thisMachinesName == "anastasia") {
-    #   systemd.services.update-dns-with-public-ip = {
-    #     script = ''
-    #       echo "Getting current IP..." >&2
-    #       if current_ip=$(${pkgs.dnsutils}/bin/dig -4 +short myip.opendns.com @resolver1.opendns.com); then
-    #         if [ -n "$current_ip" ]; then
-    #           echo "Done getting current IP; got $current_ip." >&2
-    #         else
-    #           echo "Failed getting current IP; got the empty string." >&2
-    #           exit 1
-    #         fi
-    #       else
-    #         echo "Failed getting current IP; dig exited with error code $?." >&2
-    #         exit 1
-    #       fi
+    (mkIf (config.x_niols.isServer && !(machines.this ? ipv4 || machines.this ? ipv6)) {
+      services.ddclient = {
+        enable = true;
+        interval = "5min";
 
-    #       failure=false
-    #       ${forConcat (attrNames machines.servers) (
-    #         server:
-    #         optionalString (server != "anastasia") ''
-    #           echo "Checking DNS record on ${server}..." >&2
-    #           if dns_ip=$(${pkgs.dnsutils}/bin/dig -4 +short anastasia.niols.fr @${server}.niols.fr); then
-    #             echo "Done checking DNS record; got $dns_ip." >&2
-    #             if [ "$current_ip" = "$dns_ip" ]; then
-    #               echo "The DNS record does contain the correct IP already." >&2
-    #             else
-    #               echo "Updating DNS record on ${server} to $current_ip..." >&2
-    #               ${pkgs.dnsutils}/bin/nsupdate -k ${config.age.secrets.bind-key-anastasia-ddns.path} <<-EOF
-    #                 server ${server}.niols.fr
-    #                 zone niols.fr
-    #                 update delete anastasia.niols.fr A
-    #                 update add anastasia.niols.fr 60 A $current_ip
-    #                 send
-    #           EOF
-    #               echo "Done updating DNS record on ${server}." >&2
-    #             fi
-    #           else
-    #             echo "Failed checking DNS record; dig exited with error code $?." >&2
-    #             failure=true
-    #           fi
-    #         ''
-    #       )}
-    #       if $failure; then exit 1; fi
-    #     '';
-    #     serviceConfig.Type = "oneshot";
-    #     requires = [ "network-online.target" ]; # fails if network isn't online
-    #     after = [ "network-online.target" ]; # only runs after network is online
-    #     ## NOTE: this `wantedBy` might be why the unit triggers on `nixos-rebuild`, so I removed it as of 3 June 2026
-    #     # wantedBy = [ "network-online.target" ]; # runs when network comes online;
-    #   };
+        protocol = "cloudflare";
+        username = "token";
+        passwordFile = config.age.secrets.ddclient-cloudflare-token.path;
 
-    #   systemd.timers.update-dns-with-public-ip = {
-    #     wantedBy = [ "timers.target" ];
-    #     timerConfig.OnCalendar = "*:0/1"; # every minute
-    #   };
-    # })
+        zone = "dancelor.org";
+        domains = [ "anastasia-test.dancelor.org" ];
+
+        usev4 = "webv4, webv4=ipinfo.io/ip";
+        usev6 = "webv6, webv6=ipinfo.io/ip";
+
+        ssl = true;
+      };
+    })
   ];
 }
