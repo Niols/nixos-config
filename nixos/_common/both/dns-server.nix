@@ -65,8 +65,6 @@ let
       @             IN  TXT    "v=spf1 include:spf.infomaniak.ch include:mx.ovh.com -all"
       autoconfig    IN  CNAME  infomaniak.com.
       autodiscover  IN  CNAME  infomaniak.com.
-      _domainkey    IN  NS     ns41.infomaniak.com.
-      _domainkey    IN  NS     ns42.infomaniak.com.
 
       ${config.services.bind.x_niols.zoneEntries.${domain}}
     '';
@@ -111,6 +109,7 @@ in
             dev.scd      IN  CNAME  niols.github.io.
             @            IN  TXT    "google-site-verification=ovBb3XY6sqMtNUBFMk7vEcfrvTCgeOZujBwJ2RoTTcQ"
             _dmarc       IN  TXT    "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s"
+            20191114._domainkey  IN TXT "v=DKIM1; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCkv3u+WpVMNwzG6XMscpu1ld3jDiTM2oXvf8i27bwWEngcLeUBruagPcV/iBZSruDkXCS7+v5rINm/hsoOCqNtXCKU36T4GrlDnfeWgYLKesNyc6hCaVvKTj0/+h5vpW57g0ovPf8VsUr2Kt4Nau7px0yTlhfG9lIhA0SFaGZGrwIDAQAB"
           '';
         };
 

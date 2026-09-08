@@ -241,13 +241,6 @@ in
           type = "CNAME";
           value = "infomaniak.com.";
         };
-        _domainkey = {
-          type = "NS";
-          values = [
-            "ns41.infomaniak.com."
-            "ns42.infomaniak.com."
-          ];
-        };
       });
     }
 
@@ -275,6 +268,12 @@ in
           value =
             replaceStrings [ ";" ] [ "\\;" ]
               "v=DMARC1; p=none; rua=mailto:admin@niols.fr; ruf=mailto:admin@niols.fr; fo=1; pct=100; adkim=s; aspf=s";
+        };
+        "20191114._domainkey" = {
+          type = "TXT";
+          value =
+            replaceStrings [ ";" ] [ "\\;" ]
+              "v=DKIM1; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCkv3u+WpVMNwzG6XMscpu1ld3jDiTM2oXvf8i27bwWEngcLeUBruagPcV/iBZSruDkXCS7+v5rINm/hsoOCqNtXCKU36T4GrlDnfeWgYLKesNyc6hCaVvKTj0/+h5vpW57g0ovPf8VsUr2Kt4Nau7px0yTlhfG9lIhA0SFaGZGrwIDAQAB";
         };
       };
     }
