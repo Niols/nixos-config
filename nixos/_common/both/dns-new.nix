@@ -319,8 +319,8 @@ in
         protocol = "cloudflare";
         username = "token";
         passwordFile = config.age.secrets.ddclient-cloudflare-token.path;
-        zone = "dancelor.org";
-        domains = [ "anastasia-test.dancelor.org" ];
+        zone = "niols.fr";
+        domains = [ "${machines.this.name}.niols.fr" ];
         usev6 = ""; # disable IPv6; FIXME: know whether the machine is IPv6 aware and enable if that is the case
         ssl = true;
       };
