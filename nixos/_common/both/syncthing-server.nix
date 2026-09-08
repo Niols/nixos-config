@@ -9,9 +9,10 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.syncthing.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        syncthing  IN  CNAME  ${config.x_niols.services.syncthing.enabledOn}
-      '';
+      x_niols.dnsZoneEntries."niols.fr"."syncthing" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.syncthing.enabledOn}.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.syncthing.enabledOnThisServer {

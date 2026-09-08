@@ -12,8 +12,9 @@ let
     mkOption
     mapAttrs'
     types
-    optionalString
     escape
+    genAttrs
+    optional
     ;
 
 in
@@ -31,19 +32,32 @@ in
         webServer = machines.servers.${config.x_niols.services.web.enabledOn};
       in
       {
-        services.bind.x_niols.zoneEntries."niols.fr" =
-          optionalString (webServer ? ipv4) ''
-            @          IN  A      ${webServer.ipv4}
-            www        IN  A      ${webServer.ipv4}
-          ''
-          + optionalString (webServer ? ipv6) ''
-            @          IN  AAAA   ${webServer.ipv6}
-            www        IN  AAAA   ${webServer.ipv6}
-          '';
-        services.bind.x_niols.zoneEntries."jeannerod.fr" = ''
-          nicolas      IN  CNAME  www.niols.fr.
-          www.nicolas  IN  CNAME  www.niols.fr.
-        '';
+        x_niols.dnsZoneEntries."niols.fr" = genAttrs [ "" "www" ] (
+          _:
+          optional (webServer ? ipv4) {
+            type = "A";
+            value = webServer.ipv4;
+            octodns.cloudflare.proxied = true;
+          }
+          ++ optional (webServer ? ipv6) {
+            type = "AAAA";
+            value = webServer.ipv6;
+            octodns.cloudflare.proxied = true;
+          }
+        );
+
+        x_niols.dnsZoneEntries."jeannerod.fr" = {
+          "nicolas" = {
+            type = "CNAME";
+            value = "www.niols.fr.";
+            octodns.cloudflare.proxied = true;
+          };
+          "www.nicolas" = {
+            type = "CNAME";
+            value = "www.niols.fr.";
+            octodns.cloudflare.proxied = true;
+          };
+        };
       }
     ))
 

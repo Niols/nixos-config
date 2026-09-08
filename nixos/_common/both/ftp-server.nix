@@ -11,9 +11,10 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.ftp.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        ftp  IN  CNAME  ${config.x_niols.services.ftp.enabledOn}
-      '';
+      x_niols.dnsZoneEntries."niols.fr"."ftp" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.ftp.enabledOn}.niols.fr.";
+      };
     })
 
     (mkIf config.x_niols.services.ftp.enabledOnThisServer {

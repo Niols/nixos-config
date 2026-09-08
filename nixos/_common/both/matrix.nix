@@ -12,9 +12,10 @@ in
 {
   config = mkMerge [
     (mkIf config.x_niols.services.matrix.enabledOnAnyServer {
-      services.bind.x_niols.zoneEntries."niols.fr" = ''
-        matrix  IN  CNAME  ${config.x_niols.services.matrix.enabledOn}
-      '';
+      x_niols.dnsZoneEntries."niols.fr"."matrix" = {
+        type = "CNAME";
+        value = "${config.x_niols.services.matrix.enabledOn}.niols.fr.";
+      };
 
       ## NOTE: The nginx reverse proxy makes both the client and the federation
       ## services accessible at <public_baseurl>:443. However, other servers will by
