@@ -42,8 +42,8 @@ in
         enable = true;
         listeningPort = 6872;
         githubTokenFile = config.age.secrets.dancelor-github-token.path;
-        githubRepository = "github.com/paris-branch/dancelor";
-        githubDatabaseRepository = "github.com/paris-branch/dancelor-database";
+        githubRepository = "github.com/niols/dancelor";
+        githubDatabaseRepository = "github.com/niols/dancelor-database";
         routineThreads = 2 * dancelorServer.cores;
       };
 

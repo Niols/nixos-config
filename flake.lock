@@ -100,13 +100,13 @@
       "locked": {
         "lastModified": 1788683379,
         "narHash": "sha256-dOhMWtTjxst/GGz2mZnNhLpcCpADkOtzY3+bQBZMmLo=",
-        "owner": "paris-branch",
+        "owner": "niols",
         "repo": "dancelor",
         "rev": "a707c73ef4069fc5e21490850bb9a0b2c6b954e1",
         "type": "github"
       },
       "original": {
-        "owner": "paris-branch",
+        "owner": "niols",
         "repo": "dancelor",
         "type": "github"
       }
