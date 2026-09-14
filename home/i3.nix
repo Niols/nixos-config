@@ -165,7 +165,7 @@ in
         assigns =
           if config.x_niols.isWork then
             {
-              "12" = [ { class = "^Slack$"; } ];
+              "12" = [ { class = "^slack$"; } ];
             }
           else
             {
