@@ -192,16 +192,23 @@ in
         ##
         window.commands = [
           {
-            ## By default, have normal windows have a border (even Firefox or
-            ## Nautilus) and be non-floating.
-            criteria.window_type = "normal";
-            command = "border normal, floating disable";
+            ## Force Firefox and Nautilus to have a border.
+            criteria.class = "^(firefox|org\\.gnome\\.Nautilus)$";
+            command = "border normal";
           }
           {
-            ## Little apps that have a `normal` window type but really behave
-            ## more like utilities. They get to float.
+            ## Force some known little apps to be floating, even if they don't
+            ## necessarily set it up themselves.
             criteria.class = "^(localsend_app|.blueman-manager-wrapped|Gcr-prompter)$";
             command = "floating enable";
+          }
+          {
+            ## Zoom's “notifications”. Their class and type are identical to
+            ## Zoom's other windows, so we match on title: the bigger windows
+            ## have proper names while notifications are just lowercase `zoom`.
+            criteria.class = "^zoom$";
+            criteria.title = "^zoom$";
+            command = "floating enable, border none";
           }
         ];
       };
