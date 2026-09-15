@@ -68,6 +68,15 @@ in
           "Server"
         ];
 
+        SCD.devices = [
+          "Ahlaya"
+          "Camille"
+          "Oxana"
+          "Gromit"
+          "Phineas"
+          "Server"
+        ];
+
         Scottish-ish.devices = [
           "Ahlaya"
           "Gromit"
