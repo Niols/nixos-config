@@ -36,6 +36,7 @@
   (auto-revert-verbose nil)
   (make-backup-files nil)
   (indent-tabs-mode nil)
+  (fill-column 80)
   :config
   (menu-bar-mode -1)
   (tool-bar-mode -1)
