@@ -135,6 +135,14 @@ in
             PreferredAuthentications = "password";
           };
 
+          ## SSH into GitHub uses personal key by default. For the Ahrefs key to
+          ## be picked up, a repo has to use host github.com-ahrefs, possibly
+          ## via Git's `insteadOf` feature.
+          "github.com" = {
+            IdentitiesOnly = true;
+            IdentityFile = "~/.ssh/id_niols";
+          };
+
           ## For things on localhost, we should not check the host's key, and we
           ## should just not keep the keys at all.
           localhost = {
@@ -166,6 +174,14 @@ in
         ## Ahrefs's machines qualify as “weak” crypto from my modern SSH's POV, so
         ## we disable the warning for now. TODO: re-enable once Ahrefs moves on.
         settings."*".WarnWeakCrypto = "no";
+
+        ## Git will sometimes produce SSH URLs in `ssh://git@github.com-ahrefs`
+        ## typically to handle Monorepo's flake inputs.
+        settings."github.com-ahrefs" = {
+          HostName = "github.com";
+          IdentitiesOnly = true;
+          IdentityFile = "~/.ssh/id_ahrefs";
+        };
       };
     })
 

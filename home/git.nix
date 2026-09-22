@@ -39,14 +39,6 @@
       user.email = "niols@niols.fr";
       user.signingKey = "~/.ssh/id_niols_signing.pub";
 
-      ## I have a personal and an Ahrefs GitHub accounts that do not share the
-      ## same SSH key. SSH does not know how to disambiguate and will try all
-      ## identities in an unspecified way, which might lead to interacting with
-      ## a repository with the wrong user. We specify the key explicitly here,
-      ## but one must make sure that there is no catch-all block in the SSH
-      ## config that adds the `id_niols` identity; see `assertions` below.
-      core.sshCommand = "ssh -i ~/.ssh/id_niols";
-
       init.defaultBranch = "main";
 
       ## Used by forge (via ghub) to access GitHub.
@@ -65,6 +57,22 @@
           %h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold
            yellow)%d%C(reset)%n %C(white)%s%C(reset)"'';
       };
+
+      ## I have a personal and an Ahrefs GitHub accounts that do not share the
+      ## same SSH key. SSH does not know how to disambiguate and will try all
+      ## identities in an unspecified way, which might lead to interacting with
+      ## a repository with the wrong user. So we use the personal identity by
+      ## default, except for certain GitHub orgs (ahrefs, ahrefs-core) for which
+      ## we replace the host by a fake host, which SSH can pick up on to inject
+      ## the right key.
+      url."ssh://git@github.com-ahrefs/ahrefs/".insteadOf = [
+        "ssh://git@github.com/ahrefs/"
+        "git@github.com:ahrefs/" # scp-like syntax equivalent of the previous one
+      ];
+      url."ssh://git@github.com-ahrefs/ahrefs-core/".insteadOf = [
+        "ssh://git@github.com/ahrefs-core/"
+        "git@github.com:ahrefs-core/" # scp-like syntax equivalent of the previous one
+      ];
     };
 
     includes = [
@@ -77,7 +85,6 @@
             signingKey = "~/.ssh/id_ahrefs_signing.pub";
           };
           github.user = "nicolas-jeannerod_ahrefs"; # for forge via ghub
-          core.sshCommand = "ssh -i ~/.ssh/id_ahrefs";
         };
       }
     ];
