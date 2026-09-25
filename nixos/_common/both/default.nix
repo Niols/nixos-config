@@ -67,7 +67,7 @@ in
       nix-cache.enabledOn = "anastasia";
       syncthing.enabledOn = "anastasia";
       teamspeak.enabledOn = "helga";
-      torrent.enabledOn = "helga";
+      torrent.enabledOn = null;
       web.enabledOn = "helga";
     };
 
