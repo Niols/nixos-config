@@ -75,6 +75,8 @@ in
     ;; Disable GC during init. It will be re-enabled by gcmh - see main config.
     (setq gc-cons-threshold most-positive-fixnum)
     (setq package-enable-at-startup nil)
+    ;; Prevent downloading packages, forcing us to keep our Nix setup tidy.
+    (setq package-archives nil)
   '';
 
   ## Run the OPAM hook if it exists. This can be shared between all
