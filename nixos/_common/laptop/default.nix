@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
 {
   imports = [
     ./autorandr.nix
@@ -9,14 +7,6 @@
     ./timezone.nix
     ./udev.nix
     ./xserver
-  ];
-
-  ############################################################################
-  ## Fonts
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.fira-code
-    google-fonts
   ];
 
   ############################################################################
