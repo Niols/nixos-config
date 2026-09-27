@@ -60,6 +60,15 @@
   :ensure t
   :hook (after-init . doom-modeline-mode))
 
+(use-package dashboard
+  :ensure t
+  :custom
+  (dashboard-startup-banner 'official)
+  (dashboard-items '((recents  . 10) (projects . nil)))
+  (dashboard-footer-messages '("Niols's hand-crafted Emacs configuration."))
+  :config
+  (dashboard-setup-startup-hook))
+
 ;; ==================== [ Feel ] ==================== ;;
 
 (use-package undo-fu
