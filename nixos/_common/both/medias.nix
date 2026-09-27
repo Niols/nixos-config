@@ -64,5 +64,27 @@ in
       users.groups.hester.members = [ "jellyfin" ]; # for read access to medias
       users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
     })
+
+    ## On the NFS server, ensure the right permissions are set for the
+    ## `/data/medias` endpoint.
+    ##
+    (mkIf config.x_niols.services.nfs.enabledOnThisServer {
+      systemd.services.fix-data-medias-permissions = {
+        description = "Fix the permissions of the /data/medias shared directory";
+        script = ''
+          chown -R root:medias /data/medias
+          chmod -R u=rwX,go=rX /data/medias
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+
+      systemd.timers.fix-data-medias-permissions = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "5min";
+          OnUnitActiveSec = "5min";
+        };
+      };
+    })
   ];
 }
