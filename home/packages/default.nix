@@ -21,6 +21,17 @@ let
     src = "${pkgs.lilypond}/share/emacs/site-lisp";
   };
 
+  ## Emacs can be slow if given too many fonts. For reproducibility and
+  ## performances, we limit it to what it really needs. NOTE: avoid
+  ## `pkgs.makeFontsConf` which also brings in a lot of other fonts.
+  fontsConf = pkgs.writeText "fonts.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <fontconfig>
+      <dir>${pkgs.nerd-fonts.fira-code}</dir>
+    </fontconfig>
+  '';
+
 in
 
 {
@@ -67,6 +78,8 @@ in
           ]
         ))
       ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = "wrapProgram $out/bin/emacs --set FONTCONFIG_FILE ${fontsConf}";
     };
   };
   xdg.configFile."emacs/init.el".source = ./emacs.el;
