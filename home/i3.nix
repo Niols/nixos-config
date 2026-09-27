@@ -360,15 +360,12 @@ in
     programs.rofi = {
       enable = true;
       plugins = [ pkgs.rofi-calc ];
-      ## NOTE: Do not add `ssh` in there. I never use it, but my SSH
-      ## configuration is quite big and it makes Rofi's startup very slow.
-      modes = [
-        "drun"
-        "calc"
-      ];
-      terminal = config.x_niols.terminalEmulatorCommand;
-      extraConfig = {
-        "show-icons" = true;
+      settings = {
+        terminal = config.x_niols.terminalEmulatorCommand;
+        ## NOTE: Do not add `ssh` in there. I never use it, but my SSH
+        ## configuration is quite big and it makes Rofi's startup very slow.
+        modes = "drun,calc";
+        show-icons = true;
         ## Some vi-like keybindings.
         "kb-row-up" = "Up,Control+k";
         "kb-row-down" = "Down,Control+j";
