@@ -286,22 +286,6 @@
   ;; built-in
   :hook (prog-mode . flymake-mode))
 
-(defvar my/eglot-window-hook-added nil
-  "Whether the Eglot window change hook has been added.")
-
-;; Whenever the window changes, eg. because we have changed buffer or because we
-;; have deleted a buffer, which lands us on a new one, tell eglot that the new
-;; file was “opened”, such that it might update its diagnosis of the file.
-(defun my/eglot-add-window-hook ()
-  "Add a hook to signal Eglot when the window buffer changes.
-Only adds the hook once, regardless of how many buffers use Eglot."
-  (unless my/eglot-window-hook-added
-    (add-hook 'window-buffer-change-functions
-              (lambda (_)
-                (when (and (bound-and-true-p flymake-mode) (eglot-current-server))
-                  (eglot--signal-textDocument/didOpen))))
-    (setq my/eglot-window-hook-added t)))
-
 (defun my/eglot-ensure-if-server ()
   "Start Eglot if an LSP server is configured for the current major mode."
   (require 'eglot)
@@ -311,12 +295,20 @@ Only adds the hook once, regardless of how many buffers use Eglot."
    ((not (eglot--lookup-mode major-mode))
     (message "[eglot] (info) no LSP server configured for %s" major-mode))
    (t
-    (my/eglot-add-window-hook)
     (eglot-ensure))))
 
 (use-package eglot
   ;; built-in
-  :hook (prog-mode . my/eglot-ensure-if-server))
+  :hook (prog-mode . my/eglot-ensure-if-server)
+  :config
+  ;; Whenever the window changes, eg. because we have changed buffer or
+  ;; because we have deleted a buffer, which lands us on a new one, tell
+  ;; eglot that the new file was “opened”, such that it might update its
+  ;; diagnosis of the file.
+  (add-hook 'window-state-change-functions
+            (lambda (_)
+              (when (and (bound-and-true-p flymake-mode) (eglot-current-server))
+                (eglot--signal-textDocument/didOpen)))))
 
 (use-package cram-mode
   ;; provided by Nix
