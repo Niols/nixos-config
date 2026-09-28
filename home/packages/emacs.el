@@ -317,7 +317,13 @@
   (add-hook 'window-state-change-functions
             (lambda (_)
               (when (and (bound-and-true-p flymake-mode) (eglot-current-server))
-                (eglot--signal-textDocument/didOpen)))))
+                (eglot--signal-textDocument/didOpen))))
+  :custom
+  ;; Eglot can be used to provide semantic tokens, on which some extra syntax
+  ;; colouration is based. This brings way to many colours to my files, but also
+  ;; the pairing seems broken in places and makes files unreadable.
+  (eglot-ignored-server-capabilities '(:semanticTokensProvider))
+  )
 
 (use-package cram-mode
   ;; provided by Nix
