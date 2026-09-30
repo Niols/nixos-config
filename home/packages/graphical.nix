@@ -21,7 +21,15 @@ in
         localsend
         nautilus
         nautilus-open-any-terminal
+
+        ## Some fonts that I like. Do not install all of Google fonts, that
+        ## would be more than 3500 fonts polluting everything. NOTE: Wrong font
+        ## names get silently ignored as long as at least one is right, so make
+        ## separate packages with only one font each.
+        (google-fonts.override { fonts = [ "SourceSans3" ]; })
       ];
+
+      fonts.fontconfig.enable = true; # so HM handles fonts
     })
 
     ## Packages that are only ever used on my personal laptops. They should not
