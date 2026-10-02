@@ -15,7 +15,7 @@ jobs:
             '
       - id: update
         name: Update flake.lock and create the pull request
-        uses: determinatesystems/update-flake-lock@v28
+        uses: determinatesystems/update-flake-lock@v29
         with:
           branch: dancelor/bump-dancelor
           git-author-email: dancelor@dancelor.org
