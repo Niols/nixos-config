@@ -71,6 +71,9 @@
 
 ;; ==================== [ Feel ] ==================== ;;
 
+(defvar my/shift-width 2
+  "Default indentation width used across Evil and major modes.")
+
 (use-package undo-fu
   :ensure t)
 
@@ -100,7 +103,7 @@
   :init
   (setq evil-want-keybinding nil) ; required for evil-collection
   :custom
-  (evil-shift-width 2)
+  (evil-shift-width my/shift-width)
   (evil-undo-system 'undo-fu)
   :config
   (evil-mode 1)
@@ -389,6 +392,11 @@
 (use-package apheleia
   :ensure t
   :defer t)
+
+(use-package sh-script
+  ;; built-in
+  :custom
+  (sh-basic-offset my/shift-width))
 
 ;; ==================== [ The End ] ==================== ;;
 
