@@ -31,6 +31,9 @@ variables are set, either log in again, or type
 in your shell.
 ```
 
+Note that the `--no-daemon` is for the single-user installation, which does not
+require `root` to run the daemon. It is usually not the recommended installation.
+
 ### Setting up SSH keys and Agenix
 
 If the home in question uses Agenix (which it probably does), you will need to
