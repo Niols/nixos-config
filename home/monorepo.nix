@@ -8,7 +8,10 @@ let
 in
 {
   config = mkIf config.x_niols.isWork {
-    home.file."${monorepo}/.envrc".text = "eval $(opam env)";
+    home.file."${monorepo}/.envrc".text = ''
+      ROOT=$PWD # so the sourced envrc still uses this root
+      source_env nix/envrc.sample
+    '';
 
     ## ~/.local/bin for python-based utilities, eg. semgrep.
     home.sessionPath = [
