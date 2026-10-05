@@ -211,8 +211,7 @@
 
 (use-package hl-todo
   :ensure t
-  :hook ((prog-mode . hl-todo-mode)
-         (text-mode . hl-todo-mode))
+  :hook (after-init . global-hl-todo-mode)
   :config
   (add-to-list 'hl-todo-keyword-faces '("REVIEW" . "#44dddd")))
 
