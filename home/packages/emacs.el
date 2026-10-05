@@ -213,7 +213,8 @@
   :ensure t
   :hook (after-init . global-hl-todo-mode)
   :config
-  (add-to-list 'hl-todo-keyword-faces '("REVIEW" . "#44dddd")))
+  (customize-set-variable 'hl-todo-keyword-faces
+                          (cons '("REVIEW" . "#6a8fc2") hl-todo-keyword-faces)))
 
 ;; Corfu for completion. Company is the old solution, very
 ;; stable and battle-tested, but Corfu uses more modern
