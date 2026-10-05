@@ -298,16 +298,33 @@
   ;; built-in
   :hook (prog-mode . flymake-mode))
 
+(defun my/eglot-guess-contact-executable ()
+  "Return the guessed executable for the current buffer's LSP contact.
+Return nil if no server is configured, no contact could be
+guessed, or the contact isn't a simple string/list-of-strings."
+  (require 'eglot)
+  ;; NOTE: The documentation of (eglot--guess-contact), as of October 2026, states:
+  ;; > Return (MANAGED-MODES PROJECT CLASS CONTACT LANG-IDS).
+  (let ((contact (nth 3 (ignore-errors (eglot--guess-contact)))))
+    (cond
+     ((stringp contact) contact)
+     ((and (listp contact) (stringp (car contact))) (car contact)))))
+
 (defun my/eglot-ensure-if-server ()
   "Start Eglot if an LSP server is configured for the current major mode."
   (require 'eglot)
   (cond
    ((and buffer-file-name (string-suffix-p ".mll" buffer-file-name))
     (message "[eglot] (info) blacklisted extension .mll"))
-   ((not (eglot--lookup-mode major-mode))
-    (message "[eglot] (info) no LSP server configured for %s" major-mode))
    (t
-    (eglot-ensure))))
+    (let ((exe (my/eglot-guess-contact-executable)))
+      (cond
+       ((not exe)
+        (message "[eglot] (info) no LSP server configured for %s" major-mode))
+       ((not (executable-find exe))
+        (message "[eglot] (warning) an LSP server is configured for %s but executable `%s` could not be found" major-mode exe))
+       (t
+        (eglot-ensure)))))))
 
 (use-package eglot
   ;; built-in
