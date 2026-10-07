@@ -415,6 +415,10 @@ guessed, or the contact isn't a simple string/list-of-strings."
   :custom
   (sh-basic-offset my/shift-width))
 
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . markdown-mode))
+
 ;; ==================== [ The End ] ==================== ;;
 
 ;; Silence the flymake warning about a missing footer.
