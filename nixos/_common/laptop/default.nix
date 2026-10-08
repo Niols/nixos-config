@@ -71,4 +71,13 @@
 
   programs.steam.enable = true;
   hardware.steam-hardware.enable = true; # support for controllers
+
+  ############################################################################
+  ## System auto upgrade
+
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:niols/nixos-config";
+    dates = "Mon 06:00"; # after Renovate's Mon 00:00–03:59 window + CI
+  };
 }
