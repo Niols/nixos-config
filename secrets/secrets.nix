@@ -135,6 +135,8 @@ concatMapAttrs
       octodns-cloudflare-token = [ orianne ];
       ddclient-cloudflare-token = [ anastasia ];
 
+      probo-enrollment-token = [ ahlaya ];
+
       rclone-gdrive-client-id = [
         ahlaya-niols
         gromit-niols

@@ -1,3 +1,5 @@
+{ inputs, ... }:
+
 {
   imports = [
     ./autorandr.nix
@@ -7,6 +9,8 @@
     ./timezone.nix
     ./udev.nix
     ./xserver
+
+    inputs.probo-nix.nixosModules.probo-agent
   ];
 
   ############################################################################
@@ -71,4 +75,16 @@
 
   programs.steam.enable = true;
   hardware.steam-hardware.enable = true; # support for controllers
+
+  ############################################################################
+  ## Probo Device Agent
+  ##
+  ## https://www.probo.com/device-agent
+
+  services.probo-agent = {
+    enable = true;
+    serverUrl = "https://eu.probo.com";
+    # One-shot token from Probo; keep it out of the Nix store.
+    enrollmentTokenFile = config.age.secrets.probo-enrollment-token.path;
+  };
 }

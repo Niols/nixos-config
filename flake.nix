@@ -26,6 +26,9 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.inputs.nixpkgs-stable.follows = "";
+
+    probo-nix.url = "github:niols/probo-nix";
+    probo-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
