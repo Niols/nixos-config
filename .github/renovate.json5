@@ -6,19 +6,13 @@
     ":disableDependencyDashboard",
     ":automergeAll",
     ":maintainLockFilesWeekly",
-    "schedule:weekly",
   ],
+
+  // Schedule on Monday between 0:00-3:59, in the timezone of Amsterdam
+  timezone: "Europe/Amsterdam",
+  schedule: ["* 0-3 * * 1"],
+  lockFileMaintenance: { schedule: ["* 0-3 * * 1"] },
 
   // Nix is experimental and needs manual enabling.
   nix: { enabled: true },
-
-  packageRules: [
-    {
-      // Some flake inputs are pinned to specific commits, and we do not
-      // want Renovate to constantly try to update them; see comment in flake.nix.
-      matchManagers: ["nix"],
-      matchDepNames: ["nixops4", "nixpkgs-for-nixops4"],
-      enabled: false,
-    },
-  ],
 }
