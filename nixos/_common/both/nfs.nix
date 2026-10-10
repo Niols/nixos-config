@@ -41,8 +41,9 @@ let
   ## configurations to read this value, so we hardcode it here, but we add an
   ## assertion in the configuration of Anastasia that it is the same list.
   ##
+  mediasDatasetMountpoint = "/data/medias";
   datasetMountpoints = [
-    "/data/medias"
+    mediasDatasetMountpoint
     "/data/pictures"
     "/data/services/cloud"
     "/data/services/ftp"
@@ -93,22 +94,31 @@ in
       services.nfs.server = {
         enable = true;
 
-        ## Piggyback on the safety of existing network and allow traffic only from
-        ## the internal and local ones.
+        ## Piggyback on the safety of the internal network and allow traffic
+        ## only from it. On the local network, we additionally allow read-only
+        ## access to medias, for use in Cyra.
         ##
-        exports = forConcat datasetMountpoints (datasetMountpoint: ''
-          ${datasetMountpoint} ${machines.this.internalIp}/24(rw,sync,no_subtree_check)
-          ${datasetMountpoint} ${machines.this.localIp}/24(rw,sync,no_subtree_check)
-        '');
+        exports = ''
+          ${forConcat datasetMountpoints (datasetMountpoint: ''
+            ${datasetMountpoint} ${machines.this.internalIp}/24(rw,sync,no_subtree_check)
+          '')}
+          ${mediasDatasetMountpoint} ${machines.this.localIp}/24(ro,sync,no_subtree_check)
+        '';
       };
 
       ## Allow only NFSv4. It is more secure and has better performance than
       ## NFSv3, but also avoids the need to run rpcbind and rpcidmapd daemons,
       ## which is a bit of a mess.
       ##
+      ## NOTE: Since NixOS/nixpkgs@8374f3a53 updating nfs-utils from 2.9.2 to
+      ## 3.1.1, NFS 4.0 is disabled by default. This is supposed to be better,
+      ## but Cyra still is stick with NFS 4.0 so we enable it by default. It can
+      ## probably be disabled once Cyra gets updated to Trixie.
+      ##
       services.nfs.settings.nfsd = {
         vers3 = "no";
         vers4 = "yes";
+        "vers4.0" = "yes";
       };
 
       networking.firewall.allowedTCPPorts = [ 2049 ];

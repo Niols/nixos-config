@@ -114,6 +114,11 @@ in
             User = "u363090";
           };
 
+          cyra = {
+            HostName = "192.168.1.12";
+            User = "osmc";
+          };
+
           ## Mions
           nasgul = {
             HostName = "nasgul.jeannerod.me";
