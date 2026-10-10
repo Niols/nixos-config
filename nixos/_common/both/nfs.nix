@@ -106,9 +106,15 @@ in
       ## NFSv3, but also avoids the need to run rpcbind and rpcidmapd daemons,
       ## which is a bit of a mess.
       ##
+      ## NOTE: Since NixOS/nixpkgs@8374f3a53 updating nfs-utils from 2.9.2 to
+      ## 3.1.1, NFS 4.0 is disabled by default. This is supposed to be better,
+      ## but Cyra still is stick with NFS 4.0 so we enable it by default. It can
+      ## probably be disabled once Cyra gets updated to Trixie.
+      ##
       services.nfs.settings.nfsd = {
         vers3 = "no";
         vers4 = "yes";
+        "vers4.0" = "yes";
       };
 
       networking.firewall.allowedTCPPorts = [ 2049 ];
