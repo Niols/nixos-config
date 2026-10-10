@@ -102,7 +102,7 @@ in
           ${forConcat datasetMountpoints (datasetMountpoint: ''
             ${datasetMountpoint} ${machines.this.internalIp}/24(rw,sync,no_subtree_check)
           '')}
-          ${mediasDatasetMountpoint} ${machines.this.localIp}/24(rw,sync,no_subtree_check)
+          ${mediasDatasetMountpoint} ${machines.this.localIp}/24(ro,sync,no_subtree_check)
         '';
       };
 
