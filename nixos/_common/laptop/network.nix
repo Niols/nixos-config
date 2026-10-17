@@ -30,18 +30,6 @@ in
       useDHCP = false;
       interfaces.${config.x_niols.thisLaptopsWifiInterface}.useDHCP = true;
       networkmanager.enable = true;
-
-      ## The default, but enforce it.
-      firewall.enable = true;
-
-      ## The default iptables backend doesn't satisfy probo, so use nftables
-      ## instead. The rules are the same.
-      nftables.enable = true;
-
-      ## Disable IPv4 ping; the NixOS firewall always accepts ICMPv6, echo
-      ## included, as neighbour discovery depends on it.
-      firewall.allowPing = false;
-
       firewall.allowedTCPPorts = [ 53317 ]; # for LocalSend
     };
 
