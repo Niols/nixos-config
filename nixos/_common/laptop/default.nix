@@ -112,6 +112,10 @@ in
         # One-shot token from Probo; keep it out of the Nix store.
         enrollmentTokenFile = config.age.secrets.probo-enrollment-token.path;
       };
+
+      ## Useless settings to make Probo happy
+      security.pam.services.passwd.rules.password.unix.settings.minlen = 8;
+      security.loginDefs.settings.PASS_MIN_LEN = 8;
     })
   ];
 }
