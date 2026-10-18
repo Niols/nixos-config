@@ -95,11 +95,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1791803150,
-        "narHash": "sha256-gEjPtZMbcfkX93SK2CsjafMxXwcmNExG3twrRwaCHuY=",
+        "lastModified": 1792340883,
+        "narHash": "sha256-mNXKZUe3HfpE75HtZLdUU28qx8tRbh8bR8y5Z9yeHuc=",
         "owner": "niols",
         "repo": "dancelor",
-        "rev": "bf28724e9a93b086a80e5f0771d066346e08e663",
+        "rev": "2625e490a059944ac7c3eb09f871e86a146ac368",
         "type": "github"
       },
       "original": {
@@ -482,11 +482,11 @@
     "sqlgg": {
       "flake": false,
       "locked": {
-        "lastModified": 1791366891,
-        "narHash": "sha256-V2xXfAItjLiRWYpCMPr4MD2GEO6sffEx33PzVDUAVpc=",
+        "lastModified": 1792313656,
+        "narHash": "sha256-mTBkh8ExB6ANJotTCtcphR0DSvAQOfOTc44Pe4NYPhA=",
         "owner": "niols",
         "repo": "sqlgg",
-        "rev": "69d9022ebbbf3b46fc1729387a217fff3c9e0e77",
+        "rev": "5e4dafbd4cbf35c459ebd81444088898c823313a",
         "type": "github"
       },
       "original": {
