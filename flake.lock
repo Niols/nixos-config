@@ -433,11 +433,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792239547,
-        "narHash": "sha256-OjMWHWFmQyuNkOgNFbvVt2sPfnB6jbt9ZWoGghN/ysM=",
+        "lastModified": 1792401240,
+        "narHash": "sha256-oiAaHr7rFBHJB6wjGTYH9MowrIfZnLjfflQ4MBQZ7Tg=",
         "owner": "niols",
         "repo": "probo-nix",
-        "rev": "5a20428d2b266e35709120ff8a7fcb836962bbbc",
+        "rev": "0b866d78827e6acfdd76106dc8d39b7c496bdee6",
         "type": "github"
       },
       "original": {
