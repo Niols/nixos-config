@@ -18,8 +18,9 @@
       xterm.enable = false;
       xfce = {
         enable = true;
-        noDesktop = true;
-        enableXfwm = false;
+        noDesktop = true; # handled by i3
+        enableXfwm = false; # handled by i3
+        enableScreensaver = false; # handled by i3
       };
       wallpaper = {
         mode = "scale";
