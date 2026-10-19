@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  pkgs,
   ...
 }:
 
@@ -103,6 +104,11 @@ in
       ## matter because we have passwords in Agenix.
       security.pam.services.passwd.rules.password.unix.settings.minlen = 8;
       security.loginDefs.settings.PASS_MIN_LEN = 8;
+
+      ## Clamav as malware protection - https://wiki.nixos.org/wiki/Clamav
+      environment.systemPackages = [ pkgs.clamav ];
+      services.clamav.daemon.enable = true;
+      services.clamav.updater.enable = true;
     }
 
     ############################################################################
