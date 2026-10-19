@@ -91,13 +91,18 @@ in
       hardware.steam-hardware.enable = true; # support for controllers
 
       ############################################################################
-      ## System auto upgrade
+      ## System hardening, mainly to make Probo happy
 
       system.autoUpgrade = {
         enable = true;
         flake = "github:niols/nixos-config";
         dates = "Mon 06:00"; # after Renovate's Mon 00:00–03:59 window + CI
       };
+
+      ## Force password min length at 8 characters; this does not actually
+      ## matter because we have passwords in Agenix.
+      security.pam.services.passwd.rules.password.unix.settings.minlen = 8;
+      security.loginDefs.settings.PASS_MIN_LEN = 8;
     }
 
     ############################################################################
@@ -112,10 +117,6 @@ in
         # One-shot token from Probo; keep it out of the Nix store.
         enrollmentTokenFile = config.age.secrets.probo-enrollment-token.path;
       };
-
-      ## Useless settings to make Probo happy
-      security.pam.services.passwd.rules.password.unix.settings.minlen = 8;
-      security.loginDefs.settings.PASS_MIN_LEN = 8;
     })
   ];
 }
