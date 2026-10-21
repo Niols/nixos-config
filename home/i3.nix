@@ -225,6 +225,7 @@ in
     services.screen-locker = {
       enable = true;
       lockCmd = "${pkgs.i3lock}/bin/i3lock --nofork --color=000000";
+      xautolock.enable = false; # rely on xss-lock, which respects eg. VLC or Firefox
       xss-lock.extraOptions = [ "--transfer-sleep-lock" ]; # delay suspend until after the screen was locked
     };
 
