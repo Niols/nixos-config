@@ -118,7 +118,7 @@ in
           "${modifier}+Shift+p" = "exec xfce4-screenshooter --fullscreen"; # REVIEW: was `--release` in previous text configuration - what does that change?
           "${modifier}+Shift+r" = "restart";
           "${modifier}+Shift+e" = "exec xfce4-session-logout";
-          "${modifier}+Shift+d" = "exec xflock4";
+          "${modifier}+Shift+d" = "exec loginctl lock-session";
 
           "${modifier}+Shift+b" = "move scratchpad";
           "${modifier}+b" = "scratchpad show";
@@ -220,6 +220,13 @@ in
           }
         ];
       };
+    };
+
+    services.screen-locker = {
+      enable = true;
+      lockCmd = "${pkgs.i3lock}/bin/i3lock --nofork --color=000000";
+      xautolock.enable = false; # rely on xss-lock, which respects eg. VLC or Firefox
+      xss-lock.extraOptions = [ "--transfer-sleep-lock" ]; # delay suspend until after the screen was locked
     };
 
     programs.i3status-rust = {
