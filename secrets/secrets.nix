@@ -112,7 +112,6 @@ concatMapAttrs
         headless-work
       ];
 
-      niolscloud-admin-password = [ anastasia ];
       niolscloud-exporter-token = [ orianne ]; # for the monitoring machine, not the cloud machine
       niolscloud-secrets = [ anastasia ];
 
