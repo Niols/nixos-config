@@ -194,13 +194,10 @@ in
       let
         nspawnVariants = [
           "sg"
-          "sgtrixie"
           "uk"
-          "uktrixie"
           "us"
-          "ustrixie"
         ];
-        nspawnDefault = "uktrixie";
+        nspawnDefault = "uk";
         includeFor = variant: {
           Include = "~/.ssh/ahrefs/per-user/spawnbox-devbox-${variant}-nicolasjeannerod";
         };
