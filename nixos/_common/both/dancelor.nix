@@ -40,11 +40,11 @@ in
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {
       services.dancelor = {
         enable = true;
-        listeningPort = 6872;
-        githubTokenFile = config.age.secrets.dancelor-github-token.path;
-        githubRepository = "github.com/niols/dancelor";
-        githubDatabaseRepository = "github.com/niols/dancelor-database";
-        routineThreads = 2 * dancelorServer.cores;
+        settings = {
+          port = 6872;
+          github_token_file = config.age.secrets.dancelor-github-token.path;
+          routine_threads = 2 * dancelorServer.cores;
+        };
       };
 
       ## Lately (April 2026), Dancelor has some memory leaks. We don't allow
@@ -84,7 +84,7 @@ in
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString config.services.dancelor.listeningPort}";
+          proxyPass = "http://127.0.0.1:${toString config.services.dancelor.settings.port}";
           extraConfig = ''
             ## Dancelor relies on SVGs being embedded as objects, which can trigger
             ## the `X-Frame-Options` policy. We therefore relax it a tiny bit
