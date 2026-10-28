@@ -53,7 +53,7 @@ in
         ## Nextcloud to see whether it recommends further processing, such as
         ## database reindexing or conversion.
         ##
-        package = pkgs.nextcloud34;
+        package = pkgs.nextcloud35;
 
         inherit hostName;
         settings.trusted_domains = otherHostNames;
@@ -88,9 +88,6 @@ in
         secretFile = config.age.secrets.niolscloud-secrets.path;
 
         config = {
-          adminuser = "admin";
-          adminpassFile = config.age.secrets.niolscloud-admin-password.path;
-
           dbtype = "pgsql";
           dbuser = "nextcloud";
           dbhost = "/run/postgresql";
@@ -141,17 +138,10 @@ in
       ## services that need it.
       x_niols.nginxXSSProtection = false;
 
-      age.secrets = {
-        niolscloud-admin-password = {
-          mode = "640";
-          owner = "nextcloud";
-          group = "nextcloud";
-        };
-        niolscloud-secrets = {
-          mode = "640";
-          owner = "nextcloud";
-          group = "nextcloud";
-        };
+      age.secrets.niolscloud-secrets = {
+        mode = "640";
+        owner = "nextcloud";
+        group = "nextcloud";
       };
 
       services.postgresql = {
