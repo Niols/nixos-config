@@ -45,8 +45,8 @@ in
       settings.folders = makeSyncthingFolders {
         Organiser.devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Phineas"
           "Server"
           "Gromit"
@@ -54,8 +54,8 @@ in
 
         MobileSheets.devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Phineas"
           "Server"
           "Gromit"
@@ -70,8 +70,8 @@ in
 
         SCD.devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Gromit"
           "Phineas"
           "Server"
@@ -86,8 +86,8 @@ in
 
         "Boox/Documents".devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Phineas"
           "Server"
           "Gromit"
@@ -95,8 +95,8 @@ in
 
         "Boox/Notes".devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Phineas"
           "Server"
           "Gromit"
@@ -111,8 +111,8 @@ in
 
         "Phineas/Documents".devices = [
           "Ahlaya"
-          "Camille"
           "Oxana"
+          "Oyama"
           "Phineas"
           "Server"
           "Gromit"
@@ -135,9 +135,9 @@ in
 
       overrideDevices = true;
       settings.devices = {
-        Camille.id = "IHKVBZ6-H5VAFJ2-KIQPURT-JQBGLHH-YLEKPBN-SB2WHUJ-5KZHNKP-6WPKOQR";
         Phineas.id = "5Y465HU-EQAATXE-ADZ5K3U-AEKXHRD-WPJJIE2-QJUC3PM-KX5SKL5-DLCE3AY";
         Oxana.id = "HYNDGWO-FQ7PP2U-EQJUFPR-FSHLZP6-DIU54FU-HBSLUZD-MJDYJFZ-TW5TOQL";
+        Oyama.id = "OPDSDGS-P7KBTX3-5K2THKG-S2A3B5U-NIF63V3-MRPQ52U-AN4S7RH-2XRI2QA";
         Ahlaya.id = "SGAFF5O-IMVLLWM-G5JG6R3-Y6HWZBH-I4R7NPO-5YK3HL3-CABWEYB-IB27KAB";
         Gromit.id = "TKMS33R-MUJALFM-DOXFCQO-NS7UWJ2-FHW4EBE-EJMZZGZ-HSM3EO7-JAQEHQ5";
         Server.id = "HTWB4DP-OZOHWUQ-726RZSD-77S3TAF-JULJVE5-DCBVE5T-A37LY2L-GFR37AO";
