@@ -74,6 +74,7 @@ in
         script = ''
           chown -R root:medias /data/medias
           chmod -R u=rwX,go=rX /data/medias
+          chmod -R ug=rwX,o=rX /data/medias/scottish-ish   # syncthing \in medias needs write access
         '';
         serviceConfig.Type = "oneshot";
       };
