@@ -87,7 +87,7 @@ let
     "if" = "\${{ contains(fromJSON('${toJSON aarch64Machines}'), matrix.nixos) }}";
     run = ''
       echo "system = aarch64-linux" > nix-config
-      sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+      sudo apt-get update -y && sudo apt-get install -y qemu-user-binfmt
     '';
   };
 
