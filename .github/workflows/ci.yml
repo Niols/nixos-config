@@ -28,7 +28,7 @@ jobs:
         name: Set up emulation layer
         run: 'echo "system = aarch64-linux" > nix-config
 
-          sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+          sudo apt-get update -y && sudo apt-get install -y qemu-user-binfmt
 
           '
       - name: Run check “${{ matrix.check }}”
@@ -150,7 +150,7 @@ jobs:
         name: Set up emulation layer
         run: 'echo "system = aarch64-linux" > nix-config
 
-          sudo apt-get update -y && sudo apt-get install -y qemu-user-static
+          sudo apt-get update -y && sudo apt-get install -y qemu-user-binfmt
 
           '
       - name: Build NixOS configuration “${{ matrix.nixos }}”
