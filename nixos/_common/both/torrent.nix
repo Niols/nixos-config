@@ -52,6 +52,14 @@ in
           ##
           dht.mode.set = disable
           protocol.pex.set = no
+
+          ## Enable ratio handling, stop after 200MB or at ratio 1:1
+          ##
+          ratio.enable=
+          ratio.min.set=10
+          ratio.upload.set=200M
+          ratio.max.set=100
+          method.set = group.seeding.ratio.command, d.stop=
         '';
       };
 
