@@ -1,24 +1,50 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf;
 
-  monorepo = "git/ahrefs/monorepo";
+  monorepoNix = "git/ahrefs/monorepo";
+  monorepoOpam = "git/ahrefs/monorepo-opam";
+
+  ## NOTE: admin via opam is the default for now, because via Nix we pay the
+  ## cost of evaluating the flake each time. Possibly we can speed this up, but
+  ## more importantly I think we should avoid relying on a flake as the entry point.
+  ahrefsAdminOpam = pkgs.writeShellApplication {
+    name = "admin"; # NOTE: the default, for now
+    text = ''
+      "$HOME"/${monorepoOpam}/bin/admin "$@"
+    '';
+  };
+  ahrefsAdminNix = pkgs.writeShellApplication {
+    name = "admin-nix";
+    text = ''
+      cd "$HOME"/${monorepoNix}
+      nix develop .#.devShells.x86_64-linux.default --command bin/admin "$@"
+    '';
+  };
 
 in
 {
   config = mkIf config.x_niols.isWork {
-    home.file."${monorepo}/.envrc".text = ''
+    home.file."${monorepoNix}/.envrc".text = ''
       ## NOTE: there is also `source_env` but it interpret eg. watch_dir relative
       ## to the sourced file's location.
       . ./nix/envrc.sample
     '';
+    home.file."${monorepoOpam}/.envrc".text = ''
+      eval $(opam env)
+    '';
 
     ## ~/.local/bin for python-based utilities, eg. semgrep.
-    home.sessionPath = [
-      "$HOME/${monorepo}/_build/install/default/bin"
-      "$HOME/${monorepo}/bin"
-      "$HOME/.local/bin"
+    home.sessionPath = [ "$HOME/.local/bin" ];
+    home.packages = [
+      ahrefsAdminNix
+      ahrefsAdminOpam
     ];
 
     home.sessionVariables = {
