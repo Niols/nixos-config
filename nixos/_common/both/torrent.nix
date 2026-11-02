@@ -37,16 +37,21 @@ in
           method.insert = d.move_to_complete, simple, "d.directory.set=$argument.1=; execute=mkdir,-p,$argument.1=; execute=mv,-u,$argument.0=,$argument.1=; d.save_full_session="
           method.set_key = event.download.finished,move_complete,"d.move_to_complete=$d.get_data_full_path=,$d.get_finished_dir="
 
-          ## Enable peer discovery beyond HTTP trackers
+          ## Enable UDP trackers; ignored by torrents marked private anyway
+          trackers.use_udp.set = yes
+
+          ## Disable DHT and PEX (NixOS module's default)
           ##
-          ## - support for UDP-based trackers; they are ignored by torrents marked private anyway
-          ## - Distributed Hash Table (DHT) allows finding more peers; we only enable it
-          ##   when a torrent can use it, otherwise it keeps growing and using more bandwidth
+          ## - Distributed Hash Table (DHT) allows finding more peers
           ## - Peer EXchange (PEX) allows getting peers from other peers
           ##
-          trackers.use_udp.set = yes
-          dht.mode.set = auto
-          protocol.pex.set = yes
+          ## If enabled, DHT should be on `auto`, to avoid taking too much
+          ## bandwidth. However, DHT exposes us to the whole world, so better
+          ## not. PEX exposes us to a full swarm (everyone downloading the same
+          ## torrent) at once, which is much less but still quite a bit.
+          ##
+          dht.mode.set = disable
+          protocol.pex.set = no
         '';
       };
 

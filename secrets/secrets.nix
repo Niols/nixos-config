@@ -151,7 +151,7 @@ concatMapAttrs
 
       postgresql-password-grafana = [ orianne ];
 
-      rutorrent-passwd = [ helga ];
+      rutorrent-passwd = [ orianne ];
 
       wireguard-ahlaya-ahrefs-key = [ ahlaya ];
 
