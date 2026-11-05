@@ -11,6 +11,8 @@ let
     mkMerge
     mkIf
     optionalString
+    concatStringsSep
+    mkAfter
     ;
 
   mqttPort = 1883;
@@ -63,6 +65,41 @@ in
         type = "CNAME";
         value = "${config.x_niols.services.monitor.enabledOn}.niols.fr.";
       };
+
+      services.postgresql.ensureUsers = [ { name = "grafana"; } ];
+      systemd.services.postgresql.postStart = mkAfter ''
+        psql -tA -v ON_ERROR_STOP=1 <<'EOF'
+          \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
+          ALTER USER "grafana" WITH PASSWORD :'password';
+
+          ${concatStringsSep "\n" (
+            map
+              (
+                { service, database }:
+                optionalString config.x_niols.services.${service}.enabledOnThisServer ''
+                  GRANT CONNECT ON DATABASE "${database}" TO "grafana";
+                  \connect ${database}
+                  GRANT USAGE ON SCHEMA public TO "grafana";
+                  GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
+                  ALTER DEFAULT PRIVILEGES FOR ROLE "${database}" IN SCHEMA public
+                    GRANT SELECT ON TABLES TO "grafana";
+                  GRANT CONNECT ON DATABASE "dancelor" TO "grafana";
+                ''
+              )
+              [
+                {
+                  service = "monitor";
+                  database = "telegraf";
+                }
+                {
+                  service = "dancelor";
+                  database = "dancelor";
+                }
+              ]
+          )}
+        EOF
+      '';
+      age.secrets.postgresql-password-grafana.owner = "postgres";
     })
 
     (mkIf config.x_niols.services.monitor.enabledOnThisServer {
@@ -164,25 +201,8 @@ in
             name = "telegraf";
             ensureDBOwnership = true;
           }
-          {
-            name = "grafana";
-            # see privileges below
-          }
         ];
       };
-      systemd.services.postgresql.postStart = lib.mkAfter ''
-        psql -tA <<'EOF'
-          \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
-          ALTER USER "grafana" WITH PASSWORD :'password';
-          GRANT CONNECT ON DATABASE "telegraf" TO "grafana";
-          \connect telegraf
-          GRANT USAGE ON SCHEMA public TO "grafana";
-          GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
-          ALTER DEFAULT PRIVILEGES FOR ROLE "telegraf" IN SCHEMA public
-            GRANT SELECT ON TABLES TO "grafana";
-        EOF
-      '';
-      age.secrets.postgresql-password-grafana.owner = "postgres";
 
       ## NOTE: Grafana supports variable expansion with $__file{path} syntax to
       ## read secrets from files instead of storing them in the config. See:
