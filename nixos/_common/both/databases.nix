@@ -2,11 +2,17 @@
   config,
   lib,
   pkgs,
+  machines,
   ...
 }:
 
 let
-  inherit (lib) mkIf;
+  inherit (lib)
+    mkIf
+    mkForce
+    ;
+
+  postgresPort = 5432; # the default
 
 in
 {
@@ -16,7 +22,19 @@ in
       package = pkgs.mariadb;
     };
 
-    services.postgresql.enable = true;
+    services.postgresql = {
+      enable = true;
+
+      enableTCPIP = true;
+      settings = {
+        port = postgresPort;
+        listen_addresses = mkForce "127.0.0.1,${machines.this.internalIp}";
+      };
+      authentication = ''
+        host all all ${machines.this.internalIp}/24 scram-sha-256
+      '';
+    };
+    networking.firewall.allowedTCPPorts = [ postgresPort ];
 
     ############################################################################
     ## Backup
