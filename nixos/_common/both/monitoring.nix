@@ -175,10 +175,16 @@ in
           \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
           ALTER USER "grafana" WITH PASSWORD :'password';
           GRANT CONNECT ON DATABASE "telegraf" TO "grafana";
+          GRANT CONNECT ON DATABASE "dancelor" TO "grafana";
           \connect telegraf
           GRANT USAGE ON SCHEMA public TO "grafana";
           GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
           ALTER DEFAULT PRIVILEGES FOR ROLE "telegraf" IN SCHEMA public
+            GRANT SELECT ON TABLES TO "grafana";
+          \connect dancelor
+          GRANT USAGE ON SCHEMA public TO "grafana";
+          GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
+          ALTER DEFAULT PRIVILEGES FOR ROLE "dancelor" IN SCHEMA public
             GRANT SELECT ON TABLES TO "grafana";
         EOF
       '';
