@@ -40,8 +40,8 @@ in
       ## Make sure Anastasia is automounted before starting atticd.
       ##
       systemd.services.atticd.unitConfig = {
-        Requires = [ "data-services-nix\x2dcache.mount" ];
-        After = [ "data-services-nix\x2dcache.mount" ];
+        # Requires = [ "data-services-nix\x2dcache.mount" ];
+        # After = [ "data-services-nix\x2dcache.mount" ];
       };
 
       services.postgresql = {
