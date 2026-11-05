@@ -171,16 +171,22 @@ in
         ];
       };
       systemd.services.postgresql.postStart = lib.mkAfter ''
-        psql -tA <<'EOF'
+        psql -tA -v ON_ERROR_STOP=1 <<'EOF'
           \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
           ALTER USER "grafana" WITH PASSWORD :'password';
+
+          \set password `cat ${config.age.secrets.postgresql-password-dancelor.path}`
+          ALTER USER "dancelor" WITH PASSWORD :'password';
+
           GRANT CONNECT ON DATABASE "telegraf" TO "grafana";
           GRANT CONNECT ON DATABASE "dancelor" TO "grafana";
+
           \connect telegraf
           GRANT USAGE ON SCHEMA public TO "grafana";
           GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";
           ALTER DEFAULT PRIVILEGES FOR ROLE "telegraf" IN SCHEMA public
             GRANT SELECT ON TABLES TO "grafana";
+
           \connect dancelor
           GRANT USAGE ON SCHEMA public TO "grafana";
           GRANT SELECT ON ALL TABLES IN SCHEMA public TO "grafana";

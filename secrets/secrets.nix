@@ -149,6 +149,10 @@ concatMapAttrs
         gromit-niols
       ];
 
+      postgresql-password-dancelor = [
+        anastasia
+        orianne
+      ];
       postgresql-password-grafana = [ orianne ];
 
       rutorrent-passwd = [ orianne ];
