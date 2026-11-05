@@ -67,7 +67,7 @@ in
       };
 
       services.postgresql.ensureUsers = [ { name = "grafana"; } ];
-      systemd.services.postgresql.postStart = mkAfter ''
+      systemd.services.postgresql-setup.postStart = mkAfter ''
         psql -tA -v ON_ERROR_STOP=1 <<'EOF'
           \set password `cat ${config.age.secrets.postgresql-password-grafana.path}`
           ALTER USER "grafana" WITH PASSWORD :'password';
