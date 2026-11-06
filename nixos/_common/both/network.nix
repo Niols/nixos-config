@@ -10,6 +10,7 @@ let
     mkMerge
     mkIf
     mapAttrsToList
+    mapAttrs'
     ;
 
   wgListenPort = 51821;
@@ -32,7 +33,8 @@ in
     }
 
     ## Server machines share a common WireGuard configuration, which allows them
-    ## to communicate securely over the Internet and to have static IPs.
+    ## to communicate securely over the Internet and to have static IPs. They
+    ## know of each other statically as `<machine>.internal`.
     ##
     (mkIf config.x_niols.isServer {
       networking.wireguard.interfaces.niols = {
@@ -48,6 +50,11 @@ in
         }) machines.otherServers;
       };
       networking.firewall.allowedUDPPorts = [ wgListenPort ];
+
+      networking.hosts = mapAttrs' (name: meta: {
+        name = toString meta.internalIp;
+        value = [ "${name}.internal" ];
+      }) machines.servers;
     })
   ];
 }

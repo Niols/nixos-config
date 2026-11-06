@@ -35,6 +35,8 @@ in
           octodns.cloudflare.proxied = true;
         }
       );
+
+      networking.hosts.${dancelorServer.internalIp} = [ "dancelor.internal" ];
     }))
 
     (mkIf config.x_niols.services.dancelor.enabledOnThisServer {
