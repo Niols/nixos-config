@@ -229,6 +229,12 @@ in
       xss-lock.extraOptions = [ "--transfer-sleep-lock" ]; # delay suspend until after the screen was locked
     };
 
+    ## Let logind handle the lid rather than xfce4-power-manager, as it would
+    ## without Xfce. logind suspends, and xss-lock locks the screen beforehand.
+    xfconf.settings.xfce4-power-manager = {
+      "xfce4-power-manager/logind-handle-lid-switch" = true;
+    };
+
     programs.i3status-rust = {
       enable = true;
 
