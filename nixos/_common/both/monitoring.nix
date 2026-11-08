@@ -18,6 +18,7 @@ let
   mqttPort = 1883;
   nodeMetricsPort = 9000;
   processMetricsPort = 9256;
+  zfsMetricsPort = 9134;
 
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
@@ -56,6 +57,23 @@ in
         ${optionalString (monitorServer ? ipv6) ''
           ip6tables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
           ip6tables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
+        ''}
+      '';
+    })
+
+    (mkIf (machines.this.name == "anastasia") {
+      services.prometheus.exporters.zfs = {
+        enable = true;
+        port = zfsMetricsPort;
+      };
+
+      ## Only allow the monitoring server to scrape metrics.
+      networking.firewall.extraCommands = ''
+        ${optionalString (monitorServer ? ipv4) ''
+          iptables -A nixos-fw -p tcp --dport ${toString zfsMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
+        ''}
+        ${optionalString (monitorServer ? ipv6) ''
+          ip6tables -A nixos-fw -p tcp --dport ${toString zfsMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
         ''}
       '';
     })
@@ -125,6 +143,17 @@ in
               targets = [ "${server}.niols.fr:${toString processMetricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
+          }
+          {
+            job_name = "zfs";
+            static_configs = [
+              {
+                targets = [ "anastasia.niols.fr:${toString zfsMetricsPort}" ];
+                labels = {
+                  server = "anastasia";
+                };
+              }
+            ];
           }
         ];
         port = prometheusPort;
