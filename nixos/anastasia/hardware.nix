@@ -178,7 +178,9 @@ in
     ## which is possible since the system itself is not on ZFS. To achieve this,
     ## we set `nofail` on the mount options of the datasets, which means that
     ## the system will boot even if the datasets fail to mount, and we add a
-    ## `TimeoutStartSec` to the ZFS import services.
+    ## `TimeoutStartSec` to the ZFS import services. This timeout should be long
+    ## enough to allow the pool to manage booting in DEGRADED state anyway,
+    ## which is ~60 seconds.
 
     zpool.important = makeZfsPool {
       mode = "mirror";
@@ -202,6 +204,6 @@ in
     };
   };
 
-  systemd.services."zfs-import-important".serviceConfig.TimeoutStartSec = 60;
-  systemd.services."zfs-import-unimportant".serviceConfig.TimeoutStartSec = 60;
+  systemd.services."zfs-import-important".serviceConfig.TimeoutStartSec = 120;
+  systemd.services."zfs-import-unimportant".serviceConfig.TimeoutStartSec = 120;
 }
