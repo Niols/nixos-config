@@ -326,9 +326,19 @@ guessed, or the contact isn't a simple string/list-of-strings."
        (t
         (eglot-ensure)))))))
 
+(defun my/eglot-ensure-if-server-in-prog-mode ()
+  "Call `my/eglot-ensure-if-server' if the current major mode derives from `prog-mode'."
+  (when (derived-mode-p 'prog-mode)
+    (my/eglot-ensure-if-server)))
+
 (use-package eglot
   ;; built-in
-  :hook (prog-mode . my/eglot-ensure-if-server)
+  :defer t
+  :init
+  ;; NOTE: not `prog-mode-hook', which runs before `envrc-global-mode' sets up
+  ;; the buffer's environment; `executable-find' would then miss the LSP server.
+  ;; envrc also hooks into `after-change-major-mode-hook', so we must run last.
+  (add-hook 'after-change-major-mode-hook #'my/eglot-ensure-if-server-in-prog-mode 'append)
   :config
   ;; Whenever the window changes, eg. because we have changed buffer or
   ;; because we have deleted a buffer, which lands us on a new one, tell
