@@ -37,6 +37,8 @@
   (make-backup-files nil)
   (indent-tabs-mode nil)
   (fill-column 80)
+  ;; NOTE: directories must end with `/'; they then cover all files below them.
+  (trusted-content '("~/git/" "~/.config/nixos/"))
   :config
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -326,10 +328,13 @@ guessed, or the contact isn't a simple string/list-of-strings."
        (t
         (eglot-ensure)))))))
 
-(defun my/eglot-ensure-if-server-in-prog-mode ()
-  "Call `my/eglot-ensure-if-server' if the current major mode derives from `prog-mode'."
-  (when (derived-mode-p 'prog-mode)
-    (my/eglot-ensure-if-server)))
+(defun my/eglot-ensure-if-server-in-prog-mode-and-trusted ()
+  "Call `my/eglot-ensure-if-server' if the current major mode derives from
+`prog-mode' and the buffer's content is trusted, per `trusted-content'."
+  (when (and buffer-file-name (derived-mode-p 'prog-mode))
+    (if (trusted-content-p)
+        (my/eglot-ensure-if-server)
+      (message "[eglot] (warning) not starting automatically in untrusted %s; run `M-x eglot` manually if you trust it" (buffer-name)))))
 
 (use-package eglot
   ;; built-in
@@ -338,7 +343,7 @@ guessed, or the contact isn't a simple string/list-of-strings."
   ;; NOTE: not `prog-mode-hook', which runs before `envrc-global-mode' sets up
   ;; the buffer's environment; `executable-find' would then miss the LSP server.
   ;; envrc also hooks into `after-change-major-mode-hook', so we must run last.
-  (add-hook 'after-change-major-mode-hook #'my/eglot-ensure-if-server-in-prog-mode 'append)
+  (add-hook 'after-change-major-mode-hook #'my/eglot-ensure-if-server-in-prog-mode-and-trusted 'append)
   :config
   ;; Whenever the window changes, eg. because we have changed buffer or
   ;; because we have deleted a buffer, which lands us on a new one, tell
