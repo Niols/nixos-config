@@ -193,22 +193,28 @@ int main(void) {
   snprintf(path, sizeof(path), "/proc/self/fd/%d", fd);
   snprintf(raw, sizeof(raw), "%dx%d:bgrx", w, h);
 
+  /* i3lock-fancy's colours, except for the verifying and wrong states, which
+   * i3lock-fancy hides and which we show in blue and red. */
   const char *params_light[] = {
       "--inside-color=0000001c", "--ring-color=0000003e", "--line-color=00000000",
-      "--keyhl-color=ffffff80", "--ringver-color=ffffff00", "--separator-color=22222260",
-      "--insidever-color=ffffff1c", "--ringwrong-color=ffffff55", "--insidewrong-color=ffffff1c",
-      "--verif-color=ffffff00", "--wrong-color=ff000000", "--time-color=ffffff00",
+      "--keyhl-color=ffffff80", "--separator-color=22222260",
+      "--verif-color=000000ff", "--wrong-color=000000ff", "--time-color=ffffff00",
       "--date-color=ffffff00", "--layout-color=ffffff00"};
   const char *params_dark[] = {
       "--inside-color=ffffff1c", "--ring-color=ffffff3e", "--line-color=ffffff00",
-      "--keyhl-color=00000080", "--ringver-color=00000000", "--separator-color=22222260",
-      "--insidever-color=0000001c", "--ringwrong-color=00000055", "--insidewrong-color=0000001c",
-      "--verif-color=00000000", "--wrong-color=ff000000", "--time-color=00000000",
+      "--keyhl-color=00000080", "--separator-color=22222260",
+      "--verif-color=ffffffff", "--wrong-color=ffffffff", "--time-color=00000000",
       "--date-color=00000000", "--layout-color=00000000"};
   const char **params = light ? params_light : params_dark;
   int nparams = sizeof(params_light) / sizeof(*params_light);
+  const char *feedback[] = {
+      "--ringver-color=4a90d9cc", "--insidever-color=4a90d933",
+      "--ringwrong-color=e53935cc", "--insidewrong-color=e5393533",
+      "--verif-text=Verifying…", "--wrong-text=Wrong password",
+      "--show-failed-attempts"};
+  int nfeedback = sizeof(feedback) / sizeof(*feedback);
 
-  char *args[7 + sizeof(params_light) / sizeof(*params_light)];
+  char *args[7 + sizeof(params_light) / sizeof(*params_light) + sizeof(feedback) / sizeof(*feedback)];
   int n = 0;
   args[n++] = "i3lock";
   args[n++] = "--nofork";
@@ -217,6 +223,7 @@ int main(void) {
   args[n++] = "--raw";
   args[n++] = raw;
   for (int i = 0; i < nparams; i++) args[n++] = (char *)params[i];
+  for (int i = 0; i < nfeedback; i++) args[n++] = (char *)feedback[i];
   args[n] = NULL;
   execv(I3LOCK_COLOR, args);
   die("cannot exec i3lock-color");
