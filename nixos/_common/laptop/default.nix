@@ -18,6 +18,7 @@ in
     ./autorandr.nix
     ./hardware.nix
     ./network.nix
+    ./sleep.nix
     ./syncthing.nix
     ./timezone.nix
     ./udev.nix
