@@ -35,6 +35,8 @@ in
         enable = true;
         port = nodeMetricsPort;
         enabledCollectors = [ "systemd" ];
+        ## By default, the systemd collector excludes .mount units, but we want to see them.
+        extraFlags = [ "--collector.systemd.unit-exclude=.+\\.(automount|device|scope|slice)" ];
       };
 
       services.prometheus.exporters.process = {
