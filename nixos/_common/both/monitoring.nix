@@ -155,6 +155,11 @@ in
               }
             ];
           }
+          {
+            ## Prometheus scrapes itself.
+            job_name = "prometheus";
+            static_configs = [ { targets = [ "127.0.0.1:${toString prometheusPort}" ]; } ];
+          }
         ];
         port = prometheusPort;
       };
