@@ -61,7 +61,6 @@ in
         ## from https://jellyfin.org/docs/general/networking/index.html
         locations."/".proxyPass = "http://127.0.0.1:8096";
       };
-      users.groups.hester.members = [ "jellyfin" ]; # for read access to medias
       users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
     })
 

@@ -311,8 +311,6 @@ in
           owner = "grafana";
           group = "grafana";
         };
-        hester-grafana-backup-identity.mode = "600";
-        hester-grafana-backup-repokey.mode = "600";
       };
     })
   ];

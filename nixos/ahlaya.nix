@@ -21,7 +21,5 @@
         imports = [ ../home ];
         x_niols.isWork = true;
       };
-
-      _common.hester.fileSystems.root.path = "";
     };
 }
