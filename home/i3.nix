@@ -232,6 +232,7 @@ in
     ## Let logind handle the lid rather than xfce4-power-manager, as it would
     ## without Xfce. logind suspends, and xss-lock locks the screen beforehand.
     ## Inform Xfce to use logind in general when locking the screen.
+    ## NOTE: See `nixos/_common/laptop/sleep.nix` for laptop sleep settings.
     xfconf.settings = {
       xfce4-power-manager."xfce4-power-manager/logind-handle-lid-switch" = true;
       xfce4-session."general/LockCommand" = "loginctl lock-session"; # handled by xss-lock → myi3lock
