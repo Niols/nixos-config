@@ -224,7 +224,7 @@ in
 
     services.screen-locker = {
       enable = true;
-      lockCmd = "${pkgs.i3lock}/bin/i3lock --nofork --color=000000";
+      lockCmd = "${pkgs.callPackage ./myi3lock { }}/bin/myi3lock";
       xautolock.enable = false; # rely on xss-lock, which respects eg. VLC or Firefox
       xss-lock.extraOptions = [ "--transfer-sleep-lock" ]; # delay suspend until after the screen was locked
     };
@@ -234,7 +234,7 @@ in
     ## Inform Xfce to use logind in general when locking the screen.
     xfconf.settings = {
       xfce4-power-manager."xfce4-power-manager/logind-handle-lid-switch" = true;
-      xfce4-session."general/LockCommand" = "loginctl lock-session"; # handled by xss-lock → i3lock
+      xfce4-session."general/LockCommand" = "loginctl lock-session"; # handled by xss-lock → myi3lock
     };
 
     programs.i3status-rust = {
