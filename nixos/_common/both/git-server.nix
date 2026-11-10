@@ -6,7 +6,7 @@ let
 in
 {
   config = mkIf config.x_niols.services.git.enabledOnThisServer {
-    _common.hester.backupJobs.git = {
+    x_niols.backupJobs.git = {
       startAt = "*-*-* 06:00:00";
       paths = [ "/data/services/git" ];
       repokeyFile = config.age.secrets.hester-git-backup-repokey.path;

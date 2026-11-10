@@ -175,7 +175,7 @@ in
 
       services.postgresqlBackup.databases = [ "nextcloud" ];
 
-      _common.hester.backupJobs.nextcloud = {
+      x_niols.backupJobs.nextcloud = {
         startAt = "*-*-* 04:15:00";
         paths = [
           "/var/lib/nextcloud"

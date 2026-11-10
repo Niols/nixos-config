@@ -22,6 +22,7 @@ in
 {
   imports = [
     ./ahrefs-vpn.nix
+    ./backup.nix
     ./boot.nix
     ./call.nix
     ./cloud.nix

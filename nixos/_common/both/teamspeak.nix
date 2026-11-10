@@ -27,7 +27,7 @@ in
       ## They have to happen some time after 04:00 so as to include the dump of the
       ## database. See ./databases.nix.
 
-      _common.hester.backupJobs.teamspeak = {
+      x_niols.backupJobs.teamspeak = {
         startAt = "*-*-* 06:00:00";
         paths = [
           "/var/lib/teamspeak"

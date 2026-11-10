@@ -36,7 +36,7 @@ in
       ############################################################################
       ## Daily backup
 
-      _common.hester.backupJobs.jellyfin = {
+      x_niols.backupJobs.jellyfin = {
         startAt = "*-*-* 06:00:00";
         ## REVIEW: I'm afraid this might be a lot. Review this at some point in the
         ## future to see if some folders should be excluded.

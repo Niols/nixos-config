@@ -290,7 +290,7 @@ in
 
       services.postgresqlBackup.databases = [ "telegraf" ];
 
-      _common.hester.backupJobs.grafana = {
+      x_niols.backupJobs.grafana = {
         paths = [
           "/var/backup/postgresql/telegraf.sql.gz"
           "/var/lib/prometheus2"

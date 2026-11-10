@@ -63,7 +63,7 @@ in
       ## Syncing is not backing up, so we call a Borg job on all of
       ## /data/services/syncthing.
 
-      _common.hester.backupJobs.syncthing = {
+      x_niols.backupJobs.syncthing = {
         startAt = "*-*-* 06:00:00";
         paths = [ "/data/services/syncthing" ];
         repokeyFile = config.age.secrets.hester-syncthing-backup-repokey.path;

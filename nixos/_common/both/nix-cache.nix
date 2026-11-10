@@ -90,7 +90,7 @@ in
 
       services.postgresqlBackup.databases = [ "atticd" ];
 
-      _common.hester.backupJobs.atticd = {
+      x_niols.backupJobs.atticd = {
         startAt = "*-*-* 04:30:00";
         paths = [
           "/var/backup/postgresql/atticd.sql.gz"

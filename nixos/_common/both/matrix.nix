@@ -111,7 +111,7 @@ in
 
       services.postgresqlBackup.databases = [ "matrix-synapse" ];
 
-      _common.hester.backupJobs.matrix = {
+      x_niols.backupJobs.matrix = {
         startAt = "*-*-* 04:15:00";
         paths = [
           "/var/lib/matrix-synapse"
