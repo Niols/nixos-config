@@ -35,6 +35,8 @@ in
         enable = true;
         port = nodeMetricsPort;
         enabledCollectors = [ "systemd" ];
+        ## By default, the systemd collector excludes .mount units, but we want to see them.
+        extraFlags = [ "--collector.systemd.unit-exclude=.+\\.(automount|device|scope|slice)" ];
       };
 
       services.prometheus.exporters.process = {
@@ -154,6 +156,11 @@ in
                 };
               }
             ];
+          }
+          {
+            ## Prometheus scrapes itself.
+            job_name = "prometheus";
+            static_configs = [ { targets = [ "127.0.0.1:${toString prometheusPort}" ]; } ];
           }
         ];
         port = prometheusPort;
@@ -283,7 +290,7 @@ in
 
       services.postgresqlBackup.databases = [ "telegraf" ];
 
-      _common.hester.backupJobs.grafana = {
+      x_niols.backupJobs.grafana = {
         paths = [
           "/var/backup/postgresql/telegraf.sql.gz"
           "/var/lib/prometheus2"
@@ -304,8 +311,6 @@ in
           owner = "grafana";
           group = "grafana";
         };
-        hester-grafana-backup-identity.mode = "600";
-        hester-grafana-backup-repokey.mode = "600";
       };
     })
   ];

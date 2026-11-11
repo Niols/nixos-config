@@ -118,7 +118,7 @@ in
 
       services.postgresqlBackup.databases = [ "dancelor" ];
 
-      _common.hester.backupJobs.dancelor = {
+      x_niols.backupJobs.dancelor = {
         startAt = "*-*-* 04:15:00";
         paths = [
           "/var/backup/postgresql/dancelor.sql.gz"

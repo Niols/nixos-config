@@ -5,7 +5,6 @@
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
         ../_common/server.nix
-        ./storage.nix
       ];
 
       x_niols.thisMachinesName = "orianne";

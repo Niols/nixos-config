@@ -133,7 +133,7 @@ in
       ############################################################################
       ## Daily backup
 
-      _common.hester.backupJobs.web = {
+      x_niols.backupJobs.web = {
         startAt = "*-*-* 05:00:00";
         paths = [ "/data/services/web" ];
         repokeyFile = config.age.secrets.hester-web-backup-repokey.path;

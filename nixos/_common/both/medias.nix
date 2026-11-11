@@ -36,7 +36,7 @@ in
       ############################################################################
       ## Daily backup
 
-      _common.hester.backupJobs.jellyfin = {
+      x_niols.backupJobs.jellyfin = {
         startAt = "*-*-* 06:00:00";
         ## REVIEW: I'm afraid this might be a lot. Review this at some point in the
         ## future to see if some folders should be excluded.
@@ -61,7 +61,6 @@ in
         ## from https://jellyfin.org/docs/general/networking/index.html
         locations."/".proxyPass = "http://127.0.0.1:8096";
       };
-      users.groups.hester.members = [ "jellyfin" ]; # for read access to medias
       users.groups.medias.members = [ "jellyfin" ]; # for read access to medias
     })
 

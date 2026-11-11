@@ -22,6 +22,7 @@ in
 {
   imports = [
     ./ahrefs-vpn.nix
+    ./backup.nix
     ./boot.nix
     ./call.nix
     ./cloud.nix
@@ -30,7 +31,6 @@ in
     ./dns.nix
     ./ftp-server.nix
     ./git-server.nix
-    ./hester.nix
     ./ids.nix
     ./matrix.nix
     ./medias.nix
