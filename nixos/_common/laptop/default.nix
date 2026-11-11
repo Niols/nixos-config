@@ -29,6 +29,10 @@ in
 
   config = mkMerge [
     {
+      ## PC/SC (Personal Computer/Smart Card) daemon, gives access to the “smartcard”
+      ## features of YubiKeys (OATH, PIV, OpenPGP), among other devices.
+      services.pcscd.enable = true;
+
       ############################################################################
       ## GNOME Stuff
 
