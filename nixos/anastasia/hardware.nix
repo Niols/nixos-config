@@ -144,6 +144,8 @@ in
       ## secondary NVMe for the 1TB important pool, and the 3 x 2TBs get RAIDZed
       ## together for the 4TB unimportant pool.
 
+      ## NOTE: See `docs/zfs.md` on how to format a disk like disko would.
+
       mapAttrs (_: make100PercentZfsDisk) {
         sata1 = {
           ## 2TB WD disk repurposed from D's work in 2025
@@ -186,15 +188,7 @@ in
     ## initial installation, and changing them will have no effect. We still set
     ## them here for documentation purposes, but this might not actually be
     ## entirely correct, and one needs to also apply the change manually to ZFS.
-
-    ## NOTE: To add or remove a dataset to/from an existing pool:
-    ##
-    ##     zfs create -o mountpoint=legacy <pool>/<dataset>
-    ##     zfs destroy <pool>/<dataset>
-    ##
-    ## Then redeploy Anastasia to actually make the directory. This does not
-    ## contain the actual mountpoint, because that is only for the mounting
-    ## systemd unit, not for ZFS.
+    ## See `docs/zfs.md` on how to do exactly that.
 
     zpool.important = makeZfsPool {
       mode = "mirror";
