@@ -26,6 +26,21 @@ let
       };
     };
 
+  ## NOTE: We use legacy mountpoints so that ZFS does not automount these
+  ## datasets itself. Instead, systemd handles mounting via the usual mount
+  ## units, which avoids a conflict between the two at boot.
+  ##
+  ## In disko, this is `datasets.<dataset>.options.mountpoint = "legacy"`, and
+  ## in ZFS, this is `zfs set mountpoint=legacy <dataset>`.
+
+  ## NOTE: In the event that a disk dies, we want the system to boot anyway,
+  ## which is possible since the system itself is not on ZFS. To achieve this,
+  ## we set `nofail` on the mount options of the datasets, which means that the
+  ## system will boot even if the datasets fail to mount, and we add a
+  ## `TimeoutStartSec` to the ZFS import services. This timeout should be long
+  ## enough to allow the pool to manage booting in DEGRADED state anyway, which
+  ## is ~60 seconds.
+
   makeZfsDataset = mountpoint: {
     type = "zfs_fs";
     inherit mountpoint;
@@ -124,25 +139,41 @@ in
     }
     //
 
-      ## SATA disks: all fully dedicated to ZFS pools, some to the important
-      ## one and some to the unimportant one. The 1TB (SATA6) gets mirrored
-      ## with the secondary NVMe for the 1TB important pool, and the 3 x 2TBs
-      ## get RAIDZed together for the 4TB unimportant pool.
+      ## SATA disks: all fully dedicated to ZFS pools, some to the important one
+      ## and some to the unimportant one. The 2 x 1TB get mirrored with the
+      ## secondary NVMe for the 1TB important pool, and the 3 x 2TBs get RAIDZed
+      ## together for the 4TB unimportant pool.
+
+      ## NOTE: See `docs/zfs.md` on how to format a disk like disko would.
 
       mapAttrs (_: make100PercentZfsDisk) {
         sata1 = {
+          ## 2TB WD disk repurposed from D's work in 2025
           device = "/dev/disk/by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3332695";
           pool = "unimportant";
         };
         sata2 = {
+          ## 2TB WD disk repurposed from D's work in 2025
           device = "/dev/disk/by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3532641";
           pool = "unimportant";
         };
         sata3 = {
+          ## 2TB WD disk repurposed from D's work in 2025
           device = "/dev/disk/by-id/ata-WDC_WD20EARS-00MVWB0_WD-WMAZA3541730";
           pool = "unimportant";
         };
+        sata5 = {
+          ## 1TB WD disk bought in Nov 2026
+          device = "/dev/disk/by-id/ata-WDC_WD10EURX-83UY4Y0_WD-WCC4J4CA7TFR";
+          pool = "important";
+        };
         sata6 = {
+          ## 1TB WD disk repurposed from backup external drive in Mions
+          device = "/dev/disk/by-id/ata-WDC_WD10EADX-00TDHB0_WD-WCAV5N783638";
+          pool = "important";
+        };
+        sata6_broken = {
+          ## 1TB Seagate disk repurposed from D's work in 2025 - died in Nov 2026
           device = "/dev/disk/by-id/ata-ST31000528AS_5VP7SV6M";
           pool = "important";
         };
@@ -153,34 +184,11 @@ in
     ## we don't want a long interruption for the important data, and we don't
     ## mind as much for medias.
 
-    ## NOTE: To add or remove a dataset to/from an existing pool:
-    ##
-    ##     zfs create -o mountpoint=legacy <pool>/<dataset>
-    ##     zfs destroy <pool>/<dataset>
-    ##
-    ## Then redeploy Anastasia to actually make the directory. This does not
-    ## contain the actual mountpoint, because that is only for the mounting
-    ## systemd unit, not for ZFS.
-
     ## NOTE: A lot of ZFS-related Disko options only ever have an impact during
     ## initial installation, and changing them will have no effect. We still set
     ## them here for documentation purposes, but this might not actually be
     ## entirely correct, and one needs to also apply the change manually to ZFS.
-
-    ## NOTE: We use legacy mountpoints so that ZFS does not automount these
-    ## datasets itself. Instead, systemd handles mounting via the usual mount
-    ## units, which avoids a conflict between the two at boot.
-    ##
-    ## In disko, this is `datasets.<dataset>.options.mountpoint = "legacy"`, and
-    ## in ZFS, this is `zfs set mountpoint=legacy <dataset>`.
-
-    ## NOTE: In the event that a disk dies, we want the system to boot anyway,
-    ## which is possible since the system itself is not on ZFS. To achieve this,
-    ## we set `nofail` on the mount options of the datasets, which means that
-    ## the system will boot even if the datasets fail to mount, and we add a
-    ## `TimeoutStartSec` to the ZFS import services. This timeout should be long
-    ## enough to allow the pool to manage booting in DEGRADED state anyway,
-    ## which is ~60 seconds.
+    ## See `docs/zfs.md` on how to do exactly that.
 
     zpool.important = makeZfsPool {
       mode = "mirror";
