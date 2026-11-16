@@ -158,6 +158,10 @@
             ## Expose the `attic` client. The CI uses it, and we would rather
             ## install it from our flake, so as to avoid getting nixpkgs twice.
             packages.attic = pkgs.attic-client;
+
+            ## Expose the `disko` utility, for quick use without building the
+            ## whole shell.
+            packages.disko = inputs'.disko.packages.disko;
           };
 
         ## Improve the way `inputs'` are computed by also handling the case of
