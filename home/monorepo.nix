@@ -39,6 +39,7 @@ in
     '';
     home.file."${monorepoOpam}/.envrc".text = ''
       eval $(opam env)
+      . "$HOME/.cargo/env"
     '';
 
     ## ~/.local/bin for python-based utilities, eg. semgrep.
