@@ -95,11 +95,11 @@
         "topiary": "topiary"
       },
       "locked": {
-        "lastModified": 1795075646,
-        "narHash": "sha256-zn7H58C5QJjQDHAbbGUSv7NLH/Kf4EaadzQpQWzoJFU=",
+        "lastModified": 1795110059,
+        "narHash": "sha256-SEPEQ0UbhOaf++st3QOuG/Yi0dRokQTN1C/UgqJ+/jQ=",
         "owner": "niols",
         "repo": "dancelor",
-        "rev": "8b30cb19c0e18187418529a8ad0ccf15a01fef9b",
+        "rev": "ccda65ec549d228383cf18c2737f025e427ec6cc",
         "type": "github"
       },
       "original": {
