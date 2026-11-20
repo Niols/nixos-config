@@ -43,6 +43,7 @@ in
       services.dancelor = {
         enable = true;
         settings = {
+          base_url = "https://dancelor.org";
           port = 6872;
           github_token_file = config.age.secrets.dancelor-github-token.path;
           routine_threads = 2 * dancelorServer.cores;
