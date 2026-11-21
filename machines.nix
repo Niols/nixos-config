@@ -53,6 +53,8 @@ let
   all = makeAll {
     ahlaya = {
       kind = "laptop";
+      internalIndex = 4;
+      wgPublicKey = "H8GgZS4PyFHR4jqUDsjkniJDdOY3iO7XDmwd2/EVw2A=";
     };
 
     anastasia = {
@@ -65,6 +67,8 @@ let
 
     gromit = {
       kind = "laptop";
+      internalIndex = 5;
+      wgPublicKey = "G2q1Brh4CUkhscv098fGMlcdF3Sf5OShPPgnYM3nPXg=";
     };
 
     helga = {

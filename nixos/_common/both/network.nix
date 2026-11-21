@@ -32,11 +32,14 @@ in
       };
     }
 
-    ## Server machines share a common WireGuard configuration, which allows them
+    ## Machines share a common WireGuard configuration, which allows them
     ## to communicate securely over the Internet and to have static IPs. They
     ## know of each other statically as `<machine>.internal`.
     ##
-    (mkIf config.x_niols.isServer {
+    ## NOTE: Making a new wg key: `wg genkey` makes a private key, and `wg
+    ## pubkey` makes a public key given a private one.
+    ##
+    {
       networking.wireguard.interfaces.niols = {
         ips = [ "${machines.this.internalIp}/24" ];
         privateKeyFile = config.age.secrets."wireguard-${config.x_niols.thisMachinesName}-niols-key".path;
@@ -47,14 +50,14 @@ in
           allowedIPs = [ "${meta.internalIp}/32" ];
           endpoint = mkIf (meta ? ipv4 || meta ? ipv6) "${meta.ipv4 or meta.ipv6}:${toString wgListenPort}";
           persistentKeepalive = 25;
-        }) machines.otherServers;
+        }) machines.others;
       };
       networking.firewall.allowedUDPPorts = [ wgListenPort ];
 
       networking.hosts = mapAttrs' (name: meta: {
         name = toString meta.internalIp;
         value = [ "${name}.internal" ];
-      }) machines.servers;
-    })
+      }) machines.all;
+    }
   ];
 }
