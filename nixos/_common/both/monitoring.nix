@@ -135,14 +135,14 @@ in
           {
             job_name = "node";
             static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString nodeMetricsPort}" ];
+              targets = [ "${server}.internal:${toString nodeMetricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
           }
           {
             job_name = "process";
             static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString processMetricsPort}" ];
+              targets = [ "${server}.internal:${toString processMetricsPort}" ];
               labels = { inherit server; };
             }) machines.servers;
           }
@@ -150,7 +150,7 @@ in
             job_name = "zfs";
             static_configs = [
               {
-                targets = [ "anastasia.niols.fr:${toString zfsMetricsPort}" ];
+                targets = [ "anastasia.internal:${toString zfsMetricsPort}" ];
                 labels = {
                   server = "anastasia";
                 };
