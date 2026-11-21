@@ -21,7 +21,8 @@ let
   ## anything within 10.x but we choose something fairly unique in the hope of
   ## avoiding conflicts with other networks.
   ##
-  wgIpPrefix = "10.187.93";
+  internalIpPrefix = "10.187.94.";
+  internalPrefixLength = 24;
 
   ## Some metadata for the machines of this configuration. Machines
   ## can have a bunch of different IPs:
@@ -33,7 +34,7 @@ let
   ##   home 192.168.* network, or internally to a cloud provider
   ##
   ## - “internal” IPs are IPs in the WireGuard network that binds all
-  ##   machines together; it is derived from `wgIpPrefix` and the
+  ##   machines together; it is derived from `internalIpPrefix` and the
   ##   internal index of each machine.
 
   makeAll = mapAttrs (
@@ -41,30 +42,28 @@ let
     meta
     // {
       inherit name;
+      internalIp = "${internalIpPrefix}${toString meta.internalIndex}";
+      internalIpCidr = "${internalIpPrefix}${toString meta.internalIndex}/${toString internalPrefixLength}";
     }
-    // (
-      if meta ? internalIndex then
-        { internalIp = "${wgIpPrefix}.${toString meta.internalIndex}"; }
-      else
-        { }
-    )
   );
 
   all = makeAll {
     ahlaya = {
       kind = "laptop";
+      internalIndex = 4;
     };
 
     anastasia = {
       kind = "server";
       localIp = "192.168.1.11";
+      localIpCidr = "192.168.1.11/24";
       internalIndex = 1;
-      wgPublicKey = "ElfanRos88bHayCTJM9qhg1XPOM/egor8ShHoOXAz1c=";
       cores = 2;
     };
 
     gromit = {
       kind = "laptop";
+      internalIndex = 5;
     };
 
     helga = {
@@ -72,7 +71,6 @@ let
       ipv4 = "188.245.212.11";
       ipv6 = "2a01:4f8:1c1c:42dc::1"; # in fact, we have the whole /64 subnet
       internalIndex = 2;
-      wgPublicKey = "bWTTesse8keIrCO8MWmXFhhHcvwmn+s+DY2nHFi+tmw=";
       cores = 2;
     };
 
@@ -80,14 +78,13 @@ let
       kind = "server";
       ipv4 = "89.168.38.231";
       internalIndex = 3;
-      wgPublicKey = "Gu3XXcxqxQDy+N1yFZ7fbJMpJWKOBJKeF95doHmQMT0=";
       cores = 2;
     };
   };
 
 in
 {
-  inherit all wgIpPrefix;
+  inherit all;
   laptops = filterAttrs (_: { kind, ... }: kind == "laptop") all;
   servers = filterAttrs (_: { kind, ... }: kind == "server") all;
 }

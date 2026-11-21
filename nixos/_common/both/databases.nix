@@ -33,7 +33,7 @@ in
         listen_addresses = mkForce "127.0.0.1,${machines.this.internalIp}";
       };
       authentication = ''
-        host all all ${machines.this.internalIp}/24 scram-sha-256
+        host all all ${machines.this.internalIpCidr} scram-sha-256
       '';
     };
     networking.firewall.allowedTCPPorts = [ postgresPort ];

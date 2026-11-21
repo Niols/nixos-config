@@ -106,7 +106,6 @@ let
         name = "hello";
         ipv4 = "hello"; # FIXME: so that rebuild just runs `ssh hello` - unclean
         kind = "server";
-        wgPublicKey = "DUMMY";
         cores = 1;
       };
 
@@ -114,7 +113,6 @@ let
         name = "cowsay";
         ipv4 = "cowsay"; # FIXME: so that rebuild just runs `ssh cowsay` - unclean
         kind = "server";
-        wgPublicKey = "DUMMY";
         cores = 1;
       };
     };

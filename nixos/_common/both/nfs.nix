@@ -72,8 +72,6 @@ in
               "nofail" # boot continues even if the mount fails, rather than going into emergency mode
               "x-systemd.automount" # defer the actual mount until the path is first accessed
               "x-systemd.mount-timeout=10" # give up trying to mount after 10s
-              "x-systemd.after=wireguard-niols.service" # keep WG up until this mount has been torn down
-              "x-systemd.after=wireguard-niols-peer-${config.x_niols.services.nfs.enabledOn}.service"
             ];
           };
         }) datasetMountpoints
@@ -100,9 +98,9 @@ in
         ##
         exports = ''
           ${forConcat datasetMountpoints (datasetMountpoint: ''
-            ${datasetMountpoint} ${machines.this.internalIp}/24(rw,sync,no_subtree_check)
+            ${datasetMountpoint} ${machines.this.internalIpCidr}(rw,sync,no_subtree_check)
           '')}
-          ${mediasDatasetMountpoint} ${machines.this.localIp}/24(ro,sync,no_subtree_check)
+          ${mediasDatasetMountpoint} ${machines.this.localIpCidr}(ro,sync,no_subtree_check)
         '';
       };
 
