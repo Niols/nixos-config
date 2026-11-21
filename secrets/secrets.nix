@@ -103,6 +103,24 @@ concatMapAttrs
       mosquitto-password-telegraf = [ orianne ];
       telegraf-secrets = [ orianne ];
 
+      nebula-mesh-ca-crt = [
+        ahlaya
+        anastasia
+        gromit
+        helga
+        orianne
+      ];
+      nebula-mesh-ahlaya-crt = [ ahlaya ];
+      nebula-mesh-ahlaya-key = [ ahlaya ];
+      nebula-mesh-anastasia-crt = [ anastasia ];
+      nebula-mesh-anastasia-key = [ anastasia ];
+      nebula-mesh-gromit-crt = [ gromit ];
+      nebula-mesh-gromit-key = [ gromit ];
+      nebula-mesh-helga-crt = [ helga ];
+      nebula-mesh-helga-key = [ helga ];
+      nebula-mesh-orianne-crt = [ orianne ];
+      nebula-mesh-orianne-key = [ orianne ];
+
       netrc-niols = [
         ahlaya-niols
         ahlaya-work
