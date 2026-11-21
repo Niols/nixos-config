@@ -27,8 +27,8 @@ in
 {
   config = mkMerge [
 
-    ## Each server exports its metrics.
-    (mkIf config.x_niols.isServer {
+    ## Each machine exports its metrics.
+    {
       services.prometheus.exporters.node = {
         enable = true;
         port = nodeMetricsPort;
@@ -53,7 +53,7 @@ in
         nodeMetricsPort
         processMetricsPort
       ];
-    })
+    }
 
     (mkIf (machines.this.name == "anastasia") {
       services.prometheus.exporters.zfs = {
@@ -124,14 +124,14 @@ in
             static_configs = mapAttrsToList (server: _: {
               targets = [ "${server}.internal:${toString nodeMetricsPort}" ];
               labels = { inherit server; };
-            }) machines.servers;
+            }) machines.all;
           }
           {
             job_name = "process";
             static_configs = mapAttrsToList (server: _: {
               targets = [ "${server}.internal:${toString processMetricsPort}" ];
               labels = { inherit server; };
-            }) machines.servers;
+            }) machines.all;
           }
           {
             job_name = "zfs";
