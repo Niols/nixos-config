@@ -27,8 +27,8 @@ in
 {
   config = mkMerge [
 
-    ## Each server exports its metrics.
-    (mkIf config.x_niols.isServer {
+    ## Each machine exports its metrics.
+    {
       services.prometheus.exporters.node = {
         enable = true;
         port = nodeMetricsPort;
@@ -53,7 +53,7 @@ in
         nodeMetricsPort
         processMetricsPort
       ];
-    })
+    }
 
     (mkIf (machines.this.name == "anastasia") {
       services.prometheus.exporters.zfs = {
@@ -121,17 +121,23 @@ in
         scrapeConfigs = [
           {
             job_name = "node";
-            static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.internal:${toString nodeMetricsPort}" ];
-              labels = { inherit server; };
-            }) machines.servers;
+            static_configs = mapAttrsToList (machine: meta: {
+              targets = [ "${machine}.internal:${toString nodeMetricsPort}" ];
+              labels = {
+                inherit machine;
+                machineKind = meta.kind;
+              };
+            }) machines.all;
           }
           {
             job_name = "process";
-            static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.internal:${toString processMetricsPort}" ];
-              labels = { inherit server; };
-            }) machines.servers;
+            static_configs = mapAttrsToList (machine: meta: {
+              targets = [ "${machine}.internal:${toString processMetricsPort}" ];
+              labels = {
+                inherit machine;
+                machineKind = meta.kind;
+              };
+            }) machines.all;
           }
           {
             job_name = "zfs";
@@ -139,7 +145,8 @@ in
               {
                 targets = [ "anastasia.internal:${toString zfsMetricsPort}" ];
                 labels = {
-                  server = "anastasia";
+                  machine = "anastasia";
+                  machineKind = "server";
                 };
               }
             ];
