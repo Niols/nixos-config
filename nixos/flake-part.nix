@@ -25,6 +25,7 @@ let
     inherit inputs;
     machines = machines // {
       this = machines.all.${name};
+      others = filterAttrs (otherName: _: otherName != name) machines.all;
       otherLaptops = filterAttrs (otherName: _: otherName != name) machines.laptops;
       otherServers = filterAttrs (otherName: _: otherName != name) machines.servers;
     };
