@@ -57,7 +57,7 @@ let
 in
 {
   config = mkMerge [
-    (mkIf (config.x_niols.isServer && config.x_niols.services.nfs.enabledOnOtherServer) {
+    (mkIf config.x_niols.services.nfs.enabledOnOtherServer {
       fileSystems = listToAttrs (
         map (datasetMountpoint: {
           name = datasetMountpoint;

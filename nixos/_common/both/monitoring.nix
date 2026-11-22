@@ -23,14 +23,12 @@ let
   ## The Prometheus port is entered manually into Grafana.
   prometheusPort = 9090;
 
-  monitorServer = machines.servers.${config.x_niols.services.monitor.enabledOn};
-
 in
 {
   config = mkMerge [
 
-    ## Each server exports its metrics.
-    (mkIf config.x_niols.isServer {
+    ## Each machine exports its metrics.
+    {
       services.prometheus.exporters.node = {
         enable = true;
         port = nodeMetricsPort;
@@ -50,18 +48,12 @@ in
         ];
       };
 
-      ## Only allow the monitoring server to scrape metrics.
-      networking.firewall.extraCommands = ''
-        ${optionalString (monitorServer ? ipv4) ''
-          iptables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
-          iptables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
-        ''}
-        ${optionalString (monitorServer ? ipv6) ''
-          ip6tables -A nixos-fw -p tcp --dport ${toString nodeMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
-          ip6tables -A nixos-fw -p tcp --dport ${toString processMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
-        ''}
-      '';
-    })
+      ## Only open monitoring ports on the internal network.
+      networking.firewall.interfaces."nebula.mesh".allowedTCPPorts = [
+        nodeMetricsPort
+        processMetricsPort
+      ];
+    }
 
     (mkIf (machines.this.name == "anastasia") {
       services.prometheus.exporters.zfs = {
@@ -69,15 +61,10 @@ in
         port = zfsMetricsPort;
       };
 
-      ## Only allow the monitoring server to scrape metrics.
-      networking.firewall.extraCommands = ''
-        ${optionalString (monitorServer ? ipv4) ''
-          iptables -A nixos-fw -p tcp --dport ${toString zfsMetricsPort} -s ${monitorServer.ipv4} -j nixos-fw-accept
-        ''}
-        ${optionalString (monitorServer ? ipv6) ''
-          ip6tables -A nixos-fw -p tcp --dport ${toString zfsMetricsPort} -s ${monitorServer.ipv6} -j nixos-fw-accept
-        ''}
-      '';
+      ## Only open monitoring ports on the internal network.
+      networking.firewall.interfaces."nebula.mesh".allowedTCPPorts = [
+        zfsMetricsPort
+      ];
     })
 
     (mkIf (config.x_niols.isServer && config.x_niols.services.monitor.enabledOnAnyServer) {
@@ -134,25 +121,32 @@ in
         scrapeConfigs = [
           {
             job_name = "node";
-            static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString nodeMetricsPort}" ];
-              labels = { inherit server; };
-            }) machines.servers;
+            static_configs = mapAttrsToList (machine: meta: {
+              targets = [ "${machine}.internal:${toString nodeMetricsPort}" ];
+              labels = {
+                inherit machine;
+                machineKind = meta.kind;
+              };
+            }) machines.all;
           }
           {
             job_name = "process";
-            static_configs = mapAttrsToList (server: _: {
-              targets = [ "${server}.niols.fr:${toString processMetricsPort}" ];
-              labels = { inherit server; };
-            }) machines.servers;
+            static_configs = mapAttrsToList (machine: meta: {
+              targets = [ "${machine}.internal:${toString processMetricsPort}" ];
+              labels = {
+                inherit machine;
+                machineKind = meta.kind;
+              };
+            }) machines.all;
           }
           {
             job_name = "zfs";
             static_configs = [
               {
-                targets = [ "anastasia.niols.fr:${toString zfsMetricsPort}" ];
+                targets = [ "anastasia.internal:${toString zfsMetricsPort}" ];
                 labels = {
-                  server = "anastasia";
+                  machine = "anastasia";
+                  machineKind = "server";
                 };
               }
             ];
