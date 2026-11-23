@@ -21,7 +21,7 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    dancelor.url = "github:niols/dancelor";
+    dancelor.url = "github:niols/dancelor/debug-routines";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
