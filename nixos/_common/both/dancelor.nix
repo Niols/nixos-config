@@ -47,6 +47,19 @@ in
           port = 6872;
           github_token_file = config.age.secrets.dancelor-github-token.path;
           routine_threads = 2 * dancelorServer.cores;
+          loglevel = {
+            default = "info";
+            cases = [
+              [
+                "server.routine"
+                "debug"
+              ]
+              [
+                "server.controller.job"
+                "debug"
+              ]
+            ];
+          };
         };
       };
 
